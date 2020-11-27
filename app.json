@@ -1,0 +1,17 @@
+{
+  "name": "beGalileo_rn_dev",
+  "displayName": "beGalileo_rn_dev",
+  "expo": {
+    "name": "beGalileo_rn_dev",
+    "slug": "beGalileo_rn_dev",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

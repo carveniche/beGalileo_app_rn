@@ -1,0 +1,7 @@
+
+//For React native simple radio button
+componentWillReceiveProps (newProps) {
+    if (newProps.initial !== this.state.is_active_index) {
+      this.setState({ is_active_index: newProps.initial })
+    }
+  },
