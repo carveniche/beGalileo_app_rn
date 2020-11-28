@@ -6,10 +6,25 @@ STUDENT_CLASSES,
 DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
-RESCHEDULE_DEMO
+RESCHEDULE_DEMO,SET_USER_DETAILS
 } from '../config/redux-action-types/dashboard';
 
 import * as Constants from '../components/helpers/Constants';
+
+export function setUserDetails(parent_user_id,parent_first_name,parent_last_name,parent_country,parent_currency){
+    return{
+        type : SET_USER_DETAILS,
+        payload : {
+            data :{
+                parent_user_id,
+                parent_first_name,
+                parent_last_name,
+                parent_country,
+                parent_currency
+            }
+        }
+    }
+}
 
 
 export function addToCart(stage_id,subscription_id,parent_id,student_id,country,mathbox_required) {

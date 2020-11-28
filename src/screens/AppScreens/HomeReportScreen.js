@@ -37,7 +37,7 @@ class HomeReportScreen extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-                console.log("Kid Changed " + this.props.currentSelectedKid.name);
+               
                 this.checkDashboardItems();
 
             }

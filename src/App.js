@@ -22,14 +22,14 @@ const client = axios.create({
     responseType: 'json'
   });
 
-  client.interceptors.request.use(request=>{
-    console.log('Starting Request', JSON.stringify(request, null, 2));
-    return request;
-  })
-  client.interceptors.response.use(response=>{
-    console.log('Response:', JSON.stringify(response.data, null, 2))
-    return response;
-  })
+  // client.interceptors.request.use(request=>{
+  //   console.log('Starting Request', JSON.stringify(request, null, 2));
+  //   return request;
+  // })
+  // client.interceptors.response.use(response=>{
+  //   console.log('Response:', JSON.stringify(response.data, null, 2))
+  //   return response;
+  // })
   
   const reducer = combineReducers(reducers);
 

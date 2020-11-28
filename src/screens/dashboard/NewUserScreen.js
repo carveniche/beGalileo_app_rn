@@ -16,36 +16,33 @@ class NewUserScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentSessionKid : null
+            currentSessionKid: null
         };
     }
     componentDidMount() {
-        if(this.props.dashboardStatus){
+        if (this.props.dashboardStatus) {
             this.setCurrentSessionKid()
         }
     }
 
-    componentDidUpdate(prevProps){
-        if(prevProps.dashboardResponse != this.props.dashboardResponse){
-            console.log("dashbaoird response")
-            if(this.props.dashboardStatus)
-            {
+    componentDidUpdate(prevProps) {
+        if (prevProps.dashboardResponse != this.props.dashboardResponse) {
+
+            if (this.props.dashboardStatus) {
                 this.setCurrentSessionKid();
             }
         }
     }
 
     setCurrentSessionKid = () => {
-        this.props.dashboardResponse.students.map((item)=>{
-            if(item.selected_student)
-            {
-                console.log("Current Session Kid");
-                console.log(item);
+        this.props.dashboardResponse.students.map((item) => {
+            if (item.selected_student) {
+
                 this.setState({
-                    currentSessionKid  :item
+                    currentSessionKid: item
                 })
             }
-                
+
         })
     }
     goToFaq = () => {
@@ -91,13 +88,12 @@ class NewUserScreen extends Component {
                                 <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "contain" }} source={ICON_CLOCK} />
                                 <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{currentSessionKid.student_demos[0].date} | {currentSessionKid.student_demos[0].time}</Text>
                             </View>
+                            <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
+                                <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
+                            </TouchableOpacity>
                             {
-                                currentSessionKid.demo_confirmed ?
-                                    <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
-                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
-                                        <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
-                                    </TouchableOpacity>
-                                    :
+                                !currentSessionKid.demo_confirmed && 
                                     <View>
                                         <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
                                     </View>
@@ -147,34 +143,34 @@ class NewUserScreen extends Component {
                 }
                 <SubscriptionTabs goToCartList={this.goToCartList} />
                 {
-                     currentSessionKid && !currentSessionKid.demo_booked &&
-                     <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    currentSessionKid && !currentSessionKid.demo_booked &&
+                    <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
-                     <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
-                         <Text style={CommonStyles.text_18_bold}>
-                             Not sure about beGalileo Online based learning?
+                        <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
+                            <Text style={CommonStyles.text_18_bold}>
+                                Not sure about beGalileo Online based learning?
                           </Text>
-                         <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
-                             Lorem ipsum some stats may be can come here
+                            <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
+                                Lorem ipsum some stats may be can come here
                      </Text>
-                         <TouchableOpacity
-                             style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}
-                             onPress={this.goToBookADemo}>
-                             <Text style={[CommonStyles.text_12_bold, {
-                                 paddingTop: normalize(9),
-                                 paddingBottom: normalize(9),
-                                 paddingStart: normalize(18),
-                                 paddingEnd: normalize(18)
-                             }]}>Book a FREE Demo</Text>
-                         </TouchableOpacity>
-                     </View>
- 
-                     <Image style={{ height: normalize(100), margin: 10, width: normalize(100), resizeMode: "stretch" }} source={IC_BOOK_DEMO_BG} />
- 
- 
-                 </LinearGradient>
+                            <TouchableOpacity
+                                style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}
+                                onPress={this.goToBookADemo}>
+                                <Text style={[CommonStyles.text_12_bold, {
+                                    paddingTop: normalize(9),
+                                    paddingBottom: normalize(9),
+                                    paddingStart: normalize(18),
+                                    paddingEnd: normalize(18)
+                                }]}>Book a FREE Demo</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <Image style={{ height: normalize(100), margin: 10, width: normalize(100), resizeMode: "stretch" }} source={IC_BOOK_DEMO_BG} />
+
+
+                    </LinearGradient>
                 }
-               
+
             </View>
         );
     }
@@ -188,7 +184,7 @@ const mapStateToProps = (state) => {
         get_cart_list_response: state.dashboard.get_cart_list_response,
         get_cart_list_status: state.dashboard.get_cart_list_status,
         dashboardResponse: state.dashboard.dashboard_response,
-        dashboardStatus : state.dashboard.dashboard_status,
+        dashboardStatus: state.dashboard.dashboard_status,
         currentSelectedKid: state.dashboard.current_selected_kid
     }
 

@@ -41,7 +41,7 @@ class SubscriptionTabs extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-                console.log("Kid Changed Subscription Tab " + this.props.currentSelectedKid.name);
+
                 this.setState({
                     subscriptionAddedToCart: ""
                 })
@@ -58,17 +58,17 @@ class SubscriptionTabs extends Component {
                 }
             }
         }
-        
-        if(prevProps.cartItems != this.props.cartItems){
-            if(this.props.cartItems != undefined)
-            {
+        if (this.props.cartItems != undefined) {
+            if (prevProps.cartItems != this.props.cartItems) {
+
                 console.log("Cart Items Changes Component Update");
+
                 this.checkSubscription()
-               
+
             }
-                
+
         }
-        
+
         // if(prevProps.dashboard_status != this.props.dashboard_status){
         //     console.log("Dashboard Response");
         //     if(this.props.dashboard_status){
@@ -76,36 +76,58 @@ class SubscriptionTabs extends Component {
         //         this.setState({
         //             selectedSubscription : ""
         //         })
-                
+
         //     }
         // }
-        
-  
+
+
 
     }
 
 
     checkSubscription = () => {
-        console.log("Cart Items Changed");
-        this.props.cartItems.map((cartItem,cartIndex)=>{
+        const { currentSelectedKid } = this.props;
+        // console.log(this.props.cartItems);
+        var subscriptionCount = 0;
+        this.props.cartItems.map((cartItem, cartIndex) => {
 
-            this.state.priceDetails.map((priceItem,priceIndex)=>{
-                if(priceItem.subscription_id == cartItem.subscription_id)
-                {
-                    console.log("Subscription Added Cart : "+priceItem.subscription_id)
+            this.state.priceDetails.map((priceItem, priceIndex) => {
+                if (priceItem.subscription_id == cartItem.subscription_id && currentSelectedKid.student_id == cartItem.student_id) {
+                    console.log("cart item mathbox required " + cartItem.mathbox_required);
+                    if (cartItem.mathbox_required) {
+                        this.setState({
+                            [groupPrefixCheckBox + priceIndex]: true
+                        })
+                    }
+                    else {
+                        this.setState({
+                            [groupPrefixCheckBox + priceIndex]: false
+                        })
+
+                    }
+
+
+                    console.log("Subscription Added Cart : " + priceItem.subscription_id)
+                    subscriptionCount++;
                     this.setState({
                         subscriptionAddedToCart: groupPrefix + priceIndex
                     })
                 }
-               
+
             })
         })
+        if (subscriptionCount == 0) {
+            this.setState({
+                subscriptionAddedToCart: ""
+            })
+        }
     }
 
     setCheckBoxTrue = () => {
+        console.log("Check Box True  : " + this.state.ParentCountry);
         
-        this.props.state.dashboard_response.price_details[0].price_details.map((item,index)=>{
-            console.log("Group Prefix Checkbox ");
+        this.props.state.dashboard_response.price_details[0].price_details.map((item, index) => {
+
             this.setState({
                 [groupPrefixCheckBox + index]: true
             })
@@ -120,30 +142,21 @@ class SubscriptionTabs extends Component {
             this.setState({
                 priceDetails: this.props.dashboard_response.price_details[0].price_details
             })
-            this.setCheckBoxTrue();
-         
-            
+
+
+
         }
-        console.log("Subscription Tabs");
-        this.checkSubscription();
-
-        // getLocalData(Constants.ParentUserId).then((parentId)=>{
-        //     this.setState({
-        //         ParentUserId : parentId
-        //     })
-
-        //     //this.props.getDashboardItems(parentId, "India",this.props.currentSelectedKid.student_id)
-        // })
-
-        AsyncStorage.multiGet([Constants.ParentUserId, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
-
+        if (this.props.user_detail_response != undefined) {
+            console.log("user detail available");
             this.setState({
-                ParentCountry: JSON.parse(response[1][1]),
-                ParentUserId: response[0][1],
-                currency: JSON.parse(response[2][1])
-            })
+                ParentCountry: this.props.user_detail_response.parent_country,
+                ParentUserId: this.props.user_detail_response.parent_user_id,
+                currency: this.props.user_detail_response.parent_currency
+            }, this.setCheckBoxTrue)
 
-        })
+        }
+
+
     }
 
     onGroupClassSelected = (index) => {
@@ -154,8 +167,6 @@ class SubscriptionTabs extends Component {
                 selectedSubscription: groupPrefix + index
             })
         }
-
-
 
     }
 
@@ -239,10 +250,17 @@ class SubscriptionTabs extends Component {
         this.addToCart(index, item);
 
     }
+    getPriceForPackage = (item, index) => {
+     
+            var mathBoxPrice = item.duration * 500;
+            var reducedPrice = item.original_price - mathBoxPrice;
+            return reducedPrice;
+     
+    }
 
     groupClasses() {
         const { ParentCountry } = this.state;
-       
+
 
         return this.state.priceDetails.map((item, index) =>
 
@@ -257,8 +275,14 @@ class SubscriptionTabs extends Component {
                                 <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
                                 {/* <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.display_price}</Text> */}
                             </View>
+                            {/* <Text>Check Box  : {String(this.state[groupPrefixCheckBox + index])}</Text> */}
                             <View>
-                                <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text>
+                                {
+                                    this.state[groupPrefixCheckBox + index] ?
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text> :
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {this.getPriceForPackage(item, index)}</Text>
+                                }
+
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(4) }}>
@@ -505,9 +529,10 @@ const mapStateToProps = (state) => {
         currentSelectedKid: state.dashboard.current_selected_kid,
         add_cart_status: state.dashboard.add_cart_status,
         add_cart_response: state.dashboard.add_cart_response,
-        dashboard_status : state.dashboard.dashboard_status,
-        remove_from_cart_status : state.dashboard.remove_from_cart_status,
-        cartItems : state.dashboard.cartItems
+        dashboard_status: state.dashboard.dashboard_status,
+        remove_from_cart_status: state.dashboard.remove_from_cart_status,
+        cartItems: state.dashboard.cartItems,
+        user_detail_response: state.dashboard.user_detail_response
     }
 
 

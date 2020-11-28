@@ -22,7 +22,7 @@ class PaidUserScreen extends Component {
     }
     componentDidMount() {
         console.log(this.state.currentSelectedKid);
-        if (this.state.currentSelectedKid == undefined) {
+        if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined  ) {
             this.setCurrentSelectedKid();
         }
 
@@ -43,11 +43,11 @@ class PaidUserScreen extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined && this.props.dashboardResponse.students != undefined) {
             if (this.props.dashboardResponse !== prevProps.dashboardResponse) {
-                console.log("Paid Kid Changed " + this.props.currentSelectedKid.name);
+               
                 this.props.dashboardResponse.students.map((item) => {
 
                     if (item.student_id == this.props.currentSelectedKid.student_id) {
-                        console.log("Chikld selected")
+                       
                         this.setState({
                             currentKidDetails: item
                         })
@@ -68,9 +68,9 @@ class PaidUserScreen extends Component {
                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
 
                     {
-                        mathZoneData.map((item) => {
+                        mathZoneData.map((item,index) => {
                             return (
-                                <View style={{ margin: normalize(16) }}>
+                                <View key={"MATH_"+index} style={{ margin: normalize(16) }}>
                                     <Text style={[CommonStyles.text_14_bold]}>{item.tag}</Text>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept}</Text>
                                     <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>

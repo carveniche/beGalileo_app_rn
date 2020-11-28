@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator,AsyncStorage } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -34,7 +34,9 @@ class HomeMainScreen extends Component {
                 allKidsList: this.props.state.dashboard_response.students
             })
         }
+        
         getLocalData(Constants.ParentFirstName).then((name) => {
+            
             this.setState({
                 parentName : JSON.parse(name)
             })
@@ -77,8 +79,9 @@ class HomeMainScreen extends Component {
 
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-                console.log("Kid Changed " + this.props.currentSelectedKid.name);
+               
                 this.checkDashboardItems();
+                this.getCartItems();
 
             }
         }
@@ -105,7 +108,7 @@ class HomeMainScreen extends Component {
         }
 
         if(prevProps.dashboardResponse != this.props.dashboardResponse){
-            console.log("dashbaoird response")
+           
             if(this.props.dashboardStatus)
             {
                 this.forceUpdate();
@@ -116,7 +119,7 @@ class HomeMainScreen extends Component {
     }
 
     checkDashboardItems = () => {
-        console.log("Checking Dashboard items");
+       
         getLocalData(Constants.ParentUserId).then((parentId) => {
             console.log("Parent Id " + parentId);
             this.props.getDashboardItems(parentId, "India", this.props.currentSelectedKid.student_id)
@@ -215,14 +218,15 @@ class HomeMainScreen extends Component {
 
 }
 const mapStateToProps = (state) => {
-
+    console.log("Home main screen props");
+    console.log(state.dashboard.user_detail_response);
     return {
         state: state.dashboard,
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
         dashboardStatus: state.dashboard.dashboard_status,
         dashboardResponse : state.dashboard.dashboard_response,
-
+        user_detail_response : state.dashboard.user_detail_response,
         currentSelectedKid: state.dashboard.current_selected_kid,
         addCartStatus: state.dashboard.add_cart_status,
         get_cart_list_response: state.dashboard.get_cart_list_response,

@@ -133,7 +133,7 @@ class CartListScreen extends Component {
             var cartDiscount = item.display_amount - item.amount;
             var mathBoxPricePerPack = item.boxes * 500;
             console.log(this.state.mathBoxPrice + " - Math Box  : " + mathBoxPricePerPack + " --  " + item.boxes);
-            if (item.mathbox_required)
+            if (!item.mathbox_required)
                 mathBoxPriceTotal += mathBoxPricePerPack;
             cartPriceTotal += item.amount;
             cartDiscountTotal += cartDiscount;
@@ -141,7 +141,7 @@ class CartListScreen extends Component {
 
         })
         //  netPriceTotal = this.state.finalAmountAfterCoupon + mathBoxPriceTotal;
-        netPriceTotal = cartPriceTotal + mathBoxPriceTotal;
+        netPriceTotal = cartPriceTotal - mathBoxPriceTotal;
         console.log("Coupon Discount : " + this.state.couponDiscount);
         //netPriceTotal = cartPriceTotal;
         netPriceTotal = netPriceTotal - this.state.couponDiscount;
@@ -230,6 +230,18 @@ class CartListScreen extends Component {
         });
     }
 
+    returnCalculatedPrice = (item) => {
+        if(!item.mathbox_required){
+            var mathBoxPrice = item.duration * 500;
+            var reducedPrice = item.amount - mathBoxPrice;
+            return reducedPrice;
+        }
+        else{
+            return item.amount
+        }
+        
+    }
+
 
     renderCartProducts() {
 
@@ -263,7 +275,7 @@ class CartListScreen extends Component {
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={[CommonStyles.text_18_bold]}>{this.state.currency}. {item.amount}</Text>
+                        <Text style={[CommonStyles.text_18_bold]}>{this.state.currency}. {this.returnCalculatedPrice(item)}</Text>
 
                             </View>
                             <View style={{ marginTop: normalize(4), marginTop: normalize(4) }}>
@@ -372,13 +384,13 @@ class CartListScreen extends Component {
 
 
                                     </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(12) }}>
+                                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(12) }}>
                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Mathbox Price</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_PURPLE }]}>FREE</Text> */}
+      
                                             <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{this.state.currency} {this.state.mathBoxPrice}</Text>
                                         </View>
-                                    </View>
+                                    </View> */}
 
 
                                     <View style={{ borderColor: COLOR.BORDER_COLOR_GREY, borderWidth: normalize(1), marginTop: normalize(12) }} />
@@ -419,7 +431,7 @@ class CartListScreen extends Component {
                     <Modal isVisible={confirmCancelDialog}>
                         <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(10), borderRadius: normalize(12) }}>
                             <View>
-                                <Text style={{ color: COLOR.BLACK, fontFamily: Constants.Montserrat_Regular, fontSize: normalize(14), padding: normalize(30), textAlign: 'center' }}>Are you sure want to remove item from the cart?</Text>
+                                <Text style={{ color: COLOR.BLACK, fontFamily: Constants.Montserrat_Regular, fontSize: normalize(14), padding: normalize(30), textAlign: 'center' }}>beGalileo is a great gift for your child. Are you sure you want to remove it from the cart?</Text>
                                 <View style={{ borderColor: COLOR.LIGHT_BORDER_COLOR, borderWidth: 1 }} />
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignSelf: 'stretch' }}>
                                     <TouchableOpacity style={{ color: COLOR.BLACK, flex: 1, fontFamily: Constants.Montserrat_Regular, padding: normalize(15) }} onPress={this.removeCartItem}>

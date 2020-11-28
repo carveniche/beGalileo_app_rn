@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 
     },
     FloatingButtonStyle: {
-        resizeMode: 'center',
+        resizeMode:'contain',
         
         borderRadius: normalize(100),
         //backgroundColor:'black'

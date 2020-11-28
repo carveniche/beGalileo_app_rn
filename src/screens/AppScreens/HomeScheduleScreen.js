@@ -8,11 +8,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
-import { getStudentClasses,getDashboardItems } from '../../actions/dashboard';
+import { getStudentClasses, getDashboardItems } from '../../actions/dashboard';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import DashboardHeader from '../../components/DashboardHeader';
 import LiveClassSchedule from '../ScheduleScreens/LiveClassSchedule';
 import CurriculamSchedule from '../ScheduleScreens/CurriculamSchedule';
+import {NavigationEvents} from 'react-navigation';
 
 class HomeScheduleScreen extends Component {
     constructor(props) {
@@ -21,6 +22,10 @@ class HomeScheduleScreen extends Component {
             isLiveTabSelected: true,
             allKidsList: [],
         };
+    }
+    onComponentFocus = () => {
+        console.log("On Component Focus ");
+        this.getStudentClasses();
     }
 
     componentDidMount() {
@@ -38,12 +43,12 @@ class HomeScheduleScreen extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.student_class_response != this.props.student_class_response) {
             if (this.props.student_class_status) {
-               
+
             }
         }
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-                console.log("Kid Changed " + this.props.currentSelectedKid.name);
+
                 this.checkDashboardItems();
 
             }
@@ -60,9 +65,9 @@ class HomeScheduleScreen extends Component {
     }
 
     getStudentClasses = () => {
-       
 
         this.props.getStudentClasses(13072);
+        // this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
 
@@ -79,7 +84,7 @@ class HomeScheduleScreen extends Component {
 
     render() {
         const { isLiveTabSelected, allKidsList } = this.state;
-        const { loading, currentSelectedKid, student_class_status } = this.props;
+        const { loading, currentSelectedKid, student_class_status, student_class_response } = this.props;
         return (
             <View style={{
                 flex: 1,
@@ -89,7 +94,7 @@ class HomeScheduleScreen extends Component {
             }}>
                 <ScrollView>
                     <View>
-
+                        <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
                         <DashboardHeader headerTitle="Schedule" headerDescription="See your Kids schedule" allKidsList={allKidsList} />
 
                         <View style={{ marginTop: normalize(32) }}>
@@ -111,8 +116,15 @@ class HomeScheduleScreen extends Component {
                             {
                                 currentSelectedKid && currentSelectedKid.paid_status && student_class_status ?
 
+                                    student_class_response.upcoming_classes.lenght == 0 && student_class_response.upcoming_classes.lenght == 0 && student_class_response.upcoming_classes.lenght == 0 ?
+                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No Data available</Text>
+                                        </View>
 
-                                    <LiveClassSchedule /> :
+                                        :
+                                        <LiveClassSchedule />
+
+                                    :
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No Data available</Text>
                                     </View>

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { getDashboardItems } from '../../actions/dashboard';
+import { getDashboardItems,setUserDetails } from '../../actions/dashboard';
 import { CommonStyles } from '../../config/styles';
 import * as Constants from '../../components/helpers/Constants';
 import { getLocalData,storeLocalData } from '../../components/helpers/AsyncMethods';
+import AsyncStorage from '@react-native-community/async-storage';
 class MainScreen extends Component {
 
 
@@ -17,8 +18,24 @@ class MainScreen extends Component {
 
   componentDidMount(){
     console.log("Main Screen CDM");
-    
-    this.checkDashboardItems();
+    AsyncStorage.multiGet([Constants.ParentUserId,Constants.ParentFirstName,Constants.ParentLastName, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
+      console.log(JSON.parse(response[0][1]));
+      console.log(JSON.parse(response[1][1]));
+      console.log(JSON.parse(response[2][1]));
+      console.log(JSON.parse(response[3][1]));
+      console.log(JSON.parse(response[4][1]));
+      this.props.setUserDetails(JSON.parse(response[0][1]),JSON.parse(response[1][1]),JSON.parse(response[2][1]),JSON.parse(response[3][1]),JSON.parse(response[4][1]))
+      this.props.getDashboardItems(JSON.parse(response[0][1]), JSON.parse(response[3][1]),"");
+      
+      //this.props.getDashboardItems(parentId, "India","");
+      // this.setState({
+      //     ParentCountry: JSON.parse(response[1][1]),
+      //     ParentUserId: response[0][1],
+      //     currency: JSON.parse(response[2][1])
+      // })
+
+  })
+   // this.checkDashboardItems();
   }
  
   checkDashboardItems =  () => {
@@ -72,7 +89,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    getDashboardItems
+    getDashboardItems,
+    setUserDetails
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
