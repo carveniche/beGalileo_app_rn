@@ -87,7 +87,7 @@ class NewUserDashboard extends Component {
         if (this.props.dashboardStatus) {
             this.props.dashboardResponse.students.map((item) => {
                 if (item.selected_student) {
-                    console.log("Stuent Dashboard for " + item.name + " -- " + item.account_type);
+                    
 
                     selectedStudent = item;
                 }

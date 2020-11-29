@@ -21,10 +21,12 @@ class PaidUserScreen extends Component {
         };
     }
     componentDidMount() {
-        console.log(this.state.currentSelectedKid);
+        console.log("Paid User Dashboard");
+      //  console.log(this.state.currentSelectedKid);
         if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined  ) {
-            this.setCurrentSelectedKid();
+
         }
+        this.renderDashboardData();
 
     }
 
@@ -54,7 +56,7 @@ class PaidUserScreen extends Component {
         if(selectedStudent != null)
         {
            this.setState({
-               currentKidDetails : item
+               currentKidDetails : selectedStudent
            })
         }
       
@@ -69,14 +71,18 @@ class PaidUserScreen extends Component {
 
                     if (item.student_id == this.props.currentSelectedKid.student_id) {
                        
-                        this.setState({
-                            currentKidDetails: item
-                        })
+                        // this.setState({
+                        //     currentKidDetails: item
+                        // })
                     }
                 })
 
 
             }
+        }
+
+        if(prevProps.dashboardStatus != this.props.dashboardStatus){
+            this.renderDashboardData();
         }
 
     }
@@ -537,6 +543,7 @@ const mapStateToProps = (state) => {
         get_cart_list_response: state.dashboard.get_cart_list_response,
         get_cart_list_status: state.dashboard.get_cart_list_status,
         dashboardResponse: state.dashboard.dashboard_response,
+        dashboardStatus : state.dashboard.dashboard_status,
         currentSelectedKid: state.dashboard.current_selected_kid
     }
 
