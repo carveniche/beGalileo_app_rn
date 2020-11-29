@@ -143,6 +143,11 @@ class CartListScreen extends Component {
         //  netPriceTotal = this.state.finalAmountAfterCoupon + mathBoxPriceTotal;
         netPriceTotal = cartPriceTotal - mathBoxPriceTotal;
         console.log("Coupon Discount : " + this.state.couponDiscount);
+        
+        //For Testing
+        netPriceTotal = 1;
+
+
         //netPriceTotal = cartPriceTotal;
         netPriceTotal = netPriceTotal - this.state.couponDiscount;
         console.log("Mathbox Total : " + mathBoxPriceTotal);

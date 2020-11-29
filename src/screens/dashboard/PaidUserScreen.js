@@ -40,6 +40,27 @@ class PaidUserScreen extends Component {
         this.props.navigation.navigate(Constants.PreferLiveBatchScreen);
     }
 
+    renderDashboardData = () => {
+        var selectedStudent = null;
+        if (this.props.dashboardStatus) {
+            this.props.dashboardResponse.students.map((item) => {
+                if (item.selected_student) {
+                    console.log("Stuent Dashboard for " + item.name + " -- " + item.account_type);
+
+                    selectedStudent = item;
+                }
+            })
+        }
+        if(selectedStudent != null)
+        {
+           this.setState({
+               currentKidDetails : item
+           })
+        }
+      
+
+    }
+
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined && this.props.dashboardResponse.students != undefined) {
             if (this.props.dashboardResponse !== prevProps.dashboardResponse) {

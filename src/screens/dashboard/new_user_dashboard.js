@@ -20,24 +20,42 @@ class NewUserDashboard extends Component {
         super(props);
         this.state = {
             priceDetails: [],
-            parentName : ''
+            parentName: '',
+            currentKid: null,
+            isPaidUser: false
         };
     }
 
     componentDidMount() {
-       
+
         if (this.props.dashboardStatus) {
-           
+
+
             this.setState({
-                priceDetails: this.props.dashboardResponse.price_details
+                //priceDetails: this.props.dashboardResponse.price_details
             })
         }
+        this.renderDashboardData();
         // getLocalData(Constants.ParentFirstName).then((name) => {
         //     this.setState({
         //         parentName: name
         //     })
         // })
 
+    }
+
+    getCurrentSelectedKidData = () => {
+        if (this.props.dashboardResponse != undefined) {
+            this.props.dashboardResponse.students.map((item) => {
+                if (item.selected_student) {
+                    console.log("Current Kid " + item.name);
+                    console.log(item.account_type);
+                    this.setState({
+                        currentKid: item
+                    })
+                }
+            })
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -47,7 +65,15 @@ class NewUserDashboard extends Component {
 
             }
 
-
+        }
+        if(prevProps.currentSelectedKid != this.props.currentSelectedKid){
+            // console.log("Kid changed listnere in Dashboard");
+            // console.log(this.props.currentSelectedKid.name);
+           // this.renderDashboardData();
+            
+        }
+        if(prevProps.dashboardStatus != this.props.dashboardStatus){
+            this.renderDashboardData();
         }
 
 
@@ -56,12 +82,41 @@ class NewUserDashboard extends Component {
 
 
 
+    renderDashboardData = () => {
+        var selectedStudent = null;
+        if (this.props.dashboardStatus) {
+            this.props.dashboardResponse.students.map((item) => {
+                if (item.selected_student) {
+                    console.log("Stuent Dashboard for " + item.name + " -- " + item.account_type);
 
+                    selectedStudent = item;
+                }
+            })
+        }
+        if(selectedStudent != null)
+        {
+            if(selectedStudent.paid_status)
+            {
+                this.setState({
+                    isPaidUser : true
+                })
+            }
+            else
+            {
+                this.setState({
+                    isPaidUser : false
+                })
+            }
+        }
+      
+
+    }
 
 
 
     render() {
         const { currentSelectedKid } = this.props;
+        const { currentKid, isPaidUser } = this.state;
         return (
             <View>
 
@@ -76,13 +131,22 @@ class NewUserDashboard extends Component {
                     currentSelectedKid.paid_status &&
                     <SubscriptionTabs goToCartList={this.goToCartList} />
                 } */}
+               
                 {
+                   
+                    isPaidUser ?
+                        <PaidUserScreen navigation={this.props.navigation} />
+                        :
+                        <NewUserScreen navigation={this.props.navigation} />
+                }
+
+                {/* {
                     currentSelectedKid &&
                         currentSelectedKid.paid_status ?
                         <PaidUserScreen navigation={this.props.navigation} />
                         :
                         <NewUserScreen navigation={this.props.navigation} />
-                }
+                }  */}
 
 
 
@@ -105,7 +169,7 @@ const mapStateToProps = (state) => {
         get_cart_list_response: state.dashboard.get_cart_list_response,
         get_cart_list_status: state.dashboard.get_cart_list_status,
         dashboardResponse: state.dashboard.dashboard_response,
-        dashboardStatus : state.dashboard.dashboard_status
+        dashboardStatus: state.dashboard.dashboard_status
     }
 
 
