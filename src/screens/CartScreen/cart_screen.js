@@ -145,7 +145,7 @@ class CartListScreen extends Component {
         console.log("Coupon Discount : " + this.state.couponDiscount);
         
         //For Testing
-        netPriceTotal = 1;
+       // netPriceTotal = 1;
 
 
         //netPriceTotal = cartPriceTotal;

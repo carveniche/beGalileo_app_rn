@@ -220,7 +220,7 @@ export const CommonStyles = StyleSheet.create({
     shadowRadius: 2.22,
     backgroundColor: COLOR.WHITE,
     borderRadius: normalize(20),
-    elevation: 25,
+    elevation: 5,
   },
 
   circleRoundBlack: {

@@ -512,7 +512,7 @@ class AddKidDetail extends Component {
                             }
 
                             <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.name}</Text>
-                            <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>Stage 4</Text>
+                        <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.stage}</Text>
                         </TouchableOpacity>
                     );
                 }}

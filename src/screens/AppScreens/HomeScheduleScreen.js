@@ -66,7 +66,7 @@ class HomeScheduleScreen extends Component {
 
     getStudentClasses = () => {
 
-        this.props.getStudentClasses(13072);
+        this.props.getStudentClasses(52003);
         // this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
@@ -116,17 +116,12 @@ class HomeScheduleScreen extends Component {
                             {
                                 currentSelectedKid && currentSelectedKid.paid_status && student_class_status ?
 
-                                    student_class_response.upcoming_classes.lenght == 0 && student_class_response.upcoming_classes.lenght == 0 && student_class_response.upcoming_classes.lenght == 0 ?
-                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No Data available</Text>
-                                        </View>
-
-                                        :
+                                   
                                         <LiveClassSchedule />
 
                                     :
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No Data available</Text>
+                                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
                                     </View>
 
                             }

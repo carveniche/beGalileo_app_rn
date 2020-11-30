@@ -32,7 +32,10 @@ class NewUserScreen extends Component {
                 this.setCurrentSessionKid();
             }
         }
+        
     }
+
+   
 
     setCurrentSessionKid = () => {
         this.props.dashboardResponse.students.map((item) => {
@@ -124,7 +127,9 @@ class NewUserScreen extends Component {
     render() {
         const { currentSessionKid } = this.state;
         return (
-            <View>
+            <View
+            style={{ backgroundColor : COLOR.WHITE }}
+            >
                 <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                     {
                         currentSessionKid &&

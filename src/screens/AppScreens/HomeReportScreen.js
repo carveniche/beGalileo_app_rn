@@ -20,6 +20,7 @@ class HomeReportScreen extends Component {
         this.state = {
             showAccuracyChart: true,
             showTimeSpentChart: false,
+            currentSelectedKid : [],
             accuracyChartData: [
                 {
                     name: 'Math Topic',
@@ -522,8 +523,8 @@ class HomeReportScreen extends Component {
                             currentSelectedKid && currentSelectedKid.paid_status ?
 
                                 this.showAllReportDatas() :
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No Data available</Text>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginTop : 25 }}>
+                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
                                 </View>
 
                         }

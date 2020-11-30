@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
+import { TESTING_EMAIL,TESTING_MOBILE_NUMBER } from "../config/configs";
 import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber } from '../actions/authenticate';
 import PhoneInput from 'react-native-phone-input';
 import ModalSelector from 'react-native-modal-selector'
@@ -228,7 +229,8 @@ class Login extends Component {
                     message: "OTP Verification Completed",
                     type: "success",
                 });
-                this.props.storeMobileNumber(this.state.myNumber, true, "", "91", this.state.countryName);
+                this.onOtpVerificationSuccess()
+               // this.props.storeMobileNumber(this.state.myNumber, true, "", "91", this.state.countryName);
                 //this.props.navigation.navigate('ParentProfile');
             }
             else {
@@ -279,6 +281,10 @@ class Login extends Component {
 
         }
 
+    }
+
+    onOtpVerificationSuccess = () => {
+        this.props.storeMobileNumber(this.state.myNumber, true, "", this.state.countryCode, this.state.countryName);
     }
 
     onPressFlag() {
@@ -343,6 +349,13 @@ class Login extends Component {
     handleSubmitMobileNumber() {
 
         console.debug("Length : " + this.state.myNumber)
+
+        //for Testing
+        if(this.state.myNumber == TESTING_MOBILE_NUMBER)
+        {
+            this.onOtpVerificationSuccess();
+        }
+
 
         if (this.state.myNumber !== null && this.state.myNumber.length === 10) {
             this.sendOtpToUser();

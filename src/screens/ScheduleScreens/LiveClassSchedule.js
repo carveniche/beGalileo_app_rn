@@ -137,8 +137,9 @@ class LiveClassSchedule extends Component {
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
                                 </View>
-
-                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                                {
+                                    item.practice_details && 
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
                                     {
                                         item.practice_details.map((data) => {
                                             return (
@@ -171,6 +172,9 @@ class LiveClassSchedule extends Component {
 
 
                                 </View>
+                                }
+
+                               
 
                             </View>
                         )
@@ -192,6 +196,18 @@ class LiveClassSchedule extends Component {
 
 
 
+    }
+
+    renderDataAvailablility = ()=>{
+        const { student_class_status, student_class_response } = this.props;
+        if(student_class_response.upcoming_classes.length ==0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length ==0 )
+        {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
+            </View>
+            )
+        }
     }
 
     render() {
@@ -260,20 +276,24 @@ class LiveClassSchedule extends Component {
 
                 </View> */}
                 {
+                    student_class_status && 
+                    this.renderDataAvailablility()
+                }
+                {/* {
 
                     student_class_status && student_class_response.upcoming_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.upcoming_classes)
-                }
-                {
+                    this.showInCompletedClasses(student_class_response.upcoming_classes)
+                } */}
+                {/* {
 
                     student_class_status && student_class_response.completed_classes.length > 0 &&
                     this.showCompletedClasses(student_class_response.completed_classes)
-                }
-                {
+                } */}
+                {/* {
 
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
                     this.showInCompletedClasses(student_class_response.incomplete_classes)
-                }
+                } */}
 
 
 

@@ -22,8 +22,8 @@ class PaidUserScreen extends Component {
     }
     componentDidMount() {
         console.log("Paid User Dashboard");
-      //  console.log(this.state.currentSelectedKid);
-        if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined  ) {
+        //  console.log(this.state.currentSelectedKid);
+        if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined) {
 
         }
         this.renderDashboardData();
@@ -38,7 +38,7 @@ class PaidUserScreen extends Component {
     }
 
     onChooseBatchClick = () => {
-        
+
         this.props.navigation.navigate(Constants.PreferLiveBatchScreen);
     }
 
@@ -53,24 +53,23 @@ class PaidUserScreen extends Component {
                 }
             })
         }
-        if(selectedStudent != null)
-        {
-           this.setState({
-               currentKidDetails : selectedStudent
-           })
+        if (selectedStudent != null) {
+            this.setState({
+                currentKidDetails: selectedStudent
+            })
         }
-      
+
 
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined && this.props.dashboardResponse.students != undefined) {
             if (this.props.dashboardResponse !== prevProps.dashboardResponse) {
-               
+
                 this.props.dashboardResponse.students.map((item) => {
 
                     if (item.student_id == this.props.currentSelectedKid.student_id) {
-                       
+
                         // this.setState({
                         //     currentKidDetails: item
                         // })
@@ -81,7 +80,7 @@ class PaidUserScreen extends Component {
             }
         }
 
-        if(prevProps.dashboardStatus != this.props.dashboardStatus){
+        if (prevProps.dashboardStatus != this.props.dashboardStatus) {
             this.renderDashboardData();
         }
 
@@ -95,9 +94,9 @@ class PaidUserScreen extends Component {
                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
 
                     {
-                        mathZoneData.map((item,index) => {
+                        mathZoneData.map((item, index) => {
                             return (
-                                <View key={"MATH_"+index} style={{ margin: normalize(16) }}>
+                                <View key={"MATH_" + index} style={{ margin: normalize(16) }}>
                                     <Text style={[CommonStyles.text_14_bold]}>{item.tag}</Text>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept}</Text>
                                     <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
@@ -323,7 +322,7 @@ class PaidUserScreen extends Component {
 
     accuracyAndTimeSpent = () => {
         const { currentKidDetails } = this.state;
-       
+
 
         if (currentKidDetails.activity_details != "") {
             return (
@@ -426,8 +425,28 @@ class PaidUserScreen extends Component {
 
     midasTestStatus = (details) => {
         const { currentKidDetails } = this.state;
-        if (details.midasTestStatus) {
+        console.log("Midas Test Status ");
+        console.log(details);
+        if (details.midas_status) {
+            return(
+                <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2), marginTop: normalize(20), borderRadius: normalize(20) }]}>
+                <View style={{ flexDirection: 'row', marginStart: normalize(5), marginTop: normalize(16), marginBottom: normalize(2) }}>
+                    <Image style={{ height: normalize(100), margin: normalize(5), width: normalize(100), resizeMode: "stretch" }} source={IC_MIDAS_SELECTION} />
 
+                    <View style={{ flex: 1, marginTop: normalize(20), marginBottom: normalize(20), marginEnd: normalize(5), marginStart: normalize(10) }}>
+                        <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Midas Test Completed</Text>
+                        
+            <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>Result : </Text>
+            <Text style={[CommonStyles.text_16_regular, { marginTop: normalize(8) }]}>{details.midas_details[0].correct} / {details.midas_details[0].total}</Text>
+                    </View>
+                </View>
+                {/* <View style={{ flexDirection: 'row', marginBottom: normalize(16) }}>
+                    <Text style={[CommonStyles.text_12_bold, { flex: 1, textAlign: 'center', color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Attend Test</Text>
+                    <Image style={{ height: normalize(28), alignSelf: 'center', width: normalize(28), resizeMode: "stretch" }} source={CARD_BTN_ARROW} />
+                </View> */}
+            </View>
+            )
+          
         }
         else {
             return (
@@ -455,7 +474,7 @@ class PaidUserScreen extends Component {
     render() {
         const { currentKidDetails } = this.state;
         return (
-            <View>
+            <View style={{ backgroundColor: COLOR.WHITE }}>
                 <View style={{ marginTop: normalize(20) }}>
                     <Text style={[CommonStyles.text_18_semi_bold]}>Good things ahead!</Text>
                     {
@@ -487,7 +506,7 @@ class PaidUserScreen extends Component {
 
                 }
 
-{/* 
+                {/* 
                 {
 
                     this.checkLiveClassStatus()
@@ -543,7 +562,7 @@ const mapStateToProps = (state) => {
         get_cart_list_response: state.dashboard.get_cart_list_response,
         get_cart_list_status: state.dashboard.get_cart_list_status,
         dashboardResponse: state.dashboard.dashboard_response,
-        dashboardStatus : state.dashboard.dashboard_status,
+        dashboardStatus: state.dashboard.dashboard_status,
         currentSelectedKid: state.dashboard.current_selected_kid
     }
 

@@ -23,7 +23,7 @@ class Splash extends Component {
 
     }
     componentDidMount() {
-        
+        console.log("Splash Component Did Mount");
     }
 
     onLoad = () => {
@@ -33,7 +33,7 @@ class Splash extends Component {
         {
             Animated.timing(this.state.opacity, {
                 toValue: 0.1,
-                duration: 3000,
+                duration: 2000,
                 useNativeDriver: true,
             }).start(()=>{
                 this.setState({
@@ -41,10 +41,10 @@ class Splash extends Component {
                 })
             });
         }
-        else{
+        else {
             Animated.timing(this.state.opacity, {
                 toValue: 1,
-                duration: 3000,
+                duration: 2000,
                 useNativeDriver: true,
             }).start(()=>this.checkIsUserLogged());
         }
@@ -128,6 +128,7 @@ class Splash extends Component {
                 <Animated.Image
                     onLoad={this.onLoad}
                     source={this.images[this.state.index]}
+                    
                     style={[
                         {
                             opacity: this.state.opacity,
@@ -137,7 +138,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.18</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.</Text>
             </View>
         )
     }
