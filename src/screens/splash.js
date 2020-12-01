@@ -17,7 +17,8 @@ class Splash extends Component {
             wallPaperCounter: 0,
             opacity: new Animated.Value(1),
             entryOpacity: 1,
-            index: 0
+            index: 0,
+            isAnimCompleted : false
 
         }
 
@@ -27,27 +28,31 @@ class Splash extends Component {
     }
 
     onLoad = () => {
-
-        console.log("Loading animation");
-        if(this.state.index == 0)
+       
+        if(!this.state.isAnimCompleted)
         {
-            Animated.timing(this.state.opacity, {
-                toValue: 0.1,
-                duration: 2000,
-                useNativeDriver: true,
-            }).start(()=>{
-                this.setState({
-                    index : 2
-                })
-            });
+            console.log("Loading animation");
+            if(this.state.index == 0)
+            {
+                Animated.timing(this.state.opacity, {
+                    toValue: 0.1,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }).start(()=>{
+                    this.setState({
+                        index : 2
+                    })
+                });
+            }
+            else {
+                Animated.timing(this.state.opacity, {
+                    toValue: 1,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }).start(()=>this.checkIsUserLogged());
+            }
         }
-        else {
-            Animated.timing(this.state.opacity, {
-                toValue: 1,
-                duration: 2000,
-                useNativeDriver: true,
-            }).start(()=>this.checkIsUserLogged());
-        }
+        
        
 
     }
@@ -99,6 +104,9 @@ class Splash extends Component {
 
 
     checkIsUserLogged = async () => {
+        this.setState({
+            isAnimCompleted : true
+        })
         const localData = await getLocalData(Constants.IS_LOGGED_IN);
         console.log("Is User Logged In : " + localData);
         console.log(localData);
@@ -138,7 +146,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.20</Text>
             </View>
         )
     }

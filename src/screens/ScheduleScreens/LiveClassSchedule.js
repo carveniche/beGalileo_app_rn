@@ -29,7 +29,16 @@ class LiveClassSchedule extends Component {
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
                                 </View>
+                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                                   
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text> 
+                             
+                                                </View>
 
+
+                                </View>
 
 
                             </View>
@@ -279,21 +288,21 @@ class LiveClassSchedule extends Component {
                     student_class_status && 
                     this.renderDataAvailablility()
                 }
-                {/* {
+                {
 
                     student_class_status && student_class_response.upcoming_classes.length > 0 &&
-                    this.showInCompletedClasses(student_class_response.upcoming_classes)
-                } */}
-                {/* {
+                    this.showUpComingClasses(student_class_response.upcoming_classes)
+                } 
+                 {
 
                     student_class_status && student_class_response.completed_classes.length > 0 &&
                     this.showCompletedClasses(student_class_response.completed_classes)
-                } */}
-                {/* {
+                }
+               {
 
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
                     this.showInCompletedClasses(student_class_response.incomplete_classes)
-                } */}
+                }
 
 
 

@@ -249,7 +249,7 @@ export function editStudent(student_id, first_name, last_name, dob, grade, board
     }
     else{
         var formdata = new FormData();
-        formdata.append("student_id", user_id);
+        formdata.append("student_id", student_id);
         formdata.append("first_name", first_name);
         formdata.append("last_name", last_name);
         formdata.append("dob", dob);
@@ -265,11 +265,11 @@ export function editStudent(student_id, first_name, last_name, dob, grade, board
         console.log(formdata);
 
         return {
-            type: REGISTER_STUDENT,
+            type: EDIT_STUDENT,
             payload: {
                 request: {
                     method : 'post',
-                    url: 'app_mathbox/add_child',
+                    url: 'app_mathbox/edit_child',
                     data : formdata,
                     headers: {'Content-Type': 'multipart/form-data' }
                 }
