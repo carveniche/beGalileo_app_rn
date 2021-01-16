@@ -62,7 +62,7 @@ class HomeMoreScreen extends Component {
         })
 
     }
-    
+
 
 
     onClickLogOut = () => {
@@ -92,23 +92,23 @@ class HomeMoreScreen extends Component {
         //          AsyncStorage.multiRemove(asyncStorageKeys).then(()=>this.goToLogin);
         //     }
         // }
-        const items = [[Constants.IS_LOGGED_IN, JSON.stringify(false)], [Constants.IsParentRegistered,  JSON.stringify(false)]]
-       AsyncStorage.multiSet(items).then(()=>{
-           this.props.logOutUser();
-           this.goToLogin();
-       })
-    //this.goToLogin();
+        const items = [[Constants.IS_LOGGED_IN, JSON.stringify(false)], [Constants.IsParentRegistered, JSON.stringify(false)]]
+        AsyncStorage.multiSet(items).then(() => {
+            this.props.logOutUser();
+            this.goToLogin();
+        })
+        //this.goToLogin();
 
     }
     goToLogin = () => {
-         console.log("Logging Out");
+        console.log("Logging Out");
         // this.props.navigation.replace(Constants.Splash);
         const navigateAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({ routeName: Constants.Splash })],
         });
 
-         this.props.navigation.dispatch(navigateAction);
+        this.props.navigation.dispatch(navigateAction);
         // this.props.navigation.replace(Constants.MainScreen);
     }
 
@@ -225,7 +225,7 @@ const mapStateToProps = (state) => {
 
     return {
         state: state.authenticate,
-        requestRestore : state.authenticate.requestRestore
+        requestRestore: state.authenticate.requestRestore
 
     }
 

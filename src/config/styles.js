@@ -81,32 +81,38 @@ export const CommonStyles = StyleSheet.create({
   text_18_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(18),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_18_semi_bold: {
     fontFamily: Constants.Montserrat_Semi_Bold,
     fontSize: normalize(18),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_18_regular: {
     fontFamily: Constants.Montserrat_Regular,
     fontSize: normalize(18),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
 
   text_16_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(16),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_16_semi_bold: {
     fontFamily: Constants.Montserrat_Semi_Bold,
     fontSize: normalize(16),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_16_regular: {
     fontFamily: Constants.Montserrat_Regular,
     fontSize: normalize(16),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
 
@@ -114,26 +120,31 @@ export const CommonStyles = StyleSheet.create({
   text_14_semi_bold: {
     fontFamily: Constants.Montserrat_Semi_Bold,
     fontSize: normalize(14),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_12_regular: {
     fontFamily: Constants.Montserrat_Regular,
     fontSize: normalize(12),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_12_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(12),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_12__semi_bold: {
     fontFamily: Constants.Montserrat_Semi_Bold,
     fontSize: normalize(12),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK
   },
   text_14_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(14),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK,
 
   },
@@ -141,47 +152,56 @@ export const CommonStyles = StyleSheet.create({
   text_14_Regular: {
     fontFamily: Constants.Montserrat_Regular,
     fontSize: normalize(14),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK,
 
   },
   text_12_Regular: {
     fontFamily: Constants.Montserrat_Regular,
     fontSize: normalize(12),
+    lineHeight: 25,
     color: COLOR.TEXT_COLOR_BLACK,
 
   },
   text_11_bold: {
     fontSize: normalize(11),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Semi_Bold,
     color: Constants.TEXT_COLOR_BLACK
   },
   text_8_regular: {
     fontSize: normalize(11),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Regular,
 
   },
   text_8_bold: {
     fontSize: normalize(11),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Bold,
     fontWeight: '600'
   },
   text_9_regular: {
     fontSize: normalize(9),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Regular,
 
   },
   text_9_bold: {
     fontSize: normalize(9),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Bold,
     fontWeight: '600'
   },
   text_32_regular: {
     fontSize: normalize(32),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Regular,
     fontWeight: '200'
   },
   textBody_1: {
     fontSize: normalize(14),
+    lineHeight: 25,
     fontFamily: Constants.Montserrat_Regular,
     color: Constants.TEXT_BODY_COLOR
   },

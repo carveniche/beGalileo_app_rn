@@ -25,17 +25,17 @@ class LiveClassSchedule extends Component {
                     upComingClasses.map((item) => {
                         return (
                             <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
-                               <View>
+                                <View>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
                                 </View>
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
-                                   
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
-                                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text> 
-                             
-                                                </View>
+
+                                    <View style={{ margin: normalize(16) }}>
+                                        <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+
+                                    </View>
 
 
                                 </View>
@@ -73,7 +73,7 @@ class LiveClassSchedule extends Component {
                     inCompleteClasses.map((item) => {
                         return (
                             <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
-                                 <View>
+                                <View>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
                                 </View>
@@ -133,11 +133,11 @@ class LiveClassSchedule extends Component {
 
 
     }
-    showCompletedClasses = (completedClasses) => {
+    showCompletedClasses = (completedClasses,classType) => {
 
         return (
-            <View style={{ margin : normalize(10) }}>
-                <Text style={[CommonStyles.text_14_bold]}>Completed Classes</Text>
+            <View style={{ margin: normalize(10) }}>
+                <Text style={[CommonStyles.text_14_bold]}>{classType}</Text>
                 {
                     completedClasses.map((item) => {
                         return (
@@ -147,43 +147,50 @@ class LiveClassSchedule extends Component {
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
                                 </View>
                                 {
-                                    item.practice_details && 
-                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
-                                    {
-                                        item.practice_details.map((data) => {
-                                            return (
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
-                                                    {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
-                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='check'
-                                                            color={COLOR.TEXT_COLOR_GREEN} />
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='times'
-                                                            color={COLOR.RED} />
+                                    item.practice_details && item.practice_details.length > 0 ?
 
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{data.timespent} hrs</Text>
-                                                    </View>
-                                                </View>
+                                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                                            {
+                                                item.practice_details.map((data) => {
+                                                    return (
+                                                        <View style={{ margin: normalize(16) }}>
+                                                            <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
+                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
+                                                            <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                                <Icon
+                                                                    style={{ marginStart: normalize(8) }}
+                                                                    size={15}
+                                                                    name='check'
+                                                                    color={COLOR.TEXT_COLOR_GREEN} />
+                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
+                                                                <Icon
+                                                                    style={{ marginStart: normalize(8) }}
+                                                                    size={15}
+                                                                    name='times'
+                                                                    color={COLOR.RED} />
 
-                                            )
-                                        })
-                                    }
+                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
+                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{data.timespent} hrs</Text>
+                                                            </View>
+                                                        </View>
+
+                                                    )
+                                                })
+                                            }
+                                        </View> :
+                                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+
+                                            <View style={{ margin: normalize(16) }}>
+                                                <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+
+                                            </View>
 
 
-
-
-                                </View>
+                                        </View>
                                 }
 
-                               
+
 
                             </View>
                         )
@@ -207,14 +214,13 @@ class LiveClassSchedule extends Component {
 
     }
 
-    renderDataAvailablility = ()=>{
+    renderDataAvailablility = () => {
         const { student_class_status, student_class_response } = this.props;
-        if(student_class_response.upcoming_classes.length ==0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length ==0 )
-        {
+        if (student_class_response.upcoming_classes.length == 0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length == 0) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
-            </View>
+                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
+                </View>
             )
         }
     }
@@ -285,23 +291,23 @@ class LiveClassSchedule extends Component {
 
                 </View> */}
                 {
-                    student_class_status && 
+                    student_class_status &&
                     this.renderDataAvailablility()
                 }
                 {
 
                     student_class_status && student_class_response.upcoming_classes.length > 0 &&
                     this.showUpComingClasses(student_class_response.upcoming_classes)
-                } 
-                 {
+                }
+                {
 
                     student_class_status && student_class_response.completed_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.completed_classes)
+                    this.showCompletedClasses(student_class_response.completed_classes,"Completed Classes")
                 }
-               {
+                {
 
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
-                    this.showInCompletedClasses(student_class_response.incomplete_classes)
+                    this.showCompletedClasses(student_class_response.incomplete_classes,"InComplete Classes")
                 }
 
 

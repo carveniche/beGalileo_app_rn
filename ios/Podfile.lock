@@ -245,9 +245,7 @@ PODS:
     - React
   - react-native-image-picker (2.3.1):
     - React
-  - react-native-image-sequence (0.7.0):
-    - React
-  - react-native-razorpay (2.1.33):
+  - react-native-razorpay (2.2.2):
     - razorpay-pod
     - React
   - react-native-safe-area-context (0.7.3):
@@ -390,7 +388,6 @@ DEPENDENCIES:
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
-  - react-native-image-sequence (from `../node_modules/react-native-image-sequence`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
@@ -502,8 +499,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
-  react-native-image-sequence:
-    :path: "../node_modules/react-native-image-sequence"
   react-native-razorpay:
     :path: "../node_modules/react-native-razorpay"
   react-native-safe-area-context:
@@ -619,8 +614,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: 74c129e693b43483d5a870e239bc6e70dceb1cb0
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
-  react-native-image-sequence: b4cc7ce0ee9eeec7574b005e06059b3f7f818d96
-  react-native-razorpay: 7be7bef396656a267014656cc227283e1788a94c
+  react-native-razorpay: 4e851d32acf8147ae5799321e749b3e2d137e1a3
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-viewpager: 118e65d8c65c56fe48d12a35cdcf1fe7e027a366
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
@@ -659,6 +653,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 4e6c4c34a89512e2225d336154df1cb689226a29
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: 3cbb68e4b873baa48e316bb68b43cab6372053d9
+PODFILE CHECKSUM: c2e91b11366fcc7523d533054be67b8acf48557e
 
 COCOAPODS: 1.9.1

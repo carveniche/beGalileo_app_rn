@@ -46,7 +46,6 @@ target 'beGalileorndev' do
   use_native_modules!
   pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
-  pod 'react-native-razorpay', :path => '../node_modules/react-native-razorpay'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 

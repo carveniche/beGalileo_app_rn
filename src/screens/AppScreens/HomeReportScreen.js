@@ -140,15 +140,16 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid } = this.props;
         return (
             <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
-
+   <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
+                    
                     <View style={{ flex: 1 }}>
                         <Text style={[CommonStyles.text_14_bold]}>Accuracy</Text>
                         <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(5) }]}>Average of correct answers given by kid</Text>
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                            <Text style={[CommonStyles.text_32_regular]}>{currentSelectedKid.activity_details.accuracy}</Text>
+                            <Text style={[CommonStyles.text_18_regular]}>{currentSelectedKid.activity_details.accuracy}</Text>
                             <Text style={[CommonStyles.text_12_Regular, {}]}>%</Text>
                             {/* <Icon
                                 style={{ marginStart: normalize(8) }}

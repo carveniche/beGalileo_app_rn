@@ -166,9 +166,6 @@ class Login extends Component {
 
 
 
-
-
-
                 this.setState({
                     countryName: country,
                     countryCode: countryCode,
@@ -613,7 +610,7 @@ class Login extends Component {
 
                 </View>
 
-                <Text style={{ marginTop: 2, marginStart: 20 }}>We will send you OTP on this number</Text>
+                <Text style={[CommonStyles.text_12_Regular,{ margin : 10,marginStart : 25 }]}>We will send you OTP on this number</Text>
                 <CustomGradientButton
                     style={styles.getOtpButton}
                     children="Get OTP"
@@ -687,9 +684,9 @@ class Login extends Component {
                 </View>
 
                 <View style={{ flexDirection: 'row', marginTop: 10, marginStart: 10, marginEnd: 10, justifyContent: 'space-around' }}>
-                    <Text >Enter OTP sent to your number</Text>
+                    <Text style={[CommonStyles.text_12_Regular]}>Enter OTP sent to your number</Text>
                     <TouchableOpacity onPress={this.handleOnResenOTPClick}>
-                        <Text >Resend OTP</Text>
+                        <Text style={[CommonStyles.text_12_Regular,{ color : COLOR.TEXT_COLOR_GREEN }]}>Resend OTP</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -841,7 +838,7 @@ const styles = StyleSheet.create({
         marginStart: 20,
         marginEnd: 20,
         marginTop: 20,
-        paddingTop: 15,
+        paddingTop: 5,
 
         paddingBottom: 15
     }

@@ -108,18 +108,28 @@ class MoreLiveClassBatchScreens extends Component {
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{dataElement.day}</Text>
                     </View> */}
                 </View>
-                <View style={[CommonStyles.greyLineSeprator, { marginTop: normalize(8) }]} />
-                <View style={{ marginStart: normalize(10), marginEnd: normalize(10), marginBottom: normalize(12) }}>
-                    {/* <Text style={[CommonStyles.text_11_bold, { marginTop: normalize(10) }]}>Batch {dataElement.time}</Text> */}
+                <View style={[CommonStyles.greyLineSeprator, { marginTop: normalize(12) }]} />
+                {
+                    dataElement.batch_details.map((item) => {
+                        return (
+                            <View style={{ flex: 0.5,flexDirection: 'row', marginTop: normalize(2),marginStart : normalize(15),marginBottom : 5 }}>
+                                <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day}</Text>
+                                <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(20) }]}>{item.time}</Text>
+                            </View>
+                        )
+                    })
+                }
+                {/* <View style={{ marginStart: normalize(12), marginEnd: normalize(10), marginBottom: normalize(12) }}>
+                    <Text style={[CommonStyles.text_11_bold, { marginTop: normalize(10) }]}>Batch {dataElement.time}</Text>
                     <View style={{ flexDirection: 'row', marginTop: normalize(4) }}>
-                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{dataElement.day}</Text>
+                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(20) }]}>{dataElement.day}</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(20) }]}>{dataElement.time}</Text>
                     </View>
 
 
 
 
-                    {/* <View style={{ flexDirection: 'row', marginTop: normalize(16), justifyContent: 'space-between', marginBottom: normalize(16) }}>
+                     <View style={{ flexDirection: 'row', marginTop: normalize(16), justifyContent: 'space-between', marginBottom: normalize(16) }}>
                         {
                             dataElement.changeBatchCount >= 2 ?
                                 <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, alignSelf: 'center',flex: 1, }]}>Credits to change the batch is over.</Text> :
@@ -130,8 +140,8 @@ class MoreLiveClassBatchScreens extends Component {
                             <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, alignSelf: 'center', marginEnd: normalize(20) }]}>{dataElement.changeBatchCount} / 2</Text>
                             <Image style={{ borderRadius: 100, height: normalize(28), width: normalize(28), resizeMode: "stretch" }} source={IC_ARROW_RIGHT} />
                         </View>
-                    </View> */}
-                </View>
+                    </View> 
+                </View> */}
             </View>
 
         )
@@ -148,7 +158,7 @@ class MoreLiveClassBatchScreens extends Component {
             }}>
                 <ScrollView >
                     <View style={{
-                        flex : 1,
+                        flex: 1,
                         marginStart: normalize(10),
                         marginEnd: normalize(10),
                         marginTop: normalize(10),
@@ -161,7 +171,7 @@ class MoreLiveClassBatchScreens extends Component {
                         {
                             batch_details_status && batch_details_response.batch_details.length > 0 ?
                                 this.renderLiveClassDatas() :
-                                <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center',marginTop : normalize(40) }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: normalize(40) }}>
                                     <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No batch found</Text>
                                 </View>
 
