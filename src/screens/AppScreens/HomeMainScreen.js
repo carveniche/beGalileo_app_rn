@@ -15,6 +15,7 @@ import NewUserDashboard from '../dashboard/new_user_dashboard';
 import DashboardHeader from '../../components/DashboardHeader';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import {NavigationEvents} from 'react-navigation';
+import messaging from '@react-native-firebase/messaging';
 
 
 
@@ -45,8 +46,24 @@ class HomeMainScreen extends Component {
         
        
         this.getCartItems();
+        this.requestUserPermission();
 
     }
+
+
+     requestUserPermission = async() => {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      
+        if (enabled) {
+          console.log('Authorization status:', authStatus);
+        }
+      }
+
+
+
     getCartItems = () => {
         console.log("Get Cart Items");
         getLocalData(Constants.ParentUserId).then((parentId) => {

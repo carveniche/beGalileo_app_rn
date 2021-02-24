@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { normalize, Card } from "react-native-elements";
 import { listAddress, removeAddress } from '../../actions/dashboard';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 
 
 class MoreMyAddressScreen extends Component {
@@ -179,9 +180,7 @@ class MoreMyAddressScreen extends Component {
             {
                         this.props.list_address_status && this.props.list_address_response.address_details.length > 0 ?
                             this.renderAddressList() :
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: normalize(40) }}>
-                                <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No address available</Text>
-                            </View>
+                            <NoRecordFoundComponent title="No address saved" sub_title=""/>
                     }
             <TouchableOpacity onPress={() => {
               this.addAnotherAddress()

@@ -14,6 +14,7 @@ import { allowOnlyAlphabets, isValidDate } from '../../components/helpers';
 import { getGradeDatas, deleteStudent, editStudent } from '../../actions/authenticate';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ImagePicker from 'react-native-image-picker';
 import moment from "moment";
 
@@ -44,6 +45,7 @@ class EditKidDetail extends Component {
       mBirthDay: null,
       mBirthdMonth: null,
       mBirthYear: null,
+      mBirthDateDialog: false,
       mKidTimeZone: null,
       mKidGender: "M",
       mChildGrade: null,
@@ -69,7 +71,7 @@ class EditKidDetail extends Component {
       mChildBoard: kidDetail.board,
       selectedDateText: kidDetail.dob,
       mBirthDate: kidDetail.dob,
-      mKidGender : kidDetail.gender
+      mKidGender: kidDetail.gender
     })
     this.onGenderChange(kidDetail.gender);
 
@@ -115,8 +117,16 @@ class EditKidDetail extends Component {
       selectedDateText: moment(date).format('DD-MMM-YYYY'),
       mBirthDate: moment(date).format('YYYY-MM-DD')
     });
+    this.closeDatePicker();
 
   }
+
+  closeDatePicker = () => {
+    this.setState({
+      mBirthDateDialog: false
+    })
+  }
+
 
   addUserName = (value) => {
     if (!allowOnlyAlphabets(value))
@@ -126,18 +136,18 @@ class EditKidDetail extends Component {
     })
   }
   onGradeChange = (option) => {
-    if(this.state.kidDetails.account_type == "paid"){
-    
+    if (this.state.kidDetails.account_type == "paid") {
+
     }
     this.setState({
       mChildGrade: option.label
     })
-    
+
   }
 
   onGenderChange = (value) => {
-   
-    console.log("Gender Change value "+value);
+
+    console.log("Gender Change value " + value);
     if (value)
       this.setState({
         mKidGender: "F"
@@ -374,10 +384,9 @@ class EditKidDetail extends Component {
     var pastYear = maxDateValue.getFullYear() - 1;
     maxDateValue.setFullYear(pastYear);
 
-    this.refs.dobDialog.open({
-      date: new Date(),
-      maxDate: new Date(maxDateValue)
-    });
+    this.setState({
+      mBirthDateDialog: true
+    })
   }
 
   render() {
@@ -386,7 +395,7 @@ class EditKidDetail extends Component {
       { label: 'Female', value: 1 }
     ];
     const { loading } = this.props;
-    const { kidDetails, avatarSource } = this.state;
+    const { kidDetails, avatarSource, mBirthDateDialog } = this.state;
 
     return (
 
@@ -449,7 +458,13 @@ class EditKidDetail extends Component {
 
               </View>
 
-              <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
+              <DateTimePickerModal
+                isVisible={mBirthDateDialog}
+                mode="date"
+                onConfirm={this.onDOBDatePicked}
+                onCancel={this.closeDatePicker}
+
+              />
               <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
                 <Text style={styles.textSubHeader}>First name</Text>
                 {this.state.mChildNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
@@ -686,7 +701,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  getGradeDatas, deleteStudent,editStudent
+  getGradeDatas, deleteStudent, editStudent
 };
 
 const styles = StyleSheet.create({

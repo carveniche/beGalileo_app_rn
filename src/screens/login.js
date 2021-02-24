@@ -2,21 +2,26 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
-import { TESTING_EMAIL,TESTING_MOBILE_NUMBER } from "../config/configs";
-import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber } from '../actions/authenticate';
+import { TESTING_EMAIL, TESTING_MOBILE_NUMBER } from "../config/configs";
+import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin } from '../actions/authenticate';
 import PhoneInput from 'react-native-phone-input';
-import ModalSelector from 'react-native-modal-selector'
+import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal'
 import CustomGradientButton from '../components/CustomGradientButton';
 import LoginBanner from '../components/LoginBanner';
 import { normalize } from '../components/helpers';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { isValidEmail, allowOnlyAlphabets } from '../components/helpers';
 import RNOtpVerify from 'react-native-otp-verify';
 import { storeLocalData } from '../components/helpers/AsyncMethods';
 import * as Constants from '../components/helpers/Constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import axios from 'axios';
+import jwt from "react-native-pure-jwt";
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
+import { AppleButton, appleAuth } from '@invertase/react-native-apple-authentication';
+import { ScrollView } from "react-native-gesture-handler";
+import { Alert } from "react-native";
 
 
 
@@ -37,7 +42,11 @@ class Login extends Component {
             translation: 'fra',
             showCountryList: false,
             isValidPhoneNumber: false,
-            
+            userNameError: false,
+            userPasswordError: false,
+
+            mUserName: '',
+            mPassword: '',
             countryCode: '',
             isoCode: '',
             intPhoneNum: '',
@@ -52,7 +61,8 @@ class Login extends Component {
             showFullBanner: true,
             parentCurrency: '',
             timeZone: '',
-            autoOtpIos: ''
+            autoOtpIos: '',
+            loginStatus: false
         };
     }
 
@@ -65,6 +75,13 @@ class Login extends Component {
                 pickerData: this.phone.getPickerData(),
             });
         }
+
+        //For Testing
+
+        // this.setState({
+        //     mUserName: 'anns.rahim@carveniche.com',
+        //     mPassword: 'mathbox@123'
+        // })
 
         // this.setState({
         //     countryName: Constants.INDIA,
@@ -117,13 +134,17 @@ class Login extends Component {
         this.setState({
             isGoogleLogin: true,
             parentEmail: user.email,
-            parentName: user.name
+            parentName: user.name,
+            parentFirstName: user.givenName,
+            parentLastName: user.familyName
         })
         this.props.storeMobileNumber("", false, user.email, this.state.countryCode, this.state.countryName);
     }
 
+
+
     getCountryFromIp = () => {
-        console.log("SMMMMMMMM");
+
         this.setState({
             stateLoading: true
         });
@@ -156,7 +177,7 @@ class Login extends Component {
                 var currency = '';
 
                 //For Testing
-                // country = "Dubai";
+                //country = "Dubai";
 
 
                 if (country == Constants.INDIA)
@@ -227,7 +248,7 @@ class Login extends Component {
                     type: "success",
                 });
                 this.onOtpVerificationSuccess()
-               // this.props.storeMobileNumber(this.state.myNumber, true, "", "91", this.state.countryName);
+                // this.props.storeMobileNumber(this.state.myNumber, true, "", "91", this.state.countryName);
                 //this.props.navigation.navigate('ParentProfile');
             }
             else {
@@ -237,47 +258,107 @@ class Login extends Component {
                 });
             }
         }
+
+
+
+
+        if (prevProps.user_login_status != this.props.user_login_status) {
+            console.log(prevProps.user_login_status + " === " + this.props.user_login_status);
+            if (this.props.user_login_status != undefined && this.props.user_login_status !== null) {
+                if (this.props.user_login_status) {
+                    this.existingUserToDashboard(this.props.user_login_response);
+                }
+                else {
+                    this.setState({
+                        mPassword: ''
+                    })
+                    showMessage({
+                        message: "Invalid email or password please try again",
+                        type: "danger",
+                    });
+                }
+            }
+
+
+
+        }
+
+
+
+
+
+
         if (storeMobileSucess !== undefined && storeMobileSucess !== prevProps.state.storeMobileSucess) {
             if (response.status) {
-
+                storeLocalData(Constants.ParentUserId, response.user_id);
                 storeLocalData(Constants.ParentCountryCode, this.state.countryCode);
                 storeLocalData(Constants.ParentCountryName, this.state.countryName);
                 storeLocalData(Constants.ParentCurrency, this.state.parentCurrency);
                 storeLocalData(Constants.ParentTimeZone, this.state.timeZone);
-                if (response.email == "" || response.mobile == "") {
-                    if (this.state.isGoogleLogin) {
+                console.log("Ssssssssssssss");
+                console.log(response);
+                if (response.new_user) {
 
-                        this.props.navigation.navigate(Constants.ParentProfile, {
-                            parentEmail: this.state.parentEmail,
-                            parentFirstName: this.state.userInfo.user.givenName,
-                            parentLastName: this.state.userInfo.user.familyName,
-                            parentTimeZone: this.state.timeZone
-                        });
+                    this.props.navigation.navigate(Constants.AddKidDetail, {
+                        fromParent: true
+                    });
+                    // if (this.state.isGoogleLogin) {
 
-                    }
-                    else {
-                        this.props.navigation.navigate(Constants.ParentProfile, { myNumber: this.state.myNumber,
-                            parentTimeZone: this.state.timeZone
-                         });
-                    }
+                    //     this.props.navigation.navigate(Constants.ParentProfile, {
+                    //         parentEmail: this.state.parentEmail,
+                    //         parentFirstName: this.state.userInfo.user.givenName,
+                    //         parentLastName: this.state.userInfo.user.familyName,
+                    //         parentTimeZone: this.state.timeZone
+                    //     });
+
+                    // }
+                    // else if (this.state.isAppleLogin) {
+
+                    //     this.props.navigation.navigate(Constants.ParentProfile, {
+                    //         parentEmail: this.state.parentEmail,
+                    //         parentFirstName: this.state.parentFirstName,
+                    //         parentLastName: this.state.parentLastName,
+                    //         parentTimeZone: this.state.timeZone
+                    //     });
+
+                    // }
+                    // else {
+                    //     this.props.navigation.navigate(Constants.ParentProfile, {
+                    //         myNumber: this.state.myNumber,
+                    //         parentTimeZone: this.state.timeZone
+                    //     });
+                    // }
 
 
 
                 }
                 else {
-                    storeLocalData(Constants.IS_LOGGED_IN, true);
-                    storeLocalData(Constants.ParentUserId, response.user_id);
-                    storeLocalData(Constants.ParentEmail, response.email);
-                    storeLocalData(Constants.ParentFirstName, response.first_name);
-                    storeLocalData(Constants.ParentLastName, response.last_name);
-                    storeLocalData(Constants.ParentMobileNumber, response.mobile);
-                    this.props.navigation.navigate(Constants.MainScreen);
+                    this.existingUserToDashboard(response);
                 }
                 console.log(response);
             }
 
         }
 
+    }
+
+
+    existingUserToDashboard = (response) => {
+        storeLocalData(Constants.IS_LOGGED_IN, true);
+        storeLocalData(Constants.ParentUserId, response.user_id);
+        storeLocalData(Constants.ParentEmail, response.email);
+        storeLocalData(Constants.ParentFirstName, response.first_name);
+        storeLocalData(Constants.ParentLastName, response.last_name);
+        storeLocalData(Constants.ParentMobileNumber, response.mobile);
+        console.log("Existing User Country " + this.state.countryName + " -- " + this.state.countryCode);
+        storeLocalData(Constants.ParentCountryCode, this.state.countryCode);
+        storeLocalData(Constants.ParentCountryName, response.country);
+
+        if (response.country == Constants.INDIA || response.country == null)
+            storeLocalData(Constants.ParentCurrency, Constants.INDIA_CURRENCY);
+        else
+            storeLocalData(Constants.ParentCurrency, Constants.OTHER_CURRENCY);
+       this.props.navigation.navigate(Constants.MainScreen);
     }
 
     onOtpVerificationSuccess = () => {
@@ -342,14 +423,46 @@ class Login extends Component {
     }
 
 
+    onUserLogin = () => {
+        var isValidCred = true;
+        if (!isValidEmail(this.state.mUserName)) {
+            this.setState({
+                userNameError: true
+            })
+            isValidCred = false;
+        }
+        else {
+            this.setState({
+                userNameError: false
+            })
+        }
+        if (this.state.mPassword == "") {
+            this.setState({
+                userPasswordError: true
+            })
+            isValidCred = false;
+        }
+        else {
+            this.setState({
+                userPasswordError: false
+            })
+        }
+        if (isValidCred) {
+            console.log(this.state.mUserName);
+            this.props.existingUserLogin(this.state.mUserName, this.state.mPassword);
+        }
+
+
+    }
+
+
 
     handleSubmitMobileNumber() {
 
         console.debug("Length : " + this.state.myNumber)
 
         //for Testing
-        if(this.state.myNumber == TESTING_MOBILE_NUMBER)
-        {
+        if (this.state.myNumber == TESTING_MOBILE_NUMBER) {
             this.onOtpVerificationSuccess();
         }
 
@@ -502,6 +615,18 @@ class Login extends Component {
 
     }
 
+    addUserName = (value) => {
+
+        this.setState({
+            mUserName: value
+        })
+    }
+    addUserPassword = (value) => {
+        this.setState({
+            mPassword: value
+        })
+    }
+
 
 
 
@@ -532,14 +657,96 @@ class Login extends Component {
 
         const valueProps = !initialValue ? {} : { value: initialValue };
 
+        onAppleLoginSuccess = (userInfo) => {
+            console.log("Apple sign in");
+            console.log(userInfo);
+
+            const userEmailRes = userInfo.email;
+
+            if (userEmailRes != null) {
+                const userFName = userInfo.fullName.givenName;
+                const userLName = userInfo.fullName.familyName;
+                this.setState({
+                    isAppleLogin: true,
+                    parentEmail: userEmailRes,
+                    parentName: userFName + ' ' + userLName,
+                    parentFirstName: userFName,
+                    parentLastName: userLName
+                })
+
+            }
+            else {
+                this.setState({
+                    isAppleLogin: true,
+                    parentEmail: "",
+                    parentName: "",
+                    parentFirstName: "",
+                    parentLastName: ""
+                })
+            }
+
+            this.props.storeAppleEmail("", false, userInfo.identityToken, this.state.countryCode, this.state.countryName);
+        }
+
+        async function onAppleButtonPress() {
+            const appleAuthRequestResponse = await appleAuth.performRequest({
+                requestedOperation: appleAuth.Operation.LOGIN,
+                requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+            });
+
+            const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+            console.log("Credential State");
+            console.log(credentialState);
+            // use credentialState response to ensure the user is authenticated
+            if (credentialState === appleAuth.State.AUTHORIZED) {
+                console.log(appleAuthRequestResponse);
+                console.log(appleAuthRequestResponse.identityToken);
+                //   const jsonRes = jwt.decode(appleAuthRequestResponse.identityToken,"",{
+                //     skipValidation: true
+                //   }).then(res=>{
+                //       console.log(res)
+                //   })
+                //   .error(errr=>{
+                //       console.log(errr)
+                //   });
+                // const jwtDecoded = jwt.decode(appleAuthRequestResponse.identityToken).then(res=>{
+                //     console.log("Decode Completed");
+                //     console.log(res)
+                // }).error(err=>{
+                //     console.log("Error  : "+err)
+                // })
+                this.onAppleLoginSuccess(appleAuthRequestResponse);
+                // user is authenticated
+            }
+            else {
+                console.log(credentialState);
+                alert("Login Failed");
+
+            }
+        }
+
 
         const gmailLoginContent = (
 
             <View style={styles.googleSignInContainer}>
+                {
+                    Platform.OS == 'ios' &&
+                    <AppleButton
+                        buttonStyle={AppleButton.Style.BLACK}
+                        buttonType={AppleButton.Type.SIGN_IN}
+                        style={{
+                            width: 180, // You must specify a width
+                            height: 50, // You must specify a height
+                            fontSize: 15
+                        }}
+                        onPress={() => onAppleButtonPress()}
+                    />
+                }
+
 
                 <GoogleSigninButton
-                    style={{ width: 200, height: 50 }}
-                    size={GoogleSigninButton.Size.Wide}
+                    style={{ width: 180, height: 50, marginStart: 5, fontSize: 5 }}
+                    size={GoogleSigninButton.Size.Standard}
                     color={GoogleSigninButton.Color.Dark}
                     onPress={this.signIn}
                     disabled={false} />
@@ -610,7 +817,7 @@ class Login extends Component {
 
                 </View>
 
-                <Text style={[CommonStyles.text_12_Regular,{ margin : 10,marginStart : 25 }]}>We will send you OTP on this number</Text>
+                <Text style={[CommonStyles.text_12_Regular, { margin: 2, marginStart: 25 }]}>We will send you OTP on this number</Text>
                 <CustomGradientButton
                     style={styles.getOtpButton}
                     children="Get OTP"
@@ -686,7 +893,7 @@ class Login extends Component {
                 <View style={{ flexDirection: 'row', marginTop: 10, marginStart: 10, marginEnd: 10, justifyContent: 'space-around' }}>
                     <Text style={[CommonStyles.text_12_Regular]}>Enter OTP sent to your number</Text>
                     <TouchableOpacity onPress={this.handleOnResenOTPClick}>
-                        <Text style={[CommonStyles.text_12_Regular,{ color : COLOR.TEXT_COLOR_GREEN }]}>Resend OTP</Text>
+                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_GREEN }]}>Resend OTP</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -711,31 +918,88 @@ class Login extends Component {
 
 
 
+
+
             <View style={styles.mainContainer}>
+
+
                 <StatusBar backgroundColor={COLOR.PRIMARY_BG} barStyle="dark-content" />
 
-                <View style={showFullBanner ? styles.bannerContianer : styles.bannerHalfContianer}>
+                <KeyboardAwareScrollView>
 
-                    <LoginBanner onKeyboardOpen={this.onKeyboardOpen} />
+                    <View style={showFullBanner ? styles.bannerContianer : styles.bannerHalfContianer}>
 
-                </View>
-                {stateLoading &&
-                    <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
-                }
-                {loading &&
-                    <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
-                }
+                        <LoginBanner onKeyboardOpen={this.onKeyboardOpen} />
 
-                <View style={styles.bottomContianer}>
-                    {showEnterOTP ? enterOTPContent :
-                        countryName != "" ?
-                            countryName == 'India' ?
-                                mobileNumberContent : gmailLoginContent
-                            : <View />
+                    </View>
+                    {stateLoading &&
+                        <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
                     }
-                </View>
+                    {loading &&
+                        <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
+                    }
+
+                    <View style={styles.bottomContianer}>
+                        {showEnterOTP ? enterOTPContent :
+                            countryName != "" ?
+                                countryName == 'India' ?
+                                    mobileNumberContent : gmailLoginContent
+                                : <View />
+                        }
+
+                        <View style={{ flex: 1, justifyContent: 'space-evenly', marginBottom: 2, marginTop: 20 }}>
+                            <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center' }]}>(Or)</Text>
+                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 25, marginBottom: 2 }}>
+
+                                {this.state.userNameError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
+                                <TextInput
+                                    ref={(input) => { this.Otp_4_TextInput = input; }}
+                                    placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                    placeholder="Enter User Email"
+                                    style={styles.textInputBordered}
+                                    autoCapitalize="none"
+                                    onChangeText={this.addUserName.bind(this)}
+                                    value={this.state.mUserName}
+                                    blurOnSubmit={false}
+
+                                />
+                            </View>
+                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 2 }}>
+
+                                {this.state.userPasswordError && <Text style={styles.errorMessage}>Please enter a valid Password</Text>}
+                                <TextInput
+                                    ref={(input) => { this.Otp_4_TextInput = input; }}
+                                    placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                    placeholder="Enter Password"
+                                    style={styles.textInputBordered}
+                                    secureTextEntry={true}
+                                    autoCapitalize="none"
+                                    onChangeText={this.addUserPassword.bind(this)}
+                                    value={this.state.mPassword}
+                                    blurOnSubmit={false}
+
+                                />
+                            </View>
+
+                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 2 }}>
+
+                                <CustomGradientButton
+                                    myRef={(input) => { this.btn_add_kid = input; }}
+                                    style={styles.loginButton}
+                                    children={"Login"}
+                                    onPress={this.onUserLogin}
+                                />
+                            </View>
+
+
+                        </View>
+                    </View>
+                </KeyboardAwareScrollView>
+
+
 
             </View >
+
 
         )
 
@@ -743,11 +1007,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("From state", state.authenticate);
+
     return {
         state: state.authenticate,
         showEnterOTP: state.authenticate.showEnterOTP,
-        loading: state.authenticate.loading
+        loading: state.authenticate.loading,
+        user_login_status: state.authenticate.user_login_status,
+        user_login_response: state.authenticate.user_login_response
     }
 
 }
@@ -757,7 +1023,9 @@ const mapDispatchToProps = {
     reSendOTP,
     verifyOTP,
     sendOTPHashed,
-    storeMobileNumber
+    storeMobileNumber,
+    storeAppleEmail,
+    existingUserLogin
 };
 
 const styles = StyleSheet.create({
@@ -766,18 +1034,18 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.PRIMARY_BG
     },
     bannerContianer: {
-        flex: 5,
 
+        height: 350,
         backgroundColor: COLOR.WHITE
     },
     bannerHalfContianer: {
-        flex: 1,
+
 
         backgroundColor: COLOR.WHITE
     },
     bottomContianer: {
         flex: 2,
-        marginTop: normalize(20),
+        marginTop: normalize(5),
 
         backgroundColor: COLOR.PRIMARY_BG
     },
@@ -786,8 +1054,9 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     googleSignInContainer: {
-        flex: 1,
-
+        marginBottom: 5,
+        marginTop: 25,
+        flexDirection: 'row',
         alignSelf: 'center',
         justifyContent: 'center'
     },
@@ -832,16 +1101,37 @@ const styles = StyleSheet.create({
         borderColor: COLOR.BORDER_COLOR_GREEN,
         backgroundColor: COLOR.WHITE
     },
+    textInputBordered: {
+        textAlign: 'left',
+        padding: 20,
+        alignSelf: 'stretch',
+        borderRadius: 10,
+        borderWidth: 1.5,
+        borderColor: COLOR.BORDER_COLOR_GREEN,
+        backgroundColor: COLOR.WHITE
+    },
 
     getOtpButton: {
         alignItems: 'center',
         marginStart: 20,
         marginEnd: 20,
-        marginTop: 20,
-        paddingTop: 5,
+        marginTop: 5,
+        paddingTop: 15,
 
         paddingBottom: 15
-    }
+    },
+    loginButton: {
+        alignItems: 'center',
+        marginStart: 20,
+        marginEnd: 20,
+        marginTop: 20,
+        paddingTop: 15,
+
+        paddingBottom: 15
+    },
+    errorMessage: {
+        color: COLOR.RED
+    },
 
 });
 

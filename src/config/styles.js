@@ -78,6 +78,12 @@ export const CommonStyles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 999
   },
+  img_no_record : {
+    width : 200,
+    height : 200,
+    justifyContent : 'center',
+    alignSelf : 'center'
+  },
   text_18_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(18),

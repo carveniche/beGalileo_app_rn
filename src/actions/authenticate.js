@@ -10,7 +10,7 @@ import {
     REGISTER_PARENT,
     GET_GRADE_DATA,
     REGISTER_STUDENT,
-    LOGOUT_REQUEST,DELETE_STUDENT, EDIT_STUDENT
+    LOGOUT_REQUEST, DELETE_STUDENT, EDIT_STUDENT, EXISTING_USER_LOGIN
 
 } from '../config/redux-action-types/authenticate';
 import FormData from 'form-data';
@@ -120,6 +120,39 @@ export function storeMobileNumber(mobile, otp_status, email, country_code, count
     }
 }
 
+export function existingUserLogin(user_name, password) {
+    return {
+        type: EXISTING_USER_LOGIN,
+        payload: {
+            request: {
+                url: 'app_mathbox/login',
+                params: {
+                    user_name,
+                    password
+                }
+            }
+        }
+    }
+}
+
+export function storeAppleEmail(mobile, otp_status, token, country_code, country) {
+    return {
+        type: STORE_MOBILE,
+        payload: {
+            request: {
+                url: 'app_mathbox/store_mobile',
+                params: {
+                    mobile,
+                    otp_status,
+                    token,
+                    country_code,
+                    country
+                }
+            }
+        }
+    }
+}
+
 export function getGradeDatas() {
     return {
         type: GET_GRADE_DATA,
@@ -153,8 +186,7 @@ export function registerParent(mobile, email, first_name, last_name, pin, time_z
 
 export function registerStudent(user_id, first_name, last_name, dob, grade, board, gender, photo, time_zone) {
     console.log(photo)
-    if(photo == null)
-    {
+    if (photo == null) {
         return {
             type: REGISTER_STUDENT,
             payload: {
@@ -174,7 +206,7 @@ export function registerStudent(user_id, first_name, last_name, dob, grade, boar
             }
         }
     }
-    else{
+    else {
         var formdata = new FormData();
         formdata.append("user_id", user_id);
         formdata.append("first_name", first_name);
@@ -188,34 +220,34 @@ export function registerStudent(user_id, first_name, last_name, dob, grade, boar
             uri: Platform.OS === 'android' ? `file:///${photo.uri}` : photo.uri,
             type: 'image/jpeg',
             name: 'image.jpg',
-          });
+        });
         console.log(formdata);
 
         return {
             type: REGISTER_STUDENT,
             payload: {
                 request: {
-                    method : 'post',
+                    method: 'post',
                     url: 'app_mathbox/add_child',
-                    data : formdata,
-                    headers: {'Content-Type': 'multipart/form-data' }
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' }
                 }
             }
         }
     }
-   
-   // formdata.append("photo", fileInput.files[0], "ResImage.png");
-    
+
+    // formdata.append("photo", fileInput.files[0], "ResImage.png");
+
 }
 
 
-export function deleteStudent(student_id){
-    return{
-        type : DELETE_STUDENT,
-        payload : {
+export function deleteStudent(student_id) {
+    return {
+        type: DELETE_STUDENT,
+        payload: {
             request: {
-                url : 'app_mathbox/delete_child',
-                params : {
+                url: 'app_mathbox/delete_child',
+                params: {
                     student_id
                 }
             }
@@ -226,8 +258,7 @@ export function deleteStudent(student_id){
 
 export function editStudent(student_id, first_name, last_name, dob, grade, board, gender, photo, time_zone) {
     console.log(photo)
-    if(photo == null)
-    {
+    if (photo == null) {
         return {
             type: EDIT_STUDENT,
             payload: {
@@ -247,7 +278,7 @@ export function editStudent(student_id, first_name, last_name, dob, grade, board
             }
         }
     }
-    else{
+    else {
         var formdata = new FormData();
         formdata.append("student_id", student_id);
         formdata.append("first_name", first_name);
@@ -261,24 +292,24 @@ export function editStudent(student_id, first_name, last_name, dob, grade, board
             uri: Platform.OS === 'android' ? `file:///${photo.uri}` : photo.uri,
             type: 'image/jpeg',
             name: 'image.jpg',
-          });
+        });
         console.log(formdata);
 
         return {
             type: EDIT_STUDENT,
             payload: {
                 request: {
-                    method : 'post',
+                    method: 'post',
                     url: 'app_mathbox/edit_child',
-                    data : formdata,
-                    headers: {'Content-Type': 'multipart/form-data' }
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' }
                 }
             }
         }
     }
-   
-   // formdata.append("photo", fileInput.files[0], "ResImage.png");
-    
+
+    // formdata.append("photo", fileInput.files[0], "ResImage.png");
+
 }
 
 export function restoreSession() {

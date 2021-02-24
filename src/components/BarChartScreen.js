@@ -13,11 +13,34 @@ class BarChartScreen extends Component {
         super(props);
         this.state = {
             datas: [
-                [50, 15, 40, 27, 30, 12, 20, 46, 25, 78, 45, 23, 65, 33, 80],
-                [50, 15, 40, 27, 30, 12, 20, 46, 25, 78, 45, 23, 65, 33, 80].reverse()
+                [13,25,13,0],
+                [99,0,0,67]
             ]
             
         };
+    }
+
+    componentDidMount(){
+        console.log("Bar Chart Screen");
+        console.log(this.props.accuracyData);
+        var data1 = [];
+        var data2 = [];
+        var totalArray = []
+        this.props.accuracyData.map((element,index)=>{
+            data1[index] = element.math_zone_accuracy;
+            data2[index] = element.logic_zone_accuracy;
+        
+        })
+        console.log(data1);
+        console.log(data2);
+        totalArray[0] = data1;
+        totalArray[1] = data2;
+        console.log(totalArray);
+        console.log(this.state.datas);
+        this.setState({
+            datas : totalArray
+        })
+
     }
 
 

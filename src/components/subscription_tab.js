@@ -146,8 +146,10 @@ class SubscriptionTabs extends Component {
 
 
         }
+        console.log("Subscription Tabs");
         if (this.props.user_detail_response != undefined) {
             console.log("user detail available");
+            console.log(this.props.user_detail_response);
             this.setState({
                 ParentCountry: this.props.user_detail_response.parent_country,
                 ParentUserId: this.props.user_detail_response.parent_user_id,
@@ -280,7 +282,7 @@ class SubscriptionTabs extends Component {
                                 {
                                     this.state[groupPrefixCheckBox + index] ?
                                         <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text> :
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {this.getPriceForPackage(item, index)}</Text>
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency}  {this.getPriceForPackage(item, index)}</Text>
                                 }
 
                             </View>
@@ -454,7 +456,7 @@ class SubscriptionTabs extends Component {
             <View style={{ marginStart: normalize(5), marginEnd: normalize(5) }}>
                 <View style={{ flexDirection: "row", marginTop: normalize(20) }}>
                     <TouchableOpacity onPress={this.onTabSelected} style={isGroupSelected ? styles.tabItemSelected : styles.tabItem}>
-                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Group Classes</Text>
+                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Classes</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isGroupSelected ? styles.tabItem : styles.tabItemSelected]}>
                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Speical Classes</Text>

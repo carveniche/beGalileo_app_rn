@@ -11,6 +11,7 @@ import { normalize, Card } from "react-native-elements";
 import { getStudentClasses, getDashboardItems } from '../../actions/dashboard';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import DashboardHeader from '../../components/DashboardHeader';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import LiveClassSchedule from '../ScheduleScreens/LiveClassSchedule';
 import CurriculamSchedule from '../ScheduleScreens/CurriculamSchedule';
 import {NavigationEvents} from 'react-navigation';
@@ -120,9 +121,7 @@ class HomeScheduleScreen extends Component {
                                         <LiveClassSchedule />
 
                                     :
-                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
-                                    </View>
+                                   <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
 
                             }
                         </View>

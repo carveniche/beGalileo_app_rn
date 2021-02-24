@@ -5,6 +5,7 @@ import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_ARROW_RIGHT, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_NOTIFICATIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS, IC_MORE_HELP, IMG_SHAKSHI } from "../../assets/images";
 import { CustomBackButton } from '../../components';
+import NoRecordFoundComponent  from '../../components/NoRecordFoundComponent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { getBatchDetails } from '../../actions/dashboard';
@@ -165,15 +166,13 @@ class MoreLiveClassBatchScreens extends Component {
                         marginBottom: normalize(10)
                     }}>
                         <CustomBackButton onPress={this.onPressBack} />
-                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>Live Class Batches</Text>
+                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>Live Class Schedule</Text>
                         {/* <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>2 days a week</Text> */}
 
                         {
                             batch_details_status && batch_details_response.batch_details.length > 0 ?
                                 this.renderLiveClassDatas() :
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: normalize(40) }}>
-                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No batch found</Text>
-                                </View>
+                                <NoRecordFoundComponent title="No batch found" sub_title=""/>
 
                         }
 

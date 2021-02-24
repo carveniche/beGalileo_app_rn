@@ -8,28 +8,8 @@ import { COLOR } from '../../config/styles';
 const SECTIONS = [
     {
         title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-    {
-        title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-    {
-        title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-    {
-        title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-    {
-        title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-    {
-        title: 'What do I get inside the beGalileo Math box?',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean fringilla egestas pretium. Proin posuere mi in elit efficitur, ac ultricies neque congue. Nullam ut tincidunt ex, aliquam bibendum arcu. Fusce ornare tincidunt neque in mattis.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
+        content: 'All activity details',
+    }
 ];
 
 class FaqScreen extends Component {

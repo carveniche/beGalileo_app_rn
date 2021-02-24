@@ -6,6 +6,7 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { getSubscriptionDetails } from '../../actions/dashboard';
 import { IC_ARROW_RIGHT, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_NOTIFICATIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS, IC_MORE_HELP, IMG_SHAKSHI } from "../../assets/images";
 import { CustomBackButton } from '../../components';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
@@ -152,9 +153,13 @@ class MoreMySubscriptions extends Component {
 
 
                         {
-                            subscription_details_status &&
+                            subscription_details_status && this.props.subscription_details_response.subscription_details != null && this.props.subscription_details_response.subscription_details.length > 0?
                             this.renderSubscriptionDetails()
+                        : <NoRecordFoundComponent title="No subscriptions details found" sub_title=""/>
+
                         }
+
+
 
 
                     </View>

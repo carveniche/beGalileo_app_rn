@@ -51,27 +51,27 @@
 		</dict>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to access your calendar</string>
+	<string>Allow beGalileo to access your calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to use the camera</string>
+	<string>Allow beGalileo to use the camera</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow beGalileo_rn_dev experiences to access your contacts</string>
+	<string>Allow beGalileo experiences to access your contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to use your location</string>
+	<string>Allow beGalileo to use your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to use your location</string>
+	<string>Allow beGalileo to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to use your location</string>
+	<string>Allow beGalileo to use your location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to access your microphone</string>
+	<string>Allow beGalileo to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to access your device's accelerometer</string>
+	<string>Allow beGalileo to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give beGalileo_rn_dev periences permission to save photos</string>
+	<string>Give beGalileo periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give beGalileo_rn_dev periences permission to access your photos</string>
+	<string>Give beGalileo periences permission to access your photos</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>Allow beGalileo_rn_dev to access your reminders</string>
+	<string>Allow beGalileo to access your reminders</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Bold.otf</string>
@@ -96,6 +96,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

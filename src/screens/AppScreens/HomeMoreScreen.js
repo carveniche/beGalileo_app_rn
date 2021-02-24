@@ -161,7 +161,7 @@ class HomeMoreScreen extends Component {
                             <TouchableOpacity onPress={this.onLiveClassBatchClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_LIVE_CLASS_BATCH} />
-                                    <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Live Class Batches</Text>
+                                    <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Live Class Schedule</Text>
                                 </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
                             </TouchableOpacity>

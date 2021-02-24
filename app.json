@@ -1,9 +1,9 @@
 {
-  "name": "beGalileo_rn_dev",
-  "displayName": "beGalileo_rn_dev",
+  "name": "beGalileo",
+  "displayName": "beGalileo",
   "expo": {
-    "name": "beGalileo_rn_dev",
-    "slug": "beGalileo_rn_dev",
+    "name": "beGalileo",
+    "slug": "beGalileo",
     "version": "1.0.0",
     "platforms": [
       "ios",

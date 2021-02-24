@@ -23,7 +23,7 @@ import {
     REGISTER_STUDENT,REGISTER_STUDENT_FAILED,REGISTER_STUDENT_SUCCESS,
     GET_GRADE_DATA,GET_GRADE_DATA_SUCCESS,GET_GRADE_DATA_FAILED, LOGOUT_REQUEST,
     DELETE_STUDENT,DELETE_STUDENT_SUCCESS,DELETE_STUDENT_FAILED,
-    EDIT_STUDENT,EDIT_STUDENT_SUCCESS,EDIT_STUDENT_FAILED
+    EDIT_STUDENT,EDIT_STUDENT_SUCCESS,EDIT_STUDENT_FAILED, EXISTING_USER_LOGIN, EXISTING_USER_LOGIN_SUCCESS, EXISTING_USER_LOGIN_FAILED
 } from '../config/redux-action-types/authenticate'
 import { showMessage, hideMessage } from "react-native-flash-message";
 
@@ -181,6 +181,26 @@ export default function reducer(state = initialState, action) {
                 ...state,loading : false,
                 edit_student_status : action.payload.data.status,
                 edit_student_response : action.payload.data
+            }
+        }
+
+        case EXISTING_USER_LOGIN :{
+            return{
+                ...state,loading : true,user_login_status : null
+            }
+        }
+        case EXISTING_USER_LOGIN_SUCCESS : {
+            return{
+                ...state,loading : false,
+                user_login_status : action.payload.data.status,
+                user_login_response : action.payload.data
+            }
+        }
+        case EXISTING_USER_LOGIN_FAILED :{
+            return{
+                ...state,loading : false,
+                user_login_status : false,
+                user_login_response : action.payload.data
             }
         }
         

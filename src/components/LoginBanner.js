@@ -76,8 +76,8 @@ export default class LoginBanner extends React.Component {
             <Swiper style={styles.wrapper} showsButtons={false}>
                 <View style={[styles.subItemContianer, { backgroundColor: colorBg[0] }]}>
                     <View style={styles.headerContianer}>
-                        <Text style={[CommonStyles.text_18_semi_bold, styles.headerTextItem]}>{headerText[0]}</Text>
-                        <Text style={[CommonStyles.text_14_Regular, styles.subHeaderTextItem]}>{subHeaderText[0]}</Text>
+                        <Text style={[CommonStyles.text_12_Regular, styles.headerTextItem]}>{headerText[0]}</Text>
+                        <Text style={[CommonStyles.text_12_Regular, styles.subHeaderTextItem]}>{subHeaderText[0]}</Text>
                     </View>
                     {this.state.showImage &&
 
@@ -135,12 +135,12 @@ const styles = StyleSheet.create({
         marginEnd: '15%'
     },
     headerTextItem: {
-        fontSize: normalize(18),
+        fontSize: normalize(15),
         fontWeight: 'bold',
         color: COLOR.TEXT_COLOR_BLUE
     },
     subHeaderTextItem: {
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         marginTop: 10,
         color: "#353639",
         opacity: 0.7
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        width: 300,
-        height: 200,
+        width: 120,
+        height: 120,
         marginBottom: 50,
         marginEnd : 20,
 

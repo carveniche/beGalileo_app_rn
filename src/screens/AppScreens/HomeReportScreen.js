@@ -3,24 +3,25 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles, BAR_CHART_COLORS, BAR_CHART_COLOR_LINES } from '../../config/styles';
-import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2 } from "../../assets/images";
+import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2,IC_BANNER_1 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getDashboardItems } from '../../actions/dashboard';
+import { getDashboardItems, getStudentReportData } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import DashboardHeader from '../../components/DashboardHeader';
 import PieChartScreen from '../../components/PieChartScreen';
 import BarChartScreen from '../../components/BarChartScreen';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 
 class HomeReportScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAccuracyChart: true,
+            showAccuracyChart: false,
             showTimeSpentChart: false,
-            currentSelectedKid : [],
+            currentSelectedKid: [],
             accuracyChartData: [
                 {
                     name: 'Math Topic',
@@ -35,11 +36,17 @@ class HomeReportScreen extends Component {
         };
     }
 
+    componentDidMount() {
+        console.log("Student Id " + this.props.currentSelectedKid.student_id);
+        this.checkReportDatas();
+    }
+
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-               
+
                 this.checkDashboardItems();
+                this.checkReportDatas();
 
             }
         }
@@ -51,6 +58,11 @@ class HomeReportScreen extends Component {
             this.props.getDashboardItems(parentId, "India", this.props.currentSelectedKid.student_id)
         })
 
+    }
+
+    checkReportDatas = () => {
+         this.props.getStudentReportData(this.props.currentSelectedKid.student_id,60);
+        //this.props.getStudentReportData(52006, 7);
     }
 
     changeAccuracyChartView = () => {
@@ -81,11 +93,11 @@ class HomeReportScreen extends Component {
     }
 
     onPressStarEarned = () => {
-       // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
+        // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
     }
 
     onPressBadgeEarned = () => {
-       // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
+        // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
     }
 
     onPressViewAllActivity = () => {
@@ -93,7 +105,8 @@ class HomeReportScreen extends Component {
     }
 
     showTimeSpentCard = () => {
-        const { currentSelectedKid } = this.props;
+        const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
+        const { showTimeSpentChart } = this.state;
         return (
             <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_TIME_SPENT} />
@@ -115,42 +128,52 @@ class HomeReportScreen extends Component {
                         <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
                     </View>
                 </View>
-                {/* <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
+                <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
+                    {
+                        showTimeSpentChart ?
+                            <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
+                                <View style={[CommonStyles.greyLineSeprator]} />
+
                                 {
-                                    showTimeSpentChart ?
-                                        <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
-                                            <View style={[CommonStyles.greyLineSeprator]} />
-
-                                            <PieChartScreen />
-
-
-                                        </View>
-                                        : <View />
+                                    studentReportStatus && <PieChartScreen accuracyData={this.props.studentReportResponse.report_data} />
                                 }
-                                <TouchableOpacity onPress={this.changeTimeSpentChartView} style={{ padding: normalize(20) }}>
-                                    <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
-                                </TouchableOpacity>
-                            </View> */}
+
+
+
+                            </View>
+                            : <View />
+                    }
+                    <TouchableOpacity onPress={this.changeTimeSpentChartView} style={{ padding: normalize(20) }}>
+                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                    </TouchableOpacity>
+                </View>
 
             </View>
         )
     }
 
     showAccuracyCard = () => {
-        const { currentSelectedKid } = this.props;
+        const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
+        const { showAccuracyChart } = this.state;
         return (
             <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
-   <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
+                <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
-                    
+
                     <View style={{ flex: 1 }}>
                         <Text style={[CommonStyles.text_14_bold]}>Accuracy</Text>
                         <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(5) }]}>Average of correct answers given by kid</Text>
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                            <Text style={[CommonStyles.text_18_regular]}>{currentSelectedKid.activity_details.accuracy}</Text>
-                            <Text style={[CommonStyles.text_12_Regular, {}]}>%</Text>
+                            {
+                                studentReportStatus ?
+                                    <Text style={[CommonStyles.text_18_regular]}>{studentReportResponse.total_accuracy.toFixed(2)}</Text>
+                                    :
+                                    <Text style={[CommonStyles.text_18_regular]}>{currentSelectedKid.activity_details.accuracy.toFixed(2)}</Text>
+                            }
+
+                            <Text style={[CommonStyles.text_12_Regular, {}]}> %</Text>
                             {/* <Icon
                                 style={{ marginStart: normalize(8) }}
                                 size={15}
@@ -162,45 +185,46 @@ class HomeReportScreen extends Component {
 
 
                 </View>
-                {/* <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
-                {
-                    showAccuracyChart ?
-                        <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
-                            <View style={[CommonStyles.greyLineSeprator]} />
+                <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
+                    {
+                        showAccuracyChart ?
+                            <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
+                                <View style={[CommonStyles.greyLineSeprator]} />
 
 
-                            <View style={{ flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-between' }}>
-                                <View>
-                                    {
+                                <View style={{ flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-between' }}>
+                                    <View>
+                                        {/* {
                                         this.showAccuracyChartData()
-                                    }
-                                    <Text style={[CommonStyles.text_9_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>5 Apr,2020</Text>
+                                    } */}
+                                        <Text style={[CommonStyles.text_9_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}></Text>
+
+                                    </View>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
+
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>Last 7 Days</Text>
+                                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center', marginStart: normalize(10), marginEnd: normalize(10) }} source={IC_DOWN_ENTER} />
+                                    </View>
+
 
                                 </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
+                                <View style={{ marginTop: normalize(5) }}>
+                                    {this.props.studentReportStatus && <BarChartScreen accuracyData={this.props.studentReportResponse.report_data} />}
 
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>Last 7 Days</Text>
-                                    <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center', marginStart: normalize(10), marginEnd: normalize(10) }} source={IC_DOWN_ENTER} />
                                 </View>
+
+
+
 
 
                             </View>
-                            <View style={{ marginTop: normalize(5) }}>
-                                <BarChartScreen />
-                            </View>
-                            
+                            : <View />
+                    }
 
-
-
-
-                        </View>
-                        : <View />
-                }
-
-                <TouchableOpacity onPress={this.changeAccuracyChartView} style={{ padding: normalize(20) }}>
-                    <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
-                </TouchableOpacity>
-            </View> */}
+                    <TouchableOpacity onPress={this.changeAccuracyChartView} style={{ padding: normalize(10) }}>
+                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                    </TouchableOpacity>
+                </View>
 
 
             </View>
@@ -513,20 +537,16 @@ class HomeReportScreen extends Component {
                 paddingStart: normalize(10),
                 paddingEnd: normalize(10)
             }}>
-                <ScrollView>
-                    <View>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={{ flex : 1 }}>
 
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
-                        {
-
-                        }
+                        
                         {
                             currentSelectedKid && currentSelectedKid.paid_status ?
 
                                 this.showAllReportDatas() :
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginTop : 25 }}>
-                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
-                                </View>
+                               <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test."/>
 
                         }
 
@@ -733,7 +753,8 @@ const mapStateToProps = (state) => {
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
         dashboardResponse: state.dashboard.dashboard_status,
-
+        studentReportStatus: state.dashboard.student_report_status,
+        studentReportResponse: state.dashboard.student_report_response,
         currentSelectedKid: state.dashboard.current_selected_kid,
 
     }
@@ -742,7 +763,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    getDashboardItems
+    getDashboardItems,
+    getStudentReportData
 };
 
 const styles = StyleSheet.create({

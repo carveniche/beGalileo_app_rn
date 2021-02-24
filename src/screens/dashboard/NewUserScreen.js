@@ -156,7 +156,7 @@ class NewUserScreen extends Component {
                                 Not sure about beGalileo Online based learning?
                           </Text>
                             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
-                                Lorem ipsum some stats may be can come here
+                                some stats may be can come here
                      </Text>
                             <TouchableOpacity
                                 style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}

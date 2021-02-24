@@ -11,9 +11,38 @@ class PieChartScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [45, 138, 40, 137],
-            subjects : ["Math Topic","Think and reason","Speed Math","Wathching Video"]
+            data: [45, 138, 40],
+            subjects : ["Math Zone","Logic Zone","Game Zone"]
         };
+    }
+
+    componentDidMount(){
+        console.log("Pie Chart Screen");
+        console.log(this.props.accuracyData);
+        var mathZone = 0;
+        var logicZone = 0;
+        var gameZone = 0;
+        var datas = [];
+
+        this.props.accuracyData.map((element,index)=>{
+            mathZone += element.math_zone_timespent;
+            logicZone += element.logic_timespent;
+            gameZone += element.game_timespent;
+        
+        })
+        console.log("Math Zone "+mathZone);
+        console.log("Logic Zone "+logicZone);
+        console.log("Game Zone "+gameZone);
+
+        datas[0] = mathZone;
+        datas[1] = logicZone;
+        datas[2] = gameZone;
+
+        this.setState({
+            data : datas
+        })
+        
+
     }
 
     mappedDatas() {

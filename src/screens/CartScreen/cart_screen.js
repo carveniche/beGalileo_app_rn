@@ -3,14 +3,16 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
+import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET } from "../../config/configs";
 import { IMG_SHAKSHI, IC_REMOVE_ITEM, IC_CLOSE_BLUE, CART_INDICATOR_MY_CART } from '../../assets/images';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon } from "../../actions/dashboard";
+import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon,createPaymentOrder } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from '@react-native-community/async-storage';
 import { normalize } from "react-native-elements";
+import RNRazorpayCheckout from 'react-native-razorpay';
 
 class CartListScreen extends Component {
     constructor(props) {
@@ -30,6 +32,7 @@ class CartListScreen extends Component {
             couponDiscount: 0,
             mathBoxPrice: 0,
             mLocalCountry: "",
+            mParentId : 0,
             isCouponApplied: false,
             finalAmountAfterCoupon: 0,
             currency: Constants.INDIA_CURRENCY
@@ -54,7 +57,8 @@ class CartListScreen extends Component {
             var localParentCurrency = JSON.parse(response[2][1])
             this.setState({
                 currency: localParentCurrency,
-                mLocalCountry: localParentCountry
+                mLocalCountry: localParentCountry,
+                mParentId : localParentUserId
             })
             console.log(localParentCurrency);
             this.props.getCartItemList(localParentUserId, localParentCountry)
@@ -71,6 +75,12 @@ class CartListScreen extends Component {
            
 
 
+        }
+        if (prevProps.create_order_status != this.props.create_order_status) {
+            if (this.props.create_order_status) {
+               
+                this.proceedToPayment(this.props.create_order_response)
+            }
         }
         if (prevProps.get_cart_list_status != this.props.get_cart_list_status) {
             if (this.props.get_cart_list_status) {
@@ -119,6 +129,50 @@ class CartListScreen extends Component {
             }
         }
 
+    }
+
+    updatePaymentStatus = (razorpay_payment_id) => {
+        this.props.updatePaymentStatus(razorpay_payment_id, this.state.mParentId, this.props.get_cart_list_response.mathbox_order_id)
+    }
+
+    proceedToPayment = (order_response) => {
+        console.log(order_response);
+        var formattdTotalPrice = this.state.netTotalPrice + "00";
+
+        var options = {
+            description: 'beGalileo Package',
+            image: 'https://www.begalileo.com/assets/pwa/beGalileo_logo_1024x768.png',
+            currency: 'USD',
+            key: RAZOR_PAY_TEST_KEY,
+            amount: formattdTotalPrice,
+            name: 'Carveniche Technologies',
+            order_id: order_response.razorpay_order_id,
+            // prefill: {
+            //     email: this.state.localParentEmail,
+            //     contact: this.state.localParentContactNumber,
+            //     name: this.state.localParentName
+            // },
+            notes: {
+                user_id: order_response.user_id,
+                user_subscription_ids: JSON.stringify(order_response.user_subscription_ids),
+                coupon_code: order_response.coupon_code
+            },
+            theme: { color: COLOR.TEXT_COLOR_GREEN }
+        }
+        console.log(options);
+
+        RNRazorpayCheckout.open(options).then((data) => {
+            // handle success
+            // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+            this.updatePaymentStatus(data.razorpay_payment_id);
+            // alert(`Success: ${data.razorpay_payment_id}`);
+        }).catch((error) => {
+            // handle failure
+            console.log("Payment failed Error ");
+            console.log(error);
+            // this.updatePaymentStatus(data.razorpay_payment_id);
+            this.props.navigation.navigate(Constants.PaymentFailedScreen);
+        });
     }
 
 
@@ -228,12 +282,27 @@ class CartListScreen extends Component {
 
 
     proceedToAddress = () => {
-        
-        console.log(this.state);
-        this.props.navigation.navigate(Constants.CartAddress, {
-            netTotalPrice: this.state.netTotalPrice
-        });
+        if(this.state.currency == Constants.INDIA_CURRENCY)
+        {
+            console.log(this.state);
+            this.props.navigation.navigate(Constants.CartAddress, {
+                netTotalPrice: this.state.netTotalPrice
+            });
+        }
+        else
+        {
+           // alert("Proceed to payment");
+            this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
+                this.state.mParentId,
+                this.state.localParentCountry,
+                ""
+            )
+
+        }
+      
     }
+
+  
 
     returnCalculatedPrice = (item) => {
         if(!item.mathbox_required){
@@ -271,7 +340,7 @@ class CartListScreen extends Component {
                                 <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_PURPLE, alignSelf: 'center', marginStart: normalize(8) }]}>{item.discount}% off</Text>
                             </View>
                             {
-                                item.mathbox_required &&
+                                item.mathbox_required && this.state.mLocalCountry == Constants.INDIA &&
                                 <View style={{ marginTop: normalize(4), marginTop: normalize(4) }}>
                                     <Text style={[CommonStyles.text_12_regular]}>With {item.boxes} Math boxes{"\n"}for {item.duration} months</Text>
                                 </View>
@@ -420,9 +489,8 @@ class CartListScreen extends Component {
                                         <CustomGradientButton
                                             myRef={(input) => { this.btn_pay_now = input; }}
                                             style={styles.btn_proceed_address}
-                                            children={"Proceed to Address"}
+                                            children={this.state.currency == Constants.INDIA_CURRENCY ? "Proceed to Address " : "Proceed to Payment"}
                                             onPress={this.proceedToAddress}
-
                                         />
                                     </View>
                                 </View>
@@ -538,7 +606,9 @@ const mapStateToProps = (state) => {
         remove_coupon_status: state.dashboard.remove_coupon_status,
         remove_coupon_response: state.dashboard.remove_coupon_response,
         remove_from_cart_status: state.dashboard.remove_from_cart_status,
-        remove_from_cart_response: state.dashboard.remove_from_cart_response
+        remove_from_cart_response: state.dashboard.remove_from_cart_response,
+        create_order_status: state.dashboard.create_order_status,
+        create_order_response: state.dashboard.create_order_response,
 
 
     }
@@ -549,6 +619,7 @@ const mapDispatchToProps = {
     removeFromCart,
     getCartItemList,
     doApplyCoupon,
-    doRemoveCoupon
+    doRemoveCoupon,
+    createPaymentOrder
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CartListScreen);

@@ -219,7 +219,7 @@ class LiveClassSchedule extends Component {
         if (student_class_response.upcoming_classes.length == 0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length == 0) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No record found</Text>
+                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No .. found</Text>
                 </View>
             )
         }

@@ -28,7 +28,7 @@ import {
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
     REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, 
-    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS
+    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED
 } from '../config/redux-action-types/dashboard'
 
 const initialState = { cartItems: [] }
@@ -491,6 +491,31 @@ export default function reducer(state=initialState,action){
                 remove_coupon_response : action.payload.data
             }
         }
+
+
+
+        case STUDENT_REPORT :{
+            return{
+                ...state,loading : true,student_report_status : null , student_report_response : null
+            }
+        }
+        case STUDENT_REPORT_SUCCESS : {
+            return{
+                ...state,loading : false,
+                student_report_status : action.payload.data.status,
+                student_report_response : action.payload.data
+            }
+        }
+        case STUDENT_REPORT_FAILED :{
+            return{
+                ...state,loading : false,
+                student_report_status : action.payload.data.status,
+                student_report_response : action.payload.data
+            }
+        }
+
+
+
         case SET_USER_DETAILS : {
             return{
                 ...state,

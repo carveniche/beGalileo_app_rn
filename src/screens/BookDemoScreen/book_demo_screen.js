@@ -9,6 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import Modal from 'react-native-modal';
 import { getDemoSlots, doBookingDemo } from '../../actions/dashboard';
@@ -29,6 +30,7 @@ class BookDemoScreen extends Component {
             itemPressed: null,
             selectDateError: false,
             selectDateErrorMessage: "",
+            mBirthDateDialog : false,
             timeSlotsList: [],
             mrngTimeSlotList: [],
             afternoonTimeSlotList: [],
@@ -54,7 +56,7 @@ class BookDemoScreen extends Component {
 
         }
         let todayDate = new Date();
-        todayDate.setDate(todayDate .getDate() + 1);
+        todayDate.setDate(todayDate.getDate() + 1);
         this.setState({
             dobDate: todayDate,
             selectedDateText: moment(todayDate).format('DD-MMM-YYYY'),
@@ -146,7 +148,7 @@ class BookDemoScreen extends Component {
         if (prevProps.bookDemoStatus !== this.props.bookDemoStatus) {
             console.log("inside book demo status");
             if (this.props.bookDemoStatus) {
-             
+
                 this.setState({
                     bookDemoStatus: this.props.bookDemoStatus
                 })
@@ -180,12 +182,15 @@ class BookDemoScreen extends Component {
     }
 
     showDatePicker = () => {
-        var today = new Date()
-        this.refs.dobDialog.open({
-            date: new Date(),
-            maxDate: new Date(new Date().setDate(new Date().getDate() + 3)),
-            minDate: new Date(new Date().setDate(new Date().getDate() + 1))
-        });
+        this.setState({
+            mBirthDateDialog : true
+        })
+        // var today = new Date()
+        // this.refs.dobDialog.open({
+        //     date: new Date(),
+        //     maxDate: new Date(new Date().setDate(new Date().getDate() + 3)),
+        //     minDate: new Date(new Date().setDate(new Date().getDate() + 1))
+        // });
     }
 
     renderMorningTime = (item) => (
@@ -235,8 +240,15 @@ class BookDemoScreen extends Component {
         }, () => {
             this.getTimeSlotsFromDate();
         });
+        this.closeDatePicker();
 
     }
+
+    closeDatePicker = () => {
+        this.setState({
+          mBirthDateDialog: false
+        })
+      }
 
     onDateChange = (event, selectedDate) => {
         console.log("Selected date " + selectedDate);
@@ -275,7 +287,7 @@ class BookDemoScreen extends Component {
 
 
     render() {
-        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList } = this.state;
+        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList,mBirthDateDialog } = this.state;
         const { loading } = this.props;
         const { navigation } = this.props.navigation;
         const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
@@ -361,7 +373,7 @@ class BookDemoScreen extends Component {
                                     :
                                     <Text style={{ fontFamily: Constants.Montserrat_Regular, marginStart: 10, marginTop: 10, fontSize: 15, color: COLOR.TEXT_COLOR_HINT }}>No slots available</Text>
                             }
-                            
+
                         </View>
                         <View style={{ marginTop: 10 }}>
                             <Text style={[CommonStyles.text_11_bold, { marginStart: 15, }]}>Afternoon</Text>
@@ -379,10 +391,10 @@ class BookDemoScreen extends Component {
                                     :
                                     <Text style={{ fontFamily: Constants.Montserrat_Regular, marginStart: 10, marginTop: 10, fontSize: 15, color: COLOR.TEXT_COLOR_HINT }}>No slots available</Text>
                             }
-                           
+
                         </View>
                         <View style={{ marginTop: 10 }}>
-                        <Text style={[CommonStyles.text_11_bold, { marginStart: 15, }]}>Evening</Text>
+                            <Text style={[CommonStyles.text_11_bold, { marginStart: 15, }]}>Evening</Text>
                             {
                                 eveningTimeSlotList.length > 0 ?
                                     <FlatList
@@ -397,7 +409,7 @@ class BookDemoScreen extends Component {
                                     :
                                     <Text style={{ fontFamily: Constants.Montserrat_Regular, marginStart: 10, marginTop: 10, fontSize: 15, color: COLOR.TEXT_COLOR_HINT }}>No slots available</Text>
                             }
-                           
+
 
 
 
@@ -440,7 +452,13 @@ class BookDemoScreen extends Component {
                                 onChange={this.onDateChange}
                             />
                         </Modal> */}
-                        <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
+                        <DateTimePickerModal
+                            isVisible={mBirthDateDialog}
+                            mode="date"
+                            onConfirm={this.onDOBDatePicked}
+                            onCancel={this.closeDatePicker}
+
+                        />
                     </View>
 
 

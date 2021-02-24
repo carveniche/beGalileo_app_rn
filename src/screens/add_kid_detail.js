@@ -16,6 +16,7 @@ import RadioForm, { RadioButton } from 'react-native-simple-radio-button';
 import { IC_PROFILE_PIC } from "../assets/images";
 import { getLocalData, storeLocalData } from "../components/helpers/AsyncMethods";
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ImagePicker from 'react-native-image-picker';
 import * as Constants from "../components/helpers/Constants";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -53,6 +54,8 @@ class AddKidDetail extends Component {
             mChildName: null,
             mChildLastName: null,
             avatarSource: null,
+            gradeItemPressed: null,
+            boardItemPressed : null,
             mBirthDate: null,
             mBirthDay: null,
             mBirthdMonth: null,
@@ -66,6 +69,7 @@ class AddKidDetail extends Component {
             mChildGenderError: null,
             mChildGradeError: null,
             mChildBoardError: null,
+            mBirthDateDialog: false,
             allKidsList: [],
             showAddkidForm: true,
             currentKidCounter: 0,
@@ -108,10 +112,14 @@ class AddKidDetail extends Component {
         var pastYear = maxDateValue.getFullYear() - 1;
         maxDateValue.setFullYear(pastYear);
 
-        this.refs.dobDialog.open({
-            date: new Date(),
-            maxDate: new Date(maxDateValue)
-        });
+        this.setState({
+            mBirthDateDialog: true
+        })
+
+        // this.refs.dobDialog.open({
+        //     date: new Date(),
+        //     maxDate: new Date(maxDateValue)
+        // });
     }
 
     onDOBDatePicked = (date) => {
@@ -122,8 +130,18 @@ class AddKidDetail extends Component {
             selectedDateText: moment(date).format('DD-MMM-YYYY'),
             mBirthDate: moment(date).format('YYYY-MM-DD')
         });
+        this.closeDatePicker();
 
     }
+
+    closeDatePicker = () => {
+        this.setState({
+            mBirthDateDialog: false
+        })
+    }
+
+
+
 
     // static getDerivedStateFromProps(nextProps, state) {
 
@@ -161,6 +179,7 @@ class AddKidDetail extends Component {
         })
 
         getLocalData(Constants.ParentUserId).then((parentId) => {
+            console.log("Parent user id "+parentId);
             this.setState({
                 parentUserId: parentId
             })
@@ -256,29 +275,29 @@ class AddKidDetail extends Component {
             })
             isValidationSuccess = false
         }
-        if (this.state.mChildLastName == null) {
-            this.setState({
-                mChildNameError: true
-            })
-            isValidationSuccess = false
-        }
-        else {
-            this.setState({
-                mChildNameError: false
-            })
-        }
+        // if (this.state.mChildLastName == null) {
+        //     this.setState({
+        //         mChildNameError: true
+        //     })
+        //     isValidationSuccess = false
+        // }
+        // else {
+        //     this.setState({
+        //         mChildNameError: false
+        //     })
+        // }
 
-        if (this.state.mBirthDate == null) {
-            this.setState({
-                mChildBirthDateError: true
-            })
-            isValidationSuccess = false
-        }
-        else {
-            this.setState({
-                mChildBirthDateError: false
-            })
-        }
+        // if (this.state.mBirthDate == null) {
+        //     this.setState({
+        //         mChildBirthDateError: true
+        //     })
+        //     isValidationSuccess = false
+        // }
+        // else {
+        //     this.setState({
+        //         mChildBirthDateError: false
+        //     })
+        // }
         if (this.state.mChildGrade == null) {
             this.setState({
                 mChildGradeError: true
@@ -512,7 +531,7 @@ class AddKidDetail extends Component {
                             }
 
                             <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.name}</Text>
-                        <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.stage}</Text>
+                            <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.stage}</Text>
                         </TouchableOpacity>
                     );
                 }}
@@ -564,13 +583,77 @@ class AddKidDetail extends Component {
         goBack();
     }
 
+    onGradeItemSelected(itemId) {
+        console.log(itemId+"-"+this.state.gradeItemPressed);
+        this.setState({
+            gradeItemPressed: itemId.key,
+            mChildGrade : itemId.label
+        })
+    }
+
+    onBoardItemSelected(itemId) {
+        console.log(itemId);
+        this.setState({
+            boardItemPressed: itemId.key,
+            mChildBoard : itemId.label
+        })
+    }
+
+    gradeRowData = (item) => (
+
+        <View key={item.item.key + "_grade_"} style={{ flex: 0.4 }}>
+            {
+
+
+                <TouchableOpacity disabled={false} style={this.state.gradeItemPressed == item.item.key ? styles.gridRowSelected : styles.gridRow} onPress={() => {
+                    this.onGradeItemSelected(item.item)
+                }}>
+                    <Text
+                        style={this.state.gradeItemPressed == item.item.key ? styles.gridTextSelected : styles.gridText}>
+                        {item.item.label} 
+                    </Text>
+                    {
+                        item.item.lable ? <Text style={styles.gridLabelContainer}>{item.item.lable}</Text> :
+                            null
+                    }
+                </TouchableOpacity>
+            }
+
+        </View>
+
+
+    );
+
+
+    boardRowData = (item) => (
+
+        <View key={item.item.key + "_board_"} style={{ flex: 0.4 }}>
+            {
+
+
+                <TouchableOpacity disabled={false} style={this.state.boardItemPressed == item.item.key ? styles.gridRowSelected : styles.gridRow} onPress={() => {
+                    this.onBoardItemSelected(item.item)
+                }}>
+                    <Text
+                        style={this.state.boardItemPressed == item.item.key ? styles.gridTextSelected : styles.gridText}>
+                        {item.item.label}
+                    </Text>
+                    
+                </TouchableOpacity>
+            }
+
+        </View>
+
+
+    );
+
 
 
 
 
 
     render() {
-        const { allKidsList, loading, showAddkidForm } = this.state
+        const { allKidsList, loading, showAddkidForm, mBirthDateDialog } = this.state
 
         var radio_props = [
             { label: 'Male', value: 0 },
@@ -651,12 +734,12 @@ class AddKidDetail extends Component {
 
 
                                 <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                                    <Text style={styles.textSubHeader}>First name</Text>
+                                    <Text style={styles.textSubHeader}>Screen Name</Text>
                                     {this.state.mChildNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
                                     <TextInput
                                         ref={(input) => { this.child_name_input = input; }}
                                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                                        placeholder="First Name"
+                                        placeholder="Enter a short screen name"
                                         keyboardType='default'
                                         style={styles.nametextInputBordered}
                                         onChangeText={this.addUserName.bind(this)}
@@ -665,7 +748,7 @@ class AddKidDetail extends Component {
 
                                     />
                                 </View>
-                                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+                                {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
                                     <Text style={styles.textSubHeader}>Last name</Text>
                                     {this.state.mChildNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
                                     <TextInput
@@ -679,10 +762,10 @@ class AddKidDetail extends Component {
                                         blurOnSubmit={false}
 
                                     />
-                                </View>
+                                </View> */}
 
 
-                                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+                                {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
                                     <Text style={styles.textSubHeader}>Birth Date</Text>
                                     {this.state.mChildBirthDateError && <Text style={styles.errorMessage}>Please enter a valid Date</Text>}
                                     <TouchableOpacity style={{ flexDirection: 'row', borderColor: COLOR.BORDER_COLOR_GREEN, borderWidth: 2, borderRadius: 15, margin: 5 }} onPress={this.showDatePicker}>
@@ -701,7 +784,7 @@ class AddKidDetail extends Component {
                                     </TouchableOpacity>
 
 
-                                </View>
+                                </View> */}
 
                                 {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
                                     <Text style={styles.textSubHeader}>Birth Date</Text>
@@ -743,14 +826,49 @@ class AddKidDetail extends Component {
 
                                 </View> */}
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+                                <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
+                                <Text style={styles.textSubHeader}>Grade</Text>
+                                {this.state.mChildGradeError && <Text style={styles.errorMessage}>select Grade</Text>}
+                                         <FlatList
+
+                                                columnWrapperStyle={{ justifyContent: 'flex-start' }}
+                                                data={this.gradeDataList()}
+                                                renderItem={this.gradeRowData}
+                                                horizontal={false}
+                                                keyExtractor={(item, index) => 'grade_' + index}
+                                                keyExtractor={item => item.id}
+                                                numColumns={3}
+                                            />
+                                </View>
+
+                                <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
+                                <Text style={styles.textSubHeader}>Curriculam</Text>
+                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curricualm</Text>}
+                                
+                                         <FlatList
+
+                                                columnWrapperStyle={{ justifyContent: 'flex-start' }}
+                                                data={this.boardListData()}
+                                                renderItem={this.boardRowData}
+                                                horizontal={false}
+                                                keyExtractor={(item, index) => 'board_' + index}
+                                                keyExtractor={item => item.id}
+                                                numColumns={3}
+                                            />
+                                </View>
+
+
+
+                                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
 
 
                                     <View style={{ flex: 1, alignSelf: 'stretch', marginEnd: 5 }}>
 
-                                        <Text style={styles.textSubHeader}>Grade</Text>
+                                      
                                         {this.state.mChildGradeError && <Text style={styles.errorMessage}>select Grade</Text>}
                                         <View style={styles.modalListContainer}>
+                                           
+
                                             <ModalSelector
                                                 initValue="Select Grade"
                                                 selectStyle={{ backgroundColor: 'white', borderColor: 'white' }}
@@ -805,8 +923,8 @@ class AddKidDetail extends Component {
                                         </View>
                                     </View>
 
-                                </View>
-                                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 5 }}>
+                                </View> */}
+                                {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 5 }}>
                                     <Text style={styles.textSubHeader}>Gender</Text>
                                     {this.state.mChildGenderError && <Text style={styles.errorMessage}>Please select gender</Text>}
                                     <View style={{ flexDirection: 'row', marginStart: 30, marginTop: 10 }}>
@@ -826,7 +944,7 @@ class AddKidDetail extends Component {
                                         />
 
                                     </View>
-                                </View>
+                                </View> */}
 
 
 
@@ -847,7 +965,14 @@ class AddKidDetail extends Component {
                                 onPress={this.onSubmitAndGoHome}
                             />
                         </View>
-                        <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
+                        {/* <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} /> */}
+                        <DateTimePickerModal
+                            isVisible={mBirthDateDialog}
+                            mode="date"
+                            onConfirm={this.onDOBDatePicked}
+                            onCancel={this.closeDatePicker}
+
+                        />
                         <View style={{
                             flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
                             marginBottom: 20
@@ -975,6 +1100,91 @@ const styles = StyleSheet.create({
         paddingTop: 12,
         fontFamily: "Montserrat-Regular",
         paddingBottom: 12
+    },
+    gridRow: {
+        height: 60,
+        flex: 0.4,
+        justifyContent: 'space-between',
+        backgroundColor: COLOR.WHITE,
+        borderRadius: 10,
+        borderWidth: 1.5,
+        borderColor: COLOR.BORDER_COLOR_GREY,
+        margin: 5
+    },
+    gridRowSelected: {
+        height: 60,
+        flex: 0.4,
+        justifyContent: 'space-between',
+        backgroundColor: "#325EE0",
+        borderRadius: 10,
+        borderWidth: 1.5,
+        borderColor: COLOR.BORDER_COLOR_GREY,
+        margin: 5
+    },
+    gridRowContent: {
+        height: 60,
+        flex: 0.4,
+        justifyContent: 'space-between',
+        backgroundColor: COLOR.WHITE,
+        borderRadius: 10,
+        borderWidth: 1.5,
+        borderColor: "#E2E4EE",
+        margin: 5
+    },
+    gridRowDisabled: {
+        height: 60,
+        flex: 0.4,
+        justifyContent: 'space-between',
+        backgroundColor: COLOR.WHITE,
+        borderRadius: 10,
+        borderWidth: 1.5,
+        borderColor: "#F3F4F8",
+        margin: 5
+    },
+    gridText: {
+        padding: 20,
+        fontSize: normalize(14),
+        alignSelf: 'center',
+        color: COLOR.BLACK,
+        fontFamily: Constants.Montserrat_Regular
+    },
+    errorMessage: {
+        color: COLOR.RED
+    },
+    gridTextSelected: {
+        padding: 20,
+        fontSize: normalize(14),
+        alignSelf: 'center',
+        color: COLOR.WHITE,
+        fontFamily: Constants.Montserrat_Regular
+    },
+    gridTextDisabled: {
+        padding: 20,
+        fontSize: normalize(14),
+        alignSelf: 'center',
+        color: "#AFAFAF",
+        fontFamily: Constants.Montserrat_Regular
+    },
+    gridTextContent: {
+        padding: 10,
+        fontSize: normalize(14),
+        alignSelf: 'center',
+        color: "#353639",
+        fontFamily: Constants.Montserrat_Regular
+    },
+    gridLabelContainer: {
+        color: "red",
+        fontSize: 10,
+        zIndex: 50,
+        backgroundColor: COLOR.WHITE,
+        bottom: -10,
+        paddingStart: 10,
+        paddingEnd: 10,
+        paddingTop: 2,
+        paddingBottom: 2,
+        alignSelf: 'center',
+        position: 'absolute',
+        fontFamily: Constants.Montserrat_Regular
     },
     modalListContainer: {
 
