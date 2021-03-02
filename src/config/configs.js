@@ -7,6 +7,9 @@ export const TESTING_EMAIL = "test_parent@begalileo.com";
 export const RAZOR_PAY_TEST_KEY = "rzp_live_xpLP9XUEmN6kZQ";
 export const RAZOR_PAY_TEST_SECRET = "YmoVfwV66l6PIapeWawtt9x1";
 
+export const APPLE_MERCHANT_ID_LIVE ='merchant.beGalileo.carveniche.com';
+export const APPLE_MERCHANT_ID_TEST = 'merchant.apple.test';
+
 // export const RAZOR_PAY_TEST_KEY = "rzp_test_CFYpymECku6QK2";
 // export const RAZOR_PAY_TEST_SECRET = "si16YKWoezBkQ0mqZhUjMU7O";
 

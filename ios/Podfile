@@ -40,7 +40,7 @@ target 'beGalileorndev' do
   # Other native modules
 
   # Automatically detect installed unimodules
-  use_unimodules!
+  use_unimodules!(exclude: ['expo-splash-screen'])
 
   # react-native-cli autolinking
   use_native_modules!

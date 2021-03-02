@@ -14,7 +14,7 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
-
+import { payWithApplePay } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import { add } from "react-native-reanimated";
 
@@ -33,6 +33,9 @@ class CartAddress extends Component {
             localParentName: '',
             localParentEmail: '',
             localParentContactNumber: '',
+            mParentCountryCode: '',
+            mParentCountryName: '',
+            mParentCurrency: ''
         }
     }
 
@@ -40,7 +43,7 @@ class CartAddress extends Component {
 
         const { navigation } = this.props;
 
-       
+
         const netTotalPrice = navigation.getParam('netTotalPrice', 0);
         this.setState({
             netTotalPrice: netTotalPrice
@@ -84,6 +87,27 @@ class CartAddress extends Component {
 
             })
         })
+        getLocalData(Constants.ParentCurrency).then((parentCurrency) => {
+
+            this.setState({
+                mParentCurrency: JSON.parse(parentCurrency),
+
+            })
+        })
+        getLocalData(Constants.ParentCountryCode).then((parentCountryCode) => {
+
+            this.setState({
+                mParentCountryCode: JSON.parse(parentCountryCode),
+
+            })
+        })
+        getLocalData(Constants.ParentCountryName).then((parentCountryName) => {
+
+            this.setState({
+                mParentCountryName: JSON.parse(parentCountryName),
+
+            })
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -94,7 +118,7 @@ class CartAddress extends Component {
         }
         if (prevProps.create_order_status != this.props.create_order_status) {
             if (this.props.create_order_status) {
-               
+
                 this.proceedToPayment(this.props.create_order_response)
             }
         }
@@ -104,8 +128,8 @@ class CartAddress extends Component {
             }
 
         }
-        if(prevProps.list_address_status != this.props.list_address_status){
-            if(this.props.list_address_status){
+        if (prevProps.list_address_status != this.props.list_address_status) {
+            if (this.props.list_address_status) {
                 this.selectDefaultAddress();
             }
         }
@@ -114,23 +138,21 @@ class CartAddress extends Component {
     selectDefaultAddress = () => {
         console.log("Selecting Default Address");
         var isDefaultAvailable = false;
-        this.props.list_address_response.address_details.map((addressItem)=>{
+        this.props.list_address_response.address_details.map((addressItem) => {
             console.log(addressItem);
-            if(addressItem.default_address)
-            {
+            if (addressItem.default_address) {
                 isDefaultAvailable = true;
                 this.setState({
-                    selectedAddress : addressItem.address_id
+                    selectedAddress: addressItem.address_id
                 })
             }
-        })  
-        console.log(isDefaultAvailable+"---"+this.props.list_address_response.address_details.length);
+        })
+        console.log(isDefaultAvailable + "---" + this.props.list_address_response.address_details.length);
 
-        if(!isDefaultAvailable && this.props.list_address_response.address_details.length > 0)
-        {
+        if (!isDefaultAvailable && this.props.list_address_response.address_details.length > 0) {
             console.log("Setting Dfault address");
             this.setState({
-                selectedAddress : this.props.list_address_response.address_details[0].address_id
+                selectedAddress: this.props.list_address_response.address_details[0].address_id
             })
         }
     }
@@ -154,7 +176,7 @@ class CartAddress extends Component {
     onSelectAddress = (item) => {
         console.log("Address Selected");
         console.log(item.address_id);
-        
+
         this.setState({
             selectedAddress: item.address_id
         })
@@ -188,12 +210,54 @@ class CartAddress extends Component {
         this.props.removeAddress(addressId);
     }
 
+
+    onApplePaymentResponse = (status, response) => {
+        if (status == 'SUCCESS') {
+            console.log('Payment Success');
+            console.log(response);
+            Alert.alert(
+                'Payment Success',
+                'Payment got completed'
+            );
+
+        }
+        else {
+            if (response == 'AbortError') {
+                Alert.alert(
+                    'Payment Aborted',
+                    'Payment got aborted.Please try again'
+                );
+
+            }
+            else if (response == 'CANT_MAKE_PAYMENT') {
+                  Alert.alert(
+                    'Apple Pay',
+                    'Apple Pay is not available in the device.Please check your apple pay configuration'
+                  );
+            }
+            else
+            {
+                Alert.alert(
+                    'Something went wrong',
+                    'Unable to make payment please try again'
+                  );
+            }
+
+
+        }
+    }
+
     onPaymentClick = () => {
 
 
-        //for test
-        // this.dummyPayment()
-        // return;
+
+        try {
+            payWithApplePay(1, this.state.mParentCountryName, this.onApplePaymentResponse);
+        } catch (error) {
+            console.log("Error in Apple Pay : " + error);
+        }
+
+        return;
 
 
         var defaultAddressId = 0;
@@ -203,8 +267,8 @@ class CartAddress extends Component {
                     defaultAddressId = item.address_id;
             })
         }
-      
-       
+
+
         console.log(this.state.localParentId);
         this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
             this.state.localParentId,
@@ -259,41 +323,7 @@ class CartAddress extends Component {
     }
 
 
-    dummyPayment = () => {
-      
-        var formattdTotalPrice = "500";
 
-        var options = {
-            description: 'beGalileo Package',
-            image: 'https://www.begalileo.com/assets/pwa/beGalileo_logo_1024x768.png',
-            currency: 'INR',
-            key: RAZOR_PAY_TEST_KEY,
-            amount: formattdTotalPrice,
-            name: 'Carveniche Technologies',
-           
-            prefill: {
-                email: this.state.localParentEmail,
-                contact: this.state.localParentContactNumber,
-                name: this.state.localParentName
-            },
-          
-            theme: { color: COLOR.TEXT_COLOR_GREEN }
-        }
-        console.log(options);
-
-        RNRazorpayCheckout.open(options).then((data) => {
-            // handle success
-            // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
-          //  this.updatePaymentStatus(data.razorpay_payment_id);
-            // alert(`Success: ${data.razorpay_payment_id}`);
-        }).catch((error) => {
-            // handle failure
-            console.log("Payment failed Error ");
-            console.log(error);
-            // this.updatePaymentStatus(data.razorpay_payment_id);
-          //  this.props.navigation.navigate(Constants.PaymentFailedScreen);
-        });
-    }
 
     onEditAddress = (item) => {
         console.log("on edit Adress");
@@ -383,7 +413,7 @@ class CartAddress extends Component {
                                 <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No address available</Text>
                             </View>
                     }
-                   
+
 
                     <TouchableOpacity onPress={() => {
                         this.addAnotherAddress()

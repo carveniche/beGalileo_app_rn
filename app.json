@@ -12,6 +12,12 @@
     ],
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.begalileorndev"
+    },
+    "ios": {
+      "bundleIdentifier": "com.carveniche.beGalileo"
+    }
   }
 }
