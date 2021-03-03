@@ -11,6 +11,7 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from '@react-native-community/async-storage';
+import { payWithApplePay,payWithRazorPay } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import RNRazorpayCheckout from 'react-native-razorpay';
 
@@ -40,7 +41,29 @@ class CartListScreen extends Component {
     }
 
     componentDidMount() {
-        
+
+       
+        getLocalData(Constants.ParentFirstName).then((parentName) => {
+            console.log("Parent Name " + parentName);
+            this.setState({
+                localParentName: parentName.slice(1, -1),
+
+            })
+        })
+        getLocalData(Constants.ParentEmail).then((parentEmail) => {
+            console.log("Parent Email " + parentEmail);
+            this.setState({
+                localParentEmail: parentEmail.slice(1, -1),
+
+            })
+        })
+        getLocalData(Constants.ParentMobileNumber).then((parentMobileNumber) => {
+            console.log("Parent Mobile Number " + parentMobileNumber);
+            this.setState({
+                localParentContactNumber: parentMobileNumber,
+
+            })
+        })
         this.calculatePriceDetails();
         this.getCartListScreen();
 
@@ -136,6 +159,20 @@ class CartListScreen extends Component {
     }
 
     proceedToPayment = (order_response) => {
+
+
+
+        payWithRazorPay(order_response,1,
+            this.state.mLocalCountry,
+            this.state.localParentEmail,
+            this.state.localParentContactNumber,
+            this.state.localParentName,
+            this.props.navigation,
+            this.updatePaymentStatus
+            )
+
+            return;
+
         console.log(order_response);
         var formattdTotalPrice = this.state.netTotalPrice + "00";
 

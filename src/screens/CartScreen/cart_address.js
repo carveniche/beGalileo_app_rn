@@ -14,7 +14,7 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
-import { payWithApplePay } from '../../components/helpers/payment_methods';
+import { payWithApplePay,payWithRazorPay } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import { add } from "react-native-reanimated";
 
@@ -118,7 +118,7 @@ class CartAddress extends Component {
         }
         if (prevProps.create_order_status != this.props.create_order_status) {
             if (this.props.create_order_status) {
-
+                
                 this.proceedToPayment(this.props.create_order_response)
             }
         }
@@ -251,13 +251,13 @@ class CartAddress extends Component {
 
 
 
-        try {
-            payWithApplePay(1, this.state.mParentCountryName, this.onApplePaymentResponse);
-        } catch (error) {
-            console.log("Error in Apple Pay : " + error);
-        }
+        // try {
+        //     payWithApplePay(1, this.state.mParentCountryName, this.onApplePaymentResponse);
+        // } catch (error) {
+        //     console.log("Error in Apple Pay : " + error);
+        // }
 
-        return;
+        // return;
 
 
         var defaultAddressId = 0;
@@ -270,6 +270,7 @@ class CartAddress extends Component {
 
 
         console.log(this.state.localParentId);
+       
         this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
             this.state.localParentId,
             "India",
@@ -283,6 +284,18 @@ class CartAddress extends Component {
     }
 
     proceedToPayment = (order_response) => {
+        
+        payWithRazorPay(order_response,1,
+            this.state.mParentCountryName,
+            this.state.localParentEmail,
+            this.state.localParentContactNumber,
+            this.state.localParentName,
+            this.props.navigation,
+            this.updatePaymentStatus
+            )
+
+            return;
+
         console.log(order_response);
         var formattdTotalPrice = this.state.netTotalPrice + "00";
 
