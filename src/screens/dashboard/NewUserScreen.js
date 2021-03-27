@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW } from "../../assets/images";
+import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,12 +11,17 @@ import { normalize, Card } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
 import SubscriptionTabs from '../../components/subscription_tab';
 import AddCartFloatingButton from '../../components/AddCartFloatingButton';
+import MathBoxTabs from '../dashboard/MathBoxTabs';
+import { WebView } from 'react-native-webview';
+import YouTube from 'react-native-youtube';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 class NewUserScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentSessionKid: null
+            currentSessionKid: null,
+            demoVideo: false
         };
     }
     componentDidMount() {
@@ -32,10 +37,10 @@ class NewUserScreen extends Component {
                 this.setCurrentSessionKid();
             }
         }
-        
+
     }
 
-   
+
 
     setCurrentSessionKid = () => {
         this.props.dashboardResponse.students.map((item) => {
@@ -62,6 +67,26 @@ class NewUserScreen extends Component {
         this.props.navigation.navigate(Constants.DemoDetails, {
             demoDetail: item
         });
+    }
+
+
+    rateDemoClassView = () => {
+        return (
+            <View style={{ margin: 10, justifyContent: '', borderRadius: 10 }}>
+                <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Rate demo class</Text>
+                <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>We’d like to know your view on the recent demo class your child attended.</Text>
+                <AirbnbRating
+
+                    defaultRating={0}
+
+                />
+                <Rating
+                    showRating
+                    onFinishRating={this.ratingCompleted}
+                    style={{ paddingVertical: 10 }}
+                />
+            </View>
+        )
     }
 
     checkDemoClassStatus = () => {
@@ -96,10 +121,10 @@ class NewUserScreen extends Component {
                                 <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
                             </TouchableOpacity>
                             {
-                                !currentSessionKid.demo_confirmed && 
-                                    <View>
-                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
-                                    </View>
+                                !currentSessionKid.demo_confirmed &&
+                                <View>
+                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
+                                </View>
                             }
 
 
@@ -127,32 +152,49 @@ class NewUserScreen extends Component {
     render() {
         const { currentSessionKid } = this.state;
         return (
-            <View
-            style={{ backgroundColor : COLOR.WHITE }}
-            >
-                <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
+            <View>
+                <View
+                    style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), marginStart: 10, marginEnd: 10, borderRadius: normalize(30) }}
+                >
+
+                    <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
+                        {
+                            currentSessionKid &&
+                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
+                        }
+
+                        <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
+                        <TouchableOpacity onPress={this.goToViewCurriculum}>
+                            <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(10) }]}>View Full Curriculum</Text>
+                        </TouchableOpacity>
+
+                    </View>
                     {
-                        currentSessionKid &&
-                        <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
+                        currentSessionKid && currentSessionKid.demo_booked &&
+                        this.checkDemoClassStatus()
                     }
 
-                    <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
-                    <TouchableOpacity onPress={this.goToViewCurriculum}>
-                        <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(10) }]}>View Full Curriculum</Text>
-                    </TouchableOpacity>
+                    {
+                        this.rateDemoClassView()
+                    }
+                    <View style={{ marginStart: 5, marginEnd: 5 }}>
+                        <SubscriptionTabs goToCartList={this.goToCartList} />
+                    </View>
+
+
+
 
                 </View>
-                {
-                    currentSessionKid && currentSessionKid.demo_booked &&
-                    this.checkDemoClassStatus()
-                }
-                <SubscriptionTabs goToCartList={this.goToCartList} />
+                <View>
+                    <MathBoxTabs />
+                </View>
+
                 {
                     currentSessionKid && !currentSessionKid.demo_booked &&
-                    <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 20, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
                         <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
-                            <Text style={CommonStyles.text_18_bold}>
+                            <Text style={CommonStyles.text_18_semi_bold}>
                                 Not sure about beGalileo Online based learning?
                           </Text>
                             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
@@ -175,8 +217,54 @@ class NewUserScreen extends Component {
 
                     </LinearGradient>
                 }
+                <View style={{ backgroundColor: COLOR.WHITE, borderTopLeftRadius: normalize(15), borderTopRightRadius: normalize(15) }}>
+                    <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.BLACK, alignSelf: 'center', marginTop: normalize(40) }]}>Why beGalileo?</Text>
+                    <View style={{ backgroundColor: '#EEF8FE', marginTop: normalize(32), borderRadius: normalize(12), marginStart: normalize(10), marginEnd: normalize(10) }}>
+                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents \nare saying about \nbeGalileo'}</Text>
+                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'Online learning experience \nwith kids and parents'}</Text>
+                        <Image style={{ height: normalize(200), width: '100%', resizeMode: 'stretch', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
+                        <TouchableOpacity style={{ padding: 20 }} onPress={() => {
+                            this.setState({
+                                demoVideo: true
+                            })
+                        }}>
+                            <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 20 }} source={IC_PLAY_BLUE} />
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+                <Modal
+                    animationType={"fade"}
+                    transparent={true}
+                    visible={this.state.demoVideo}
+                    onRequestClose={this.closeModal}
+                >
+                    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.BG_TRS_BLUE }} >
+                        <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30 }} onPress={() => {
+                            this.setState({
+                                demoVideo: false
+                            })
+                        }}>
+                            <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
+                        </TouchableOpacity>
+
+                        <YouTube
+                            videoId="bEJLVQJjeak" // The YouTube video ID
+                            play={this.state.demoVideo} // control playback of video with true/false
+                            inLine // control whether the video should play in fullscreen or inline
+                            loop // control whether the video should loop when ended
+                            onReady={e => this.setState({ isReady: true })}
+                            onChangeState={e => this.setState({ status: e.state })}
+                            onChangeQuality={e => this.setState({ quality: e.quality })}
+                            onError={e => this.setState({ error: e.error })}
+                            style={{ alignSelf: 'stretch', height: 300 }}
+                        />
+                    </View>
+
+                </Modal>
 
             </View>
+
         );
     }
 }
