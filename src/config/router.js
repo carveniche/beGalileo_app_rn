@@ -36,6 +36,7 @@ import EditKidDetail from "../screens/MyKids/EditKidDetail";
 import MainScreen from "../screens/AppScreens/MainScreen";
 import Main from "react-native-country-picker-modal";
 import DemoDetails from '../screens/BookDemoScreen/demo_details';
+import DemoClassResults from '../screens/BookDemoScreen/demo_class_results';
 
 
 
@@ -124,7 +125,14 @@ const AppStackNavigator = createStackNavigator({
        }
    },
     
-   
+   DemoClassResults:{
+    screen : DemoClassResults,
+    navigationOptions:{
+        headerShown : false,
+        headerBackTitleVisible : false,
+        headerTitle : ''
+    }
+},
     
     PaymentFailedScreen: {
         screen: PaymentFailedScreen,

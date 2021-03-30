@@ -38,6 +38,7 @@ export const StarBadgeReportScreen = "StarBadgeReportScreen";
 export const MoreLiveClassBatchScreens = "MoreLiveClassBatchScreens";
 export const MoreMySubscriptions = "MoreMySubscriptions";
 export const RateDemoClass = "RateDemoClass";
+export const DemoClassResults = "DemoClassResults";
 export const SubscriptonDetailsScreen = "SubscriptonDetailsScreen";
 export const SubscriptonOrderDetails = "SubscriptonOrderDetails";
 export const SubscriptonMathboxDetails = "SubscriptonMathboxDetails";

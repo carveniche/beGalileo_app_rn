@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE, IC_STAR_LAYOUT } from "../../assets/images";
+import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE, IC_STAR_LAYOUT, IC_BANNER_2 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -73,6 +73,10 @@ class NewUserScreen extends Component {
         this.props.navigation.navigate(Constants.RateDemoClass);
     }
 
+    goToDemoClassResults = () => {
+        this.props.navigation.navigate(Constants.DemoClassResults);
+    }
+
     rateDemoClassView = () => {
         return (
             <TouchableOpacity onPress={this.goToRateDemoClass}>
@@ -85,6 +89,31 @@ class NewUserScreen extends Component {
                     </Card>
                 </View>
             </TouchableOpacity>
+
+        )
+    }
+    demoResultsView = () => {
+        return (
+           
+                <View>
+
+                    <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
+                        <View style={{  flex : 1,flexDirection : 'row',justifyContent : 'space-evenly' }}>
+                            <View style={{ flex : 0.5 }}>
+                                <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Demo class results are here!</Text>
+                                <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>Know what teacher-coach have to say about Aarav</Text>
+                            </View>
+            
+                            <Image style={{ flex : 0.5,alignSelf: 'center', height: normalize(100), width: normalize(100), marginTop: normalize(24), borderRadius: 20, resizeMode: "stretch" }} source={IC_BANNER_2} />
+                        </View>
+                        <TouchableOpacity  onPress={this.goToDemoClassResults} style={[CommonStyles.shadowContainer_border_20,{ width : normalize(120),marginTop : normalize(16),marginStart : normalize(24) }]}>
+                        <Text style={[CommonStyles.text_12__semi_bold,{ color : COLOR.BLUE_LINk,textAlign :'center',marginTop : normalize(9),marginBottom : normalize(9) }]}>View Results</Text>
+                        </TouchableOpacity>
+                       
+
+                    </Card>
+                </View>
+          
 
         )
     }
@@ -162,7 +191,9 @@ class NewUserScreen extends Component {
                 {
                     this.rateDemoClassView()
                 }
-
+                {
+                    this.demoResultsView()
+                }
                 <View
                     style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderRadius: normalize(30) }}
                 >
@@ -178,6 +209,7 @@ class NewUserScreen extends Component {
                                 </TouchableOpacity>
                             </View>
                         }
+
 
 
 
