@@ -55,6 +55,7 @@
     "react-native-progress": "^4.1.2",
     "react-native-pure-jwt": "^2.2.2",
     "react-native-razorpay": "^2.2.4",
+    "react-native-read-more-text": "^1.1.2",
     "react-native-reanimated": "^2.0.1",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "~2.2.0",

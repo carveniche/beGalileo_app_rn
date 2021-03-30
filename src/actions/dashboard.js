@@ -6,7 +6,7 @@ STUDENT_CLASSES,
 DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
-RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT
+RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT
 } from '../config/redux-action-types/dashboard';
 
 import * as Constants from '../components/helpers/Constants';
@@ -407,6 +407,23 @@ export function getStudentClasses(student_id){
                 url : 'app_mathbox/student_classes',
                 params : {
                     student_id
+
+                }
+            }
+        }
+    }
+}
+
+export function getDemoResults(live_class_id,student_id,parent_id){
+    return{
+        type : DEMO_RESULT,
+        payload : {
+            request: {
+                url : 'app_mathbox/demo_result',
+                params : {
+                    live_class_id,
+                    student_id,
+                    parent_id
 
                 }
             }
