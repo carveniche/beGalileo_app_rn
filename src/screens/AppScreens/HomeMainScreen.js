@@ -190,9 +190,7 @@ class HomeMainScreen extends Component {
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: COLOR.WHITE,
-                paddingStart: normalize(10),
-                paddingEnd: normalize(10)
+                backgroundColor: COLOR.WHITE
             }}>
                 <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
                 {

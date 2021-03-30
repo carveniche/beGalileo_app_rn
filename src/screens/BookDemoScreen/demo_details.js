@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -249,6 +249,7 @@ const mapStateToProps = (state) => {
 
     return {
         state: state.dashboard,
+        loading: state.dashboard.loading,
         bookDemoStatus: state.dashboard.book_demo_status,
         cancelSlotStatus: state.dashboard.cancel_slot_status
     }

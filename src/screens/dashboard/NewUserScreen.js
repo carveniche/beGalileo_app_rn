@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE } from "../../assets/images";
+import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE, IC_STAR_LAYOUT } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -69,75 +69,77 @@ class NewUserScreen extends Component {
         });
     }
 
+    goToRateDemoClass = () => {
+        this.props.navigation.navigate(Constants.RateDemoClass);
+    }
 
     rateDemoClassView = () => {
         return (
-            <View style={{ margin: 10, justifyContent: '', borderRadius: 10 }}>
-                <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Rate demo class</Text>
-                <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>We’d like to know your view on the recent demo class your child attended.</Text>
-                <AirbnbRating
+            <TouchableOpacity onPress={this.goToRateDemoClass}>
+                <View>
 
-                    defaultRating={0}
+                    <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
+                        <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Rate demo class</Text>
+                        <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>We’d like to know your view on the recent demo class your child attended.</Text>
+                        <Image style={{ alignSelf: 'center', height: normalize(30), width: normalize(200), marginTop: normalize(24), borderRadius: 20, resizeMode: "stretch" }} source={IC_STAR_LAYOUT} />
+                    </Card>
+                </View>
+            </TouchableOpacity>
 
-                />
-                <Rating
-                    showRating
-                    onFinishRating={this.ratingCompleted}
-                    style={{ paddingVertical: 10 }}
-                />
-            </View>
         )
     }
 
     checkDemoClassStatus = () => {
         const { currentSessionKid } = this.state;
-        return (
-            <View>
+        if (currentSessionKid.student_demos != null && currentSessionKid.student_demos[0].status != 'Completed')
+            return (
 
-                <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
+                <View>
 
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{ height: normalize(110), marginStart: normalize(5), marginTop: normalize(5) }}>
-                            <View style={{ flex: 1, borderRadius: 20, backgroundColor: COLOR.LOGIN_BANNER_BG, justifyContent: 'flex-end', alignSelf: 'center' }}>
-                                <Image style={{ alignSelf: 'center', height: normalize(80), marginStart: normalize(10), width: normalize(80), borderRadius: 20, resizeMode: "stretch" }} source={LIVE_CLASS_CARD_THUMB} />
-                            </View>
+                    <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
 
-                        </View>
-                        <View style={{ flex: 1, marginStart: normalize(16) }}>
-                            <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Live demo Class</Text>
-                            {
-                                currentSessionKid.demo_confirmed ?
-                                    <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is confirmed.</Text>
-                                    :
-                                    <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is booked</Text>
-                            }
-
-                            <View style={{ flexDirection: 'row', marginTop: normalize(8) }}>
-                                <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "contain" }} source={ICON_CLOCK} />
-                                <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{currentSessionKid.student_demos[0].date} | {currentSessionKid.student_demos[0].time}</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
-                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
-                                <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
-                            </TouchableOpacity>
-                            {
-                                !currentSessionKid.demo_confirmed &&
-                                <View>
-                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ height: normalize(110), marginStart: normalize(5), marginTop: normalize(5) }}>
+                                <View style={{ flex: 1, borderRadius: 20, backgroundColor: COLOR.LOGIN_BANNER_BG, justifyContent: 'flex-end', alignSelf: 'center' }}>
+                                    <Image style={{ alignSelf: 'center', height: normalize(80), marginStart: normalize(10), width: normalize(80), borderRadius: 20, resizeMode: "stretch" }} source={LIVE_CLASS_CARD_THUMB} />
                                 </View>
-                            }
+
+                            </View>
+                            <View style={{ flex: 1, marginStart: normalize(16) }}>
+                                <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Live demo Class</Text>
+                                {
+                                    currentSessionKid.demo_confirmed ?
+                                        <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is confirmed.</Text>
+                                        :
+                                        <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is booked</Text>
+                                }
+
+                                <View style={{ flexDirection: 'row', marginTop: normalize(8) }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "contain" }} source={ICON_CLOCK} />
+                                    <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{currentSessionKid.student_demos[0].date} | {currentSessionKid.student_demos[0].time}</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
+                                    <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
+                                </TouchableOpacity>
+                                {
+                                    !currentSessionKid.demo_confirmed &&
+                                    <View>
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
+                                    </View>
+                                }
 
 
 
 
+                            </View>
                         </View>
-                    </View>
 
 
 
-                </Card>
-            </View>
-        )
+                    </Card>
+                </View>
+            )
     }
 
     goToViewCurriculum = () => {
@@ -152,31 +154,37 @@ class NewUserScreen extends Component {
     render() {
         const { currentSessionKid } = this.state;
         return (
-            <View>
+            <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY }}>
+                {
+                    currentSessionKid && currentSessionKid.demo_booked &&
+                    this.checkDemoClassStatus()
+                }
+                {
+                    this.rateDemoClassView()
+                }
+
                 <View
-                    style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), marginStart: 10, marginEnd: 10, borderRadius: normalize(30) }}
+                    style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderRadius: normalize(30) }}
                 >
 
                     <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         {
-                            currentSessionKid &&
-                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
+                            currentSessionKid && currentSessionKid.demo_booked &&
+                            <View>
+                                <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
+                                <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
+                                <TouchableOpacity onPress={this.goToViewCurriculum}>
+                                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(10) }]}>View Full Curriculum</Text>
+                                </TouchableOpacity>
+                            </View>
                         }
 
-                        <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
-                        <TouchableOpacity onPress={this.goToViewCurriculum}>
-                            <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(10) }]}>View Full Curriculum</Text>
-                        </TouchableOpacity>
+
+
 
                     </View>
-                    {
-                        currentSessionKid && currentSessionKid.demo_booked &&
-                        this.checkDemoClassStatus()
-                    }
 
-                    {
-                        this.rateDemoClassView()
-                    }
+
                     <View style={{ marginStart: 5, marginEnd: 5 }}>
                         <SubscriptionTabs goToCartList={this.goToCartList} />
                     </View>
@@ -239,7 +247,7 @@ class NewUserScreen extends Component {
                     visible={this.state.demoVideo}
                     onRequestClose={this.closeModal}
                 >
-                    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.BG_TRS_BLUE }} >
+                    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.TEXT_ALPHA_GREY }} >
                         <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30 }} onPress={() => {
                             this.setState({
                                 demoVideo: false

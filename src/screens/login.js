@@ -177,7 +177,7 @@ class Login extends Component {
                 var currency = '';
 
                 //For Testing
-                //country = "Dubai";
+               // country = "Dubai";
 
 
                 if (country == Constants.INDIA)

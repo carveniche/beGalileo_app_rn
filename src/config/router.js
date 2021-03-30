@@ -7,7 +7,7 @@ import Login from '../screens/login';
 import Splash from '../screens/splash';
 import ParentProfile from '../screens/parent_profile';
 import AddKidDetail from '../screens/add_kid_detail';
-
+import RateDemoClass  from '../screens/BookDemoScreen/rate_demo_class';
 import FaqScreen from '../screens/AppScreens/faq_screen';
 import Dashboard from '../screens/AppScreens/dashboard';
 import BookDemoScreen from '../screens/BookDemoScreen/book_demo_screen';
@@ -115,12 +115,14 @@ const AppStackNavigator = createStackNavigator({
         }
     },
    
-
-   
-   
-  
-    
-    
+   RateDemoClass:{
+       screen : RateDemoClass,
+       navigationOptions:{
+           headerShown : false,
+           headerBackTitleVisible : false,
+           headerTitle : ''
+       }
+   },
     
    
     
