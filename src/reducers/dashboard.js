@@ -28,7 +28,7 @@ import {
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
     REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, 
-    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS
+    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED
 } from '../config/redux-action-types/dashboard'
 
 const initialState = { cartItems: [] }
@@ -532,6 +532,27 @@ export default function reducer(state=initialState,action){
                 ...state,loading : false,
                 demo_result_status : action.payload.data.status,
                 demo_result_response : action.payload.data
+            }
+        }
+
+
+        case PARENT_FEEDBACK :{
+            return{
+                ...state,loading : true,parent_feedback_status : null , parent_feedback_response : null
+            }
+        }
+        case PARENT_FEEDBACK_SUCCESS : {
+            return{
+                ...state,loading : false,
+                parent_feedback_status : action.payload.data.status,
+                parent_feedback_response : action.payload.data
+            }
+        }
+        case PARENT_FEEDBACK_FAILED :{
+            return{
+                ...state,loading : false,
+                parent_feedback_status : action.payload.data.status,
+                parent_feedback_response : action.payload.data
             }
         }
 

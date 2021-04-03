@@ -384,6 +384,7 @@ class PaidUserScreen extends Component {
     
 
     checkLiveClassStatus = (liveClassDetails) => {
+        console.log(getDifferenceFromTodayDate(liveClassDetails.start_date,liveClassDetails.time)+" OOOOOOO");
         return (
             <View style={{ marginTop: normalize(20) }}>
                 <Text style={[CommonStyles.text_18_semi_bold]}>Live Class</Text>
@@ -499,7 +500,7 @@ class PaidUserScreen extends Component {
     render() {
         const { currentKidDetails } = this.state;
         return (
-            <View style={{ backgroundColor: COLOR.WHITE }}>
+            <View style={{ backgroundColor: COLOR.WHITE,marginStart : normalize(15),marginEnd : normalize(15) }}>
                 <View style={{ marginTop: normalize(20) }}>
                     <Text style={[CommonStyles.text_18_semi_bold]}>Good things ahead!</Text>
                     {

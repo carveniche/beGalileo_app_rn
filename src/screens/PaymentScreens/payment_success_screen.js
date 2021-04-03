@@ -47,15 +47,15 @@ class PaymentSuccessScreen extends Component {
         <View style={{ flex: 1, height: normalize(1), backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(12) }} />
 
 
-        <View style={{ marginStart: normalize(16), marginBottom: normalize(20) }}>
+        {/* <View style={{ marginStart: normalize(16), marginBottom: normalize(20) }}>
           <Text style={[CommonStyles.text_18_semi_bold, { marginTop: normalize(12) }]}>{item.duration} Months</Text>
           {
             item.mathbox_required &&
             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(4) }]}>With {item.boxes} Math boxes for {item.duration} months</Text>
           }
 
-          {/* <Text style={[CommonStyles.text_9_bold, { marginTop: normalize(8), marginBottom: normalize(20) }]}>First box delivery by May 12</Text> */}
-        </View>
+        
+        </View> */}
 
 
       </View>
@@ -74,7 +74,7 @@ class PaymentSuccessScreen extends Component {
 
           <View>
             <Image style={{ resizeMode: 'contain', height: normalize(80), width: normalize(80), marginTop: normalize(20), marginBottom: normalize(20), height: normalize(40), alignSelf: 'center' }} source={PAYMENT_SUCCESS} />
-            <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Payment sucess!</Text>
+            <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Payment Success!</Text>
 
             <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(30), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>Let your kid take command by Switching to kids account</Text>
 

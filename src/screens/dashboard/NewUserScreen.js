@@ -189,9 +189,11 @@ class NewUserScreen extends Component {
                     this.checkDemoClassStatus()
                 }
                 {
+                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].parent_feedback && 
                     this.rateDemoClassView()
                 }
                 {
+                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].status == 'Completed' &&
                     this.demoResultsView()
                 }
                 <View
@@ -200,7 +202,7 @@ class NewUserScreen extends Component {
 
                     <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         {
-                            currentSessionKid && currentSessionKid.demo_booked &&
+                            currentSessionKid  &&
                             <View>
                                 <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
                                 <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>

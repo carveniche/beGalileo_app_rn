@@ -23,7 +23,10 @@ class DemoClassResults extends Component {
     }
 
     componentDidMount() {
-        this.props.getDemoResults(21427, 54330, 54329);
+        console.log("Democ class results");
+        console.log(this.props.currentSelectedKid.student_demos);
+        console.log(this.props.dashboardResponse.parent_id);
+        this.props.getDemoResults(this.props.currentSelectedKid.student_demos[0].demo_class_id, this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id);
     }
 
     onPressBack = () => {
@@ -32,20 +35,75 @@ class DemoClassResults extends Component {
         goBack();
     }
 
-    onClickEnrollProgram = () =>{
-        
+    onClickEnrollProgram = () => {
+        this.props.navigation.navigate(Constants.Dashboard);
     }
 
+
+
+    renderMathConcept = (mathConcept) => {
+        return (
+            <View>
+                <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(20) }]}>Math Concept</Text>
+                {
+                    mathConcept.map((item) => {
+                        return (
+                            <View>
+                                <Text style={[CommonStyles.text_14_bold, { color: COLOR.BLACK }]}>{item.sub_concept_name}</Text>
+                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.tag_name}</Text>
+                            </View>
+                        )
+                    })
+                }
+
+            </View>
+        )
+    }
+
+    onCLickViewCurriculam = () => {
+        this.props.navigation.navigate(Constants.ViewCurriculum);
+    }
+
+    renderLogicaloncept = (logicConcept) => {
+        return (
+            <View>
+                <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(20) }]}>THINK N REASON</Text>
+                {
+                    logicConcept.map((item) => {
+                        return (
+                            <View>
+                                <Text style={[CommonStyles.text_14_bold, { color: COLOR.BLACK }]}>{item.sub_concept_name}</Text>
+                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.tag_name}</Text>
+                            </View>
+                        )
+                    })
+                }
+
+            </View>
+        )
+    }
+
+    getStructuredTimeFormat = (time) => {
+        return time.replaceAll(", ", "\n");
+    }
 
     renderResultView = () => {
         const { demo_result_status, demo_result_response } = this.props;
         return (
             <View>
                 <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(10) }]}>Results of Demo Class</Text>
+                {
+                    demo_result_response.math_concepts != null && demo_result_response.math_concepts.length > 0 &&
+                    this.renderMathConcept(demo_result_response.math_concepts)
+                }
+                {
+                    demo_result_response.math_concepts != null && demo_result_response.math_concepts.length > 0 &&
+                    this.renderLogicaloncept(demo_result_response.math_concepts)
+                }
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', marginTop: normalize(32) }}>
                     <View>
                         <Text style={[CommonStyles.text_11_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Attended on</Text>
-                        <Text style={[CommonStyles.text_18_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>Mon, 12{'\n'}May 4 pm</Text>
+                        <Text style={[CommonStyles.text_18_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{this.getStructuredTimeFormat(demo_result_response.attended_on)}</Text>
                     </View>
                     <View>
                         <Text style={[CommonStyles.text_11_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Time taken</Text>
@@ -106,7 +164,10 @@ class DemoClassResults extends Component {
                     />
                 </View>
 
-                <Text style={[CommonStyles.text_12__semi_bold,{ color : COLOR.TEXT_COLOR_GREEN,textAlign : 'center',marginBottom  : normalize(40) }]}>View Full Curriculam</Text>
+                <TouchableOpacity onPress={this.onCLickViewCurriculam}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, textAlign: 'center', marginBottom: normalize(40) }]}>View Full Curriculam</Text>
+                </TouchableOpacity>
+
 
 
 
@@ -180,7 +241,9 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         loading: state.dashboard.loading,
         demo_result_status: state.dashboard.demo_result_status,
-        demo_result_response: state.dashboard.demo_result_response
+        demo_result_response: state.dashboard.demo_result_response,
+        currentSelectedKid: state.dashboard.current_selected_kid,
+        dashboardResponse: state.dashboard.dashboard_response
     }
 
 

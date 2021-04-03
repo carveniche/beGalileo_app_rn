@@ -6,7 +6,8 @@ STUDENT_CLASSES,
 DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
-RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT
+RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED
 } from '../config/redux-action-types/dashboard';
 
 import * as Constants from '../components/helpers/Constants';
@@ -430,3 +431,23 @@ export function getDemoResults(live_class_id,student_id,parent_id){
         }
     }
 }
+
+export function submitParentFeedback(live_class_id,user_id,rating,recommendation,feedback){
+    return{
+        type : PARENT_FEEDBACK,
+        payload : {
+            request: {
+                url : 'app_mathbox/parent_feedback',
+                params : {
+                    live_class_id,
+                    user_id,
+                    rating,
+                    recommendation,
+                    feedback
+
+                }
+            }
+        }
+    }
+}
+
