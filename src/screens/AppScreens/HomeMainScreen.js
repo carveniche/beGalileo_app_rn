@@ -5,7 +5,7 @@ import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
-import { getDashboardItems, getCartItemList, updateCurrentKid } from '../../actions/dashboard';
+import { getDashboardItems, getCartItemList, updateCurrentKid,setDeviceInfo } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import SubscriptionTabs from '../../components/subscription_tab';
@@ -41,6 +41,11 @@ class HomeMainScreen extends Component {
             this.setState({
                 parentName : JSON.parse(name)
             })
+        })
+
+        getLocalData(Constants.ParentTimeZone).then((timeZone) => {
+            
+           console.log("Time Zone is : "+JSON.parse(timeZone));
         })
        
         

@@ -432,6 +432,23 @@ export function getDemoResults(live_class_id,student_id,parent_id){
     }
 }
 
+export function setDeviceInfo(parent_id,time_zone,regId){
+    return{
+        type : DEMO_RESULT,
+        payload : {
+            request: {
+                url : 'app_mathbox/demo_result',
+                params : {
+                    parent_id,
+                    time_zone,
+                    regId
+
+                }
+            }
+        }
+    }
+}
+
 export function submitParentFeedback(live_class_id,user_id,rating,recommendation,feedback){
     return{
         type : PARENT_FEEDBACK,
