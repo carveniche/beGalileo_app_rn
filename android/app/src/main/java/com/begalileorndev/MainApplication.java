@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.horcrux.svg.SvgPackage;
+import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.faizal.OtpVerify.RNOtpVerifyPackage;

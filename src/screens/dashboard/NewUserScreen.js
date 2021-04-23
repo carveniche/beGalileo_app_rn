@@ -14,6 +14,7 @@ import AddCartFloatingButton from '../../components/AddCartFloatingButton';
 import MathBoxTabs from '../dashboard/MathBoxTabs';
 import { WebView } from 'react-native-webview';
 import YouTube from 'react-native-youtube';
+import YoutubePlayer from "react-native-youtube-iframe";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 class NewUserScreen extends Component {
@@ -94,26 +95,26 @@ class NewUserScreen extends Component {
     }
     demoResultsView = () => {
         return (
-           
-                <View>
 
-                    <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
-                        <View style={{  flex : 1,flexDirection : 'row',justifyContent : 'space-evenly' }}>
-                            <View style={{ flex : 0.5 }}>
-                                <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Demo class results are here!</Text>
-                                <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>Know what teacher-coach have to say about Aarav</Text>
-                            </View>
-            
-                            <Image style={{ flex : 0.5,alignSelf: 'center', height: normalize(100), width: normalize(100), marginTop: normalize(24), borderRadius: 20, resizeMode: "stretch" }} source={IC_BANNER_2} />
+            <View>
+
+                <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <View style={{ flex: 0.5 }}>
+                            <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Demo class results are here!</Text>
+                            <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>Know what teacher-coach have to say about Aarav</Text>
                         </View>
-                        <TouchableOpacity  onPress={this.goToDemoClassResults} style={[CommonStyles.shadowContainer_border_20,{ width : normalize(120),marginTop : normalize(16),marginStart : normalize(24) }]}>
-                        <Text style={[CommonStyles.text_12__semi_bold,{ color : COLOR.BLUE_LINk,textAlign :'center',marginTop : normalize(9),marginBottom : normalize(9) }]}>View Results</Text>
-                        </TouchableOpacity>
-                       
 
-                    </Card>
-                </View>
-          
+                        <Image style={{ flex: 0.5, alignSelf: 'center', height: normalize(100), width: normalize(100), marginTop: normalize(24), borderRadius: 20, resizeMode: "stretch" }} source={IC_BANNER_2} />
+                    </View>
+                    <TouchableOpacity onPress={this.goToDemoClassResults} style={[CommonStyles.shadowContainer_border_20, { width: normalize(120), marginTop: normalize(16), marginStart: normalize(24) }]}>
+                        <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk, textAlign: 'center', marginTop: normalize(9), marginBottom: normalize(9) }]}>View Results</Text>
+                    </TouchableOpacity>
+
+
+                </Card>
+            </View>
+
 
         )
     }
@@ -189,7 +190,7 @@ class NewUserScreen extends Component {
                     this.checkDemoClassStatus()
                 }
                 {
-                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].parent_feedback && 
+                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].parent_feedback &&
                     this.rateDemoClassView()
                 }
                 {
@@ -202,7 +203,7 @@ class NewUserScreen extends Component {
 
                     <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         {
-                            currentSessionKid  &&
+                            currentSessionKid &&
                             <View>
                                 <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
                                 <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
@@ -289,8 +290,14 @@ class NewUserScreen extends Component {
                         }}>
                             <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
                         </TouchableOpacity>
+                        <YoutubePlayer
+                            height={300}
+                            play={true}
+                            videoId={"bEJLVQJjeak"}
+                           
+                        />
 
-                        <YouTube
+                        {/* <YouTube
                             videoId="bEJLVQJjeak" // The YouTube video ID
                             play={this.state.demoVideo} // control playback of video with true/false
                             inLine // control whether the video should play in fullscreen or inline
@@ -300,7 +307,7 @@ class NewUserScreen extends Component {
                             onChangeQuality={e => this.setState({ quality: e.quality })}
                             onError={e => this.setState({ error: e.error })}
                             style={{ alignSelf: 'stretch', height: 300 }}
-                        />
+                        /> */}
                     </View>
 
                 </Modal>

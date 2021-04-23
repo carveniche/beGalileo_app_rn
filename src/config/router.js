@@ -37,6 +37,10 @@ import MainScreen from "../screens/AppScreens/MainScreen";
 import Main from "react-native-country-picker-modal";
 import DemoDetails from '../screens/BookDemoScreen/demo_details';
 import DemoClassResults from '../screens/BookDemoScreen/demo_class_results';
+import RenewSubscription from '../screens/SubscriptionScreens/RenewSubscription';
+import ClassDetailsScreen from '../screens/ScheduleScreens/ClassDetailsScreen';
+import ClassListScreen from '../screens/ScheduleScreens/ClassListScreen';
+
 
 
 
@@ -279,7 +283,30 @@ const AppStackNavigator = createStackNavigator({
             headerTitle : ''
         }
     },
-
+    RenewSubscription:{
+        screen: RenewSubscription,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
+    ClassDetailsScreen:{
+        screen: ClassDetailsScreen,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
+    ClassListScreen:{
+        screen: ClassListScreen,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
     ChooseLiveBatch: {
         screen: ChooseLiveBatch,
         navigationOptions: {

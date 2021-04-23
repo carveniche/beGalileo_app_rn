@@ -75,7 +75,7 @@ class DashboardHeader extends Component {
         })
 
         return (
-            <View>
+            <View style={styles.container}>
                 <View style={{ marginTop: normalize(10), marginStart: normalize(5) }}>
                     <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>{headerTitle}</Text>
                     <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(4) }]}>{headerDescription}</Text>
@@ -106,6 +106,11 @@ const mapDispatchToProps = {
 };
 
 const styles = StyleSheet.create({
+
+    container :{
+        backgroundColor : COLOR.WHITE
+    },
+
     textHeader: {
         fontSize: 15,
         textAlign: "left",

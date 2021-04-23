@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, SafeAreaView,YellowBox } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView,YellowBox,BackHandler } from 'react-native';
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { COLOR } from './config/styles';
@@ -38,6 +38,18 @@ const client = axios.create({
 
 
   export default class App extends Component {
+
+    componentDidMount(){
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    componentWillUnmount(){
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton() {
+      return true;
+    }
+
     render() {
       return (
         <Provider store={store}>
@@ -53,6 +65,7 @@ const client = axios.create({
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: COLOR.WHITE
+      backgroundColor: COLOR.WHITE,
+      padding : 5
     }
   });

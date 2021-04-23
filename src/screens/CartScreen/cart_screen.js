@@ -162,7 +162,7 @@ class CartListScreen extends Component {
 
 
 
-        payWithRazorPay(order_response,1,
+        payWithRazorPay(order_response,this.state.netTotalPrice,
             this.state.mLocalCountry,
             this.state.localParentEmail,
             this.state.localParentContactNumber,

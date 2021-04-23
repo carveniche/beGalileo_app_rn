@@ -9,7 +9,8 @@ import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
-import { getDisplayTimeHours } from '../../components/helpers';
+import { getDisplayTimeHours,secondsToHms } from '../../components/helpers';
+
 
 class ClassDetailsScreen extends Component {
     constructor(props) {
@@ -46,11 +47,11 @@ class ClassDetailsScreen extends Component {
     }
 
     showPracticeDetails = (item) => {
-   
-        if(item.practice_details.length == 0)
-            return(
-                <View style={{ margin : 20,alignItems:'center' }}>
-                     <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>Practice not done yet...</Text>
+
+        if (item.practice_details.length == 0)
+            return (
+                <View style={{ margin: 20, alignItems: 'center' }}>
+                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>Practice not done yet...</Text>
                 </View>
             )
 
@@ -74,7 +75,7 @@ class ClassDetailsScreen extends Component {
                                 color={COLOR.RED} />
 
                             <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{getDisplayTimeHours(data.timespent)}</Text>
+                             <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)}</Text> 
                         </View>
                     </View>
 
@@ -101,12 +102,12 @@ class ClassDetailsScreen extends Component {
 
                         <CustomBackButton onPress={this.onPressBack} />
 
-                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>{this.state.classType} Class</Text>
-                    {
-                        classData && classData.practice_details &&
-                        this.showPracticeDetails(classData)
-                        
-                    }
+                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>{this.state.classType.slice(0,-2)}</Text>
+                        {
+                            classData && classData.practice_details &&
+                            this.showPracticeDetails(classData)
+
+                        }
                         {/* <View style={{ marginTop: normalize(20) }}>
                             <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Math Concept</Text>
                             <View style={{ justifyContent: 'space-between' }}>
@@ -140,7 +141,7 @@ class ClassDetailsScreen extends Component {
                             <View style={{ flexDirection: 'column', flex: 1, alignItems: 'center' }}>
                                 <Text style={CommonStyles.text_11_bold}>Teacher</Text>
                                 <TouchableOpacity onPress={this.cancleConfiramtiondemo}>
-                    <Text style={[CommonStyles.text_18_regular, { marginTop: normalize(4) }]}>{classData.teacher}</Text>
+                                    <Text style={[CommonStyles.text_18_regular, { marginTop: normalize(4) }]}>{classData.teacher}</Text>
                                 </TouchableOpacity>
 
                             </View>

@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BATCH_SELECTION, IC_MIDAS_SELECTION, CARD_BTN_ARROW, LIVE_CLASS_TODAY, ICON_CLOCK, IC_SCHEDULE, IC_ACCURACY, IC_TIME_SPENT, IC_BADGE_SAMPLE_1, IC_BADGE_SAMPLE_2, IC_ACTIVITY, LIVE_CLASS_CARD_THUMB } from "../../assets/images";
+import { IC_BATCH_SELECTION, IC_MIDAS_SELECTION, IC_NUMERO, CARD_BTN_ARROW, LIVE_CLASS_TODAY, ICON_CLOCK, IC_SCHEDULE, IC_ACCURACY, IC_TIME_SPENT, IC_BADGE_SAMPLE_1, IC_BADGE_SAMPLE_2, IC_ACTIVITY, LIVE_CLASS_CARD_THUMB, IC_BANNER_3 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
-import { getDifferenceFromTodayDate,getDisplayFormattedDate } from '../../components/helpers';
+import { getDifferenceFromTodayDate, getDisplayFormattedDate } from '../../components/helpers';
 import * as Progress from 'react-native-progress';
 import SvgUri from "react-native-svg-uri";
 import SubscriptionTabs from '../../components/subscription_tab';
@@ -379,12 +379,12 @@ class PaidUserScreen extends Component {
     }
 
 
-    
 
-    
+
+
 
     checkLiveClassStatus = (liveClassDetails) => {
-        console.log(getDifferenceFromTodayDate(liveClassDetails.start_date,liveClassDetails.time)+" OOOOOOO");
+        console.log(getDifferenceFromTodayDate(liveClassDetails.start_date, liveClassDetails.time) + " OOOOOOO");
         return (
             <View style={{ marginTop: normalize(20) }}>
                 <Text style={[CommonStyles.text_18_semi_bold]}>Live Class</Text>
@@ -392,7 +392,7 @@ class PaidUserScreen extends Component {
                     liveClassDetails.todays_class ?
                         <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>Today</Text>
                         :
-                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{getDifferenceFromTodayDate(liveClassDetails.start_date,liveClassDetails.time)} Ago</Text>
+                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{getDifferenceFromTodayDate(liveClassDetails.start_date, liveClassDetails.time)} Ago</Text>
                 }
 
                 <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(1), marginEnd: normalize(1) }]}>
@@ -407,9 +407,9 @@ class PaidUserScreen extends Component {
                         <Image style={{ height: normalize(150), alignSelf: 'center', resizeMode: 'contain' }} source={LIVE_CLASS_TODAY} />
 
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(16), marginStart: normalize(16),marginBottom:16 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(16), marginStart: normalize(16), marginBottom: 16 }}>
                         <View style={{ flex: 1, }}>
-               
+
                             <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>{getDisplayFormattedDate(liveClassDetails.start_date)}</Text>
                             <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>{liveClassDetails.time}</Text>
 
@@ -447,6 +447,78 @@ class PaidUserScreen extends Component {
             </View>
         )
 
+    }
+
+    pendingClassStatus = () => {
+        return (
+            <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2), marginTop: normalize(20), borderRadius: normalize(20) }]}>
+
+
+
+                <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(10), marginBottom: normalize(10), marginEnd: normalize(5), marginStart: normalize(10) }}>
+                    <View style={{ flex: 1, marginTop: normalize(10),marginStart : normalize(10) }}>
+                        <Text style={[CommonStyles.text_12_bold]}>24 Classes</Text>
+                        <Text style={[CommonStyles.text_12__semi_bold]}>Completed : </Text>
+                        <Text style={[CommonStyles.text_18_bold]}>8 out of 16</Text>
+                        <View>
+                            <Text style={[CommonStyles.text_12_regular]}>Last Class Date</Text>
+                            <Text style={[CommonStyles.text_12_regular]}>24 Jan 2021</Text>
+                        </View>
+
+                    </View>
+
+                    <Image style={{ flex: 1, height: normalize(100), alignSelf: 'center', width: normalize(100),marginEnd : normalize(20), resizeMode: 'contain' }} source={IC_BANNER_3} />
+                </View>
+
+
+            </View>
+        )
+    }
+
+    renewSubscriptionCard = (expiringDetails) => {
+        const nextSubscription = expiringDetails[0].next_subscription_to_show[0];
+       
+        return (
+
+
+            <LinearGradient colors={['#F2E2FF', '#FFFFFF']} style={[CommonStyles.shadowContainer_border_20, { marginTop : normalize(20),marginBottom : normalize(10),marginStart : normalize(5),marginEnd : normalize(5) }]}>
+                <View style={{ flex: 1, flexDirection: 'row', marginEnd: normalize(5), marginStart: normalize(10) }}>
+
+                    <Text style={[CommonStyles.text_16_semi_bold, { flex: 3, marginStart: normalize(10), alignSelf: 'center' }]}>Get {nextSubscription.discount}% off on {nextSubscription.duration} month renewal</Text>
+                    <Image style={{ flex: 1, height: normalize(50), width: normalize(100), marginTop: 10, marginEnd: 10, resizeMode: 'contain' }} source={IC_NUMERO} />
+                </View>
+                <View style={{ marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(10) }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={[CommonStyles.text_8_regular, { backgroundColor: COLOR.TEXT_COLOR_YELLOW, paddingStart: 10, paddingEnd: 10, paddingTop: 5, paddingBottom: 5, borderRadius: 20, overflow: 'hidden' }]}>Alert</Text>
+                    </View>
+
+                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, lineHeight: 18, marginTop: normalize(5) }]}>{nextSubscription.student_name}’s online learning{'\n'}subscription is about to over</Text>
+                    {
+                        expiringDetails[0].expiring_in_days > 0 ?
+                        <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Expiring on - {expiringDetails[0].current_subscription_end_date} | {expiringDetails[0].expiring_in_days} Days to go</Text>
+                        :
+                        <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Subscription Expired</Text>
+                    }
+                  
+
+                </View>
+                <TouchableOpacity onPress={()=>this.onClickRenewSubscription(nextSubscription.duration)} style={{ flexDirection: 'row', marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(20), justifyContent: 'space-between' }}>
+                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Renew</Text>
+                    <Image style={{ height: normalize(28), alignSelf: 'center', width: normalize(28), resizeMode: "stretch" }} source={CARD_BTN_ARROW} />
+                </TouchableOpacity>
+            </LinearGradient>
+
+
+
+
+        )
+
+    }
+
+    onClickRenewSubscription = (mDuration) => {
+        this.props.navigation.navigate(Constants.RenewSubscription,{
+            duration : mDuration
+        });
     }
 
     midasTestStatus = (details) => {
@@ -500,8 +572,10 @@ class PaidUserScreen extends Component {
     render() {
         const { currentKidDetails } = this.state;
         return (
-            <View style={{ backgroundColor: COLOR.WHITE,marginStart : normalize(15),marginEnd : normalize(15) }}>
-                <View style={{ marginTop: normalize(20) }}>
+            <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY, paddingStart: normalize(5), paddingEnd: normalize(5) }}>
+
+
+                {/* <View style={{ marginTop: normalize(20) }}>
                     <Text style={[CommonStyles.text_18_semi_bold]}>Good things ahead!</Text>
                     {
                         currentKidDetails &&
@@ -512,7 +586,14 @@ class PaidUserScreen extends Component {
 
 
 
-                </View>
+                </View> */}
+                {
+                    this.pendingClassStatus()
+                }
+                {
+                    currentKidDetails && currentKidDetails.subscription_about_to_expire &&
+                    this.renewSubscriptionCard(currentKidDetails.expiring_subscription_details)
+                }
 
                 {
                     currentKidDetails && currentKidDetails.last_class_details != "" &&

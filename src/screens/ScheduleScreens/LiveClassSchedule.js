@@ -6,6 +6,7 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, LIVE_CLASS_TODAY, ICON_CLOCK, CARD_BTN_ARROW, IC_SCHEDULE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
+import { secondsToHms } from '../../components/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 
@@ -19,30 +20,31 @@ class LiveClassSchedule extends Component {
     showUpComingClasses = (upComingClasses) => {
 
         return (
-            <View style={{ margin: normalize(10) }}>
-                <Text style={[CommonStyles.text_14_bold]}>UpComing Classes</Text>
+            <View style={{ backgroundColor: COLOR.WHITE, paddingStart: normalize(10), paddingEnd: normalize(10), paddingBottom: normalize(20), borderBottomStartRadius: 24, borderBottomEndRadius: 24 }}>
+                <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
                 {
-                    upComingClasses.map((item) => {
-                        return (
-                            <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
-                                <View>
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
-                                    <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
-                                </View>
-                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                    upComingClasses.map((item, index) => {
+                        if (index < 3)
+                            return (
+                                <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
+                                    <View>
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
+                                        <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                    </View>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 
-                                    <View style={{ margin: normalize(16) }}>
-                                        <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+                                        <View style={{ margin: normalize(16) }}>
+                                            <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+
+                                        </View>
+
 
                                     </View>
 
 
                                 </View>
-
-
-                            </View>
-                        )
+                            )
 
                     })
                 }
@@ -67,8 +69,8 @@ class LiveClassSchedule extends Component {
     showInCompletedClasses = (inCompleteClasses) => {
 
         return (
-            <View style={{ margin: normalize(10) }}>
-                <Text style={[CommonStyles.text_14_bold]}>InComplete Classes</Text>
+            <View style={{ backgroundColor: COLOR.RED, borderRadius: 24 }}>
+                <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>InComplete Classes</Text>
                 {
                     inCompleteClasses.map((item) => {
                         return (
@@ -99,7 +101,7 @@ class LiveClassSchedule extends Component {
                                                             color={COLOR.RED} />
 
                                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{data.timespent} hrs</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)} hrs</Text>
                                                     </View>
                                                 </View>
 
@@ -133,67 +135,104 @@ class LiveClassSchedule extends Component {
 
 
     }
-    showCompletedClasses = (completedClasses,classType) => {
+
+
+    onPressClassItem = (clType,clData) => {
+        this.props.navigation.navigate(Constants.ClassDetailsScreen,{
+            classType : clType,
+            classData : clData
+        })
+    }
+
+    onPressViewAll = (clType,clList) => {
+        console.log("On Press View All");
+        console.log(clList);
+        this.props.navigation.navigate(Constants.ClassListScreen,{
+            classType : clType,
+            classList : clList
+        })
+    }
+    showCompletedClasses = (completedClasses, classType) => {
 
         return (
-            <View style={{ margin: normalize(10) }}>
-                <Text style={[CommonStyles.text_14_bold]}>{classType}</Text>
+            <View style={{ backgroundColor: COLOR.WHITE, borderRadius: 24, paddingHorizontal: normalize(10), paddingVertical: normalize(20), marginTop: normalize(20) }}>
+                <View style={{ flexDirection: 'row', marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                    <Text style={[CommonStyles.text_14_bold]}>{classType}</Text>
+                    <TouchableOpacity onPress={()=>this.onPressViewAll(classType,completedClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
+                        <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
+                    </TouchableOpacity>
+
+                </View>
+
                 {
-                    completedClasses.map((item) => {
-                        return (
-                            <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
-                                <View>
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
-                                    <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
-                                </View>
-                                {
-                                    item.practice_details && item.practice_details.length > 0 ?
+                    completedClasses.map((item, index) => {
+                        if (index < 3)
 
-                                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
-                                            {
-                                                item.practice_details.map((data) => {
-                                                    return (
-                                                        <View style={{ margin: normalize(16) }}>
-                                                            <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
-                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
-                                                            <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                                <Icon
-                                                                    style={{ marginStart: normalize(8) }}
-                                                                    size={15}
-                                                                    name='check'
-                                                                    color={COLOR.TEXT_COLOR_GREEN} />
-                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
-                                                                <Icon
-                                                                    style={{ marginStart: normalize(8) }}
-                                                                    size={15}
-                                                                    name='times'
-                                                                    color={COLOR.RED} />
+                            return (
+                                <TouchableOpacity onPress={()=>this.onPressClassItem(classType,item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
+                                    <View>
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
+                                        <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                    </View>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 
-                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{data.timespent} hrs</Text>
-                                                            </View>
-                                                        </View>
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
 
-                                                    )
-                                                })
-                                            }
-                                        </View> :
-                                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                                                </View>
 
-                                            <View style={{ margin: normalize(16) }}>
-                                                <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
 
                                             </View>
+                                    
+                                    {
+                                       // item.practice_details && item.practice_details.length > 0 ?
+
+                                            // <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+                                            //     {
+                                            //         item.practice_details.map((data) => {
+                                            //             return (
+                                            //                 <View style={{ margin: normalize(16) }}>
+                                            //                     <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
+                                            //                     {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
+                                            //                     <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                            //                         <Icon
+                                            //                             style={{ marginStart: normalize(8) }}
+                                            //                             size={15}
+                                            //                             name='check'
+                                            //                             color={COLOR.TEXT_COLOR_GREEN} />
+                                            //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
+                                            //                         <Icon
+                                            //                             style={{ marginStart: normalize(8) }}
+                                            //                             size={15}
+                                            //                             name='times'
+                                            //                             color={COLOR.RED} />
+
+                                            //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
+                                            //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)}</Text>
+                                            //                     </View>
+                                            //                 </View>
+
+                                            //             )
+                                            //         })
+                                            //     }
+                                            // </View> :
+                                            // <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+
+                                            //     <View style={{ margin: normalize(16) }}>
+                                            //         <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                            //         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+
+                                            //     </View>
 
 
-                                        </View>
-                                }
+                                            // </View>
+                                    }
 
 
 
-                            </View>
-                        )
+                                </TouchableOpacity>
+                            )
 
                     })
                 }
@@ -208,8 +247,6 @@ class LiveClassSchedule extends Component {
 
             </View>
         )
-
-
 
 
     }
@@ -302,12 +339,12 @@ class LiveClassSchedule extends Component {
                 {
 
                     student_class_status && student_class_response.completed_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.completed_classes,"Completed Classes")
+                    this.showCompletedClasses(student_class_response.completed_classes, "Completed Classes")
                 }
                 {
 
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.incomplete_classes,"InComplete Classes")
+                    this.showCompletedClasses(student_class_response.incomplete_classes, "InComplete Classes")
                 }
 
 

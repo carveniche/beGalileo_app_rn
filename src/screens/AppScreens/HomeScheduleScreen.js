@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
+
 import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,7 +15,7 @@ import DashboardHeader from '../../components/DashboardHeader';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import LiveClassSchedule from '../ScheduleScreens/LiveClassSchedule';
 import CurriculamSchedule from '../ScheduleScreens/CurriculamSchedule';
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 
 class HomeScheduleScreen extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class HomeScheduleScreen extends Component {
     }
     onComponentFocus = () => {
         console.log("On Component Focus ");
-        this.getStudentClasses();
+       // this.getStudentClasses();
     }
 
     componentDidMount() {
@@ -67,8 +68,8 @@ class HomeScheduleScreen extends Component {
 
     getStudentClasses = () => {
 
-       // this.props.getStudentClasses(52003);
-         this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
+        // this.props.getStudentClasses(52003);
+        this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
 
@@ -89,17 +90,19 @@ class HomeScheduleScreen extends Component {
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: COLOR.WHITE,
-                paddingStart: normalize(10),
-                paddingEnd: normalize(10)
+                backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
                 <ScrollView>
                     <View>
                         <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
+
                         <DashboardHeader headerTitle="Schedule" headerDescription="See your Kids schedule" allKidsList={allKidsList} />
 
-                        <View style={{ marginTop: normalize(32) }}>
-                            <View style={{ flexDirection: "row" }}>
+
+
+
+                        <View style={{ backgroundColor : COLOR.WHITE,marginTop: normalize(20),borderTopLeftRadius : 24,borderTopRightRadius  :24 }}>
+                            <View style={{ flexDirection: "row" ,marginStart : normalize(10),marginTop : normalize(20),marginBottom : normalize(20)}}>
                                 <TouchableOpacity onPress={this.onTabSelected} style={isLiveTabSelected ? styles.tabItemSelected : styles.tabItem}>
                                     <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Live Class</Text>
                                 </TouchableOpacity>
@@ -108,26 +111,26 @@ class HomeScheduleScreen extends Component {
                                 </TouchableOpacity> */}
                             </View>
                         </View>
-                        <View style={{ marginTop: normalize(20) }}>
+                       
                             {/* {
-                                isLiveTabSelected ?
-                                    <LiveClassSchedule />
-                                    : <CurriculamSchedule />
-                            } */}
+                                            isLiveTabSelected ?
+                                                <LiveClassSchedule />
+                                                : <CurriculamSchedule />
+                                        } */}
                             {
-                                currentSelectedKid && currentSelectedKid.paid_status && student_class_status ?
+                                currentSelectedKid && currentSelectedKid.paid_status && student_class_status &&
 
-                                   
-                                        <LiveClassSchedule />
 
-                                    :
-                                   <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
+                                <LiveClassSchedule navigation={this.props.navigation} />
+
+                                //     :
+                                //    <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
 
                             }
-                        </View>
-
+                       
 
                     </View>
+
 
                 </ScrollView>
             </View>

@@ -415,6 +415,22 @@ export function getStudentClasses(student_id){
     }
 }
 
+
+export function getUpcomingClasses(student_id){
+    return{
+        type : STUDENT_CLASSES,
+        payload : {
+            request: {
+                url : 'app_mathbox/upcoming_classes',
+                params : {
+                    student_id
+
+                }
+            }
+        }
+    }
+}
+
 export function getDemoResults(live_class_id,student_id,parent_id){
     return{
         type : DEMO_RESULT,

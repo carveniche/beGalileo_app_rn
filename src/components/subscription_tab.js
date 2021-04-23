@@ -32,13 +32,17 @@ class SubscriptionTabs extends Component {
             priceDetails: [],
             isBuyNow: false,
             ParentCountry: "",
-            currency: Constants.INDIA_CURRENCY
+            currency: Constants.INDIA_CURRENCY,
+            recommendedIndex: null
         }
 
 
     }
 
     componentDidUpdate(prevProps) {
+
+
+
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
 
@@ -84,6 +88,23 @@ class SubscriptionTabs extends Component {
 
     }
 
+    assignRecommendedIndex() {
+        console.log("Assigning Recommended Index" + this.props.recommended)
+        let recIndex = 0;
+        if (this.props.recommended == 3)
+            recIndex = 0
+        else if (this.props.recommended == 6)
+            recIndex = 1;
+        else if (this.props.recommended == 10)
+            recIndex = 2;
+
+        this.setState({
+            recommendedIndex: recIndex
+        })
+
+
+    }
+
 
     checkSubscription = () => {
         const { currentSelectedKid } = this.props;
@@ -125,7 +146,7 @@ class SubscriptionTabs extends Component {
 
     setCheckBoxTrue = () => {
         console.log("Check Box True  : " + this.state.ParentCountry);
-        
+
         this.props.state.dashboard_response.price_details[0].price_details.map((item, index) => {
 
             this.setState({
@@ -135,6 +156,8 @@ class SubscriptionTabs extends Component {
     }
 
     componentDidMount() {
+
+
 
         if (this.props.state.dashboard_status) {
 
@@ -146,6 +169,9 @@ class SubscriptionTabs extends Component {
 
 
         }
+        if (this.props.recommended)
+            this.assignRecommendedIndex()
+
         console.log("Subscription Tabs");
         if (this.props.user_detail_response != undefined) {
             console.log("user detail available");
@@ -163,7 +189,7 @@ class SubscriptionTabs extends Component {
 
     onGroupClassSelected = (index) => {
         const currentSub = groupPrefix + index;
-        console.log(index);
+        console.log("Selected Subscription Index : " + index);
         if (currentSub != this.state.subscriptionAddedToCart) {
             this.setState({
                 selectedSubscription: groupPrefix + index
@@ -253,19 +279,129 @@ class SubscriptionTabs extends Component {
 
     }
     getPriceForPackage = (item, index) => {
-     
-            var mathBoxPrice = item.duration * 500;
-            var reducedPrice = item.original_price - mathBoxPrice;
-            return reducedPrice;
-     
+
+        var mathBoxPrice = item.duration * 500;
+        var reducedPrice = item.original_price - mathBoxPrice;
+        return reducedPrice;
+
+    }
+
+    recommendedSubscription = () => {
+        const { ParentCountry, recommendedIndex } = this.state;
+        console.log("Recommended Subscription");
+        const item = this.props.dashboard_response.price_details[0].price_details[recommendedIndex];
+
+        console.log(item);
+        const index = recommendedIndex;
+
+       
+        return (
+            <TouchableOpacity onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
+                <View style={this.state.selectedSubscription == groupPrefix + index ?
+                    styles.selectedContainerStyle :
+                    this.state.subscriptionAddedToCart == groupPrefix + index ? styles.cartAddedContainerStyle :
+                        styles.shadowContainerStyle} >
+                    <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(16) }}>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
+                            <View style={{ flexDirection: "row" }}>
+                                <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
+                                {/* <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.display_price}</Text> */}
+                            </View>
+                            {/* <Text>Check Box  : {String(this.state[groupPrefixCheckBox + index])}</Text> */}
+                            <View>
+                                {
+                                    this.state[groupPrefixCheckBox + index] ?
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text> :
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency}  {this.getPriceForPackage(item, index)}</Text>
+                                }
+
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(4) }}>
+                            <View>
+                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.classes} Classes</Text>
+
+                            </View>
+                            <View style={{ alignItems: 'flex-end', }}>
+                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{this.state.currency} {item.display_price}</Text>
+
+                            </View>
+                        </View>
+
+
+                        {
+                            ParentCountry == Constants.INDIA && item.boxes !== "" ?
+                                <View>
+                                    <View style={{ borderWidth: 1, marginTop: normalize(16), borderColor: COLOR.BORDER_COLOR_GREY }} />
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: normalize(12) }}>
+
+                                        <View style={{ height: normalize(25), width: normalize(25) }}>
+                                            <CheckBox
+                                                containerStyle={{ padding: 0, margin: 0 }}
+                                                size={25}
+                                                onPress={() => this.onCheckBoxChecked(index)}
+                                                checked={this.state[groupPrefixCheckBox + index]}
+                                            />
+                                        </View>
+
+                                        <View style={{ marginStart: normalize(8) }}>
+                                            <Text style={[CommonStyles.text_12_bold]}>{this.state.currency} {item.boxes * 500}</Text>
+                                            <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(1) }]}>Includes {item.boxes} Math boxes</Text>
+                                        </View>
+                                    </View>
+                                </View> :
+                                <View></View>
+
+                        }
+
+
+                        <View>
+
+                        </View>
+
+                    </View>
+
+                </View>
+                {
+                    this.state.selectedSubscription == groupPrefix + index ?
+                        <View style={{ flexDirection: 'row', marginTop: normalize(12) }}>
+                            <View>
+                                <CustomGradientButtonIcon
+                                    myRef={(input) => { this.btn_add_kid = input; }}
+                                    style={{ padding: 10, flexDirection: 'row' }}
+                                    children="Confirm"
+                                    icon={IC_BUY_NOW}
+                                    iconStyle={{ height: normalize(24), width: normalize(24), marginStart: normalize(26) }}
+                                    textStyling={{ marginStart: normalize(12), alignSelf: 'center', marginEnd: normalize(26) }}
+                                    onPress={() => this.onBuyNowPress(index, item)}
+                                />
+                            </View>
+                            {/* <TouchableOpacity onPress={() => this.addToCart(index, item)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Image style={{ height: normalize(24), width: normalize(24), marginStart: normalize(16), alignSelf: 'center' }} source={IC_ADD_TO_CART} />
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(16), alignSelf: 'center' }]}>Add to Cart</Text>
+                            </TouchableOpacity> */}
+                        </View>
+                        :
+                        this.state.subscriptionAddedToCart == groupPrefix + index ?
+                            <View style={{ justifyContent: 'center', marginTop: normalize(12) }}>
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, alignSelf: 'center' }]}>Subscription Added to cart</Text>
+                            </View>
+                            : <View />
+                }
+
+
+            </TouchableOpacity>
+        )
     }
 
     groupClasses() {
         const { ParentCountry } = this.state;
-
+        console.log("Group Classes");
+        console.log(this.state.priceDetails);
 
         return this.state.priceDetails.map((item, index) =>
-
+            this.props.recommended != item.duration &&
             <TouchableOpacity onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
                 <View style={this.state.selectedSubscription == groupPrefix + index ?
                     styles.selectedContainerStyle :
@@ -362,7 +498,10 @@ class SubscriptionTabs extends Component {
 
 
             </TouchableOpacity>
+
+
         )
+
     }
 
     onTabSelected = () => {
@@ -454,6 +593,22 @@ class SubscriptionTabs extends Component {
         const { isGroupSelected, subscriptionList } = this.state;
         return (
             <View style={{ marginStart: normalize(5), marginEnd: normalize(5) }}>
+
+                {
+                    this.props.dashboard_status && this.state.recommendedIndex != null &&
+                    <View>
+                        {
+                            this.recommendedSubscription()
+                        }
+                        <Text style={[CommonStyles.text_14_semi_bold]}>Other Recommeded Programs for Sakshi</Text>
+                    </View>
+
+
+
+
+                }
+
+
                 <View style={{ flexDirection: "row", marginTop: normalize(20) }}>
                     <TouchableOpacity onPress={this.onTabSelected} style={isGroupSelected ? styles.tabItemSelected : styles.tabItem}>
                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Classes</Text>
@@ -462,6 +617,7 @@ class SubscriptionTabs extends Component {
                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Speical Classes</Text>
                     </TouchableOpacity> */}
                 </View>
+
 
                 <View style={{ marginTop: normalize(10) }}>
                     {

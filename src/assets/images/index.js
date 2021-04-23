@@ -74,3 +74,4 @@ export const IC_PLAY_BLUE = require('./IC_PLAY_BLUE.png');
 export const FEEDBACK_VERY_GOOD = require('./FEEDBACK_VERY_GOOD.png');
 export const FEEDBACK_GOOD = require('./FEEDBACK_GOOD.png');
 export const FEEDBACK_BAD = require('./FEEDBACK_BAD.png');
+export const IC_NUMERO = require("./IC_NUMERO.png");

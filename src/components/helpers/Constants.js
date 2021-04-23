@@ -29,8 +29,10 @@ export const INDIA = "India";
 export const INDIA_CURRENCY = "Rs";
 export const OTHER_CURRENCY = "USD";
 export const DUBAI = "DUBAI";
-
+export const ClassDetailsScreen = 'ClassDetailsScreen';
+export const ClassListScreen = 'ClassListScreen';
 export const MoreProfileScreen = 'MoreProfileScreen';
+export const RenewSubscription = 'RenewSubscription';
 export const MoreEditProfileScreen = "MoreEditProfileScreen";
 export const OverallActivitiesScreen = "OverallActivitiesScreen";
 export const ActivityReportScreen = "ActivityReportScreen";

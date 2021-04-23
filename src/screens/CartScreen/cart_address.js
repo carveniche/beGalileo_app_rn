@@ -285,7 +285,7 @@ class CartAddress extends Component {
 
     proceedToPayment = (order_response) => {
         
-        payWithRazorPay(order_response,1,
+        payWithRazorPay(order_response,this.state.netTotalPrice,
             this.state.mParentCountryName,
             this.state.localParentEmail,
             this.state.localParentContactNumber,
