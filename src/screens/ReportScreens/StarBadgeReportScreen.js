@@ -13,7 +13,8 @@ class StarBadgeReportScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isStarSelected: false,
+            isStarSelected: true,
+            totalStars : 0,
             allBadgeList: [
                 {
                     id: 0,
@@ -49,6 +50,15 @@ class StarBadgeReportScreen extends Component {
         };
     }
 
+    componentDidMount(){
+        var showStar = this.props.navigation.getParam('showStar', true);
+        var collStars = this.props.navigation.getParam('collectedStars', 0);
+        this.setState({
+            isStarSelected : showStar,
+            totalStars : collStars
+        })
+    }
+
     onPressBack = () => {
         const { goBack } = this.props.navigation;
        
@@ -75,7 +85,7 @@ class StarBadgeReportScreen extends Component {
                     <Image style={{ width: normalize(230), height: normalize(170), alignSelf: 'center', position: 'absolute' }} source={IC_STAR_SIDES} />
                 </View>
                 <View style={{ alignSelf: 'center' }}>
-                    <Text style={[CommonStyles.text_18_semi_bold, { alignSelf: 'center' }]}>678</Text>
+                    <Text style={[CommonStyles.text_18_semi_bold, { alignSelf: 'center' }]}>{this.state.totalStars}</Text>
                     <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'center', marginTop: normalize(4) }]}>Total stars{'\n'}received by sakshi</Text>
                 </View>
                 <View style={{ marginTop: normalize(40) }}>

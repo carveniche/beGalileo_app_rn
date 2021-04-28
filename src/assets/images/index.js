@@ -75,3 +75,4 @@ export const FEEDBACK_VERY_GOOD = require('./FEEDBACK_VERY_GOOD.png');
 export const FEEDBACK_GOOD = require('./FEEDBACK_GOOD.png');
 export const FEEDBACK_BAD = require('./FEEDBACK_BAD.png');
 export const IC_NUMERO = require("./IC_NUMERO.png");
+export const IC_HOMEWORK = require("./IC_HOMEWORK.png");

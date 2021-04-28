@@ -92,12 +92,17 @@ class HomeReportScreen extends Component {
         }
     }
 
-    onPressStarEarned = () => {
-        // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
+    onPressStarEarned = (starsColl) => {
+         this.props.navigation.navigate(Constants.StarBadgeReportScreen,{
+              showStar : true,
+              collectedStars : starsColl
+         });
     }
 
     onPressBadgeEarned = () => {
-        // this.props.navigation.navigate(Constants.StarBadgeReportScreen);
+         this.props.navigation.navigate(Constants.StarBadgeReportScreen,{
+            showStar : false
+       });
     }
 
     onPressViewAllActivity = () => {
@@ -411,7 +416,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid } = this.props;
         return (
             <View style={{ marginTop: normalize(16) }}>
-                <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text>
+                {/* <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text> */}
 
                 {
 
@@ -501,7 +506,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid } = this.props;
         return (
             <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
-                <TouchableOpacity disabled={true} onPress={this.onPressStarEarned} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
+                <TouchableOpacity disabled={false} onPress={()=>this.onPressStarEarned(currentSelectedKid.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={[CommonStyles.text_12_bold]}>{currentSelectedKid.stars}</Text>
@@ -510,7 +515,7 @@ class HomeReportScreen extends Component {
 
                 </TouchableOpacity>
 
-                <TouchableOpacity disabled={true} onPress={this.onPressBadgeEarned} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_PURPLE, borderRadius: normalize(24), justifyContent: 'space-between', marginStart: normalize(10) }}>
+                <TouchableOpacity disabled={false} onPress={this.onPressBadgeEarned} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_PURPLE, borderRadius: normalize(24), justifyContent: 'space-between', marginStart: normalize(10) }}>
                     <View style={{ flexDirection: 'row', margin: normalize(13) }}>
                         <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', position: 'absolute' }} source={IC_BADGES_EARNED_1} />
                         <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', marginStart: normalize(10) }} source={IC_BADGES_EARNED_2} />

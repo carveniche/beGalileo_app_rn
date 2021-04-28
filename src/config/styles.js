@@ -39,7 +39,10 @@ export const COLOR = {
   BLUE_LINk : '#3E63D3',
   TEXT_COLOR_PURPLE: '#A35BEB',
   SHADOW_COLOR: 'rgba(11, 66, 171, 0.16)',
-  KID_SELECTED : '#DDF3FC'
+  KID_SELECTED : '#DDF3FC',
+  INPROGRESS_YELLOW : "#FFF5D7",
+  ORANGE : "#F2994A",
+  COMPLETED_GREEN : '#C9FFDF'
 };
 
 export const PIE_CHART_COLORS = [COLOR.TEXT_COLOR_GREEN, COLOR.TEXT_COLOR_ORANGE, COLOR.RED, COLOR.TAB_BOTTOM_BLUE, COLOR.BG_PURPLE, COLOR.DANGER, COLOR.PANTOME]
@@ -193,6 +196,12 @@ export const CommonStyles = StyleSheet.create({
     lineHeight: 25,
     fontFamily: Constants.Montserrat_Regular,
 
+  },
+  text_9_semi_bold: {
+    fontSize: normalize(9),
+    lineHeight: 25,
+    fontFamily: Constants.Montserrat_Bold,
+    color : COLOR.TEXT_COLOR_BLACK
   },
   text_9_bold: {
     fontSize: normalize(9),
