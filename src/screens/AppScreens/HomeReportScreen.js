@@ -7,6 +7,7 @@ import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, I
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { timeInHourFormat } from '../../components/helpers/CustomUtilMethods';
 import { getDashboardItems, getStudentReportData } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import DashboardHeader from '../../components/DashboardHeader';
@@ -122,8 +123,8 @@ class HomeReportScreen extends Component {
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                            <Text style={[CommonStyles.text_16_regular]}>{currentSelectedKid.activity_details.timespent}</Text>
-                            <Text style={[CommonStyles.text_12_Regular, {}]}> hrs</Text>
+                            <Text style={[CommonStyles.text_16_regular]}>{timeInHourFormat(currentSelectedKid.activity_details.timespent)}</Text>
+                            {/* <Text style={[CommonStyles.text_12_Regular, {}]}> hrs</Text> */}
                             {/* <Icon
                                 style={{ marginStart: normalize(8) }}
                                 size={15}

@@ -9,8 +9,28 @@ import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
+import CustomGradientButton from '../../components/CustomGradientButton';
 import RadioForm, { RadioButtonInput, RadioButton, RadioButtonLabel } from 'react-native-simple-radio-button';
-import { getDisplayTimeHours, secondsToHms } from '../../components/helpers';
+import { getDisplayTimeHours, secondsToHms, timeInHourFormat } from '../../components/helpers';
+import ImagePicker from 'react-native-image-picker';
+
+const workBookStatusPrefix = 'workbook_status_';
+
+
+const options = {
+    title: 'Select Avatar',
+    multiple: false,
+    maxWidth: 300,
+    maxHeight: 300,
+    quality: 0.5,
+    customButtons: [{ name: 'Workbook', title: 'Choose Photo from Gallery' }],
+    cropping: true,
+    includeBase64: true,
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 
 
 class ClassDetailsScreen extends Component {
@@ -25,6 +45,8 @@ class ClassDetailsScreen extends Component {
             mWorkBookStatus: null
         };
     }
+
+
 
 
     componentDidMount() {
@@ -195,18 +217,16 @@ class ClassDetailsScreen extends Component {
     }
 
 
-    onPressWorkBookRadio = (e) => {
+    onPressWorkBookRadio = (topicId, index) => {
+
+
         this.setState({
-            mWorkBookStatus: e
+            [workBookStatusPrefix + topicId]: workBookStatusPrefix + topicId + "_" + index
         })
     }
 
     showWorkBook = (workBookData) => {
-        var radio_props = [
-            { label: 'Not Started', value: 0 },
-            { label: 'In Progress', value: 1 },
-            { label: 'Completed', value: 2 },
-        ];
+
         const { mworkBook } = this.state;
         return (
             <View>
@@ -221,7 +241,15 @@ class ClassDetailsScreen extends Component {
                     mworkBook &&
                     <View >
                         {
+
                             workBookData.map((item) => {
+
+
+                                var radio_props = [
+                                    { label: 'Not Started', value: 0 },
+                                    { label: 'In Progress', value: 1 },
+                                    { label: 'Completed', value: 2 },
+                                ];
                                 return (
                                     <View>
                                         <View style={{ marginTop: normalize(20) }}>
@@ -244,33 +272,58 @@ class ClassDetailsScreen extends Component {
                                             >
                                                 {
                                                     radio_props.map((obj, i) => (
-                                                        <RadioButton labelHorizontal={true} key={i} >
-                                                            {/*  You can set RadioButtonLabel before RadioButtonInput */}
-                                                            <RadioButtonInput
-                                                                obj={obj}
-                                                                index={i}
-                                                                isSelected={this.state.mWorkBookStatus === i}
-                                                                onPress={this.onPressWorkBookRadio}
-                                                                borderWidth={1}
-                                                                buttonInnerColor={COLOR.TEXT_COLOR_GREEN}
-                                                                buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
-                                                                buttonSize={10}
-                                                                buttonOuterSize={20}
-                                                                buttonStyle={{}}
-                                                                buttonWrapStyle={{ marginLeft: 10, marginTop: normalize(10) }}
-                                                            />
-                                                            <RadioButtonLabel
-                                                                obj={obj}
-                                                                index={i}
-                                                                labelHorizontal={true}
-                                                                onPress={this.onPressWorkBookRadio}
-                                                                labelStyle={{ fontSize: normalize(12), fontFamily: Constants.Montserrat_Regular, color: COLOR.TEXT_COLOR_BLACK }}
-                                                                labelWrapStyle={{ marginTop: normalize(10) }}
-                                                            />
-                                                        </RadioButton>
+
+                                                        <View>
+                                                            {/* <Text>{item.topic_id}</Text> */}
+                                                            <RadioButton labelHorizontal={true} key={i} >
+                                                                {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                                                <RadioButtonInput
+                                                                    obj={obj}
+                                                                    index={i}
+                                                                    isSelected={this.state[workBookStatusPrefix + item.sub_topic_id] == (workBookStatusPrefix + item.sub_topic_id + "_" + i)}
+                                                                    onPress={() => {
+                                                                        this.onPressWorkBookRadio(item.sub_topic_id, i)
+                                                                    }}
+                                                                    borderWidth={1}
+                                                                    buttonInnerColor={COLOR.TEXT_COLOR_GREEN}
+                                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                                    buttonSize={10}
+                                                                    buttonOuterSize={20}
+                                                                    buttonStyle={{}}
+                                                                    buttonWrapStyle={{ marginLeft: 10, marginTop: normalize(10) }}
+                                                                />
+
+                                                                <RadioButtonLabel
+                                                                    obj={obj}
+                                                                    index={i}
+                                                                    labelHorizontal={true}
+                                                                    onPress={() => {
+                                                                        this.onPressWorkBookRadio(item.sub_topic_id, i)
+
+                                                                    }}
+                                                                    labelStyle={{ fontSize: normalize(12), fontFamily: Constants.Montserrat_Regular, color: COLOR.TEXT_COLOR_BLACK }}
+                                                                    labelWrapStyle={{ marginTop: normalize(10) }}
+                                                                />
+                                                            </RadioButton>
+
+
+
+
+
+                                                        </View>
+
                                                     ))
                                                 }
                                             </RadioForm>
+                                            <View>
+                                                {
+                                                    this.state[workBookStatusPrefix + item.sub_topic_id] == (workBookStatusPrefix + item.sub_topic_id + "_2") &&
+                                                    <TouchableOpacity onPress={this.onClickUploadWorkBook} style={{ flexWrap : 'wrap',marginVertical : normalize(10)}}>
+                                                        <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE,backgroundColor : COLOR.TEXT_COLOR_GREEN,justifyContent : 'center',paddingHorizontal : 20,paddingVertical : 10,borderRadius : 10,overflow : 'hidden' }]}>Upload Workbook</Text>
+                                                    </TouchableOpacity>
+                                                }
+
+                                            </View>
                                         </View>
                                     </View>
                                 )
@@ -288,11 +341,33 @@ class ClassDetailsScreen extends Component {
         )
     }
 
+    onClickUploadWorkBook = () => {
+        ImagePicker.showImagePicker(options, (response) => {
 
 
-    showPracticeDetails = (item) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                console.log(response);
+                const source = { uri: response.uri };
 
-        if (item.practice_details.length == 0)
+
+                this.setState({
+                    avatarSource: source,
+                });
+            }
+        });
+    }
+
+
+
+    showPracticeDetails = (item, tag) => {
+
+        if (item.length == 0)
             return (
                 <View style={{ margin: 20, alignItems: 'center' }}>
                     <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>Practice not done yet...</Text>
@@ -300,31 +375,45 @@ class ClassDetailsScreen extends Component {
             )
 
         return (
-            item.practice_details.map((data) => {
-                return (
-                    <View style={{ margin: normalize(10) }}>
-                        <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
-                        {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
-                        <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                            <Icon
-                                style={{ marginStart: normalize(8) }}
-                                size={15}
-                                name='check'
-                                color={COLOR.TEXT_COLOR_GREEN} />
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
-                            <Icon
-                                style={{ marginStart: normalize(8) }}
-                                size={15}
-                                name='times'
-                                color={COLOR.RED} />
+            <View style={{ marginTop: normalize(10) }}>
+                <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>{tag}</Text>
+                {
+                    item.map((data) => {
+                        return (
 
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)}</Text>
-                        </View>
-                    </View>
+                            <View >
+                                <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
 
-                )
-            })
+                                <View style={{ flexDirection: 'row', marginTop: normalize(2), alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Icon
+                                            style={{ marginStart: normalize(2) }}
+                                            size={15}
+                                            name='check'
+                                            color={COLOR.TEXT_COLOR_GREEN} />
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
+                                        <Icon
+                                            style={{ marginStart: normalize(8) }}
+                                            size={15}
+                                            name='times'
+                                            color={COLOR.RED} />
+
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
+                                    </View>
+
+                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{timeInHourFormat(data.timespent)}</Text>
+                                </View>
+                                <View style={{ height: 2, marginVertical: normalize(12), backgroundColor: COLOR.BORDER_COLOR_GREY }} />
+                            </View>
+
+
+
+
+                        )
+                    })
+                }
+            </View>
+
         )
     }
 
@@ -354,8 +443,13 @@ class ClassDetailsScreen extends Component {
 
                                 <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>{this.state.classType.slice(0, -2)}</Text>
                                 {
-                                    classData.practice_details &&
-                                    this.showPracticeDetails(classData)
+                                    classData.math_quizzes &&
+                                    this.showPracticeDetails(classData.math_quizzes, "Math Concept")
+
+                                }
+                                {
+                                    classData.logical_quizzes &&
+                                    this.showPracticeDetails(classData.logical_quizzes, "Think N Reason")
 
                                 }
 

@@ -6,7 +6,7 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, LIVE_CLASS_TODAY, ICON_CLOCK, CARD_BTN_ARROW, IC_SCHEDULE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
-import { secondsToHms } from '../../components/helpers';
+import { secondsToHms,timeInHourFormat } from '../../components/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 
@@ -101,7 +101,7 @@ class LiveClassSchedule extends Component {
                                                             color={COLOR.RED} />
 
                                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)} hrs</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{timeInHourFormat(data.timespent)} hrs</Text>
                                                     </View>
                                                 </View>
 

@@ -42,6 +42,19 @@ export function secondsToHms(d) {
     return hDisplay + mDisplay; 
 }
 
+export function timeInHourFormat(mTime){
+    var timeValue = "";
+    var a = mTime.split(':');
+    if(a[0] != "00"){
+      timeValue += a[0]+" Hrs"
+    }
+    if(a[1] != "00"){
+        timeValue += a[1]+" Mins"
+    }
+    return timeValue;
+    
+}
+
 export function getDisplayFormattedDate(dateValue){
     return moment(dateValue).format('MMM DD, YYYY');
 }

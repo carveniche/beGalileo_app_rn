@@ -8,6 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
+import { timeInHourFormat } from '../../components/helpers/CustomUtilMethods';
 import { getDifferenceFromTodayDate, getDisplayFormattedDate } from '../../components/helpers';
 import * as Progress from 'react-native-progress';
 import SvgUri from "react-native-svg-uri";
@@ -359,8 +360,8 @@ class PaidUserScreen extends Component {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                                    <Text style={[CommonStyles.text_16_regular]}>{currentKidDetails.activity_details.timespent}</Text>
-                                    <Text style={[CommonStyles.text_12_Regular, {}]}>hrs</Text>
+                                    <Text style={[CommonStyles.text_16_regular]}>{timeInHourFormat(currentKidDetails.activity_details.timespent)}</Text>
+                                    {/* <Text style={[CommonStyles.text_12_Regular, {}]}>hrs</Text> */}
                                     {/* <Icon
                                     style={{ marginStart: normalize(8) }}
                                     size={15}
