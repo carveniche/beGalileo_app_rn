@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Modal } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER } from "../../assets/images";
+import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER,IC_CLOSE_BLUE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,6 +17,7 @@ import ImagePicker from 'react-native-image-picker';
 const workBookStatusPrefix = 'workbook_status_';
 
 
+
 const options = {
     title: 'Select Avatar',
     multiple: false,
@@ -24,6 +25,7 @@ const options = {
     maxHeight: 300,
     quality: 0.5,
     customButtons: [{ name: 'Workbook', title: 'Choose Photo from Gallery' }],
+
     cropping: true,
     includeBase64: true,
     storageOptions: {
@@ -42,7 +44,9 @@ class ClassDetailsScreen extends Component {
             mMathConcept: false,
             mThinkNReason: false,
             mworkBook: false,
-            mWorkBookStatus: null
+            workBookUpload: [],
+            mWorkBookStatus: null,
+            mSelectedWorkBookImage: null
         };
     }
 
@@ -225,9 +229,19 @@ class ClassDetailsScreen extends Component {
         })
     }
 
+
+    showImagePopUp = (item) => {
+        console.log("Image Clicked");
+        console.log(item);
+        this.setState({
+            mSelectedWorkBookImage: item
+        })
+
+    }
+
     showWorkBook = (workBookData) => {
 
-        const { mworkBook } = this.state;
+        const { mworkBook, workBookUpload, mSelectedWorkBookImage } = this.state;
         return (
             <View>
                 <TouchableOpacity onPress={() => this.onClickAssignedHomeWork(2)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -316,10 +330,28 @@ class ClassDetailsScreen extends Component {
                                                 }
                                             </RadioForm>
                                             <View>
+                                                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{ flexDirection: 'row', marginVertical: normalize(10) }}>
+                                                    {
+                                                        workBookUpload.map((book) => {
+                                                            return (
+                                                                <View>
+
+                                                                    <TouchableOpacity onPress={() => this.showImagePopUp(book)} style={{ margin: 5 }}>
+                                                                        <Image source={book.src} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                    </TouchableOpacity>
+                                                                </View>
+
+                                                            )
+                                                        })
+                                                    }
+                                                </ScrollView>
+
+
+
                                                 {
                                                     this.state[workBookStatusPrefix + item.sub_topic_id] == (workBookStatusPrefix + item.sub_topic_id + "_2") &&
-                                                    <TouchableOpacity onPress={this.onClickUploadWorkBook} style={{ flexWrap : 'wrap',marginVertical : normalize(10)}}>
-                                                        <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE,backgroundColor : COLOR.TEXT_COLOR_GREEN,justifyContent : 'center',paddingHorizontal : 20,paddingVertical : 10,borderRadius : 10,overflow : 'hidden' }]}>Upload Workbook</Text>
+                                                    <TouchableOpacity onPress={() => this.onClickUploadWorkBook(item.sub_topic_id)} style={{ flexWrap: 'wrap', marginVertical: normalize(10) }}>
+                                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.WHITE, backgroundColor: COLOR.TEXT_COLOR_GREEN, justifyContent: 'center', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, overflow: 'hidden' }]}>Upload Workbook</Text>
                                                     </TouchableOpacity>
                                                 }
 
@@ -334,6 +366,31 @@ class ClassDetailsScreen extends Component {
                     </View>
 
                 }
+                {
+                    mSelectedWorkBookImage &&
+
+                    <Modal transparent={true}>
+                        <View style={{ flex : 1,backgroundColor : COLOR.BG_ALPHA_BLACK,justifyContent: 'center', alignContent: 'center' }}>
+                            <Image source={mSelectedWorkBookImage.src} style={{ height: '70%', width: '100%', resizeMode: 'contain' }} />
+                            <TouchableOpacity onPress={()=>{
+                                this.setState({
+                                    mSelectedWorkBookImage : null
+                                })
+                            }}>
+                                <Text style={[CommonStyles.text_12_bold,{ backgroundColor : COLOR.RED,paddingHorizontal : 20,paddingVertical : 10,borderRadius : 20,color : COLOR.WHITE,marginVertical: normalize(10), alignSelf: 'center',overflow : 'hidden' }]}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ position : 'absolute',marginTop : 30,marginEnd : 30,top : 0,right : 0 }} onPress={()=>{
+                                this.setState({
+                                    mSelectedWorkBookImage : null
+                                })
+                            }}>
+                             <Image source={IC_CLOSE_BLUE} style={{ height: 50, width: 50, resizeMode: 'cover' }} />
+                            </TouchableOpacity>
+
+                        </View>
+                    </Modal>
+
+                }
 
 
             </View>
@@ -341,7 +398,8 @@ class ClassDetailsScreen extends Component {
         )
     }
 
-    onClickUploadWorkBook = () => {
+    onClickUploadWorkBook = (subTopicId) => {
+        console.log("Sub topic Id " + subTopicId);
         ImagePicker.showImagePicker(options, (response) => {
 
 
@@ -355,10 +413,12 @@ class ClassDetailsScreen extends Component {
                 console.log(response);
                 const source = { uri: response.uri };
 
+                var imageItem = {
+                    id: subTopicId,
+                    src: source
+                }
 
-                this.setState({
-                    avatarSource: source,
-                });
+                this.setState({ workBookUpload: [...this.state.workBookUpload, imageItem] })
             }
         });
     }
