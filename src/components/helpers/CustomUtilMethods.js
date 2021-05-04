@@ -43,6 +43,9 @@ export function secondsToHms(d) {
 }
 
 export function timeInHourFormat(mTime){
+    console.log("Time in Hour "+mTime);
+    if(mTime == undefined || mTime == 0)
+        return "0 Mins";
     var timeValue = "";
     var a = mTime.split(':');
     if(a[0] != "00"){

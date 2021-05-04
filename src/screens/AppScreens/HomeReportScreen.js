@@ -62,8 +62,8 @@ class HomeReportScreen extends Component {
     }
 
     checkReportDatas = () => {
-         this.props.getStudentReportData(this.props.currentSelectedKid.student_id,60);
-        //this.props.getStudentReportData(52006, 7);
+         //this.props.getStudentReportData(this.props.currentSelectedKid.student_id,60);
+        this.props.getStudentReportData(51765, 7);
     }
 
     changeAccuracyChartView = () => {

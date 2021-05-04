@@ -28,7 +28,7 @@ import {
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
     REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, 
-    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED
+    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED
 } from '../config/redux-action-types/dashboard'
 
 const initialState = { cartItems: [] }
@@ -449,6 +449,26 @@ export default function reducer(state=initialState,action){
             }
         }
 
+
+        case STUDENT_CATEGORY_CLASSES :{
+            return{
+                ...state,loading : true,student_category_class_status : false
+            }
+        }
+        case STUDENT_CATEGORY_CLASSES_SUCCESS : {
+            return{
+                ...state,loading : false,
+                student_category_class_status : action.payload.data.status,
+                student_category_class_response : action.payload.data
+            }
+        }
+        case STUDENT_CATEGORY_CLASSES_FAILED :{
+            return{
+                ...state,loading : false,
+                student_category_class_status : action.payload.data.status,
+                student_category_class_response : action.payload.data
+            }
+        }
 
 
         case APPLY_COUPON :{

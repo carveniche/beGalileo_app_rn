@@ -40,6 +40,7 @@ import DemoClassResults from '../screens/BookDemoScreen/demo_class_results';
 import RenewSubscription from '../screens/SubscriptionScreens/RenewSubscription';
 import ClassDetailsScreen from '../screens/ScheduleScreens/ClassDetailsScreen';
 import ClassListScreen from '../screens/ScheduleScreens/ClassListScreen';
+import LiveClassSchedule from '../screens/ScheduleScreens/LiveClassSchedule';
 
 
 
@@ -301,6 +302,14 @@ const AppStackNavigator = createStackNavigator({
     },
     ClassListScreen:{
         screen: ClassListScreen,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
+    LiveClassSchedule:{
+        screen: LiveClassSchedule,
         navigationOptions: {
             headerShown: false,
             headerBackTitleVisible : false,

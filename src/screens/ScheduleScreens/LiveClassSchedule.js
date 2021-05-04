@@ -6,9 +6,12 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, LIVE_CLASS_TODAY, ICON_CLOCK, CARD_BTN_ARROW, IC_SCHEDULE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
-import { secondsToHms,timeInHourFormat } from '../../components/helpers';
+import { secondsToHms, timeInHourFormat } from '../../components/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
+import DashboardHeader from '../../components/DashboardHeader';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
+
 
 class LiveClassSchedule extends Component {
     constructor(props) {
@@ -26,7 +29,7 @@ class LiveClassSchedule extends Component {
                     upComingClasses.map((item, index) => {
                         if (index < 3)
                             return (
-                                <View style={{ flexDirection: 'row', marginTop: normalize(10) }}>
+                                <TouchableOpacity onPress={() => this.onPressClassItem(Constants.UPCOMING_CLASSES, item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
                                     <View>
                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                         <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
@@ -43,7 +46,7 @@ class LiveClassSchedule extends Component {
                                     </View>
 
 
-                                </View>
+                                </TouchableOpacity>
                             )
 
                     })
@@ -151,8 +154,7 @@ class LiveClassSchedule extends Component {
         console.log("On Press View All");
         console.log(clList);
         this.props.navigation.navigate(Constants.ClassListScreen, {
-            classType: clType,
-            classList: clList
+            classType: clType
         })
     }
     showCompletedClasses = (completedClasses, classType) => {
@@ -183,13 +185,13 @@ class LiveClassSchedule extends Component {
                                         <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
                                         {
-                                            item.homework_assigned && 
-                                            <View style={{ marginTop : normalize(6) }}>
-                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_BLACK }]}>Homework assigned</Text>
-                                        </View>
+                                            item.homework_assigned &&
+                                            <View style={{ marginTop: normalize(6) }}>
+                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_BLACK }]}>Homework assigned</Text>
+                                            </View>
 
                                         }
-                                        
+
                                     </View>
 
 
@@ -267,8 +269,8 @@ class LiveClassSchedule extends Component {
         const { student_class_status, student_class_response } = this.props;
         if (student_class_response.upcoming_classes.length == 0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length == 0) {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>No .. found</Text>
+                <View style={{ flex: 1, backgroundColor : COLOR.WHITE ,justifyContent: 'center', alignItems: 'center' }}>
+                    <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
                 </View>
             )
         }
@@ -339,10 +341,7 @@ class LiveClassSchedule extends Component {
                     </View>
 
                 </View> */}
-                {
-                    student_class_status &&
-                    this.renderDataAvailablility()
-                }
+
                 {
 
                     student_class_status && student_class_response.upcoming_classes.length > 0 &&
@@ -351,14 +350,17 @@ class LiveClassSchedule extends Component {
                 {
 
                     student_class_status && student_class_response.completed_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.completed_classes, "Completed Classes")
+                    this.showCompletedClasses(student_class_response.completed_classes, Constants.COMPLETED_CLASSES)
                 }
                 {
 
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
-                    this.showCompletedClasses(student_class_response.incomplete_classes, "InComplete Classes")
+                    this.showCompletedClasses(student_class_response.incomplete_classes, Constants.INCOMPLETE_CLASSES)
                 }
-
+                {
+                    student_class_status &&
+                    this.renderDataAvailablility()
+                }
 
 
 

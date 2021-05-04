@@ -58,3 +58,6 @@ export const ParentCurrency ="ParentCurrency";
 export const ParentTimeZone = "ParentTimeZone";
 export const ANDROID = 'android';
 export const IOS ='ios';
+export const COMPLETED_CLASSES = "Completed Classes";
+export const INCOMPLETE_CLASSES = "InComplete Classes";
+export const UPCOMING_CLASSES = "Upcoming Classes";

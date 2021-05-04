@@ -588,9 +588,9 @@ class PaidUserScreen extends Component {
 
 
                 </View> */}
-                {
+                {/* {
                     this.pendingClassStatus()
-                }
+                } */}
                 {
                     currentKidDetails && currentKidDetails.subscription_about_to_expire &&
                     this.renewSubscriptionCard(currentKidDetails.expiring_subscription_details)

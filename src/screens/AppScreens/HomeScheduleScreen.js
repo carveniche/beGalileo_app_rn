@@ -69,7 +69,7 @@ class HomeScheduleScreen extends Component {
     getStudentClasses = () => {
 
          this.props.getStudentClasses(53187);
-       // this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
+       //this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
 
@@ -118,13 +118,16 @@ class HomeScheduleScreen extends Component {
                                                 : <CurriculamSchedule />
                                         } */}
                             {
-                                currentSelectedKid && currentSelectedKid.paid_status && student_class_status &&
+                                currentSelectedKid && currentSelectedKid.paid_status && student_class_status ?
 
 
                                 <LiveClassSchedule navigation={this.props.navigation} />
-
-                                //     :
-                                //    <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
+                                : <View />
+                                    // :
+                                    // <View>
+                                    //       <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
+                                    //     </View>
+                                  
 
                             }
                        

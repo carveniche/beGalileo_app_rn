@@ -35,7 +35,7 @@ export const COLOR = {
   TRACKING_BLUE :'#72BEFF',
   TEXT_ALPHA_GREY: 'rgba(53, 54, 57, 0.7)',
   BG_ALPHA_BLACK: 'rgba(0, 0, 0, 0.9)',
-  BG_ALPHA_BLUE: 'rgba(243,247,255,0.0)',
+  BG_ALPHA_BLUE: 'rgba(243,247,255,0.2)',
   TAB_BOTTOM_BLUE: '#3E63D3',
   BLUE_LINk : '#3E63D3',
   TEXT_COLOR_PURPLE: '#A35BEB',
@@ -175,6 +175,12 @@ export const CommonStyles = StyleSheet.create({
 
   },
   text_11_bold: {
+    fontSize: normalize(11),
+    lineHeight: 25,
+    fontFamily: Constants.Montserrat_Bold,
+    color: Constants.TEXT_COLOR_BLACK
+  },
+  text_11_semi_bold: {
     fontSize: normalize(11),
     lineHeight: 25,
     fontFamily: Constants.Montserrat_Semi_Bold,

@@ -430,7 +430,7 @@ class ClassDetailsScreen extends Component {
         if (item.length == 0)
             return (
                 <View style={{ margin: 20, alignItems: 'center' }}>
-                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>Practice not done yet...</Text>
+                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{tag} Practice not done</Text>
                 </View>
             )
 
@@ -477,8 +477,45 @@ class ClassDetailsScreen extends Component {
         )
     }
 
+    showUpcomingClassDetail = () => {
+        return(
+            <View style={{ margin : normalize(10)}}>
+                <TouchableOpacity onPress={this.onClickCancelClass}>
+                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.TEXT_COLOR_GREEN,marginTop : normalize(20) }]}>Cancel Class</Text>
+                </TouchableOpacity>
+      
+                <View>
+                    <Text style={[CommonStyles.text_12_bold,{ color : COLOR.TEXT_COLOR_BLACK,marginTop : normalize(40) }]}>Things to note</Text>
+                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>Join the call at least a minute or two before the scheduled meeting time.</Text>
+                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>Have a designated note taker.</Text>
+                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>You can cancel the class before 24 hours of confirmed time. </Text>
+                </View>
+            </View>
+        )
+    }
+
+    onCancelClassConfirmation = () => {
+
+    }
+
+    onClickCancelClass = () => {
+        Alert.alert(
+            "Are you sure want to cancel the class?",
+            "",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Yes", onPress: () => this.onCancelClassConfirmation() }
+            ],
+            { cancelable: false }
+        );
+    }
+
     render() {
-        const { classData } = this.state;
+        const { classData,classType } = this.state;
         return (
             <View style={{
                 flex: 1,
@@ -503,12 +540,12 @@ class ClassDetailsScreen extends Component {
 
                                 <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>{this.state.classType.slice(0, -2)}</Text>
                                 {
-                                    classData.math_quizzes &&
+                                   classType != Constants.UPCOMING_CLASSES && classData.math_quizzes &&
                                     this.showPracticeDetails(classData.math_quizzes, "Math Concept")
 
                                 }
                                 {
-                                    classData.logical_quizzes &&
+                                   classType != Constants.UPCOMING_CLASSES && classData.logical_quizzes &&
                                     this.showPracticeDetails(classData.logical_quizzes, "Think N Reason")
 
                                 }
@@ -528,10 +565,15 @@ class ClassDetailsScreen extends Component {
                                     </View>
 
                                 </View>
+                                
 
                                 {
-                                    classData.homework_assigned &&
+                                    classType != Constants.UPCOMING_CLASSES && classData.homework_assigned &&
                                     this.showAssignedHomeWork(classData)
+                                }
+                                {
+                                    classType == Constants.UPCOMING_CLASSES && 
+                                    this.showUpcomingClassDetail()
                                 }
 
                             </View>

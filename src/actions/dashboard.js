@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES
 } from '../config/redux-action-types/dashboard';
 
 import * as Constants from '../components/helpers/Constants';
@@ -408,6 +408,22 @@ export function getStudentClasses(student_id){
                 url : 'app_mathbox/student_classes',
                 params : {
                     student_id
+
+                }
+            }
+        }
+    }
+}
+
+export function getStudentCategoryClasses(student_id,category){
+    return{
+        type : STUDENT_CATEGORY_CLASSES,
+        payload : {
+            request: {
+                url : 'app_mathbox/student_classes',
+                params : {
+                    student_id,
+                    category
 
                 }
             }
