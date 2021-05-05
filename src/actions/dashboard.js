@@ -7,8 +7,9 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD
 } from '../config/redux-action-types/dashboard';
+import FormData from 'form-data';
 
 import * as Constants from '../components/helpers/Constants';
 
@@ -73,6 +74,29 @@ export function getCartItemList(parent_id,country){
                     parent_id,
                     country
                 }
+            }
+        }
+    }
+}
+
+export function uploadWorkBook(homework_id, workbook,type,name){
+    var formdata = new FormData();
+    formdata.append("homework_id", homework_id);
+    formdata.append('workbook', {
+        uri: Platform.OS === 'android' ? `file:///${workbook.uri}` : workbook.uri,
+        type: type,
+        name: name,
+    });
+    console.log(formdata);
+
+    return {
+        type: WORKBOOK_UPLOAD,
+        payload: {
+            request: {
+                method: 'post',
+                url: 'app_mathbox/upload_workbook',
+                data: formdata,
+                headers: { 'Content-Type': 'multipart/form-data' }
             }
         }
     }

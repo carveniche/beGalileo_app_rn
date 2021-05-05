@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER,IC_CLOSE_BLUE } from "../../assets/images";
+import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER, IC_CLOSE_BLUE } from "../../assets/images";
+import { uploadWorkBook } from '../../actions/dashboard';
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +14,7 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import RadioForm, { RadioButtonInput, RadioButton, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { getDisplayTimeHours, secondsToHms, timeInHourFormat } from '../../components/helpers';
 import ImagePicker from 'react-native-image-picker';
+import DocumentPicker from 'react-native-document-picker';
 
 const workBookStatusPrefix = 'workbook_status_';
 
@@ -46,7 +48,9 @@ class ClassDetailsScreen extends Component {
             mworkBook: false,
             workBookUpload: [],
             mWorkBookStatus: null,
-            mSelectedWorkBookImage: null
+            mSelectedWorkBookImage: null,
+            mShowUploadChoice: false,
+            mSelectedItem : null
         };
     }
 
@@ -89,7 +93,7 @@ class ClassDetailsScreen extends Component {
                     }
                     <View style={{ marginTop: normalize(20), marginBottom: normalize(20), backgroundColor: COLOR.BORDER_COLOR_GREY, height: 1 }} />
                     {
-                        this.showWorkBook(homeWorkData.math_zone_data)
+                        this.showWorkBook(homeWorkData.workbook_data)
                     }
                 </View>
 
@@ -268,12 +272,12 @@ class ClassDetailsScreen extends Component {
                                     <View>
                                         <View style={{ marginTop: normalize(20) }}>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                <Text style={[CommonStyles.text_11_bold]}>{item.topic_name}</Text>
-                                                {
+                                                <Text style={[CommonStyles.text_11_bold]}>{item.name}</Text>
+                                                {/* {
                                                     this.getHomeWorkProgress(item.status)
-                                                }
+                                                } */}
                                             </View>
-                                            <Text style={[CommonStyles.text_12_Regular]}>{item.sub_topic_name}</Text>
+                                            {/* <Text style={[CommonStyles.text_12_Regular]}>{item.sub_topic_name}</Text> */}
                                             <Text style={[CommonStyles.text_9_semi_bold]}>Due Date : {item.due_date}</Text>
                                         </View>
 
@@ -350,7 +354,7 @@ class ClassDetailsScreen extends Component {
 
                                                 {
                                                     this.state[workBookStatusPrefix + item.sub_topic_id] == (workBookStatusPrefix + item.sub_topic_id + "_2") &&
-                                                    <TouchableOpacity onPress={() => this.onClickUploadWorkBook(item.sub_topic_id)} style={{ flexWrap: 'wrap', marginVertical: normalize(10) }}>
+                                                    <TouchableOpacity onPress={() => this.onClickUploadWorkBook(item)} style={{ flexWrap: 'wrap', marginVertical: normalize(10) }}>
                                                         <Text style={[CommonStyles.text_12_bold, { color: COLOR.WHITE, backgroundColor: COLOR.TEXT_COLOR_GREEN, justifyContent: 'center', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, overflow: 'hidden' }]}>Upload Workbook</Text>
                                                     </TouchableOpacity>
                                                 }
@@ -370,21 +374,21 @@ class ClassDetailsScreen extends Component {
                     mSelectedWorkBookImage &&
 
                     <Modal transparent={true}>
-                        <View style={{ flex : 1,backgroundColor : COLOR.BG_ALPHA_BLACK,justifyContent: 'center', alignContent: 'center' }}>
+                        <View style={{ flex: 1, backgroundColor: COLOR.BG_ALPHA_BLACK, justifyContent: 'center', alignContent: 'center' }}>
                             <Image source={mSelectedWorkBookImage.src} style={{ height: '70%', width: '100%', resizeMode: 'contain' }} />
-                            <TouchableOpacity onPress={()=>{
+                            <TouchableOpacity onPress={() => {
                                 this.setState({
-                                    mSelectedWorkBookImage : null
+                                    mSelectedWorkBookImage: null
                                 })
                             }}>
-                                <Text style={[CommonStyles.text_12_bold,{ backgroundColor : COLOR.RED,paddingHorizontal : 20,paddingVertical : 10,borderRadius : 20,color : COLOR.WHITE,marginVertical: normalize(10), alignSelf: 'center',overflow : 'hidden' }]}>Delete</Text>
+                                <Text style={[CommonStyles.text_12_bold, { backgroundColor: COLOR.RED, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, color: COLOR.WHITE, marginVertical: normalize(10), alignSelf: 'center', overflow: 'hidden' }]}>Delete</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ position : 'absolute',marginTop : 30,marginEnd : 30,top : 0,right : 0 }} onPress={()=>{
+                            <TouchableOpacity style={{ position: 'absolute', marginTop: 30, marginEnd: 30, top: 0, right: 0 }} onPress={() => {
                                 this.setState({
-                                    mSelectedWorkBookImage : null
+                                    mSelectedWorkBookImage: null
                                 })
                             }}>
-                             <Image source={IC_CLOSE_BLUE} style={{ height: 50, width: 50, resizeMode: 'cover' }} />
+                                <Image source={IC_CLOSE_BLUE} style={{ height: 50, width: 50, resizeMode: 'cover' }} />
                             </TouchableOpacity>
 
                         </View>
@@ -398,8 +402,54 @@ class ClassDetailsScreen extends Component {
         )
     }
 
-    onClickUploadWorkBook = (subTopicId) => {
-        console.log("Sub topic Id " + subTopicId);
+    closeUploadChoice = () => {
+        this.setState({
+            mShowUploadChoice : false
+        })
+    }
+
+    selectPdfWorkBook = async () => {
+        const now = Date.now();
+        this.closeUploadChoice();
+        const { mSelectedItem } = this.state;
+        this.setState({
+            mShowUploadChoice : false
+        })
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+            });
+            console.log(
+                res.uri,
+                res.type, // mime type
+                res.name,
+                res.size
+            );
+            const source = { uri: res.uri };
+
+                var pdfItem = {
+                    id: mSelectedItem.homework_id,
+                    isImage : false,
+                    src: source
+                }
+                var fileName = now+"_workbook"+".pdf";
+                this.props.uploadWorkBook(mSelectedItem.homework_id, source,"application/pdf",fileName);
+
+                this.setState({ workBookUpload: [...this.state.workBookUpload, pdfItem] })
+
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                // User cancelled the picker, exit any dialogs or menus and move on
+            } else {
+                throw err;
+            }
+        }
+    }
+
+    selectImageWorkBook = () => {
+        const now = Date.now();
+        this.closeUploadChoice();
+        const { mSelectedItem } = this.state;
         ImagePicker.showImagePicker(options, (response) => {
 
 
@@ -414,13 +464,25 @@ class ClassDetailsScreen extends Component {
                 const source = { uri: response.uri };
 
                 var imageItem = {
-                    id: subTopicId,
+                    id: mSelectedItem.homework_id,
+                    isImage : true,
                     src: source
                 }
+                var fileName = now+"_image"+".jpg";
+                this.props.uploadWorkBook(mSelectedItem.homework_id, source,'image/jpeg',fileName);
 
                 this.setState({ workBookUpload: [...this.state.workBookUpload, imageItem] })
             }
         });
+    }
+
+    onClickUploadWorkBook = async (item) => {
+       
+
+            this.setState({
+                mSelectedItem : item,
+                mShowUploadChoice : true
+            })
     }
 
 
@@ -478,17 +540,17 @@ class ClassDetailsScreen extends Component {
     }
 
     showUpcomingClassDetail = () => {
-        return(
-            <View style={{ margin : normalize(10)}}>
+        return (
+            <View style={{ margin: normalize(10) }}>
                 <TouchableOpacity onPress={this.onClickCancelClass}>
-                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.TEXT_COLOR_GREEN,marginTop : normalize(20) }]}>Cancel Class</Text>
+                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginTop: normalize(20) }]}>Cancel Class</Text>
                 </TouchableOpacity>
-      
+
                 <View>
-                    <Text style={[CommonStyles.text_12_bold,{ color : COLOR.TEXT_COLOR_BLACK,marginTop : normalize(40) }]}>Things to note</Text>
-                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>Join the call at least a minute or two before the scheduled meeting time.</Text>
-                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>Have a designated note taker.</Text>
-                    <Text style={[CommonStyles.text_12_regular,{ color : COLOR.TEXT_ALPHA_GREY, marginTop : normalize(16)}]}>You can cancel the class before 24 hours of confirmed time. </Text>
+                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(40) }]}>Things to note</Text>
+                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Join the call at least a minute or two before the scheduled meeting time.</Text>
+                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Have a designated note taker.</Text>
+                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>You can cancel the class before 24 hours of confirmed time. </Text>
                 </View>
             </View>
         )
@@ -515,7 +577,7 @@ class ClassDetailsScreen extends Component {
     }
 
     render() {
-        const { classData,classType } = this.state;
+        const { classData, classType, mShowUploadChoice } = this.state;
         return (
             <View style={{
                 flex: 1,
@@ -534,18 +596,19 @@ class ClassDetailsScreen extends Component {
                     }}>
 
                         <CustomBackButton onPress={this.onPressBack} />
+
                         {
                             classData &&
                             <View>
 
                                 <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>{this.state.classType.slice(0, -2)}</Text>
                                 {
-                                   classType != Constants.UPCOMING_CLASSES && classData.math_quizzes &&
+                                    classType != Constants.UPCOMING_CLASSES && classData.math_quizzes &&
                                     this.showPracticeDetails(classData.math_quizzes, "Math Concept")
 
                                 }
                                 {
-                                   classType != Constants.UPCOMING_CLASSES && classData.logical_quizzes &&
+                                    classType != Constants.UPCOMING_CLASSES && classData.logical_quizzes &&
                                     this.showPracticeDetails(classData.logical_quizzes, "Think N Reason")
 
                                 }
@@ -565,14 +628,14 @@ class ClassDetailsScreen extends Component {
                                     </View>
 
                                 </View>
-                                
+
 
                                 {
                                     classType != Constants.UPCOMING_CLASSES && classData.homework_assigned &&
                                     this.showAssignedHomeWork(classData)
                                 }
                                 {
-                                    classType == Constants.UPCOMING_CLASSES && 
+                                    classType == Constants.UPCOMING_CLASSES &&
                                     this.showUpcomingClassDetail()
                                 }
 
@@ -584,6 +647,21 @@ class ClassDetailsScreen extends Component {
 
                     </View>
                 </ScrollView>
+                {
+                    mShowUploadChoice &&
+                    <View style={{ position: 'absolute', bottom: 0, height: 300, width: '100%', backgroundColor: COLOR.BG_ALPHA_BLACK }}>
+                        <View style={{ flex : 1,justifyContent : 'space-evenly' }}>
+                            <TouchableOpacity onPress={this.selectImageWorkBook} style={{ alignSelf: 'baseline', marginTop : normalize(10) ,backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
+                                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE }]}>Upload Image</Text>
+                            </TouchableOpacity>
+                            <Text style={[CommonStyles.text_18_regular,{ alignSelf : 'center',color : COLOR.WHITE }]}>Or</Text>
+                            <TouchableOpacity onPress={this.selectPdfWorkBook} style={{ alignSelf: 'baseline', marginBottom : normalize(10) ,backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
+                                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE }]}>Upload PDF</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                }
             </View>
         );
     }
@@ -604,7 +682,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-
+    uploadWorkBook
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassDetailsScreen);

@@ -327,6 +327,8 @@ PODS:
   - React-jsinspector (0.63.4)
   - react-native-date-picker (2.7.13):
     - React
+  - react-native-document-picker (5.0.3):
+    - React-Core
   - react-native-geolocation (2.0.2):
     - React
   - react-native-image-picker (2.3.4):
@@ -520,6 +522,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-payments (from `../node_modules/react-native-payments`)
@@ -652,6 +655,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-image-picker:
@@ -795,6 +800,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-date-picker: 4468aeac8de6a6e351b56be0014d4fd35476de4c
+  react-native-document-picker: d2b8fa4d9b268a316515b1f631236f7a87813df6
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-payments: b5645a0d43e557604ba48d2bf0a44dd8a5db4ad6
@@ -844,6 +850,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YoutubePlayer-in-WKWebView: cfbf46da51d7370662a695a8f351e5fa1d3e1008
 
-PODFILE CHECKSUM: 01e87c78895c99cd3ec839ecee04d8209bffde9a
+PODFILE CHECKSUM: 6bdb11556800b8f98116a25bd2dd02012560dec5
 
 COCOAPODS: 1.10.1

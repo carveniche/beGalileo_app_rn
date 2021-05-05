@@ -195,7 +195,7 @@ class ClassListScreen extends Component {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <CustomBackButton onPress={this.onPressBack} />
-                            <Text>{showFilter ? "fff" : "RRR"}</Text>
+                            
                             <TouchableOpacity onPress={this.showFilterDialog} style={{ padding: 10 }}>
                                 <Image style={{ height: normalize(20), width: normalize(20), resizeMode: 'contain', alignSelf: 'center' }} source={IC_FILTER} />
                             </TouchableOpacity>

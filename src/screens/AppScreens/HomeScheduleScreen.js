@@ -68,7 +68,8 @@ class HomeScheduleScreen extends Component {
 
     getStudentClasses = () => {
 
-         this.props.getStudentClasses(53187);
+        // this.props.getStudentClasses(53187);
+         this.props.getStudentClasses(54938);
        //this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
