@@ -454,6 +454,40 @@ export function getStudentCategoryClasses(student_id,category){
         }
     }
 }
+export function getStudentCategoryClassesWithDate(student_id,category,start_date,end_date){
+    return{
+        type : STUDENT_CATEGORY_CLASSES,
+        payload : {
+            request: {
+                url : 'app_mathbox/student_classes',
+                params : {
+                    student_id,
+                    category,
+                    start_date,
+                    end_date
+
+                }
+            }
+        }
+    }
+}
+
+export function getStudentCategoryClassesWithFilter(student_id,category,filter){
+    return{
+        type : STUDENT_CATEGORY_CLASSES,
+        payload : {
+            request: {
+                url : 'app_mathbox/student_classes',
+                params : {
+                    student_id,
+                    category,
+                    filter
+
+                }
+            }
+        }
+    }
+}
 
 
 export function getUpcomingClasses(student_id){

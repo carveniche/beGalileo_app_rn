@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView ,Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { getStudentCategoryClasses } from '../../actions/dashboard';
+import { getStudentCategoryClasses, getStudentCategoryClassesWithFilter, getStudentCategoryClassesWithDate } from '../../actions/dashboard';
 import { IC_FILTER } from "../../assets/images";
-import LinearGradient from 'react-native-linear-gradient';
-import { addToCart } from "../../actions/dashboard";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Config from "../../config/configs";
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
 import { getDisplayTimeHours, secondsToHms } from '../../components/helpers';
+import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import ReportFilterBottomDialog from '../../components/ReportFilterBottomDialog';
+import moment from 'moment';
 
 class ClassListScreen extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class ClassListScreen extends Component {
         this.state = {
             classType: "",
             classList: [],
-            showFilter : false
+            showFilter: false
         };
     }
 
@@ -34,12 +34,19 @@ class ClassListScreen extends Component {
         this.getStudentClasses(classType)
     }
 
+
+    getClassType = (classType) => {
+        if (classType == Constants.COMPLETED_CLASSES)
+            return "completed";
+        else if (classType == Constants.INCOMPLETE_CLASSES)
+            return "incomplete";
+        else if (classType == Constants.UPCOMING_CLASSES)
+            return "upcoming";
+    }
+
     getStudentClasses = (mClassType) => {
-        if (mClassType == Constants.COMPLETED_CLASSES)
-            this.props.getStudentCategoryClasses(53187, "completed");
-        else if (mClassType == Constants.INCOMPLETE_CLASSES)
-            this.props.getStudentCategoryClasses(53187, "incomplete");
-        //this.props.getStudentClasses(this.props.currentSelectedKid.student_id,"");
+
+        this.props.getStudentCategoryClasses(53187, this.getClassType(mClassType));
     }
 
     onPressBack = () => {
@@ -56,8 +63,52 @@ class ClassListScreen extends Component {
         })
     }
 
+    showUpComingClasses = (upComingClasses) => {
+
+        return (
+            <View style={{ backgroundColor: COLOR.WHITE, paddingStart: normalize(10), paddingEnd: normalize(10), paddingBottom: normalize(20), borderBottomStartRadius: 24, borderBottomEndRadius: 24 }}>
+                {/* <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
+                <TouchableOpacity onPress={() => this.onPressViewAll(Constants.UPCOMING_CLASSES, upComingClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
+                </TouchableOpacity> */}
+                { 
+                    
+                    upComingClasses.map((item, index) => {
+                  
+                            return (
+                                <TouchableOpacity onPress={() => this.onPressClassItem(Constants.UPCOMING_CLASSES, item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
+                                    <View>
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
+                                        <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                    </View>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
+
+                                        <View style={{ margin: normalize(16) }}>
+                                            <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
+                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
+
+                                        </View>
+
+
+                                    </View>
+
+
+                                </TouchableOpacity>
+                            )
+
+                    })
+                }
+            </View>
+        )
+
+
+
+
+    }
+
 
     showCompletedClasses = (completedClasses, classType) => {
+
 
         return (
             <View style={{ backgroundColor: COLOR.WHITE, borderRadius: 24, paddingHorizontal: normalize(10), paddingVertical: normalize(5) }}>
@@ -157,27 +208,51 @@ class ClassListScreen extends Component {
 
     }
 
-    onClickApplyFilter = () => {
+    onClickApplyFilter = (fromDate, tillDate) => {
+        console.log("From Date " + fromDate);
+        console.log("To Date : " + tillDate);
+        var start_date = moment(fromDate).format('DD-MM-YYYY');
+        var end_date = moment(tillDate).format('DD-MM-YYYY');
+        console.log(start_date, end_date)
+        this.props.getStudentCategoryClassesWithDate(53187, this.getClassType(this.state.classType), start_date, end_date);
+        this.onCloseFilter();
+    }
 
+    onClickFilterDays = (daysToFilter) => {
+        this.props.getStudentCategoryClassesWithFilter(53187, this.getClassType(this.state.classType), daysToFilter);
+        this.onCloseFilter();
+    }
+
+    resetFilters = () => {
+        this.props.getStudentCategoryClasses(53187, this.getClassType(this.state.classType));
+        this.onCloseFilter();
     }
 
     onCloseFilter = () => {
         this.setState({
-            showFilter : false
+            showFilter: false
         })
     }
 
     showFilterDialog = () => {
         console.log("SHOW FILTER");
         this.setState({
-            showFilter : true
+            showFilter: true
         })
     }
 
-    
+    showNoRecordFound = () => {
+        return (
+            <View style={{ height: '100%', backgroundColor: COLOR.RED, justifyContent: 'center' }}>
+                <Text style={[CommonStyles.text_12_bold, { color: COLOR.BLACK, alignSelf: 'center' }]}>No Record Found..</Text>
+            </View>
+        )
+    }
+
+
 
     render() {
-        const { classList, classType,showFilter } = this.state;
+        const { classList, classType, showFilter } = this.state;
         const { loading, student_category_class_response, student_category_class_status } = this.props;
         return (
             <View style={{
@@ -185,8 +260,9 @@ class ClassListScreen extends Component {
                 backgroundColor: COLOR.WHITE,
 
             }}>
-                <ScrollView >
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
                     <View style={{
+
                         marginStart: normalize(20),
                         marginEnd: normalize(20),
                         marginTop: normalize(10),
@@ -195,33 +271,60 @@ class ClassListScreen extends Component {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <CustomBackButton onPress={this.onPressBack} />
-                            
+
                             <TouchableOpacity onPress={this.showFilterDialog} style={{ padding: 10 }}>
                                 <Image style={{ height: normalize(20), width: normalize(20), resizeMode: 'contain', alignSelf: 'center' }} source={IC_FILTER} />
                             </TouchableOpacity>
 
                         </View>
-                        
-                        
-                        
+
+
+
                         <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>{classType.slice(0, -2)}</Text>
                         {
-                            student_category_class_status && student_category_class_response.completed_classes &&
+                            student_category_class_status &&
+                            <View>
+                                {
+                                    classType == Constants.UPCOMING_CLASSES && student_category_class_response.upcoming_classes &&
+                                    this.showUpComingClasses(student_category_class_response.upcoming_classes)
+                                }
+                                {
+                                   classType == Constants.COMPLETED_CLASSES && student_category_class_response.completed_classes &&
+                                    this.showCompletedClasses(student_category_class_response.completed_classes, classType)
+                                }
+                                {
+                                    classType == Constants.COMPLETED_CLASSES && student_category_class_response.incomplete_classes &&
+                                    this.showCompletedClasses(student_category_class_response.incomplete_classes, classType)
+                                }
+                            </View>
 
-                            this.showCompletedClasses(student_category_class_response.completed_classes, classType)
+
+
                         }
-                        {
-                            loading &&
-                            <Text>Loading</Text>
-                        }
-                            
+
+
+
                     </View>
                 </ScrollView>
+
+                {
+                    loading &&
+                    <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
+                }
+                {/* {
+                   classType == Constants.UPCOMING_CLASSES && student_category_class_status && student_category_class_response.completed_classes && student_category_class_response.completed_classes.length < 1 &&
+                    <View style={{ position: 'absolute', top: 200, bottom: 0, left: 0, right: 0 }}>
+                        <NoRecordFoundComponent title={"No Classes Found"} />
+                    </View>
+
+                } */}
+                
                 {
                     showFilter &&
-                    <ReportFilterBottomDialog onCloseFilter={this.onCloseFilter} onClickApplyFilter={this.onClickApplyFilter} />
+                    <ReportFilterBottomDialog onCloseFilter={this.onCloseFilter} onClickApplyFilter={this.onClickApplyFilter} onClickFilterDays={this.onClickFilterDays} resetFilters={this.resetFilters} />
                 }
-            
+
+
             </View>
         );
     }
@@ -242,7 +345,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    getStudentCategoryClasses
+    getStudentCategoryClasses,
+    getStudentCategoryClassesWithDate,
+    getStudentCategoryClassesWithFilter
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassListScreen);

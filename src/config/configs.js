@@ -1,3 +1,7 @@
+import { Dimensions } from 'react-native';
+export const SCREEN_HEIGHT = Dimensions.get('window').height;
+export const SCREEN_WIDTH =  Dimensions.get('window').width;
+
 export const MSG91_AUTH_KEY = "313408AH0lkf4gael5eae578fP1";
 export const MSG91_TEMPLATE_ID = "5eb0039ad6fc0523f423aa4e";
 

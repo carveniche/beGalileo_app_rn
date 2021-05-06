@@ -24,7 +24,13 @@ class LiveClassSchedule extends Component {
 
         return (
             <View style={{ backgroundColor: COLOR.WHITE, paddingStart: normalize(10), paddingEnd: normalize(10), paddingBottom: normalize(20), borderBottomStartRadius: 24, borderBottomEndRadius: 24 }}>
-                <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
+                <View style={{ flexDirection: 'row', marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                    <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
+                    <TouchableOpacity onPress={() => this.onPressViewAll(Constants.UPCOMING_CLASSES, upComingClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
+                        <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
+                    </TouchableOpacity>
+                </View>
+
                 {
                     upComingClasses.map((item, index) => {
                         if (index < 3)
@@ -51,15 +57,6 @@ class LiveClassSchedule extends Component {
 
                     })
                 }
-
-
-
-
-
-
-
-
-
             </View>
         )
 
@@ -124,19 +121,8 @@ class LiveClassSchedule extends Component {
                 }
 
 
-
-
-
-
-
-
-
             </View>
         )
-
-
-
-
     }
 
 
@@ -269,8 +255,8 @@ class LiveClassSchedule extends Component {
         const { student_class_status, student_class_response } = this.props;
         if (student_class_response.upcoming_classes.length == 0 && student_class_response.completed_classes.length == 0 && student_class_response.incomplete_classes.length == 0) {
             return (
-                <View style={{ flex: 1, backgroundColor : COLOR.WHITE ,justifyContent: 'center', alignItems: 'center' }}>
-                    <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
+                <View style={{ flex: 1, backgroundColor: COLOR.WHITE, justifyContent: 'center', alignItems: 'center' }}>
+                    <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title="" />
                 </View>
             )
         }
