@@ -19,7 +19,7 @@ class ClassListScreen extends Component {
         this.state = {
             classType: "",
             classList: [],
-            showFilter: false
+            showFilter: false,
         };
     }
 
@@ -27,6 +27,7 @@ class ClassListScreen extends Component {
     componentDidMount() {
         const { navigation } = this.props;
         var classType = navigation.getParam('classType', "");
+       
 
         this.setState({
             classType: classType
@@ -46,7 +47,7 @@ class ClassListScreen extends Component {
 
     getStudentClasses = (mClassType) => {
 
-        this.props.getStudentCategoryClasses(53187, this.getClassType(mClassType));
+        this.props.getStudentCategoryClasses(this.props.currentSelectedKid.student_id, this.getClassType(mClassType));
     }
 
     onPressBack = () => {
@@ -311,17 +312,30 @@ class ClassListScreen extends Component {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 }
-                {/* {
-                   classType == Constants.UPCOMING_CLASSES && student_category_class_status && student_category_class_response.completed_classes && student_category_class_response.completed_classes.length < 1 &&
+                {
+                   classType == Constants.COMPLETED_CLASSES && student_category_class_status && student_category_class_response.completed_classes && student_category_class_response.completed_classes.length < 1 &&
                     <View style={{ position: 'absolute', top: 200, bottom: 0, left: 0, right: 0 }}>
                         <NoRecordFoundComponent title={"No Classes Found"} />
                     </View>
 
-                } */}
-                
+                }
+                {
+                   classType == Constants.INCOMPLETE_CLASSES && student_category_class_status && student_category_class_response.completed_classes && student_category_class_response.incomplete_classes.length < 1 &&
+                    <View style={{ position: 'absolute', top: 200, bottom: 0, left: 0, right: 0 }}>
+                        <NoRecordFoundComponent title={"No Classes Found"} />
+                    </View>
+
+                }
+                {
+                   classType == Constants.UPCOMING_CLASSES && student_category_class_status && student_category_class_response.completed_classes && student_category_class_response.upcoming_classes.length < 1 &&
+                    <View style={{ position: 'absolute', top: 200, bottom: 0, left: 0, right: 0 }}>
+                        <NoRecordFoundComponent title={"No Classes Found"} />
+                    </View>
+
+                }
                 {
                     showFilter &&
-                    <ReportFilterBottomDialog onCloseFilter={this.onCloseFilter} onClickApplyFilter={this.onClickApplyFilter} onClickFilterDays={this.onClickFilterDays} resetFilters={this.resetFilters} />
+                    <ReportFilterBottomDialog classType={classType} onCloseFilter={this.onCloseFilter} onClickApplyFilter={this.onClickApplyFilter} onClickFilterDays={this.onClickFilterDays} resetFilters={this.resetFilters} />
                 }
 
 

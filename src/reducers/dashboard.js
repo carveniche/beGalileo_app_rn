@@ -27,7 +27,7 @@ import {
     BATCH_DETAILS_SUCCESS, BATCH_DETAILS_FAILED, STUDENT_CLASSES, STUDENT_CLASSES_SUCCESS, 
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
-    REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, 
+    REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, CLASS_CANCEL,CLASS_CANCEL_SUCCESS,CLASS_CANCEL_FAILED,
     RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED, WORKBOOK_UPLOAD, WORKBOOK_UPLOAD_SUCCESS, WORKBOOK_UPLOAD_FAILED
 } from '../config/redux-action-types/dashboard'
 
@@ -135,7 +135,25 @@ export default function reducer(state=initialState,action){
             }
         }
 
-
+        case CLASS_CANCEL :{
+            return{
+                ...state,loading : true,class_cancel_status : null,class_cancel_response : null
+            }
+        }
+        case CLASS_CANCEL_SUCCESS : {
+            return{
+                ...state,loading : false,
+                class_cancel_status : action.payload.data.status,
+                class_cancel_response : action.payload.data
+            }
+        }
+        case CLASS_CANCEL_FAILED :{
+            return{
+                ...state,loading : false,
+                class_cancel_status : action.payload.data.status,
+                class_cancel_response : action.payload.data
+            }
+        }
 
 
         case CANCEL_DEMO :{
@@ -431,7 +449,7 @@ export default function reducer(state=initialState,action){
 
         case STUDENT_CLASSES :{
             return{
-                ...state,loading : true,student_class_status : false
+                ...state,loading : true
             }
         }
         case STUDENT_CLASSES_SUCCESS : {

@@ -347,6 +347,12 @@ class LiveClassSchedule extends Component {
                     student_class_status &&
                     this.renderDataAvailablility()
                 }
+                {
+                    student_class_status && student_class_response.upcoming_classes.length < 1 && student_class_response.completed_classes.length < 1 && student_class_response.incomplete_classes.length < 1 && 
+                    <View>
+                        <NoRecordFoundComponent title={"No "}/>
+                        </View>
+                }
 
 
 

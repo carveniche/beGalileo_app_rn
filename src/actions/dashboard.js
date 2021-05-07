@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -472,6 +472,8 @@ export function getStudentCategoryClassesWithDate(student_id,category,start_date
     }
 }
 
+
+
 export function getStudentCategoryClassesWithFilter(student_id,category,filter){
     return{
         type : STUDENT_CATEGORY_CLASSES,
@@ -497,6 +499,23 @@ export function getUpcomingClasses(student_id){
             request: {
                 url : 'app_mathbox/upcoming_classes',
                 params : {
+                    student_id
+
+                }
+            }
+        }
+    }
+}
+
+export function cancelClass(parent_id, live_class_id, student_id){
+    return{
+        type : CLASS_CANCEL,
+        payload : {
+            request: {
+                url : 'app_mathbox/cancel_class',
+                params : {
+                    parent_id,
+                    live_class_id,
                     student_id
 
                 }

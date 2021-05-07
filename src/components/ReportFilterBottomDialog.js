@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal } from "react-native";
 import * as Constants from './helpers/Constants';
 import { COLOR, CommonStyles } from '../config/styles';
@@ -22,6 +22,11 @@ const ReportFilterBottomDialog = (props) => {
 
 
   let mMaxDate = new Date();
+  let mMinDate = new Date();
+
+  useEffect(() => {
+    console.log("Class Type " + props.classType);
+  }, [])
 
   onDOBDatePicked = (date) => {
     console.log("On date selected : " + selectedDate);
@@ -39,22 +44,42 @@ const ReportFilterBottomDialog = (props) => {
   openDatePicker = (tag) => {
     console.log("Open Dae " + tag);
     setSelectedDate(tag);
-    if (tag == 0) {
-      datePicker.current.open({
-        date: new Date(),
-        maxDate: mMaxDate
-      });
-    }
-    else {
-      if (fromDateRaw) {
+    if (props.classType != Constants.UPCOMING_CLASSES) {
+      if (tag == 0) {
         datePicker.current.open({
-          date: fromDateRaw,
-          minDate: fromDateRaw,
+          date: new Date(),
           maxDate: mMaxDate
         });
       }
+      else {
+        if (fromDateRaw) {
+          datePicker.current.open({
+            date: fromDateRaw,
+            minDate: fromDateRaw,
+            maxDate: mMaxDate
+          });
+        }
 
+      }
     }
+    else{
+      if (tag == 0) {
+        datePicker.current.open({
+          date: new Date(),
+          minDate: mMaxDate
+        });
+      }
+      else {
+        if (fromDateRaw) {
+          datePicker.current.open({
+            date: fromDateRaw,
+            minDate: fromDateRaw
+          });
+        }
+
+      }
+    }
+
 
 
   }
@@ -93,7 +118,7 @@ const ReportFilterBottomDialog = (props) => {
           </View>
           <View style={{ height: 1, backgroundColor: COLOR.BORDER_COLOR_GREY, margin: normalize(20) }} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-            <Text style={[CommonStyles.text_11_semi_bold, { alignSelf: 'center' }]}>Or show last</Text>
+            <Text style={[CommonStyles.text_11_semi_bold, { alignSelf: 'center' }]}>{props.classType == Constants.UPCOMING_CLASSES ? "Or show next" : "Or show last"}</Text>
             <TouchableOpacity onPress={() => onPressFilterDays(30)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
               <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>30 Days</Text>
             </TouchableOpacity>

@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER, IC_CLOSE_BLUE } from "../../assets/images";
+import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER, IC_CLOSE_BLUE , ICON_PDF} from "../../assets/images";
 import { uploadWorkBook } from '../../actions/dashboard';
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { cancelClass  } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
 import CustomGradientButton from '../../components/CustomGradientButton';
@@ -53,6 +54,14 @@ class ClassDetailsScreen extends Component {
         };
     }
 
+    componentDidUpdate(prevProps){
+        if (prevProps.classCancelResponse != this.props.classCancelResponse) {
+            if(this.props.classCancelResponse && this.props.classCancelResponse.status)
+            {
+                this.props.navigation.goBack();
+            }
+        }
+    }
 
 
 
@@ -340,7 +349,14 @@ class ClassDetailsScreen extends Component {
                                                                 <View>
 
                                                                     <TouchableOpacity onPress={() => this.showImagePopUp(book)} style={{ margin: 5 }}>
-                                                                        <Image source={book.src} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                        {
+                                                                            book.isImage ? 
+                                                                            <Image source={book.src} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                            :
+                                                                            <Image source={ICON_PDF} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                        }
+                                                                       
+                                                                       
                                                                     </TouchableOpacity>
                                                                 </View>
 
@@ -556,7 +572,11 @@ class ClassDetailsScreen extends Component {
     }
 
     onCancelClassConfirmation = () => {
-
+        console.log(this.state.classData.live_class_id);
+        console.log(this.props.currentSelectedKid.student_id);
+        console.log(this.props.dashboardResponse.parent_id);
+        this.props.cancelClass(this.props.dashboardResponse.parent_id,this.state.classData.live_class_id,this.props.currentSelectedKid.student_id)
+        
     }
 
     onClickCancelClass = () => {
@@ -673,7 +693,13 @@ const mapStateToProps = (state) => {
         loading: state.dashboard.loading,
         currentSelectedKid: state.dashboard.current_selected_kid,
         student_class_response: state.dashboard.student_class_response,
-        student_class_status: state.dashboard.student_class_status
+        student_class_status: state.dashboard.student_class_status,
+        dashboardStatus: state.dashboard.dashboard_status,
+        dashboardResponse : state.dashboard.dashboard_response,
+        classCancelStatus : state.dashboard.class_cancel_status,
+        classCancelResponse : state.dashboard.class_cancel_response
+
+        
 
     }
 
@@ -681,7 +707,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    uploadWorkBook
+    uploadWorkBook,
+    cancelClass
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassDetailsScreen);

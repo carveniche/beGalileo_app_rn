@@ -26,6 +26,7 @@ import {
     EDIT_STUDENT,EDIT_STUDENT_SUCCESS,EDIT_STUDENT_FAILED, EXISTING_USER_LOGIN, EXISTING_USER_LOGIN_SUCCESS, EXISTING_USER_LOGIN_FAILED
 } from '../config/redux-action-types/authenticate'
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { CLASS_CANCEL, CLASS_CANCEL_FAILED, CLASS_CANCEL_SUCCESS } from '../config/redux-action-types/dashboard';
 
 const initialState = { user: {}, requestRestore: true,showEnterOTP : false }
 
@@ -162,6 +163,8 @@ export default function reducer(state = initialState, action) {
                 delete_student_response : action.payload.data
             }
         }
+
+        
 
 
         case EDIT_STUDENT :{

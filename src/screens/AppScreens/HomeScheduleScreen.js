@@ -27,7 +27,7 @@ class HomeScheduleScreen extends Component {
     }
     onComponentFocus = () => {
         console.log("On Component Focus ");
-       // this.getStudentClasses();
+        this.getStudentClasses();
     }
 
     componentDidMount() {
@@ -44,6 +44,7 @@ class HomeScheduleScreen extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.student_class_response != this.props.student_class_response) {
+            console.log(this.props.student_class_response);
             if (this.props.student_class_status) {
 
             }
@@ -69,8 +70,8 @@ class HomeScheduleScreen extends Component {
     getStudentClasses = () => {
 
         // this.props.getStudentClasses(53187);
-         this.props.getStudentClasses(54938);
-       //this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
+       // this.props.getStudentClasses(54938);
+       this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
     }
 
 

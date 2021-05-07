@@ -77,3 +77,4 @@ export const FEEDBACK_BAD = require('./FEEDBACK_BAD.png');
 export const IC_NUMERO = require("./IC_NUMERO.png");
 export const IC_HOMEWORK = require("./IC_HOMEWORK.png");
 export const IC_FILTER = require("./IC_FILTER.png");
+export const ICON_PDF = require("./ICON_PDF.png");
