@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -524,6 +524,25 @@ export function cancelClass(parent_id, live_class_id, student_id){
     }
 }
 
+export function updateDeviceInfo(parent_id, regId,time_zone){
+    return{
+        type : DEVICE_INFO,
+        payload : {
+            request: {
+                url : 'app_mathbox/device_info',
+                params : {
+                    parent_id,
+                    regId,
+                    time_zone
+
+                }
+            }
+        }
+    }
+}
+
+
+
 export function getDemoResults(live_class_id,student_id,parent_id){
     return{
         type : DEMO_RESULT,
@@ -541,22 +560,7 @@ export function getDemoResults(live_class_id,student_id,parent_id){
     }
 }
 
-export function setDeviceInfo(parent_id,time_zone,regId){
-    return{
-        type : DEMO_RESULT,
-        payload : {
-            request: {
-                url : 'app_mathbox/demo_result',
-                params : {
-                    parent_id,
-                    time_zone,
-                    regId
 
-                }
-            }
-        }
-    }
-}
 
 export function submitParentFeedback(live_class_id,user_id,rating,recommendation,feedback){
     return{

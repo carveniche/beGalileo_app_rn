@@ -5,7 +5,7 @@ import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
-import { getDashboardItems, getCartItemList, updateCurrentKid,setDeviceInfo } from '../../actions/dashboard';
+import { getDashboardItems, getCartItemList, updateCurrentKid,updateDeviceInfo } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import SubscriptionTabs from '../../components/subscription_tab';
@@ -16,6 +16,7 @@ import DashboardHeader from '../../components/DashboardHeader';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import {NavigationEvents} from 'react-navigation';
 import messaging from '@react-native-firebase/messaging';
+
 
 
 
@@ -52,6 +53,7 @@ class HomeMainScreen extends Component {
        
         this.getCartItems();
         this.requestUserPermission();
+        this.updateDeviceToken();
 
     }
 
@@ -67,6 +69,33 @@ class HomeMainScreen extends Component {
         }
       }
 
+
+    updateDeviceToken = () => {
+
+
+        
+
+        
+
+
+        getLocalData(Constants.ParentUserId).then((name) => {
+            console.log("Firebase Device Token");
+            console.log(name);
+            console.log("ZZZZ");
+           
+        })
+
+
+        messaging()
+        .getToken()
+        .then(token => {
+         console.log("Device Token "+token);
+         this.props.updateDeviceInfo(51252,token,"Asia/Kolkata");
+        });
+    }  
+
+
+    
 
 
     getCartItems = () => {
@@ -258,7 +287,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getDashboardItems,
-    getCartItemList
+    getCartItemList,
+    updateDeviceInfo
 };
 
 const styles = StyleSheet.create({

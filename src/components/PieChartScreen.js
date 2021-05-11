@@ -4,19 +4,54 @@ import { PieChart, Grid, XAxis } from 'react-native-svg-charts'
 import { Dimensions } from "react-native";
 import { COLOR, PIE_CHART_COLORS, CommonStyles } from '../config/styles';
 import { normalize } from 'react-native-elements';
-import { Circle, G, Line, Text as SVGTEXT } from 'react-native-svg'
-const screenWidth = Dimensions.get("window").width;
+import PieChartCircle from '../components/PieChartCircle';
+import { ceil } from 'react-native-reanimated';
 
+
+const screenWidth = Dimensions.get("window").width;
+let dataPercent = [];
 class PieChartScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [45, 138, 40],
-            subjects : ["Math Zone","Logic Zone","Game Zone"]
+            data: [],
+            subjects: ["Math Zone", "Logic Zone", "Game Zone"]
         };
     }
 
-    componentDidMount(){
+    getPercentValues = (itemData) => {
+        var x = itemData[0];
+        var y = itemData[1];
+        var z = itemData[2];
+        var xPercent = 0;
+        var zPercent = 0;
+        var yPercent = 0;
+
+        var total = x + y + z;
+        console.log(x + "-" + y + "-" + z + "-" + total);
+        if (x != 0)
+            xPercent = (x / total) * 100;
+        if (y != 0)
+            yPercent = (y / total) * 100;
+        if (z != 0)
+            zPercent = (z / total) * 100;
+
+
+        if ((xPercent % 1) > 0.5)
+            dataPercent[0] = Math.ceil(xPercent);
+        else
+            dataPercent[0] = Math.floor(xPercent);
+        if ((yPercent % 1) > 0.5)
+            dataPercent[1] = Math.ceil(yPercent);
+        else
+            dataPercent[1] = Math.floor(yPercent);
+        if ((zPercent % 1) > 0.5)
+            dataPercent[2] = Math.ceil(zPercent);
+        else
+            dataPercent[2] = Math.floor(zPercent);
+    }
+
+    componentDidMount() {
         console.log("Pie Chart Screen");
         console.log(this.props.accuracyData);
         var mathZone = 0;
@@ -24,39 +59,45 @@ class PieChartScreen extends Component {
         var gameZone = 0;
         var datas = [];
 
-        this.props.accuracyData.map((element,index)=>{
+        this.props.accuracyData.map((element, index) => {
             mathZone += element.math_zone_timespent;
             logicZone += element.logic_timespent;
             gameZone += element.game_timespent;
-        
+
         })
-        console.log("Math Zone "+mathZone);
-        console.log("Logic Zone "+logicZone);
-        console.log("Game Zone "+gameZone);
+        console.log("Math Zone " + mathZone);
+        console.log("Logic Zone " + logicZone);
+        console.log("Game Zone " + gameZone);
 
         datas[0] = mathZone;
         datas[1] = logicZone;
         datas[2] = gameZone;
 
+
+        this.getPercentValues(datas);
+
         this.setState({
-            data : datas
+            data: datas
         })
-        
+
 
     }
 
     mappedDatas() {
-        return this.state.subjects.map((data,index) => {
+        const { data } = this.state;
+        return this.state.subjects.map((item, index) => {
             return (
-                <View style={{ flexDirection: 'row',flex : 1,marginTop : normalize(8)  }} key = {index}>
+                <View style={{ flexDirection: 'row', flex: 1, marginTop: normalize(8) }} key={index}>
                     <View style={[CommonStyles.circleRoundBlack, { alignSelf: 'center', backgroundColor: PIE_CHART_COLORS[index] }]} />
 
-                    <Text style={[CommonStyles.text_12_Regular,{ marginStart : normalize(8) }]}>{data}</Text>
+                    <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{item + " - "+dataPercent[index]+"%"}</Text>
 
                 </View>
             )
         })
     }
+
+
 
 
     render() {
@@ -79,30 +120,10 @@ class PieChartScreen extends Component {
 
             return slices.map((slice, index) => {
                 const { labelCentroid, pieCentroid, data } = slice;
+                console.log("Slice");
+                console.log(data);
                 return (
-                    <G key={index}>
-                        <Line
-                            x1={labelCentroid[0]}
-                            y1={labelCentroid[1]}
-                            x2={pieCentroid[0]}
-                            y2={pieCentroid[1]}
-                            stroke={data.svg.fill}
-                        />
-
-                        <Circle
-                            cx={labelCentroid[0]}
-                            cy={labelCentroid[1]}
-                            r={15}
-                            fill={data.svg.fill}
-                        />
-
-
-
-
-
-
-
-                    </G>
+                    <PieChartCircle slice={slice} value={dataPercent[index]} index={index} />
                 )
             })
         }

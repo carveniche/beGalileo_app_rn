@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles, BAR_CHART_COLORS, BAR_CHART_COLOR_LINES } from '../../config/styles';
-import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2,IC_BANNER_1 } from "../../assets/images";
+import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2, IC_BANNER_1 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -62,8 +62,8 @@ class HomeReportScreen extends Component {
     }
 
     checkReportDatas = () => {
-         //this.props.getStudentReportData(this.props.currentSelectedKid.student_id,60);
-        this.props.getStudentReportData(51765, 7);
+        this.props.getStudentReportData(this.props.currentSelectedKid.student_id,7);
+       // this.props.getStudentReportData(53187, 7);
     }
 
     changeAccuracyChartView = () => {
@@ -94,16 +94,16 @@ class HomeReportScreen extends Component {
     }
 
     onPressStarEarned = (starsColl) => {
-         this.props.navigation.navigate(Constants.StarBadgeReportScreen,{
-              showStar : true,
-              collectedStars : starsColl
-         });
+        this.props.navigation.navigate(Constants.StarBadgeReportScreen, {
+            showStar: true,
+            collectedStars: starsColl
+        });
     }
 
     onPressBadgeEarned = () => {
-         this.props.navigation.navigate(Constants.StarBadgeReportScreen,{
-            showStar : false
-       });
+        this.props.navigation.navigate(Constants.StarBadgeReportScreen, {
+            showStar: false
+        });
     }
 
     onPressViewAllActivity = () => {
@@ -140,9 +140,12 @@ class HomeReportScreen extends Component {
                             <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
                                 <View style={[CommonStyles.greyLineSeprator]} />
 
-                                {
-                                    studentReportStatus && <PieChartScreen accuracyData={this.props.studentReportResponse.report_data} />
-                                }
+                                <View style={{ paddingVertical: normalize(20) }}>
+                                    {
+                                        studentReportStatus && <PieChartScreen accuracyData={this.props.studentReportResponse.report_data} />
+                                    }
+                                </View>
+
 
 
 
@@ -206,11 +209,25 @@ class HomeReportScreen extends Component {
                                         <Text style={[CommonStyles.text_9_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}></Text>
 
                                     </View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <View style={{ height: normalize(4), width: normalize(16), backgroundColor: BAR_CHART_COLOR_LINES[0], alignSelf: 'center', borderRadius: normalize(20) }} />
+                                                <Text style={[CommonStyles.text_12_regular, { alignSelf: 'center', marginStart: normalize(8) }]}>Math topic</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <View style={{ height: normalize(4), width: normalize(16), backgroundColor: BAR_CHART_COLOR_LINES[1], alignSelf: 'center', borderRadius: normalize(20) }} />
+                                                <Text style={[CommonStyles.text_12_regular, { marginStart: normalize(8) }]}>Think and reason</Text>
+                                            </View>
 
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>Last 7 Days</Text>
-                                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center', marginStart: normalize(10), marginEnd: normalize(10) }} source={IC_DOWN_ENTER} />
+                                        </View>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
+
+                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>Last 7 Days</Text>
+                                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center', marginStart: normalize(10), marginEnd: normalize(10) }} source={IC_DOWN_ENTER} />
+                                        </View>
                                     </View>
+
 
 
                                 </View>
@@ -507,7 +524,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid } = this.props;
         return (
             <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
-                <TouchableOpacity disabled={false} onPress={()=>this.onPressStarEarned(currentSelectedKid.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
+                <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(currentSelectedKid.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={[CommonStyles.text_12_bold]}>{currentSelectedKid.stars}</Text>
@@ -544,15 +561,15 @@ class HomeReportScreen extends Component {
                 paddingEnd: normalize(10)
             }}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={{ flex : 1 }}>
+                    <View style={{ flex: 1 }}>
 
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
-                        
+
                         {
                             currentSelectedKid && currentSelectedKid.paid_status ?
 
                                 this.showAllReportDatas() :
-                               <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test."/>
+                                <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test." />
 
                         }
 
