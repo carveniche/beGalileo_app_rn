@@ -49,11 +49,13 @@ export function timeInHourFormat(mTime){
     var timeValue = "";
     var a = mTime.split(':');
     if(a[0] != "00"){
-      timeValue += a[0]+" Hrs"
+      timeValue += a[0]+" H"
     }
     if(a[1] != "00"){
-        timeValue += a[1]+" Mins"
+        timeValue += " "+a[1]+" M"
     }
+    if(mTime == "00:00:00")
+        timeValue = "0";
     return timeValue;
     
 }

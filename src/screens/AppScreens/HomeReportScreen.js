@@ -15,6 +15,9 @@ import PieChartScreen from '../../components/PieChartScreen';
 import BarChartScreen from '../../components/BarChartScreen';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
+import { List } from 'react-native-paper';
+
+const listFilterDays = [7, 30, 60, 90];
 
 class HomeReportScreen extends Component {
     constructor(props) {
@@ -23,6 +26,8 @@ class HomeReportScreen extends Component {
             showAccuracyChart: false,
             showTimeSpentChart: false,
             currentSelectedKid: [],
+            filterExpanded: false,
+            currentFilterDays: 7,
             accuracyChartData: [
                 {
                     name: 'Math Topic',
@@ -62,8 +67,8 @@ class HomeReportScreen extends Component {
     }
 
     checkReportDatas = () => {
-        this.props.getStudentReportData(this.props.currentSelectedKid.student_id,7);
-       // this.props.getStudentReportData(53187, 7);
+        //this.props.getStudentReportData(this.props.currentSelectedKid.student_id, 7);
+        this.props.getStudentReportData(53187, this.state.currentFilterDays);
     }
 
     changeAccuracyChartView = () => {
@@ -110,6 +115,50 @@ class HomeReportScreen extends Component {
         this.props.navigation.navigate(Constants.OverallActivitiesScreen)
     }
 
+    onPressFilter = () => {
+        this.setState({
+            filterExpanded: !this.state.filterExpanded
+        })
+    }
+
+    filterDatas = (e) => {
+        console.log("Filter days " + e);
+        this.setState({
+            filterExpanded: !this.state.filterExpanded,
+            currentFilterDays: e
+        }, this.checkReportDatas)
+    }
+
+    showFilterList = () => {
+        const { currentFilterDays } = this.state;
+        return (
+            <View>
+                <List.Accordion
+                    title={"Last " + currentFilterDays + " days"}
+                    left={props => <List.Icon {...props} icon="calendar" />}
+                    expanded={this.state.filterExpanded}
+                    onPress={this.onPressFilter}
+                >
+                    {
+                        listFilterDays.map((item) => {
+                            var title = "Last " + item + " days";
+                            if (item != currentFilterDays)
+                                return (
+                                    <List.Item title={title} onPress={() => this.filterDatas(item)} />
+                                )
+
+                        })
+
+                    }
+
+                </List.Accordion>
+            </View>
+
+
+
+        )
+    }
+
     showTimeSpentCard = () => {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showTimeSpentChart } = this.state;
@@ -119,20 +168,24 @@ class HomeReportScreen extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16) }}>
                     <View style={{ flex: 1 }}>
                         <Text style={[CommonStyles.text_14_bold]}>Time Spent</Text>
-                        <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Total time spend by kid and split</Text>
+                        {
+                            studentReportStatus && timeInHourFormat(studentReportResponse.total_time_spent) == "0" ?
+                                <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>No time spent...</Text>
+                                :
+                                <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Total time spend by kid and split</Text>
+                        }
+
                     </View>
-                    <View style={{ flex: 1, alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                            <Text style={[CommonStyles.text_16_regular]}>{timeInHourFormat(currentSelectedKid.activity_details.timespent)}</Text>
-                            {/* <Text style={[CommonStyles.text_12_Regular, {}]}> hrs</Text> */}
-                            {/* <Icon
-                                style={{ marginStart: normalize(8) }}
-                                size={15}
-                                name='arrow-down'
-                                color={COLOR.TEXT_COLOR_GREEN} /> */}
+                    {studentReportStatus && timeInHourFormat(studentReportResponse.total_time_spent) != "0" &&
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                                <Text style={[CommonStyles.text_16_regular]}>{timeInHourFormat(studentReportResponse.total_time_spent)}</Text>
+
+                            </View>
+                            {/* <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text> */}
                         </View>
-                        <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
-                    </View>
+                    }
+
                 </View>
                 <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
                     {
@@ -152,12 +205,16 @@ class HomeReportScreen extends Component {
                             </View>
                             : <View />
                     }
-                    <TouchableOpacity onPress={this.changeTimeSpentChartView} style={{ padding: normalize(20) }}>
-                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
-                    </TouchableOpacity>
+                    {
+                        studentReportStatus && timeInHourFormat(studentReportResponse.total_time_spent) != "0" &&
+                        < TouchableOpacity onPress={this.changeTimeSpentChartView} style={{ padding: normalize(20) }}>
+                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                        </TouchableOpacity>
+                    }
+
                 </View>
 
-            </View>
+            </View >
         )
     }
 
@@ -165,7 +222,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showAccuracyChart } = this.state;
         return (
-            <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
+            <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2) }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
 
@@ -221,11 +278,7 @@ class HomeReportScreen extends Component {
                                             </View>
 
                                         </View>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
 
-                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>Last 7 Days</Text>
-                                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center', marginStart: normalize(10), marginEnd: normalize(10) }} source={IC_DOWN_ENTER} />
-                                        </View>
                                     </View>
 
 
@@ -243,10 +296,14 @@ class HomeReportScreen extends Component {
                             </View>
                             : <View />
                     }
+                    {
+                        studentReportStatus && studentReportResponse.total_accuracy > 0 &&
+                        <TouchableOpacity onPress={this.changeAccuracyChartView} style={{ padding: normalize(10) }}>
+                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                        </TouchableOpacity>
+                    }
 
-                    <TouchableOpacity onPress={this.changeAccuracyChartView} style={{ padding: normalize(10) }}>
-                        <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
-                    </TouchableOpacity>
+
                 </View>
 
 
@@ -502,12 +559,19 @@ class HomeReportScreen extends Component {
                         {
                             this.renderStarAndBadge()
                         }
-                        {
-                            this.showAccuracyCard()
-                        }
-                        {
-                            this.showTimeSpentCard()
-                        }
+
+                        <View style={{ backgroundColor : COLOR.WHITE,paddingVertical : normalize(10),borderRadius : normalize(20),marginTop : normalize(10) }}>
+                            {
+                                this.showFilterList()
+                            }
+                            {
+                                this.showAccuracyCard()
+                            }
+                            {
+                                this.showTimeSpentCard()
+                            }
+                        </View>
+
                         {
                             this.recentActivity()
                         }
@@ -556,9 +620,7 @@ class HomeReportScreen extends Component {
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: COLOR.WHITE,
-                paddingStart: normalize(10),
-                paddingEnd: normalize(10)
+                backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ flex: 1 }}>
