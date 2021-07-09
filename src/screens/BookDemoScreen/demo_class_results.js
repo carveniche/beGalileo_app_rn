@@ -36,7 +36,9 @@ class DemoClassResults extends Component {
     }
 
     onClickEnrollProgram = () => {
-        this.props.navigation.navigate(Constants.Dashboard);
+        this.props.navigation.navigate(Constants.Dashboard,{
+            enrollProgram : "enroll"
+        });
     }
 
 

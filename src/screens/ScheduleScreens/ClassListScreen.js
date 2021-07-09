@@ -26,6 +26,7 @@ class ClassListScreen extends Component {
 
     componentDidMount() {
         const { navigation } = this.props;
+   
         var classType = navigation.getParam('classType', "");
        
 
@@ -109,7 +110,8 @@ class ClassListScreen extends Component {
 
 
     showCompletedClasses = (completedClasses, classType) => {
-
+        console.log("HHHHHHH ",classType);
+        console.log(completedClasses);
 
         return (
             <View style={{ backgroundColor: COLOR.WHITE, borderRadius: 24, paddingHorizontal: normalize(10), paddingVertical: normalize(5) }}>
@@ -215,17 +217,17 @@ class ClassListScreen extends Component {
         var start_date = moment(fromDate).format('DD-MM-YYYY');
         var end_date = moment(tillDate).format('DD-MM-YYYY');
         console.log(start_date, end_date)
-        this.props.getStudentCategoryClassesWithDate(53187, this.getClassType(this.state.classType), start_date, end_date);
+        this.props.getStudentCategoryClassesWithDate(this.props.currentSelectedKid.student_id, this.getClassType(this.state.classType), start_date, end_date);
         this.onCloseFilter();
     }
 
     onClickFilterDays = (daysToFilter) => {
-        this.props.getStudentCategoryClassesWithFilter(53187, this.getClassType(this.state.classType), daysToFilter);
+        this.props.getStudentCategoryClassesWithFilter(this.props.currentSelectedKid.student_id, this.getClassType(this.state.classType), daysToFilter);
         this.onCloseFilter();
     }
 
     resetFilters = () => {
-        this.props.getStudentCategoryClasses(53187, this.getClassType(this.state.classType));
+        this.props.getStudentCategoryClasses(this.props.currentSelectedKid.student_id, this.getClassType(this.state.classType));
         this.onCloseFilter();
     }
 
@@ -236,7 +238,7 @@ class ClassListScreen extends Component {
     }
 
     showFilterDialog = () => {
-        console.log("SHOW FILTER");
+      
         this.setState({
             showFilter: true
         })
@@ -285,6 +287,7 @@ class ClassListScreen extends Component {
                         {
                             student_category_class_status &&
                             <View>
+                          
                                 {
                                     classType == Constants.UPCOMING_CLASSES && student_category_class_response.upcoming_classes &&
                                     this.showUpComingClasses(student_category_class_response.upcoming_classes)
@@ -294,7 +297,7 @@ class ClassListScreen extends Component {
                                     this.showCompletedClasses(student_category_class_response.completed_classes, classType)
                                 }
                                 {
-                                    classType == Constants.COMPLETED_CLASSES && student_category_class_response.incomplete_classes &&
+                                    classType == Constants.INCOMPLETE_CLASSES && student_category_class_response.incomplete_classes &&
                                     this.showCompletedClasses(student_category_class_response.incomplete_classes, classType)
                                 }
                             </View>

@@ -7,6 +7,7 @@ export const BookDemoScreen= 'BookDemoScreen';
 export const DemoConfirmation= 'DemoConfirmation';
 export const DemoDetails= 'DemoDetails';
 export const Dashboard= 'Dashboard';
+export const HomeReportScreen = 'HomeReportScreen';
 export const MainScreen = 'MainScreen';
 export const Login= 'Login';
 export const AddKidDetail= 'AddKidDetail';

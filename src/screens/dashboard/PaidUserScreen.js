@@ -321,6 +321,12 @@ class PaidUserScreen extends Component {
     }
 
 
+    onPressAccuracyTimeSpent = () => {
+        this.props.navigation.navigate('Report');
+      
+    }
+
+
 
 
     accuracyAndTimeSpent = () => {
@@ -329,8 +335,8 @@ class PaidUserScreen extends Component {
 
         if (currentKidDetails.activity_details != "") {
             return (
-                <View>
-                    <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
+                <View style={{ marginBottom : normalize(20) }}>
+                    <TouchableOpacity onPress={this.onPressAccuracyTimeSpent} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
                         <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(12), marginBottom: normalize(16), marginStart: normalize(16) }}>
                             <View style={{ flex: 1 }}>
@@ -350,8 +356,8 @@ class PaidUserScreen extends Component {
                                 <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
                             </View>
                         </View>
-                    </View>
-                    <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.onPressAccuracyTimeSpent} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
                         <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_TIME_SPENT} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginBottom: normalize(16), marginStart: normalize(16) }}>
                             <View style={{ flex: 1 }}>
@@ -371,7 +377,7 @@ class PaidUserScreen extends Component {
                                 <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
 
                 </View>
             )
@@ -462,7 +468,7 @@ class PaidUserScreen extends Component {
                         <Text style={[CommonStyles.text_12__semi_bold]}>Completed : </Text>
                         <Text style={[CommonStyles.text_18_bold]}>8 out of 16</Text>
                         <View>
-                            <Text style={[CommonStyles.text_12_regular]}>Last Class Date</Text>
+                            <Text style={[CommonStyles.text_11_semi_bold,{ color : COLOR.TEXT_ALPHA_GREY }]}>Last Class Date</Text>
                             <Text style={[CommonStyles.text_12_regular]}>24 Jan 2021</Text>
                         </View>
 
@@ -612,12 +618,12 @@ class PaidUserScreen extends Component {
                 }
 
 
-                {
+                {/* {
                     currentKidDetails && currentKidDetails.activity_details != "" &&
                     this.recentActivity()
 
 
-                }
+                } */}
 
 
 

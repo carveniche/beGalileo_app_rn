@@ -19,6 +19,7 @@ import * as Config from '../../config/configs';
 import { NavigationActions } from 'react-navigation';
 
 
+
 class BookDemoScreen extends Component {
 
     constructor(props) {
@@ -279,6 +280,11 @@ class BookDemoScreen extends Component {
         console.log("Student ID : " + this.state.currentKid.student_id);
         console.log("Slot: " + this.state.itemPressed);
         console.log("day : " + this.state.selectedDate);
+        // console.log(DeviceInfo.getTimezone());
+        getLocalData(Constants.ParentTimeZone).then((timeZone) => {
+            console.log("Time Zone : "+timeZone);
+           
+        })
         this.props.doBookingDemo(this.state.currentKid.student_id, this.state.itemPressed, this.state.selectedDate);
         //this.props.navigation.navigate("DemoConfirmation");
     }

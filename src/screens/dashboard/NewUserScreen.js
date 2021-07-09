@@ -102,7 +102,7 @@ class NewUserScreen extends Component {
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <View style={{ flex: 0.5 }}>
                             <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.BLACK, marginTop: normalize(20) }]}>Demo class results are here!</Text>
-                            <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>Know what teacher-coach have to say about Aarav</Text>
+                            <Text style={[CommonStyles.text_14_Regular, { marginTop: normalize(5) }]}>Know what teacher-coach have to say about {this.props.currentSelectedKid.first_name}</Text>
                         </View>
 
                         <Image style={{ flex: 0.5, alignSelf: 'center', height: normalize(100), width: normalize(100), marginTop: normalize(24), borderRadius: 20, resizeMode: "stretch" }} source={IC_BANNER_2} />
@@ -190,11 +190,11 @@ class NewUserScreen extends Component {
                     this.checkDemoClassStatus()
                 }
                 {
-                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].parent_feedback &&
+                    currentSessionKid && currentSessionKid.demo_booked && currentSessionKid.student_demos[0].status == 'Completed' && !currentSessionKid.student_demos[0].parent_feedback &&
                     this.rateDemoClassView()
                 }
                 {
-                    currentSessionKid && currentSessionKid.demo_booked && !currentSessionKid.student_demos[0].status == 'Completed' &&
+                    currentSessionKid && currentSessionKid.demo_booked && currentSessionKid.student_demos[0].status == 'Completed' &&
                     this.demoResultsView()
                 }
                 <View

@@ -65,15 +65,27 @@ class PieChartScreen extends Component {
             gameZone += element.game_timespent;
 
         })
+       
+
+        // datas[0] = mathZone;
+        // datas[1] = logicZone;
+        // datas[2] = gameZone;
+        var totalLength = 3;
+        datas[0] = mathZone/totalLength;
+        datas[1] = logicZone/totalLength;
+        datas[2] = gameZone/totalLength;
+
         console.log("Math Zone " + mathZone);
         console.log("Logic Zone " + logicZone);
         console.log("Game Zone " + gameZone);
+        console.log("Total Length "+ totalLength);
+        console.log("Math Zone " + datas[0]);
+        console.log("Logic Zone " + datas[1]);
+        console.log("Game Zone " + datas[2]);
 
-        datas[0] = mathZone;
-        datas[1] = logicZone;
-        datas[2] = gameZone;
-
-
+        // dataPercent[0] = datas[0];
+        // dataPercent[1] = datas[1];
+        // dataPercent[2] = datas[2];
         this.getPercentValues(datas);
 
         this.setState({
@@ -90,7 +102,7 @@ class PieChartScreen extends Component {
                 <View style={{ flexDirection: 'row', flex: 1, marginTop: normalize(8) }} key={index}>
                     <View style={[CommonStyles.circleRoundBlack, { alignSelf: 'center', backgroundColor: PIE_CHART_COLORS[index] }]} />
 
-                    <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{item + " - "+dataPercent[index]+"%"}</Text>
+                    <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{item + " - " + dataPercent[index] + "%"}</Text>
 
                 </View>
             )
@@ -107,7 +119,7 @@ class PieChartScreen extends Component {
         const randomColor = () => ('#' + (Math.random() * 0xFFFFFF << 0).toString(16) + '000000').slice(0, 7)
 
         const pieData = data
-            .filter(value => value > 0)
+        
             .map((value, index) => ({
                 value,
                 svg: { fill: PIE_CHART_COLORS[index] },

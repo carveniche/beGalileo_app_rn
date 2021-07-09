@@ -120,12 +120,13 @@ export function payWithRazorPay(order_response, netTotalPrice, countryName ,loca
         },
         theme: { color: COLOR.TEXT_COLOR_GREEN }
     }
-    console.log(options);
+    console.log("Options ",options);
 
     RNRazorpayCheckout.open(options).then((data) => {
+        console.log("Payment Response ",data);
         // handle success
         // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
-        callBackPaymentStatus(data.razorpay_payment_id);
+        //callBackPaymentStatus(data.razorpay_payment_id);
         // alert(`Success: ${data.razorpay_payment_id}`);
     }).catch((error) => {
         // handle failure

@@ -8,16 +8,23 @@ import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { timeInHourFormat } from '../../components/helpers/CustomUtilMethods';
-import { getDashboardItems, getStudentReportData } from '../../actions/dashboard';
+import { getDashboardItems, getStudentReportData, getStudentActivity } from '../../actions/dashboard';
+import { CustomBackButton } from "../../components";
 import { normalize, Card } from "react-native-elements";
 import DashboardHeader from '../../components/DashboardHeader';
 import PieChartScreen from '../../components/PieChartScreen';
 import BarChartScreen from '../../components/BarChartScreen';
+import ComponentActivityItem from "../../components/ComponentActivityItem";
+import ComponentSpeedMathListItem from "../../components/ComponentSpeedMathListItem";
+import { ReportListDateItem } from '../../components';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { List } from 'react-native-paper';
+import AcitivityReportList from "../ReportScreens/AcitivityReportList";
+import ReportFilterBottomDialog from "../../components/ReportFilterBottomDialog";
 
-const listFilterDays = [7, 30, 60, 90];
+
+const listFilterDays = [7, 30, 60];
 
 class HomeReportScreen extends Component {
     constructor(props) {
@@ -44,7 +51,9 @@ class HomeReportScreen extends Component {
 
     componentDidMount() {
         console.log("Student Id " + this.props.currentSelectedKid.student_id);
+        console.log("Dashboard Response : ", this.props.dashboardResponse.parent_id);
         this.checkReportDatas();
+        this.checkActivtiyDatas();
     }
 
     componentDidUpdate(prevProps) {
@@ -67,8 +76,14 @@ class HomeReportScreen extends Component {
     }
 
     checkReportDatas = () => {
-        //this.props.getStudentReportData(this.props.currentSelectedKid.student_id, 7);
-        this.props.getStudentReportData(53187, this.state.currentFilterDays);
+        //this.props.getStudentReportData(53499, 7);
+        this.props.getStudentReportData(this.props.currentSelectedKid.student_id, this.state.currentFilterDays);
+    }
+
+    checkActivtiyDatas = () => {
+        this.props.getStudentActivity(this.props.dashboardResponse.parent_id,this.props.currentSelectedKid.student_id,7);
+
+      //  this.props.getStudentActivity(50606, 53499, 7);
     }
 
     changeAccuracyChartView = () => {
@@ -163,7 +178,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showTimeSpentChart } = this.state;
         return (
-            <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
+            <TouchableOpacity onPress={this.changeTimeSpentChartView} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_TIME_SPENT} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16) }}>
                     <View style={{ flex: 1 }}>
@@ -214,7 +229,7 @@ class HomeReportScreen extends Component {
 
                 </View>
 
-            </View >
+            </TouchableOpacity >
         )
     }
 
@@ -222,7 +237,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showAccuracyChart } = this.state;
         return (
-            <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2) }]}>
+            <TouchableOpacity onPress={this.changeAccuracyChartView} style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2) }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
 
@@ -254,7 +269,7 @@ class HomeReportScreen extends Component {
                 <View style={{ marginTop: normalize(12), marginBottom: normalize(20) }}>
                     {
                         showAccuracyChart ?
-                            <View style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
+                            <View o style={{ marginStart: normalize(16), marginEnd: normalize(16) }}>
                                 <View style={[CommonStyles.greyLineSeprator]} />
 
 
@@ -307,7 +322,7 @@ class HomeReportScreen extends Component {
                 </View>
 
 
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -491,7 +506,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid } = this.props;
         return (
             <View style={{ marginTop: normalize(16) }}>
-                {/* <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text> */}
+                <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text>
 
                 {
 
@@ -553,14 +568,13 @@ class HomeReportScreen extends Component {
         return (
             <View>
 
+
                 {
                     currentSelectedKid.activity_details != "" &&
                     <View>
-                        {
-                            this.renderStarAndBadge()
-                        }
 
-                        <View style={{ backgroundColor : COLOR.WHITE,paddingVertical : normalize(10),borderRadius : normalize(20),marginTop : normalize(10) }}>
+
+                        <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
                             {
                                 this.showFilterList()
                             }
@@ -571,10 +585,13 @@ class HomeReportScreen extends Component {
                                 this.showTimeSpentCard()
                             }
                         </View>
-
                         {
-                            this.recentActivity()
+                            this.renderStarAndBadge()
                         }
+
+                        {/* {
+                            this.recentActivity()
+                        } */}
                     </View>
 
                 }
@@ -614,6 +631,185 @@ class HomeReportScreen extends Component {
         )
     }
 
+    listAcitivityItem = (activityData) => {
+
+        return activityData.map((item) => {
+
+            return (
+                (item.home_concepts.length > 0 || item.class_concepts.length > 0 || item.home_think_n_reasons.length > 0 || item.class_think_n_reasons.length > 0 || item.speedmath.length > 0) ?
+                    <View style={{ flexDirection: 'row', marginTop: normalize(20) }}>
+                        <ReportListDateItem itemDay={item.day} />
+                        <View style={{ flex: 1, marginStart: normalize(20), marginEnd: normalize(2) }}>
+
+                            {(item.home_concepts.length > 0 || item.class_concepts.length > 0) &&
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Math Concept</Text>
+                            }
+
+                            {
+                                item.home_concepts.length > 0 &&
+                                <View>
+
+                                    {
+                                        item.home_concepts.map((homeConceptData) => {
+
+                                            return (
+                                                <ComponentActivityItem conceptData={homeConceptData} />
+                                            );
+                                        })
+                                    }
+
+                                </View>
+                            }
+
+
+                            {
+                                item.class_concepts.length > 0 &&
+                                <View>
+
+                                    {
+                                        item.class_concepts.map((homeConceptData) => {
+
+                                            return (
+                                                <ComponentActivityItem conceptData={homeConceptData} />
+                                            );
+                                        })
+                                    }
+
+                                </View>
+                            }
+
+
+                            {(item.home_think_n_reasons.length > 0 || item.class_think_n_reasons.length > 0) &&
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Think N Reason</Text>
+                            }
+
+
+                            {
+                                item.home_think_n_reasons.length > 0 &&
+                                <View>
+
+                                    {
+                                        item.home_think_n_reasons.map((reasonData) => {
+
+                                            return (
+                                                <ComponentActivityItem conceptData={reasonData} />
+                                            );
+                                        })
+                                    }
+
+                                </View>
+                            }
+
+
+                            {
+                                item.class_think_n_reasons.length > 0 &&
+                                <View>
+
+                                    {
+                                        item.class_think_n_reasons.map((reasonData) => {
+
+                                            return (
+                                                <ComponentActivityItem conceptData={reasonData} />
+                                            );
+                                        })
+                                    }
+
+                                </View>
+                            }
+                            {(item.speedmath.length > 0) &&
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(5) }]}>Speed Math</Text>
+                            }
+                            {
+                                item.speedmath.length > 0 &&
+                                <View>
+                                    {
+                                        item.speedmath.map((speedMathData) => {
+
+                                            return (
+                                                <ComponentSpeedMathListItem conceptData={speedMathData} />
+                                            );
+                                        })
+                                    }
+
+                                </View>
+                            }
+
+
+
+
+
+
+
+                        </View>
+
+
+
+
+
+                    </View> : <View></View>
+            )
+        })
+
+    }
+
+    renderAcitivityScreeen = () => {
+        const activityDatas = this.props.studentActivityReport;
+       
+        return (
+
+            <View style={{ backgroundColor: COLOR.WHITE, borderRadius: normalize(24), marginTop: normalize(40) }}>
+                <View style={{ marginTop: normalize(32), marginStart: normalize(20), marginEnd: normalize(20) }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[CommonStyles.text_14_bold]}>7 Days Activity</Text>
+                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(8) }]}>(7)</Text>
+                        </View>
+                        <TouchableOpacity onPress={this.onPressViewAllActivity}>
+                            <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: normalize(20) }}>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Text style={[CommonStyles.text_18_bold]}>{activityDatas.problems_solved}</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Problems Answered</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Text style={[CommonStyles.text_18_bold]}>{activityDatas.correct}</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Correct Answers</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Text style={[CommonStyles.text_18_bold]}>{activityDatas.incorrect}</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>InCorrect Answers</Text>
+                        </View>
+                    </View>
+
+
+
+                </View>
+
+
+                <View style={{ marginTop: normalize(16), marginStart: normalize(20), marginEnd: normalize(20),marginBottom : normalize(20) }}>
+                    <AcitivityReportList />
+                    {/* {
+
+                        this.listAcitivityItem(activityDatas.activity_data)
+                    } */}
+          
+
+                </View>
+
+
+            </View>
+        )
+    }
+    onPressBack = () => {
+        const { goBack } = this.props.navigation;
+        console.log("ON BACK PRESS");
+        goBack();
+    }
+
     render() {
         const { currentSelectedKid } = this.props;
         const { showTimeSpentChart, showAccuracyChart, accuracyChartData } = this.state;
@@ -623,8 +819,9 @@ class HomeReportScreen extends Component {
                 backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={{ flex: 1 }}>
 
+                    <View style={{ flex: 1 }}>
+                        {/* <CustomBackButton onPress={this.onPressBack} /> */}
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
 
                         {
@@ -635,189 +832,14 @@ class HomeReportScreen extends Component {
 
                         }
 
-
-
-
-                        {/* <View style={{ backgroundColor: COLOR.WHITE, borderRadius: normalize(24), marginTop: normalize(40) }}>
-                            <View style={{ marginTop: normalize(32), marginStart: normalize(20), marginEnd: normalize(20) }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={[CommonStyles.text_14_bold]}>7 Days Activity</Text>
-                                        <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(8) }]}>(11)</Text>
-                                    </View>
-                                    <TouchableOpacity onPress={this.onPressViewAllActivity}>
-                                        <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
-                                    </TouchableOpacity>
-
-
-                                </View>
-                                <View style={{ flexDirection: 'row', marginTop: normalize(20) }}>
-                                    <View style={{ flex: 1, alignItems: 'center' }}>
-                                        <Text style={[CommonStyles.text_18_bold]}>678</Text>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Problems Answered</Text>
-                                    </View>
-                                    <View style={{ flex: 1, alignItems: 'center' }}>
-                                        <Text style={[CommonStyles.text_18_bold]}>534</Text>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Correct Answers</Text>
-                                    </View>
-                                    <View style={{ flex: 1, alignItems: 'center' }}>
-                                        <Text style={[CommonStyles.text_18_bold]}>144</Text>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>InCorrect Answers</Text>
-                                    </View>
-                                </View>
-
-
-
-                            </View>
-                            <View style={{ marginTop: normalize(16), marginStart: normalize(20), marginEnd: normalize(20) }}>
-
-                                <View style={{ flexDirection: 'row', marginTop: normalize(20) }}>
-                                    <View>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>M</Text>
-                                        <Text style={[CommonStyles.text_12_bold]}>12</Text>
-                                    </View>
-                                    <View style={{ flex: 1, marginStart: normalize(20), marginEnd: normalize(2) }}>
-                                        <View>
-                                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Math Concept</Text>
-                                            <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>Count with Counters within 10</Text>
-                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>From Numbers upto 10</Text>
-                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='check'
-                                                            color={COLOR.TEXT_COLOR_GREEN} />
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>7</Text>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='times'
-                                                            color={COLOR.RED} />
-
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>3</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>00 : 37 hrs</Text>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                            <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>Count with Counters within 10</Text>
-                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>From Numbers upto 10</Text>
-                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='check'
-                                                            color={COLOR.TEXT_COLOR_GREEN} />
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>7</Text>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='times'
-                                                            color={COLOR.RED} />
-
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>3</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>00 : 37 hrs</Text>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-
-
-
-                                        <View style={{ marginTop: normalize(20) }}>
-                                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK N REASON</Text>
-                                            <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>Patterns and Numbers</Text>
-                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>From Analogical Thinking</Text>
-                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='check'
-                                                            color={COLOR.TEXT_COLOR_GREEN} />
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>17</Text>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='times'
-                                                            color={COLOR.RED} />
-
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>3</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>00 : 37 hrs</Text>
-                                                    </View>
-                                                </View>
-
-
-                                            </View>
-                                        </View>
-
-                                        <View style={{ marginTop: normalize(20) }}>
-                                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>SPEED MATH</Text>
-                                            <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
-                                                <View style={{ margin: normalize(16) }}>
-                                                    <Text style={[CommonStyles.text_14_bold]}>Patterns and Numbers</Text>
-                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>From Analogical Thinking</Text>
-                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='check'
-                                                            color={COLOR.TEXT_COLOR_GREEN} />
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>17</Text>
-                                                        <Icon
-                                                            style={{ marginStart: normalize(8) }}
-                                                            size={15}
-                                                            name='times'
-                                                            color={COLOR.RED} />
-
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>3</Text>
-                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>00 : 37 hrs</Text>
-                                                    </View>
-                                                </View>
-
-
-                                            </View>
-                                        </View>
-
-
-                                    </View>
+                        {
+                            this.props.studentActivityStatus &&
+                            this.renderAcitivityScreeen()
+                        }
 
 
 
 
-
-                                </View>
-
-
-
-
-                                <View style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
-
-                                    <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(1), marginEnd: normalize(1) }]}>
-                                        <View style={{ margin: normalize(16) }}>
-                                            <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>MATH CONCEPT</Text>
-                                            <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Numbers upto 10</Text>
-
-                                            <View style={{ flexDirection: 'row', marginTop: normalize(8), justifyContent: 'space-evenly' }}>
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>6 Sub Concepts</Text>
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>1 Concept Test</Text>
-                                            </View>
-
-
-                                        </View>
-
-                                    </View>
-
-                                </View>
-
-                            </View>
-
-
-                        </View> */}
 
 
 
@@ -837,10 +859,12 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
-        dashboardResponse: state.dashboard.dashboard_status,
+        dashboardResponse: state.dashboard.dashboard_response,
         studentReportStatus: state.dashboard.student_report_status,
         studentReportResponse: state.dashboard.student_report_response,
         currentSelectedKid: state.dashboard.current_selected_kid,
+        studentActivityStatus: state.dashboard.student_activity_report_status,
+        studentActivityReport: state.dashboard.student_activity_report_response
 
     }
 
@@ -849,7 +873,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getDashboardItems,
-    getStudentReportData
+    getStudentReportData,
+    getStudentActivity
 };
 
 const styles = StyleSheet.create({

@@ -29,6 +29,10 @@ export function getDifferenceFromTodayDate(value, time) {
 
 }
 
+export function getDayOfTheWeek(){
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+}
+
 export function secondsToHms(d) {
     d = Number(d);
     d = Number(3800);
@@ -43,7 +47,7 @@ export function secondsToHms(d) {
 }
 
 export function timeInHourFormat(mTime){
-    console.log("Time in Hour "+mTime);
+    console.log("GIVEN Time in Hour "+mTime);
     if(mTime == undefined || mTime == 0)
         return "0 Mins";
     var timeValue = "";

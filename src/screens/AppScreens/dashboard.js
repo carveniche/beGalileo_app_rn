@@ -20,18 +20,12 @@ const Tab = createBottomTabNavigator();
 class Dashboard extends Component {
 
     componentDidMount(){
-        
+        console.log("Dashboard Page",this.props);
     }
 
     render() {
         return (
-            <NavigationContainer>
-                <Tab.Navigator>
-                    <Tab.Screen name="Home" component={HomeMainScreen} />
-                    <Tab.Screen name="Settings" component={HomeScheduleScreen} />
-                </Tab.Navigator>
-            </NavigationContainer>
-
+            <TabNavigator />
         );
     }
 }
@@ -44,7 +38,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const TabNavigator = createMaterialBottomTabNavigator(
+const TabNavigator = createAppContainer(createMaterialBottomTabNavigator(
     {
         Home: {
             screen: HomeMainScreen,
@@ -96,9 +90,9 @@ const TabNavigator = createMaterialBottomTabNavigator(
         inactiveColor: COLOR.TAB_ICON_INACTIVE,
         barStyle: { backgroundColor: COLOR.WHITE,height:52 },
     },
-);
+));
 
 
 
-export default createAppContainer(TabNavigator);  
+export default TabNavigator;  
 //export default Dashboard; 

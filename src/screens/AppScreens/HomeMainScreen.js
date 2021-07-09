@@ -30,7 +30,8 @@ class HomeMainScreen extends Component {
         parentName : ''
     }
     componentDidMount() {
-        
+            console.log("Main Screeeen Parmas")
+            console.log(this.props.navigation.getParam('enrollProgram', "sssddd"));
         if (this.props.state.dashboard_status) {
             this.setState({
                 allKidsList: this.props.state.dashboard_response.students
@@ -70,27 +71,30 @@ class HomeMainScreen extends Component {
       }
 
 
-    updateDeviceToken = () => {
+    updateDeviceToken = async () => {
 
+    
 
+          var parentUserId =  await getLocalData(Constants.ParentUserId);
+          var parentTimeZone = await getLocalData(Constants.ParentTimeZone);
         
 
-        
+          console.log("Parent User id",parentUserId);
 
-
-        getLocalData(Constants.ParentUserId).then((name) => {
-            console.log("Firebase Device Token");
-            console.log(name);
-            console.log("ZZZZ");
+          console.log("Parent Time Zone",parentTimeZone);
+        // getLocalData(Constants.ParentUserId).then((name) => {
+        //     console.log("Firebase Device Token");
+        //     console.log(name);
+        //     console.log("ZZZZ");
            
-        })
+        // })
 
 
         messaging()
         .getToken()
         .then(token => {
          console.log("Device Token "+token);
-         this.props.updateDeviceInfo(51252,token,"Asia/Kolkata");
+         this.props.updateDeviceInfo(parentUserId,token,JSON.parse(parentTimeZone));
         });
     }  
 
@@ -99,7 +103,7 @@ class HomeMainScreen extends Component {
 
 
     getCartItems = () => {
-        console.log("Get Cart Items");
+       
         getLocalData(Constants.ParentUserId).then((parentId) => {
             console.log("Parent Id " + parentId);
             this.props.getCartItemList(parentId, "India")
@@ -212,6 +216,13 @@ class HomeMainScreen extends Component {
         this.checkDashboardItems();
     }
 
+    getHeaderTitle = () => {
+        if(this.state.parentName != null)
+            return "Hi "+this.state.parentName;
+        else
+            return "Hi";    
+    }
+
 
 
 
@@ -235,7 +246,7 @@ class HomeMainScreen extends Component {
                 <ScrollView>
                     <View style={{ flex: 1, justifyContent: 'flex-start' }}>
 
-                        <DashboardHeader headerTitle={"Hi "+this.state.parentName} headerDescription="See your Kids activity" allKidsList={allKidsList} />
+                        <DashboardHeader headerTitle={this.getHeaderTitle()} headerDescription="See your Kids activity" allKidsList={allKidsList} />
                         {
                             dashboardResponse &&
                             <View>{

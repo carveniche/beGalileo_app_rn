@@ -10,6 +10,7 @@ import AddKidDetail from '../screens/add_kid_detail';
 import RateDemoClass  from '../screens/BookDemoScreen/rate_demo_class';
 import FaqScreen from '../screens/AppScreens/faq_screen';
 import Dashboard from '../screens/AppScreens/dashboard';
+import HomeReportScreen from "../screens/AppScreens/HomeReportScreen";
 import BookDemoScreen from '../screens/BookDemoScreen/book_demo_screen';
 import DemoConfirmation from '../screens/BookDemoScreen/demo_confirmation';
 import TeacherProfile from '../screens/BookDemoScreen/teacher_profile';
@@ -185,7 +186,15 @@ const AppStackNavigator = createStackNavigator({
     },
 
 
-
+    HomeReportScreen: {
+        screen: HomeReportScreen,
+        navigationOptions: {
+            headerShown: false,
+            gestureEnabled: false,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
 
 
 

@@ -26,16 +26,10 @@ class MainScreen extends Component {
       console.log(JSON.parse(response[4][1]));
       this.props.setUserDetails(JSON.parse(response[0][1]),JSON.parse(response[1][1]),JSON.parse(response[2][1]),JSON.parse(response[3][1]),JSON.parse(response[4][1]))
       this.props.getDashboardItems(JSON.parse(response[0][1]), JSON.parse(response[3][1]),"");
-      
-      //this.props.getDashboardItems(parentId, "India","");
-      // this.setState({
-      //     ParentCountry: JSON.parse(response[1][1]),
-      //     ParentUserId: response[0][1],
-      //     currency: JSON.parse(response[2][1])
-      // })
+    
 
   })
-   // this.checkDashboardItems();
+  
   }
  
   checkDashboardItems =  () => {

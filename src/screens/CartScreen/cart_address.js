@@ -14,7 +14,7 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
-import { payWithApplePay,payWithRazorPay } from '../../components/helpers/payment_methods';
+import { payWithApplePay, payWithRazorPay } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import { add } from "react-native-reanimated";
 
@@ -45,6 +45,7 @@ class CartAddress extends Component {
 
 
         const netTotalPrice = navigation.getParam('netTotalPrice', 0);
+        const isMathboxRequired = navigation.getParam('isMathboxRequired', false);
         this.setState({
             netTotalPrice: netTotalPrice
         })
@@ -118,7 +119,7 @@ class CartAddress extends Component {
         }
         if (prevProps.create_order_status != this.props.create_order_status) {
             if (this.props.create_order_status) {
-                
+
                 this.proceedToPayment(this.props.create_order_response)
             }
         }
@@ -230,17 +231,16 @@ class CartAddress extends Component {
 
             }
             else if (response == 'CANT_MAKE_PAYMENT') {
-                  Alert.alert(
+                Alert.alert(
                     'Apple Pay',
                     'Apple Pay is not available in the device.Please check your apple pay configuration'
-                  );
+                );
             }
-            else
-            {
+            else {
                 Alert.alert(
                     'Something went wrong',
                     'Unable to make payment please try again'
-                  );
+                );
             }
 
 
@@ -262,18 +262,23 @@ class CartAddress extends Component {
 
         var defaultAddressId = 0;
         if (this.state.selectedAddress == 0) {
-            this.props.list_address_response.address_details.map((item) => {
-                if (item.default_address)
-                    defaultAddressId = item.address_id;
-            })
+          
+            if(this.props.list_address_status)
+            {
+                this.props.list_address_response.address_details.map((item) => {
+                    if (item.default_address)
+                        defaultAddressId = item.address_id;
+                })
+            }
+           
         }
 
 
-        console.log(this.state.localParentId);
-       
+        
+
         this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
             this.state.localParentId,
-            "India",
+            this.state.mParentCountryName,
             defaultAddressId
         )
 
@@ -284,17 +289,17 @@ class CartAddress extends Component {
     }
 
     proceedToPayment = (order_response) => {
-        
-        payWithRazorPay(order_response,this.state.netTotalPrice,
+
+        payWithRazorPay(order_response, this.state.netTotalPrice,
             this.state.mParentCountryName,
             this.state.localParentEmail,
             this.state.localParentContactNumber,
             this.state.localParentName,
             this.props.navigation,
             this.updatePaymentStatus
-            )
+        )
 
-            return;
+        return;
 
         console.log(order_response);
         var formattdTotalPrice = this.state.netTotalPrice + "00";
@@ -441,13 +446,18 @@ class CartAddress extends Component {
                             <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>Rs. {this.state.netTotalPrice}</Text>
                         </View>
                         <View>
-                            <CustomGradientButton
-                                myRef={(input) => { this.btn_pay_now = input; }}
-                                style={styles.btn_proceed_payment}
-                                children={"Proceed to Payment"}
-                                onPress={this.onPaymentClick}
+                            
+                            {
+                                this.props.list_address_status &&
+                                <CustomGradientButton
+                                    myRef={(input) => { this.btn_pay_now = input; }}
+                                    style={styles.btn_proceed_payment}
+                                    children={"Proceed to Payment"}
+                                    onPress={this.onPaymentClick}
 
-                            />
+                                />
+                            }
+
                         </View>
                     </View>
 

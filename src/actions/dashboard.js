@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -135,7 +135,8 @@ export function getDemoSlots(parent_id,demo_date){
                 url : 'app_mathbox/demo_free_slots',
                 params : {
                     parent_id,
-                    demo_date
+                    demo_date,
+
                 }
             }
         }
@@ -149,6 +150,23 @@ export function getStudentReportData(student_id,filter){
             request: {
                 url : 'app_mathbox/reports',
                 params : {
+                    student_id,
+                    filter
+                }
+            }
+        }
+    }
+
+}
+
+export function getStudentActivity(parent_id,student_id,filter){
+    return{
+        type : STUDENT_ACTIVITY,
+        payload : {
+            request: {
+                url : 'app_mathbox/activity',
+                params : {
+                    parent_id,
                     student_id,
                     filter
                 }
@@ -362,7 +380,7 @@ export function createPaymentOrder(mathbox_order_id, parent_id, country, address
         }
     }
 }
-export function updatePaymentStatus(razorpay_payment_id, parent_id, mathbox_order_id){
+export function updatePaymentStatus(razorpay_payment_id, parent_id, mathbox_order_id,mobile,email){
     return{
         type : UPDATE_PAYMENT_STATUS,
         payload : {
@@ -498,6 +516,21 @@ export function getUpcomingClasses(student_id){
         payload : {
             request: {
                 url : 'app_mathbox/upcoming_classes',
+                params : {
+                    student_id
+
+                }
+            }
+        }
+    }
+}
+
+export function getStarBadgeReport(student_id){
+    return{
+        type : STAR_BADGE_REPORT,
+        payload : {
+            request: {
+                url : 'app_mathbox/stars_and_badges',
                 params : {
                     student_id
 

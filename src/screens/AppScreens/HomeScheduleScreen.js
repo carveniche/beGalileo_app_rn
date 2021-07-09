@@ -27,7 +27,7 @@ class HomeScheduleScreen extends Component {
     }
     onComponentFocus = () => {
         console.log("On Component Focus ");
-        this.getStudentClasses();
+      //  this.getStudentClasses();
     }
 
     componentDidMount() {
@@ -68,7 +68,7 @@ class HomeScheduleScreen extends Component {
     }
 
     getStudentClasses = () => {
-
+        console.log("POPOPOPPOPOPOPO");
         // this.props.getStudentClasses(53187);
        // this.props.getStudentClasses(54938);
        this.props.getStudentClasses(this.props.currentSelectedKid.student_id);
@@ -124,11 +124,11 @@ class HomeScheduleScreen extends Component {
 
 
                                 <LiveClassSchedule navigation={this.props.navigation} />
-                                : <View />
-                                    // :
-                                    // <View>
-                                    //       <NoRecordFoundComponent title="There is no Live Class Schedule." sub_title=""/>
-                                    //     </View>
+                              
+                                    :
+                                    <View style={{ backgroundColor : COLOR.WHITE }}>
+                                          <NoRecordFoundComponent title="Live class not scheduled" sub_title=""/>
+                                        </View>
                                   
 
                             }

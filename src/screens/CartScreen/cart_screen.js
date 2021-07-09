@@ -6,12 +6,12 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET } from "../../config/configs";
 import { IMG_SHAKSHI, IC_REMOVE_ITEM, IC_CLOSE_BLUE, CART_INDICATOR_MY_CART } from '../../assets/images';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon,createPaymentOrder } from "../../actions/dashboard";
+import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from '@react-native-community/async-storage';
-import { payWithApplePay,payWithRazorPay } from '../../components/helpers/payment_methods';
+import { payWithApplePay, payWithRazorPay } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import RNRazorpayCheckout from 'react-native-razorpay';
 
@@ -33,7 +33,7 @@ class CartListScreen extends Component {
             couponDiscount: 0,
             mathBoxPrice: 0,
             mLocalCountry: "",
-            mParentId : 0,
+            mParentId: 0,
             isCouponApplied: false,
             finalAmountAfterCoupon: 0,
             currency: Constants.INDIA_CURRENCY
@@ -42,7 +42,7 @@ class CartListScreen extends Component {
 
     componentDidMount() {
 
-       
+
         getLocalData(Constants.ParentFirstName).then((parentName) => {
             console.log("Parent Name " + parentName);
             this.setState({
@@ -81,7 +81,7 @@ class CartListScreen extends Component {
             this.setState({
                 currency: localParentCurrency,
                 mLocalCountry: localParentCountry,
-                mParentId : localParentUserId
+                mParentId: localParentUserId
             })
             console.log(localParentCurrency);
             this.props.getCartItemList(localParentUserId, localParentCountry)
@@ -95,13 +95,13 @@ class CartListScreen extends Component {
 
         if (prevProps.cartItems != this.props.cartItems) {
             console.log("Cart items changed");
-           
+
 
 
         }
         if (prevProps.create_order_status != this.props.create_order_status) {
             if (this.props.create_order_status) {
-               
+
                 this.proceedToPayment(this.props.create_order_response)
             }
         }
@@ -162,16 +162,16 @@ class CartListScreen extends Component {
 
 
 
-        payWithRazorPay(order_response,this.state.netTotalPrice,
+        payWithRazorPay(order_response, this.state.netTotalPrice,
             this.state.mLocalCountry,
             this.state.localParentEmail,
             this.state.localParentContactNumber,
             this.state.localParentName,
             this.props.navigation,
             this.updatePaymentStatus
-            )
+        )
 
-            return;
+        return;
 
         console.log(order_response);
         var formattdTotalPrice = this.state.netTotalPrice + "00";
@@ -224,6 +224,7 @@ class CartListScreen extends Component {
             var cartDiscount = item.display_amount - item.amount;
             var mathBoxPricePerPack = item.boxes * 500;
             console.log(this.state.mathBoxPrice + " - Math Box  : " + mathBoxPricePerPack + " --  " + item.boxes);
+            console.log("Math Box Required : ", item.mathbox_required + "-- " + item.amount);
             if (!item.mathbox_required)
                 mathBoxPriceTotal += mathBoxPricePerPack;
             cartPriceTotal += item.amount;
@@ -234,9 +235,9 @@ class CartListScreen extends Component {
         //  netPriceTotal = this.state.finalAmountAfterCoupon + mathBoxPriceTotal;
         netPriceTotal = cartPriceTotal - mathBoxPriceTotal;
         console.log("Coupon Discount : " + this.state.couponDiscount);
-        
+
         //For Testing
-       // netPriceTotal = 1;
+        // netPriceTotal = 1;
 
 
         //netPriceTotal = cartPriceTotal;
@@ -289,7 +290,7 @@ class CartListScreen extends Component {
     }
     applyCouponCode = () => {
         const { userCouponCode, mLocalCountry } = this.state;
- 
+
         this.props.doApplyCoupon(userCouponCode, this.props.get_cart_list_response.mathbox_order_id, mLocalCountry)
 
     }
@@ -315,20 +316,32 @@ class CartListScreen extends Component {
         this.props.doRemoveCoupon(this.props.get_cart_list_response.mathbox_order_id, this.state.mLocalCountry)
     }
 
+    getMathBoxRequiredStatus = () => {
+        var isMathboxRequired = false;
+        this.props.cartItems.map((item) => {
+            if (item.mathbox_required)
+                isMathboxRequired = true;
+        })
+        return isMathboxRequired;
+    }
 
+
+
+    goToAddressScreen = () => {
+
+        this.props.navigation.navigate(Constants.CartAddress, {
+            netTotalPrice: this.state.netTotalPrice,
+            isMathboxRequired: this.getMathBoxRequiredStatus()
+        });
+    }
 
 
     proceedToAddress = () => {
-        if(this.state.currency == Constants.INDIA_CURRENCY)
-        {
-            console.log(this.state);
-            this.props.navigation.navigate(Constants.CartAddress, {
-                netTotalPrice: this.state.netTotalPrice
-            });
+        if (this.state.currency == Constants.INDIA_CURRENCY) {
+            this.goToAddressScreen();
         }
-        else
-        {
-           // alert("Proceed to payment");
+        else {
+            // alert("Proceed to payment");
             this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
                 this.state.mParentId,
                 this.state.localParentCountry,
@@ -336,21 +349,35 @@ class CartListScreen extends Component {
             )
 
         }
-      
+
     }
 
-  
+    getProceedButtonText = () => {
+
+        if (this.state.currency != Constants.INDIA_CURRENCY)
+            return "Proceed to Payment"
+        else {
+
+            if (this.getMathBoxRequiredStatus())
+                return "Proceed to Address";
+            else
+               return "Proceed to Payment";    
+
+        }
+    }
+
+
 
     returnCalculatedPrice = (item) => {
-        if(!item.mathbox_required){
+        if (!item.mathbox_required) {
             var mathBoxPrice = item.duration * 500;
             var reducedPrice = item.amount - mathBoxPrice;
             return reducedPrice;
         }
-        else{
+        else {
             return item.amount
         }
-        
+
     }
 
 
@@ -386,7 +413,7 @@ class CartListScreen extends Component {
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                        <Text style={[CommonStyles.text_18_bold]}>{this.state.currency}. {this.returnCalculatedPrice(item)}</Text>
+                                <Text style={[CommonStyles.text_18_bold]}>{this.state.currency}. {this.returnCalculatedPrice(item)}</Text>
 
                             </View>
                             <View style={{ marginTop: normalize(4), marginTop: normalize(4) }}>
@@ -526,7 +553,7 @@ class CartListScreen extends Component {
                                         <CustomGradientButton
                                             myRef={(input) => { this.btn_pay_now = input; }}
                                             style={styles.btn_proceed_address}
-                                            children={this.state.currency == Constants.INDIA_CURRENCY ? "Proceed to Address " : "Proceed to Payment"}
+                                            children={this.getProceedButtonText()}
                                             onPress={this.proceedToAddress}
                                         />
                                     </View>
