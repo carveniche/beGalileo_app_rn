@@ -11,7 +11,7 @@ import { getLocalData } from '../../components/helpers/AsyncMethods';
 import SubscriptionTabs from '../../components/subscription_tab';
 import AddCartFloatingButton from '../../components/AddCartFloatingButton';
 import PaidUserDashboard from '../dashboard/paid_user_dashboard';
-import NewUserDashboard from '../dashboard/new_user_dashboard';
+import MainUserDashboard from '../dashboard/MainUserDashboard';
 import DashboardHeader from '../../components/DashboardHeader';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import {NavigationEvents} from 'react-navigation';
@@ -30,8 +30,8 @@ class HomeMainScreen extends Component {
         parentName : ''
     }
     componentDidMount() {
-            console.log("Main Screeeen Parmas")
-            console.log(this.props.navigation.getParam('enrollProgram', "sssddd"));
+            // console.log("Main Screeeen Parmas")
+            // console.log(this.props.navigation.getParam('enrollProgram', "sssddd"));
         if (this.props.state.dashboard_status) {
             this.setState({
                 allKidsList: this.props.state.dashboard_response.students
@@ -253,7 +253,7 @@ class HomeMainScreen extends Component {
                                 // !isPaidUser ?
                                 //     <PaidUserDashboard  {...this.props}/>
                                 //     :
-                                <NewUserDashboard {...this.props} />
+                                <MainUserDashboard {...this.props} />
                             }
                             </View>
 

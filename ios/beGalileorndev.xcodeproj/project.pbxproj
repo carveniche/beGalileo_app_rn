@@ -38,6 +38,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = beGalileorndev/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = beGalileorndev/main.m; sourceTree = "<group>"; };
 		14998EC9903543419B70A2A0 /* Montserrat-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Regular.otf"; path = "../assets/fonts/Montserrat-Regular.otf"; sourceTree = "<group>"; };
+		18344DB0269EFAE000CCA704 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18422C22255AA44600B32746 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		185BF0FB25E54C6C002FE508 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18EC72F725B98ACD00319667 /* beGalileo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = beGalileo.entitlements; path = beGalileorndev/beGalileo.entitlements; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 			children = (
 				EAF23B99E71F428AA70C5568 /* Montserrat-Bold.otf */,
 				5AAA98FDA0B44C70B3E48B9A /* Montserrat-Light.otf */,
+				18344DB0269EFAE000CCA704 /* GoogleService-Info.plist */,
 				593172ACCB874DB2B95C492E /* Montserrat-Medium.otf */,
 				14998EC9903543419B70A2A0 /* Montserrat-Regular.otf */,
 				7BF6C22FFCC042728B6A4550 /* Montserrat-SemiBold.otf */,

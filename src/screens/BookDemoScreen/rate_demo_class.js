@@ -184,7 +184,7 @@ class RateDemoClass extends Component {
                         <TextInput
                             placeholder='Your Feedback'
                             placeholderTextColor={COLOR.TEXT_ALPHA_GREY}
-                            textAlignVertical={true}
+                      
                             multiline={true}
                             onChangeText={this.handleFeedbackText}
                             style={{ paddingTop: 20, paddingStart: 10, paddingEnd: 10, paddingBottom: 20, height: 100, borderRadius: 15, borderWidth: 1, borderColor: COLOR.TEXT_ALPHA_GREY }}>

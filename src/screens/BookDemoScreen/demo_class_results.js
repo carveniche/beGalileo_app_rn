@@ -6,10 +6,11 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { CustomBackButton } from '../../components';
 import RadioForm, { RadioButton } from 'react-native-simple-radio-button';
 import { IC_BANNER_2 } from '../../assets/images';
+
 import { getDemoResults } from '../../actions/dashboard';
 import CustomGradientButton from '../../components/CustomGradientButton';
 import { normalize } from "react-native-elements";
-import { secondsToHms } from '../../components/helpers/CustomUtilMethods';
+import { secondsToHms,replaceAll } from '../../components/helpers/CustomUtilMethods';
 import ReadMore from 'react-native-read-more-text';
 
 
@@ -86,7 +87,16 @@ class DemoClassResults extends Component {
     }
 
     getStructuredTimeFormat = (time) => {
-        return time.replaceAll(", ", "\n");
+        console.log("Time Structure",time);
+        if(time == null || typeof time == "undefined" )
+        return "";
+        else
+        {
+            var splitTime = time.split(', ');
+            console.log("Time Split : ",splitTime);
+            return splitTime[0]+'\n'+splitTime[1]+'\n'+splitTime[2];
+        }
+        
     }
 
     renderResultView = () => {
@@ -105,7 +115,7 @@ class DemoClassResults extends Component {
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', marginTop: normalize(32) }}>
                     <View>
                         <Text style={[CommonStyles.text_11_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Attended on</Text>
-                        <Text style={[CommonStyles.text_18_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{this.getStructuredTimeFormat(demo_result_response.attended_on)}</Text>
+                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{this.getStructuredTimeFormat(demo_result_response.attended_on)}</Text>
                     </View>
                     <View>
                         <Text style={[CommonStyles.text_11_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Time taken</Text>
@@ -139,7 +149,7 @@ class DemoClassResults extends Component {
                         {
                             demo_result_response.teacher_mesages.map((item, index) => {
                                 return (
-                                    <Text style={[CommonStyles.text_18_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(10) }]}>{index + 1}. {item}</Text>
+                                    <Text style={[CommonStyles.text_16_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(10) }]}>{index + 1}. {item}</Text>
                                 )
                             })
                         }

@@ -215,6 +215,8 @@ class Login extends Component {
             .catch(p => console.log(p));
 
     otpHandler = (message) => {
+        if(message == null)
+        return;
         console.debug("OTP Message " + message);
         const otp = /(\d{4})/g.exec(message)[1];
         console.debug("OTP IDENTIFIED " + otp)

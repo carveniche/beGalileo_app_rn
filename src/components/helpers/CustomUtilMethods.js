@@ -34,6 +34,9 @@ export function getDayOfTheWeek(){
 }
 
 export function secondsToHms(d) {
+    console.log("Seconds to time",d);
+    if(d==0)
+    return 0;
     d = Number(d);
     d = Number(3800);
     var h = Math.floor(d / 3600);
@@ -62,6 +65,13 @@ export function timeInHourFormat(mTime){
         timeValue = "0";
     return timeValue;
     
+}
+
+
+function replaceAll(str, find, replace) {
+    var escapedFind=find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    return str.replace(new RegExp(escapedFind, 'g'), replace);
+
 }
 
 export function getDisplayFormattedDate(dateValue){

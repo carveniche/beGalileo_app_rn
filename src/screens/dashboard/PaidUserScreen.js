@@ -465,12 +465,16 @@ class PaidUserScreen extends Component {
                 <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(10), marginBottom: normalize(10), marginEnd: normalize(5), marginStart: normalize(10) }}>
                     <View style={{ flex: 1, marginTop: normalize(10),marginStart : normalize(10) }}>
                         <Text style={[CommonStyles.text_12_bold]}>24 Classes</Text>
+                        <View style={{ justifyContent:'center' }}>
                         <Text style={[CommonStyles.text_12__semi_bold]}>Completed : </Text>
                         <Text style={[CommonStyles.text_18_bold]}>8 out of 16</Text>
-                        <View>
+                        </View>
+                       
+                        {/* <View>
                             <Text style={[CommonStyles.text_11_semi_bold,{ color : COLOR.TEXT_ALPHA_GREY }]}>Last Class Date</Text>
                             <Text style={[CommonStyles.text_12_regular]}>24 Jan 2021</Text>
-                        </View>
+                        </View> */}
+                       
 
                     </View>
 

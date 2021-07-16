@@ -15,7 +15,7 @@ import NewUserScreen from './NewUserScreen';
 import PaidUserScreen from './PaidUserScreen';
 
 
-class NewUserDashboard extends Component {
+class MainUserDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -179,4 +179,4 @@ const mapDispatchToProps = {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewUserDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(MainUserDashboard);
