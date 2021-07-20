@@ -8,7 +8,7 @@ const NoRecordFoundComponent = props => {
     return (
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
-            <Image style={CommonStyles.img_no_record} source={IC_BANNER_1} />
+            <Image style={CommonStyles.img_no_record} source={IC_BANNER_1} resizeMode={'contain'} />
             <Text style={[CommonStyles.text_12_bold,{ marginTop : 10 }]}>{props.title}</Text>
             <Text style={[CommonStyles.text_8_regular,{ marginTop : 5 }]}>{props.sub_title}</Text>
         </View>

@@ -1,6 +1,8 @@
 import * as Constants from './Constants';
 import { APPLE_MERCHANT_ID_LIVE, APPLE_MERCHANT_ID_TEST, RAZOR_PAY_TEST_KEY } from './../../config/configs';
 import RNRazorpayCheckout from 'react-native-razorpay';
+
+
 import { COLOR, CommonStyles } from '../../config/styles';
 
 export function payWithApplePay(netTotalPrice, countryName, callBack) {
@@ -82,9 +84,41 @@ export function payWithApplePay(netTotalPrice, countryName, callBack) {
 
 }
 
-export function payWithRazorPay(order_response, netTotalPrice, countryName ,localParentEmail, localParentContactNumber, localParentName, navigation, callBackPaymentStatus) {
-    console.log(countryName);
+export function payWithRazorPayFromCart(order_response, netTotalPrice, countryName, localParentEmail, localParentContactNumber, localParentName, navigation, callBackPaymentStatus) {
+    var options = getRazorPayOptions(order_response, netTotalPrice, countryName, localParentEmail, localParentContactNumber, localParentName);
+   
+   executePayment(options,callBackPaymentStatus,"cart");
+    
+}
 
+function executePayment(options,callBack,isFrom){
+    RNRazorpayCheckout.open(options).then((data) => {
+        console.log("Payment Response ", data);
+        callBack(data.razorpay_payment_id,isFrom);
+
+    }).catch((error) => {
+        // handle failure
+        console.log("Payment failed Error ");
+        console.log(error);
+        // this.updatePaymentStatus(data.razorpay_payment_id);
+        // navigation.navigate(Constants.PaymentFailedScreen);
+    });
+}
+
+
+
+export function payWithRazorPayFromAddress(order_response, netTotalPrice, countryName, localParentEmail, localParentContactNumber, localParentName, navigation, callBackPaymentStatus) {
+
+
+
+
+    var options = getRazorPayOptions(order_response, netTotalPrice, countryName, localParentEmail, localParentContactNumber, localParentName);
+
+    console.log("Payment options  ",options);
+    executePayment(options,callBackPaymentStatus,"address");
+}
+
+function getRazorPayOptions(order_response, netTotalPrice, countryName, localParentEmail, localParentContactNumber, localParentName) {
     var countryCode = '';
     var currencyCode = '';
 
@@ -103,7 +137,7 @@ export function payWithRazorPay(order_response, netTotalPrice, countryName ,loca
     var options = {
         description: 'beGalileo Package',
         image: 'https://www.begalileo.com/assets/pwa/beGalileo_logo_1024x768.png',
-        currency: 'INR',
+        currency: currencyCode,
         key: RAZOR_PAY_TEST_KEY,
         amount: formattdTotalPrice,
         name: 'Carveniche Technologies',
@@ -120,19 +154,5 @@ export function payWithRazorPay(order_response, netTotalPrice, countryName ,loca
         },
         theme: { color: COLOR.TEXT_COLOR_GREEN }
     }
-    console.log("Options ",options);
-
-    RNRazorpayCheckout.open(options).then((data) => {
-        console.log("Payment Response ",data);
-        // handle success
-        // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
-        //callBackPaymentStatus(data.razorpay_payment_id);
-        // alert(`Success: ${data.razorpay_payment_id}`);
-    }).catch((error) => {
-        // handle failure
-        console.log("Payment failed Error ");
-        console.log(error);
-        // this.updatePaymentStatus(data.razorpay_payment_id);
-        navigation.navigate(Constants.PaymentFailedScreen);
-    });
+    return options;
 }

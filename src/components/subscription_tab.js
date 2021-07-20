@@ -397,8 +397,7 @@ class SubscriptionTabs extends Component {
 
     groupClasses() {
         const { ParentCountry } = this.state;
-        console.log("Group Classes");
-        console.log(this.state.priceDetails);
+       
 
         return this.state.priceDetails.map((item, index) =>
             this.props.recommended != item.duration &&

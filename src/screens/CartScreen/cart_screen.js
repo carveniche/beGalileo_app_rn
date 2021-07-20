@@ -6,18 +6,19 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET } from "../../config/configs";
 import { IMG_SHAKSHI, IC_REMOVE_ITEM, IC_CLOSE_BLUE, CART_INDICATOR_MY_CART } from '../../assets/images';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder } from "../../actions/dashboard";
+import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder,updatePaymentStatus } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from '@react-native-community/async-storage';
-import { payWithApplePay, payWithRazorPay } from '../../components/helpers/payment_methods';
+import { payWithApplePay, payWithRazorPayFromCart } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import RNRazorpayCheckout from 'react-native-razorpay';
 
 class CartListScreen extends Component {
     constructor(props) {
         super(props);
+        this.updateCartPaymentStatus = this.updateCartPaymentStatus.bind(this);
         this.state = {
             cartItems: [
 
@@ -27,6 +28,7 @@ class CartListScreen extends Component {
             applyCouponDialog: false,
             userCouponCode: "",
             isValidCouponCode: true,
+            isCouponApplied : false,
             netTotalPrice: 0,
             cartTotalPrice: 0,
             cartDiscountPrice: 0,
@@ -53,14 +55,14 @@ class CartListScreen extends Component {
         getLocalData(Constants.ParentEmail).then((parentEmail) => {
             console.log("Parent Email " + parentEmail);
             this.setState({
-                localParentEmail: parentEmail.slice(1, -1),
+                localParentEmail: JSON.parse(parentEmail),
 
             })
         })
         getLocalData(Constants.ParentMobileNumber).then((parentMobileNumber) => {
             console.log("Parent Mobile Number " + parentMobileNumber);
             this.setState({
-                localParentContactNumber: parentMobileNumber,
+                localParentContactNumber: JSON.parse(parentMobileNumber),
 
             })
         })
@@ -131,10 +133,15 @@ class CartListScreen extends Component {
                 }, this.calculatePriceDetails)
             }
             else {
-                this.setState({
-                    isValidCouponCode: false,
-                    couponDiscount: 0
-                }, this.calculatePriceDetails)
+                if(this.props.apply_coupon_status != null)
+                {
+                    this.setState({
+                        isValidCouponCode: false,
+                        couponDiscount: 0
+                    }, this.calculatePriceDetails)
+                }
+                
+                
             }
         }
         if (prevProps.remove_coupon_status != this.props.remove_coupon_status) {
@@ -151,65 +158,47 @@ class CartListScreen extends Component {
                 this.calculatePriceDetails()
             }
         }
+        if (prevProps.update_payment_status != this.props.update_payment_status) {
+            if(this.props.update_payment_status != null)
+            {
+                if (this.props.update_payment_status) {
+                    this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+                }
+                else
+                    this.props.navigation.navigate(Constants.PaymentFailedScreen);
+            }
+           
+         
+
+        }
 
     }
 
-    updatePaymentStatus = (razorpay_payment_id) => {
-        this.props.updatePaymentStatus(razorpay_payment_id, this.state.mParentId, this.props.get_cart_list_response.mathbox_order_id)
+    
+
+    updateCartPaymentStatus = (razorpay_payment_id,isFrom) => {
+      
+        console.log("Cart Payment Success Id "+razorpay_payment_id,this.props.get_cart_list_response.mathbox_order_id);
+        if(isFrom == "cart")
+         this.props.updatePaymentStatus(razorpay_payment_id, this.state.mParentId, this.props.get_cart_list_response.mathbox_order_id,this.state.localParentContactNumber,this.state.localParentEmail,"razor")
     }
 
     proceedToPayment = (order_response) => {
 
 
 
-        payWithRazorPay(order_response, this.state.netTotalPrice,
+        payWithRazorPayFromCart(order_response, this.state.netTotalPrice,
             this.state.mLocalCountry,
             this.state.localParentEmail,
             this.state.localParentContactNumber,
             this.state.localParentName,
             this.props.navigation,
-            this.updatePaymentStatus
+            this.updateCartPaymentStatus
         )
 
         return;
 
-        console.log(order_response);
-        var formattdTotalPrice = this.state.netTotalPrice + "00";
-
-        var options = {
-            description: 'beGalileo Package',
-            image: 'https://www.begalileo.com/assets/pwa/beGalileo_logo_1024x768.png',
-            currency: 'USD',
-            key: RAZOR_PAY_TEST_KEY,
-            amount: formattdTotalPrice,
-            name: 'Carveniche Technologies',
-            order_id: order_response.razorpay_order_id,
-            // prefill: {
-            //     email: this.state.localParentEmail,
-            //     contact: this.state.localParentContactNumber,
-            //     name: this.state.localParentName
-            // },
-            notes: {
-                user_id: order_response.user_id,
-                user_subscription_ids: JSON.stringify(order_response.user_subscription_ids),
-                coupon_code: order_response.coupon_code
-            },
-            theme: { color: COLOR.TEXT_COLOR_GREEN }
-        }
-        console.log(options);
-
-        RNRazorpayCheckout.open(options).then((data) => {
-            // handle success
-            // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
-            this.updatePaymentStatus(data.razorpay_payment_id);
-            // alert(`Success: ${data.razorpay_payment_id}`);
-        }).catch((error) => {
-            // handle failure
-            console.log("Payment failed Error ");
-            console.log(error);
-            // this.updatePaymentStatus(data.razorpay_payment_id);
-            this.props.navigation.navigate(Constants.PaymentFailedScreen);
-        });
+      
     }
 
 
@@ -337,20 +326,34 @@ class CartListScreen extends Component {
 
 
     proceedToAddress = () => {
+
+       
         if (this.state.currency == Constants.INDIA_CURRENCY) {
-            this.goToAddressScreen();
+            if(this.getMathBoxRequiredStatus())
+                    this.goToAddressScreen();
+            else
+                this.doCreatePaymentOrder();
         }
         else {
             // alert("Proceed to payment");
-            this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
-                this.state.mParentId,
-                this.state.localParentCountry,
-                ""
-            )
+            this.doCreatePaymentOrder();
 
         }
 
     }
+
+
+    doCreatePaymentOrder = () => {
+        this.props.createPaymentOrder(this.props.get_cart_list_response.mathbox_order_id,
+            this.state.mParentId,
+            this.state.localParentCountry,
+            ""
+        )
+    }
+
+
+
+    
 
     getProceedButtonText = () => {
 
@@ -446,11 +449,12 @@ class CartListScreen extends Component {
                     backgroundColor: COLOR.WHITE
                 }}
             >
-                <View style={{ marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(30) }}>
-                    {
+                 {
                         loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                     }
+                <View style={{ marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(30) }}>
+                   
 
                     {
                         this.props.cartItems && this.props.cartItems.length > 0 ?
@@ -594,17 +598,17 @@ class CartListScreen extends Component {
                                 </TouchableOpacity>
 
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(40), paddingTop: normalize(16), paddingBottom: normalize(16) }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
                                 <TextInput
-                                    style={[CommonStyles.text_12_Regular, { marginStart: normalize(16), padding: normalize(2) }]}
+                                    style={[CommonStyles.text_12_Regular, { flex : 1,paddingVertical : 20,paddingHorizontal : 10,textAlignVertical : 'center',justifyContent : 'center' }]}
                                     placeholder={"Enter Coupon Code"}
                                     value={userCouponCode}
                                     onChangeText={(userCouponCode) => this.setState({ userCouponCode })}
 
                                 />
                                 {
-                                    this.state.userCouponCode.length > 2 && !this.state.isCouponApplied ?
-                                        <TouchableOpacity onPress={this.applyCouponCode}>
+                                    this.state.userCouponCode.length > 2 && !this.state.isCouponApplied && !loading ?
+                                        <TouchableOpacity onPress={this.applyCouponCode} style={{ justifyContent : 'center' }}>
                                             <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginEnd: normalize(16) }]} >Apply</Text>
                                         </TouchableOpacity>
 
@@ -614,7 +618,7 @@ class CartListScreen extends Component {
 
                             </View>
                             {
-                                !isValidCouponCode ?
+                                !isValidCouponCode && !loading  ?
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.RED, marginTop: normalize(7) }]}>Invalid coupon code</Text>
                                     : <View />
                             }
@@ -673,6 +677,8 @@ const mapStateToProps = (state) => {
         remove_from_cart_response: state.dashboard.remove_from_cart_response,
         create_order_status: state.dashboard.create_order_status,
         create_order_response: state.dashboard.create_order_response,
+        update_payment_status: state.dashboard.update_payment_status,
+        update_payment_response: state.dashboard.update_payment_response
 
 
     }
@@ -684,6 +690,7 @@ const mapDispatchToProps = {
     getCartItemList,
     doApplyCoupon,
     doRemoveCoupon,
-    createPaymentOrder
+    createPaymentOrder,
+    updatePaymentStatus
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CartListScreen);

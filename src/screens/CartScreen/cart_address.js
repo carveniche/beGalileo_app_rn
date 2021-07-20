@@ -14,14 +14,14 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
-import { payWithApplePay, payWithRazorPay } from '../../components/helpers/payment_methods';
+import { payWithApplePay, payWithRazorPayFromAddress } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import { add } from "react-native-reanimated";
 
 class CartAddress extends Component {
     constructor(props) {
         super(props);
-        this.updatePaymentStatus = this.updatePaymentStatus.bind(this);
+      //  this.updatePaymentStatus = this.updatePaymentStatus.bind(this);
         this.state = {
             cart_address: [
 
@@ -77,14 +77,14 @@ class CartAddress extends Component {
         getLocalData(Constants.ParentEmail).then((parentEmail) => {
             console.log("Parent Email " + parentEmail);
             this.setState({
-                localParentEmail: parentEmail.slice(1, -1),
+                localParentEmail: JSON.parse(parentEmail)
 
             })
         })
         getLocalData(Constants.ParentMobileNumber).then((parentMobileNumber) => {
             console.log("Parent Mobile Number " + parentMobileNumber);
             this.setState({
-                localParentContactNumber: parentMobileNumber,
+                localParentContactNumber: JSON.parse(parentMobileNumber),
 
             })
         })
@@ -124,9 +124,16 @@ class CartAddress extends Component {
             }
         }
         if (prevProps.update_payment_status != this.props.update_payment_status) {
-            if (this.props.update_payment_status) {
-                this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+            if(this.props.update_payment_status != null)
+            {
+                if (this.props.update_payment_status) {
+                    this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+                }
+                else
+                    this.props.navigation.navigate(Constants.PaymentFailedScreen);
             }
+           
+         
 
         }
         if (prevProps.list_address_status != this.props.list_address_status) {
@@ -284,60 +291,26 @@ class CartAddress extends Component {
 
     }
 
-    updatePaymentStatus = (razorpay_payment_id) => {
-        this.props.updatePaymentStatus(razorpay_payment_id, this.state.localParentId, this.props.get_cart_list_response.mathbox_order_id)
+    updateAddressPaymentStatus = (razorpay_payment_id,isFrom) => {
+        console.log("Address Payment Status Id",razorpay_payment_id,isFrom);
+        if(isFrom == "address")
+        this.props.updatePaymentStatus(razorpay_payment_id, this.state.localParentId, this.props.get_cart_list_response.mathbox_order_id,this.state.localParentContactNumber,this.state.localParentEmail,"razor")
     }
 
     proceedToPayment = (order_response) => {
 
-        payWithRazorPay(order_response, this.state.netTotalPrice,
+        payWithRazorPayFromAddress(order_response, this.state.netTotalPrice,
             this.state.mParentCountryName,
             this.state.localParentEmail,
             this.state.localParentContactNumber,
             this.state.localParentName,
             this.props.navigation,
-            this.updatePaymentStatus
+            this.updateAddressPaymentStatus
         )
 
         return;
 
-        console.log(order_response);
-        var formattdTotalPrice = this.state.netTotalPrice + "00";
-
-        var options = {
-            description: 'beGalileo Package',
-            image: 'https://www.begalileo.com/assets/pwa/beGalileo_logo_1024x768.png',
-            currency: 'INR',
-            key: RAZOR_PAY_TEST_KEY,
-            amount: formattdTotalPrice,
-            name: 'Carveniche Technologies',
-            order_id: order_response.razorpay_order_id,
-            prefill: {
-                email: this.state.localParentEmail,
-                contact: this.state.localParentContactNumber,
-                name: this.state.localParentName
-            },
-            notes: {
-                user_id: order_response.user_id,
-                user_subscription_ids: JSON.stringify(order_response.user_subscription_ids),
-                coupon_code: order_response.coupon_code
-            },
-            theme: { color: COLOR.TEXT_COLOR_GREEN }
-        }
-        console.log(options);
-
-        RNRazorpayCheckout.open(options).then((data) => {
-            // handle success
-            // this.props.navigation.navigate(Constants.PaymentSuccessScreen);
-            this.updatePaymentStatus(data.razorpay_payment_id);
-            // alert(`Success: ${data.razorpay_payment_id}`);
-        }).catch((error) => {
-            // handle failure
-            console.log("Payment failed Error ");
-            console.log(error);
-            // this.updatePaymentStatus(data.razorpay_payment_id);
-            this.props.navigation.navigate(Constants.PaymentFailedScreen);
-        });
+       
     }
 
 

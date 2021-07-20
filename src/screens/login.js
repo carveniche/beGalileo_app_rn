@@ -352,9 +352,11 @@ class Login extends Component {
         storeLocalData(Constants.ParentFirstName, response.first_name);
         storeLocalData(Constants.ParentLastName, response.last_name);
         storeLocalData(Constants.ParentMobileNumber, response.mobile);
+        storeLocalData(Constants.ParentTimeZone, this.state.timeZone);
         console.log("Existing User Country " + this.state.countryName + " -- " + this.state.countryCode);
         storeLocalData(Constants.ParentCountryCode, this.state.countryCode);
         storeLocalData(Constants.ParentCountryName, response.country);
+        
 
         if (response.country == Constants.INDIA || response.country == null)
             storeLocalData(Constants.ParentCurrency, Constants.INDIA_CURRENCY);

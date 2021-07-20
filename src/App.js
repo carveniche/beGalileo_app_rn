@@ -9,6 +9,7 @@ import { AuthStack } from './config/router';
 import ROOT from "./screens/root";
 import * as reducers from './reducers';
 import thunk from "redux-thunk";
+import { BASE_URL } from './config/configs'; 
 
 import {
   createStackNavigator
@@ -18,7 +19,7 @@ import FlashMessage from "react-native-flash-message";
 console.disableYellowBox = true;
 
 const client = axios.create({
-    baseURL: 'https://www.begalileo.com/',
+    baseURL: BASE_URL,
     responseType: 'json'
   });
 

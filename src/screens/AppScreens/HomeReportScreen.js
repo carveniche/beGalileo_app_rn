@@ -18,6 +18,7 @@ import ComponentActivityItem from "../../components/ComponentActivityItem";
 import ComponentSpeedMathListItem from "../../components/ComponentSpeedMathListItem";
 import { ReportListDateItem } from '../../components';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
+import SearchingRecordComponent from "../../components/SearchingRecordComponent";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { List } from 'react-native-paper';
 import AcitivityReportList from "../ReportScreens/AcitivityReportList";
@@ -50,19 +51,19 @@ class HomeReportScreen extends Component {
     }
 
     componentDidMount() {
-        console.log("Student Id " + this.props.currentSelectedKid.student_id);
-        console.log("Dashboard Response : ", this.props.dashboardResponse.parent_id);
+
         this.checkReportDatas();
         this.checkActivtiyDatas();
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
+
             if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
 
-                this.checkDashboardItems();
+                //   this.checkDashboardItems();
                 this.checkReportDatas();
-
+                this.checkActivtiyDatas();
             }
         }
     }
@@ -77,13 +78,15 @@ class HomeReportScreen extends Component {
 
     checkReportDatas = () => {
         //this.props.getStudentReportData(53499, 7);
+        console.log("Checking Report Datas : " + this.props.currentSelectedKid.student_id, this.state.currentFilterDays);
         this.props.getStudentReportData(this.props.currentSelectedKid.student_id, this.state.currentFilterDays);
     }
 
     checkActivtiyDatas = () => {
-        this.props.getStudentActivity(this.props.dashboardResponse.parent_id,this.props.currentSelectedKid.student_id,7);
+        console.log("Checking Activity Datas");
+        this.props.getStudentActivity(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, 7);
 
-      //  this.props.getStudentActivity(50606, 53499, 7);
+        //  this.props.getStudentActivity(50606, 53499, 7);
     }
 
     changeAccuracyChartView = () => {
@@ -563,36 +566,39 @@ class HomeReportScreen extends Component {
 
 
     showAllReportDatas = () => {
-        const { currentSelectedKid } = this.props;
-
+        const { currentSelectedKid, studentActivityStatus, studentReportResponse } = this.props;
+        console.log("Student Report Response", studentReportResponse);
         return (
-            <View>
+            <View style={{ flex: 1 }}>
 
 
                 {
-                    currentSelectedKid.activity_details != "" &&
-                    <View>
+                    studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
+
+                        <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test." />
+                        :
+                        <View>
+
+                            {
+                                this.renderStarAndBadge()
+                            }
+                            <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+                                {
+                                    this.showFilterList()
+                                }
+                                {
+                                    this.showAccuracyCard()
+                                }
+                                {
+                                    this.showTimeSpentCard()
+                                }
+                            </View>
 
 
-                        <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
-                            {
-                                this.showFilterList()
-                            }
-                            {
-                                this.showAccuracyCard()
-                            }
-                            {
-                                this.showTimeSpentCard()
-                            }
-                        </View>
-                        {
-                            this.renderStarAndBadge()
-                        }
-
-                        {/* {
+                            {/* {
                             this.recentActivity()
                         } */}
-                    </View>
+                        </View>
 
                 }
 
@@ -602,13 +608,13 @@ class HomeReportScreen extends Component {
     }
 
     renderStarAndBadge = () => {
-        const { currentSelectedKid } = this.props;
+        const { studentReportResponse } = this.props;
         return (
             <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
-                <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(currentSelectedKid.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
+                <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(studentReportResponse.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={[CommonStyles.text_12_bold]}>{currentSelectedKid.stars}</Text>
+                        <Text style={[CommonStyles.text_12_bold]}>{studentReportResponse.stars}</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(8) }]}>Stars</Text>
                     </View>
 
@@ -621,7 +627,7 @@ class HomeReportScreen extends Component {
                     </View>
 
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={[CommonStyles.text_12_bold]}>{currentSelectedKid.activity_details.badges.length}</Text>
+                        <Text style={[CommonStyles.text_12_bold]}>{studentReportResponse.badges}</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(8) }]}>Badges</Text>
                     </View>
 
@@ -754,7 +760,7 @@ class HomeReportScreen extends Component {
 
     renderAcitivityScreeen = () => {
         const activityDatas = this.props.studentActivityReport;
-       
+
         return (
 
             <View style={{ backgroundColor: COLOR.WHITE, borderRadius: normalize(24), marginTop: normalize(40) }}>
@@ -790,13 +796,13 @@ class HomeReportScreen extends Component {
                 </View>
 
 
-                <View style={{ marginTop: normalize(16), marginStart: normalize(20), marginEnd: normalize(20),marginBottom : normalize(20) }}>
+                <View style={{ marginTop: normalize(16), marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(20) }}>
                     <AcitivityReportList />
                     {/* {
 
                         this.listAcitivityItem(activityDatas.activity_data)
                     } */}
-          
+
 
                 </View>
 
@@ -811,7 +817,7 @@ class HomeReportScreen extends Component {
     }
 
     render() {
-        const { currentSelectedKid } = this.props;
+        const { currentSelectedKid, studentReportStatus, studentActivityStatus, studentActivityReport, loading } = this.props;
         const { showTimeSpentChart, showAccuracyChart, accuracyChartData } = this.state;
         return (
             <View style={{
@@ -820,20 +826,26 @@ class HomeReportScreen extends Component {
             }}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'column' }}>
                         {/* <CustomBackButton onPress={this.onPressBack} /> */}
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
 
-                        {
-                            currentSelectedKid && currentSelectedKid.paid_status ?
 
-                                this.showAllReportDatas() :
-                                <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test." />
+                        {
+                            studentReportStatus &&
+
+                            this.showAllReportDatas()
+
 
                         }
+                        {
+                            loading &&
+                            <SearchingRecordComponent title="Searching..." sub_title="Fetching reports" />
+                        }
+
 
                         {
-                            this.props.studentActivityStatus &&
+                            studentActivityStatus && studentActivityReport.problems_solved > 1 &&
                             this.renderAcitivityScreeen()
                         }
 
@@ -853,7 +865,7 @@ class HomeReportScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-
+    console.log(state.dashboard.student_report_response);
     return {
 
         state: state.dashboard,

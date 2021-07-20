@@ -113,8 +113,7 @@ class Splash extends Component {
             isAnimCompleted : true
         })
         const localData = await getLocalData(Constants.IS_LOGGED_IN);
-        console.log("Is User Logged In : " + localData);
-        console.log(localData);
+      
         if (JSON.parse(localData))
             this.props.navigation.navigate(Constants.MainScreen);
         else {
@@ -153,7 +152,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.50</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.51</Text>
             </View>
         )
     }

@@ -50,7 +50,7 @@ export function secondsToHms(d) {
 }
 
 export function timeInHourFormat(mTime){
-    console.log("GIVEN Time in Hour "+mTime);
+ 
     if(mTime == undefined || mTime == 0)
         return "0 Mins";
     var timeValue = "";

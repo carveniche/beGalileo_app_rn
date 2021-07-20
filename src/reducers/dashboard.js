@@ -363,7 +363,7 @@ export default function reducer(state=initialState,action){
 
         case UPDATE_PAYMENT_STATUS :{
             return{
-                ...state,loading : true,update_payment_status : false
+                ...state,loading : true,update_payment_status : null
             }
         }
         case UPDATE_PAYMENT_STATUS_SUCCESS :{

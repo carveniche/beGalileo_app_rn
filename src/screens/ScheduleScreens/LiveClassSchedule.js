@@ -263,72 +263,10 @@ class LiveClassSchedule extends Component {
     }
 
     render() {
-        const { student_class_status, student_class_response } = this.props;
+        const { student_class_status, student_class_response,loading } = this.props;
         return (
-            <View>
+            <View style={{ flex : 1,flexDirection : 'column' }}>
 
-
-
-
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <View>
-                        <Text style={[CommonStyles.text_18_semi_bold, { alignSelf: 'center' }]}>30</Text>
-                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'center' }]}>Today{'\n'}Liveclass</Text>
-                    </View>
-                    <View>
-                        <Text style={[CommonStyles.text_18_semi_bold, { alignSelf: 'center' }]}>9</Text>
-                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'center' }]}>Math{'\n'}Concepts</Text>
-                    </View>
-                    <View>
-                        <Text style={[CommonStyles.text_18_semi_bold, { alignSelf: 'center' }]}>1</Text>
-                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'center' }]}>Think{'\n'}Reason</Text>
-                    </View>
-
-                </View> */}
-
-                {/* <View style={{ marginTop: normalize(20) }}>
-                    <Text style={[CommonStyles.text_18_semi_bold]}>Live Class</Text>
-                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>Today</Text>
-                    <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(1), marginEnd: normalize(1) }]}>
-                        <View style={{
-                            flex: 1,
-                            height: 150,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-
-                            overflow: 'hidden'
-                        }}>
-                            <Image style={{ height: normalize(150), alignSelf: 'center', resizeMode: 'contain' }} source={LIVE_CLASS_TODAY} />
-
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(16), marginStart: normalize(16) }}>
-                            <View style={{ flex: 1, }}>
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>MATH CONCEPT</Text>
-                                <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Count Forward within 10</Text>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK N REASON</Text>
-                                <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Patterns and Numbers</Text>
-                            </View>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginTop: normalize(20), marginStart: normalize(16) }}>
-                            <Image style={{ height: normalize(16), width: normalize(16), resizeMode: 'contain' }} source={ICON_CLOCK} />
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(8) }]}>Starting in</Text>
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(5) }]}>00:04:32</Text>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginBottom: normalize(16), marginTop: normalize(25), marginStart: normalize(16) }}>
-                            <Text style={[CommonStyles.text_12_bold, { flex: 1, color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Join Class</Text>
-                            <Image style={{ height: normalize(28), alignSelf: 'center', width: normalize(28), marginEnd: normalize(16), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
-                        </View>
-
-
-                    </View>
-
-                </View> */}
-                
-              
 
                 {
 
@@ -345,15 +283,14 @@ class LiveClassSchedule extends Component {
                     student_class_status && student_class_response.incomplete_classes.length > 0 &&
                     this.showCompletedClasses(student_class_response.incomplete_classes, Constants.INCOMPLETE_CLASSES)
                 }
+             
                 {
-                    student_class_status &&
-                    this.renderDataAvailablility()
-                }
-                {
-                    student_class_status && student_class_response.upcoming_classes.length < 1 && student_class_response.completed_classes.length < 1 && student_class_response.incomplete_classes.length < 1 && 
-                    <View>
-                        <NoRecordFoundComponent title={"No "}/>
+                    student_class_status && !loading && student_class_response.upcoming_classes.length < 1 && student_class_response.completed_classes.length < 1 && student_class_response.incomplete_classes.length < 1 && 
+                    <View style={{ flex : 1,flexDirection : 'column',justifyContent: 'center',alignItems : 'center' }}>
+                         <NoRecordFoundComponent title={"No classes found"}/>
                         </View>
+                       
+                       
                 }
 
 

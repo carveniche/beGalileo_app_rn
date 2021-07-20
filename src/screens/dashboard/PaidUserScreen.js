@@ -23,8 +23,8 @@ class PaidUserScreen extends Component {
         };
     }
     componentDidMount() {
-        console.log("Paid User Dashboard");
-        //  console.log(this.state.currentSelectedKid);
+       
+   
         if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined) {
 
         }
@@ -49,7 +49,7 @@ class PaidUserScreen extends Component {
         if (this.props.dashboardStatus) {
             this.props.dashboardResponse.students.map((item) => {
                 if (item.selected_student) {
-                    console.log("Stuent Dashboard for " + item.name + " -- " + item.account_type);
+                    
 
                     selectedStudent = item;
                 }
@@ -534,8 +534,7 @@ class PaidUserScreen extends Component {
 
     midasTestStatus = (details) => {
         const { currentKidDetails } = this.state;
-        console.log("Midas Test Status ");
-        console.log(details);
+        
         if (details.midas_status) {
             return (
                 <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2), marginTop: normalize(20), borderRadius: normalize(20) }]}>

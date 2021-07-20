@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER, IC_CLOSE_BLUE , ICON_PDF} from "../../assets/images";
+import { IC_HOMEWORK, IC_DOWN_ENTER, IC_UP_ENTER, IC_CLOSE_BLUE, ICON_PDF } from "../../assets/images";
 import { uploadWorkBook } from '../../actions/dashboard';
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { cancelClass  } from '../../actions/dashboard';
+import { cancelClass } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
 import CustomGradientButton from '../../components/CustomGradientButton';
@@ -50,14 +50,13 @@ class ClassDetailsScreen extends Component {
             mWorkBookStatus: null,
             mSelectedWorkBookImage: null,
             mShowUploadChoice: false,
-            mSelectedItem : null
+            mSelectedItem: null
         };
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         if (prevProps.classCancelResponse != this.props.classCancelResponse) {
-            if(this.props.classCancelResponse && this.props.classCancelResponse.status)
-            {
+            if (this.props.classCancelResponse && this.props.classCancelResponse.status) {
                 this.props.navigation.goBack();
             }
         }
@@ -91,8 +90,9 @@ class ClassDetailsScreen extends Component {
                     <Text style={[CommonStyles.text_14_semi_bold, { alignSelf: 'center', marginStart: normalize(16) }]}>Assigned Homework</Text>
                 </View>
                 <View style={{ marginTop: normalize(30) }}>
+                    
                     {
-                        homeWorkData.math_zone_data.length &&
+                        homeWorkData.math_zone_data.length > 0 &&
                         this.showMathConcept(homeWorkData.math_zone_data)
                     }
                     <View style={{ marginTop: normalize(20), marginBottom: normalize(20), backgroundColor: COLOR.BORDER_COLOR_GREY, height: 1 }} />
@@ -148,18 +148,18 @@ class ClassDetailsScreen extends Component {
 
     showMathConcept = (mathData) => {
         const { mMathConcept } = this.state;
+
+        
         return (
             <View>
                 <TouchableOpacity onPress={() => this.onClickAssignedHomeWork(0)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={[CommonStyles.text_12_bold]}>Math Concept</Text>
-
-
                     <Image style={{ height: normalize(10), width: normalize(10), marginStart: normalize(20), resizeMode: 'contain', alignSelf: 'center' }} source={mMathConcept ? IC_UP_ENTER : IC_DOWN_ENTER} />
 
                 </TouchableOpacity>
                 {
                     mMathConcept &&
-                    <View >
+                    <View>
                         {
                             mathData.map((item) => {
                                 return (
@@ -350,13 +350,13 @@ class ClassDetailsScreen extends Component {
 
                                                                     <TouchableOpacity onPress={() => this.showImagePopUp(book)} style={{ margin: 5 }}>
                                                                         {
-                                                                            book.isImage ? 
-                                                                            <Image source={book.src} style={{ height: 100, width: 100, borderRadius: 10 }} />
-                                                                            :
-                                                                            <Image source={ICON_PDF} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                            book.isImage ?
+                                                                                <Image source={book.src} style={{ height: 100, width: 100, borderRadius: 10 }} />
+                                                                                :
+                                                                                <Image source={ICON_PDF} style={{ height: 100, width: 100, borderRadius: 10 }} />
                                                                         }
-                                                                       
-                                                                       
+
+
                                                                     </TouchableOpacity>
                                                                 </View>
 
@@ -419,7 +419,7 @@ class ClassDetailsScreen extends Component {
 
     closeUploadChoice = () => {
         this.setState({
-            mShowUploadChoice : false
+            mShowUploadChoice: false
         })
     }
 
@@ -428,7 +428,7 @@ class ClassDetailsScreen extends Component {
         this.closeUploadChoice();
         const { mSelectedItem } = this.state;
         this.setState({
-            mShowUploadChoice : false
+            mShowUploadChoice: false
         })
         try {
             const res = await DocumentPicker.pick({
@@ -442,15 +442,15 @@ class ClassDetailsScreen extends Component {
             );
             const source = { uri: res.uri };
 
-                var pdfItem = {
-                    id: mSelectedItem.homework_id,
-                    isImage : false,
-                    src: source
-                }
-                var fileName = now+"_workbook"+".pdf";
-                this.props.uploadWorkBook(mSelectedItem.homework_id, source,"application/pdf",fileName);
+            var pdfItem = {
+                id: mSelectedItem.homework_id,
+                isImage: false,
+                src: source
+            }
+            var fileName = now + "_workbook" + ".pdf";
+            this.props.uploadWorkBook(mSelectedItem.homework_id, source, "application/pdf", fileName);
 
-                this.setState({ workBookUpload: [...this.state.workBookUpload, pdfItem] })
+            this.setState({ workBookUpload: [...this.state.workBookUpload, pdfItem] })
 
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
@@ -480,11 +480,11 @@ class ClassDetailsScreen extends Component {
 
                 var imageItem = {
                     id: mSelectedItem.homework_id,
-                    isImage : true,
+                    isImage: true,
                     src: source
                 }
-                var fileName = now+"_image"+".jpg";
-                this.props.uploadWorkBook(mSelectedItem.homework_id, source,'image/jpeg',fileName);
+                var fileName = now + "_image" + ".jpg";
+                this.props.uploadWorkBook(mSelectedItem.homework_id, source, 'image/jpeg', fileName);
 
                 this.setState({ workBookUpload: [...this.state.workBookUpload, imageItem] })
             }
@@ -492,12 +492,12 @@ class ClassDetailsScreen extends Component {
     }
 
     onClickUploadWorkBook = async (item) => {
-       
 
-            this.setState({
-                mSelectedItem : item,
-                mShowUploadChoice : true
-            })
+
+        this.setState({
+            mSelectedItem: item,
+            mShowUploadChoice: true
+        })
     }
 
 
@@ -575,8 +575,8 @@ class ClassDetailsScreen extends Component {
         console.log(this.state.classData.live_class_id);
         console.log(this.props.currentSelectedKid.student_id);
         console.log(this.props.dashboardResponse.parent_id);
-        this.props.cancelClass(this.props.dashboardResponse.parent_id,this.state.classData.live_class_id,this.props.currentSelectedKid.student_id)
-        
+        this.props.cancelClass(this.props.dashboardResponse.parent_id, this.state.classData.live_class_id, this.props.currentSelectedKid.student_id)
+
     }
 
     onClickCancelClass = () => {
@@ -597,6 +597,9 @@ class ClassDetailsScreen extends Component {
 
     render() {
         const { classData, classType, mShowUploadChoice } = this.state;
+
+
+
         return (
             <View style={{
                 flex: 1,
@@ -669,13 +672,13 @@ class ClassDetailsScreen extends Component {
                 {
                     mShowUploadChoice &&
                     <View style={{ position: 'absolute', bottom: 0, height: 300, width: '100%', backgroundColor: COLOR.BG_ALPHA_BLACK }}>
-                        <View style={{ flex : 1,justifyContent : 'space-evenly' }}>
-                            <TouchableOpacity onPress={this.selectImageWorkBook} style={{ alignSelf: 'baseline', marginTop : normalize(10) ,backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
-                                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE }]}>Upload Image</Text>
+                        <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+                            <TouchableOpacity onPress={this.selectImageWorkBook} style={{ alignSelf: 'baseline', marginTop: normalize(10), backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.WHITE }]}>Upload Image</Text>
                             </TouchableOpacity>
-                            <Text style={[CommonStyles.text_18_regular,{ alignSelf : 'center',color : COLOR.WHITE }]}>Or</Text>
-                            <TouchableOpacity onPress={this.selectPdfWorkBook} style={{ alignSelf: 'baseline', marginBottom : normalize(10) ,backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
-                                <Text style={[CommonStyles.text_12_bold,{ color : COLOR.WHITE }]}>Upload PDF</Text>
+                            <Text style={[CommonStyles.text_18_regular, { alignSelf: 'center', color: COLOR.WHITE }]}>Or</Text>
+                            <TouchableOpacity onPress={this.selectPdfWorkBook} style={{ alignSelf: 'baseline', marginBottom: normalize(10), backgroundColor: COLOR.ORANGE, paddingVertical: normalize(10), paddingHorizontal: normalize(40), alignSelf: 'center', borderRadius: normalize(20) }}>
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.WHITE }]}>Upload PDF</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -695,11 +698,11 @@ const mapStateToProps = (state) => {
         student_class_response: state.dashboard.student_class_response,
         student_class_status: state.dashboard.student_class_status,
         dashboardStatus: state.dashboard.dashboard_status,
-        dashboardResponse : state.dashboard.dashboard_response,
-        classCancelStatus : state.dashboard.class_cancel_status,
-        classCancelResponse : state.dashboard.class_cancel_response
+        dashboardResponse: state.dashboard.dashboard_response,
+        classCancelStatus: state.dashboard.class_cancel_status,
+        classCancelResponse: state.dashboard.class_cancel_response
 
-        
+
 
     }
 

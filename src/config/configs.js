@@ -21,3 +21,4 @@ export const APPLE_MERCHANT_ID_TEST = 'merchant.apple.test';
 // export const RAZOR_PAY_TEST_SECRET = "DNZpGvPVIqSTqX8E6xE8riHE";
 
 export const BASE_URL = "https://www.begalileo.com";
+//export const BASE_URL = "http://testserver.begalileo.com";

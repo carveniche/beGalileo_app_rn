@@ -10,10 +10,13 @@ class PaymentDoScreen extends Component {
     
         };
       }
+
+
+
     render() {
         return (
            <View>
-
+             <Text>Processing payment</Text>
            </View>
         );
     }

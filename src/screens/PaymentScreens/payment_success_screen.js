@@ -35,8 +35,8 @@ class PaymentSuccessScreen extends Component {
     return this.props.update_payment_response.subscription_details.map((item) => {
       return <View style={{ marginTop: normalize(20), borderRadius: normalize(24), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: normalize(9) }}>
-          <View style={{ flex: 1, flexDirection: 'row', marginStart: normalize(2) }}>
-            <Image style={{ alignSelf: 'center', height: normalize(25), width: normalize(25) }} source={{ uri: item.photo }} />
+          <View style={{ flex: 1, flexDirection: 'row', marginStart: normalize(10) }}>
+            <Image style={{ alignSelf: 'center', height: normalize(25), width: normalize(25),marginStart : normalize(10) }} source={{ uri: item.photo }} />
             <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(6), alignSelf: 'center' }]}>{item.student_name}</Text>
           </View>
           <View style={{ flex: 1, alignSelf: 'center', marginStart: normalize(20), marginEnd: normalize(2) }}>
@@ -44,10 +44,14 @@ class PaymentSuccessScreen extends Component {
           </View>
         </View>
 
+        {/* <View style={{ marginStart: normalize(20), marginBottom: normalize(20) }}>
+          <Text style={[CommonStyles.text_16_bold, { marginTop: normalize(12) }]}>{item.duration} Months</Text>
+          </View> */}
+
         <View style={{ flex: 1, height: normalize(1), backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(12) }} />
 
 
-        {/* <View style={{ marginStart: normalize(16), marginBottom: normalize(20) }}>
+        <View style={{ marginStart: normalize(16), marginBottom: normalize(20) }}>
           <Text style={[CommonStyles.text_18_semi_bold, { marginTop: normalize(12) }]}>{item.duration} Months</Text>
           {
             item.mathbox_required &&
@@ -55,7 +59,7 @@ class PaymentSuccessScreen extends Component {
           }
 
         
-        </View> */}
+        </View>
 
 
       </View>

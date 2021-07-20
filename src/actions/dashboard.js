@@ -380,16 +380,19 @@ export function createPaymentOrder(mathbox_order_id, parent_id, country, address
         }
     }
 }
-export function updatePaymentStatus(razorpay_payment_id, parent_id, mathbox_order_id,mobile,email){
+export function updatePaymentStatus(transaction_id, parent_id, mathbox_order_id,mobile,email,payment_type){
     return{
         type : UPDATE_PAYMENT_STATUS,
         payload : {
             request: {
                 url : 'app_mathbox/update_payment_status',
                 params : {
-                    razorpay_payment_id,
+                    transaction_id,
                     parent_id,
-                    mathbox_order_id
+                    mathbox_order_id,
+                    mobile,
+                    email,
+                    payment_type
 
                 }
             }

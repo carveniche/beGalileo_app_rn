@@ -112,22 +112,6 @@ class HomeMainScreen extends Component {
 
     }
 
-    // static getDerivedStateFromProps(nextProps, state) {
-    //     console.log("Home Main Screen Derived State");
-    //     console.log(nextProps.currentSelectedKid);
-    //     if(nextProps.currentSelectedKid != undefined)
-    //     {
-    //         console.log("Selected Kid ");
-    //         if(nextProps.currentSelectedKid.student_id !== state.selectedKid)
-    //         {
-    //             return {
-    //                 selectedKid : nextProps.currentSelectedKid.student_id
-    //             }
-    //         }
-    //     }
-
-    //     return null;
-    // }
 
     componentDidUpdate(prevProps) {
 
@@ -278,8 +262,7 @@ class HomeMainScreen extends Component {
 
 }
 const mapStateToProps = (state) => {
-    console.log("Home main screen props");
-    console.log(state.dashboard.user_detail_response);
+   
     return {
         state: state.dashboard,
         loading: state.dashboard.loading,
