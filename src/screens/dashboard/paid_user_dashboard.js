@@ -116,7 +116,7 @@ class PaidUserDashboard extends Component {
                                 <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Count Forward within 10</Text>
                             </View>
                             <View style={{ flex: 1 }}>
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK N REASON</Text>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK and REASON</Text>
                                 <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Patterns and Numbers</Text>
                             </View>
                         </View>
@@ -151,7 +151,7 @@ class PaidUserDashboard extends Component {
                             </View>
                             <View style={{ height: normalize(1), backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(8) }} />
                             <View style={{ marginStart: normalize(16), marginTop: normalize(8), marginBottom: normalize(16) }}>
-                                <Text style={CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }}>THINK N REASON</Text>
+                                <Text style={CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }}>THINK and REASON</Text>
                                 <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Patterns and Numbers</Text>
                             </View>
 
@@ -248,7 +248,7 @@ class PaidUserDashboard extends Component {
                             </View>
 
                             <View style={{ marginTop: normalize(20) }}>
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK N REASON</Text>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK and REASON</Text>
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
                                     <View style={{ margin: normalize(16) }}>
                                         <Text style={[CommonStyles.text_14_bold]}>Patterns and Numbers</Text>

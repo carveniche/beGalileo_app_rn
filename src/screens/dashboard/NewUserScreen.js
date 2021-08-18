@@ -17,6 +17,7 @@ import YouTube from 'react-native-youtube';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
+
 class NewUserScreen extends Component {
     constructor(props) {
         super(props);
@@ -29,6 +30,8 @@ class NewUserScreen extends Component {
         if (this.props.dashboardStatus) {
             this.setCurrentSessionKid()
         }
+
+        
     }
 
     componentDidUpdate(prevProps) {

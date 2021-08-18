@@ -16,40 +16,7 @@ class MoreMySubscriptions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            liveBatchDatas: [
-                {
-                    name: 'Sakshi...',
-                    image: IMG_SHAKSHI,
-                    classType: 'Group Class',
-                    grade: 'Grade 1',
-                    expiryDate: '12,May 2020',
 
-                    months: 12,
-                    isExpired: false,
-                    withBox: true
-                },
-                {
-                    name: 'Sarthaak',
-                    image: IMG_SARTHAK,
-                    classType: 'Group Class',
-                    grade: 'Grade 1',
-                    expiryDate: '20,May 2020 (2 days left)',
-                    months: 6,
-                    isExpired: false,
-                    withBox: true
-                },
-                {
-                    name: 'Kiaan',
-                    image: IMG_SHAKSHI,
-                    classType: 'Group Class',
-                    grade: 'Grade 1',
-                    expiryDate: '12,May 2020',
-                    months: 12,
-                    isExpired: true,
-                    withBox: true
-                },
-
-            ]
         };
     }
     onPressBack = () => {
@@ -65,7 +32,7 @@ class MoreMySubscriptions extends Component {
     getSubscriptionDetails = () => {
         getLocalData(Constants.ParentUserId).then((parentId) => {
             this.props.getSubscriptionDetails(parentId);
-          })
+        })
     }
 
     onViewDetailsClick = () => {
@@ -76,13 +43,23 @@ class MoreMySubscriptions extends Component {
         return this.props.subscription_details_response.subscription_details.map((dataElement, index) =>
 
             <View key={index} style={[CommonStyles.shadowContainer, { marginTop: normalize(20) }]}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginStart: normalize(8), marginEnd: normalize(8), paddingTop: normalize(16) }}>
-                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                        <Image style={{ borderRadius: 100, height: normalize(28), width: normalize(28), resizeMode: "stretch" }} source={{ uri: dataElement.photo }} />
-                        <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', marginStart: normalize(6) }]}>{dataElement.student_name}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginStart: normalize(4), marginEnd: normalize(4), paddingTop: normalize(16) }}>
+                    <View style={{
+                        flex: 1, width: 0,
+                        flexGrow: 1
+                    }}>
+                        <View style={{ flexDirection: 'row', marginStart : normalize(5) }}>
+                            <Image style={{ borderRadius: 100, height: normalize(28), width: normalize(28), resizeMode: "stretch" }} source={{ uri: dataElement.photo }} />
+                            <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', marginStart: normalize(6) }]}>{dataElement.student_name}</Text>
+                        </View>
+
                     </View>
-                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{dataElement.live_classes} Live Classes</Text>
+
+                    <View style={{
+                        flex: 1,  width: 0,
+                        flexGrow: 1,marginEnd : normalize(5)
+                    }}>
+                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'right' }]}>{dataElement.live_classes} Live Classes</Text>
 
                     </View>
                 </View>
@@ -90,25 +67,25 @@ class MoreMySubscriptions extends Component {
                 <View style={{ marginStart: normalize(10), marginEnd: normalize(10) }}>
 
                     <View style={{ marginTop: normalize(4), marginTop: normalize(12) }}>
-                        <Text style={[CommonStyles.text_18_semi_bold]}>{dataElement.duration} Months</Text>
+                        <Text style={[CommonStyles.text_16_semi_bold]}>{dataElement.duration} Months</Text>
                         {
                             dataElement.boxes > 0 &&
                             <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>With {dataElement.boxes} Math boxes for {dataElement.duration} months</Text>
                         }
 
                     </View>
-                    <View style={{ marginTop: normalize(4), marginTop: normalize(12),marginBottom:normalize(12) }}>
-                        <Text style={[CommonStyles.text_18_semi_bold]}>Subscribed On</Text>
+                    <View style={{ marginTop: normalize(4), marginTop: normalize(12), marginBottom: normalize(12) }}>
+                        <Text style={[CommonStyles.text_16_semi_bold]}>Subscribed On</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{dataElement.subscription_start_date}</Text>
                     </View>
 
-                    <View style={{ marginTop: normalize(4), marginTop: normalize(12),marginBottom:normalize(12) }}>
-                        <Text style={[CommonStyles.text_18_semi_bold]}>Expires On</Text>
+                    <View style={{ marginTop: normalize(4), marginTop: normalize(12), marginBottom: normalize(12) }}>
+                        <Text style={[CommonStyles.text_16_semi_bold]}>{ dataElement.expired ?  "Expired on" : "Expires on"}</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{dataElement.subscription_end_date}</Text>
                     </View>
-                    <View style={{ marginTop: normalize(4), marginTop: normalize(12),marginBottom:normalize(12) }}>
-                        <Text style={[CommonStyles.text_18_semi_bold]}>Price</Text>
-                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{dataElement.currency} {dataElement.amount}</Text>
+                    <View style={{ marginTop: normalize(4), marginTop: normalize(12), marginBottom: normalize(12) }}>
+                        <Text style={[CommonStyles.text_16_semi_bold]}>Price</Text>
+                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{dataElement.currency} {dataElement.amount}</Text>
                     </View>
 
 
@@ -148,14 +125,14 @@ class MoreMySubscriptions extends Component {
                         marginBottom: normalize(20)
                     }}>
                         <CustomBackButton onPress={this.onPressBack} />
-                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>My Subscriptions</Text>
+                        <Text style={[CommonStyles.text_16_semi_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>My Subscriptions</Text>
 
 
 
                         {
-                            subscription_details_status && this.props.subscription_details_response.subscription_details != null && this.props.subscription_details_response.subscription_details.length > 0?
-                            this.renderSubscriptionDetails()
-                        : <NoRecordFoundComponent title="No subscriptions details found" sub_title=""/>
+                            subscription_details_status && this.props.subscription_details_response.subscription_details != null && this.props.subscription_details_response.subscription_details.length > 0 ?
+                                this.renderSubscriptionDetails()
+                                : <NoRecordFoundComponent title="No subscriptions details found" sub_title="" />
 
                         }
 

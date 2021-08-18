@@ -28,7 +28,7 @@ import {
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
     REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, CLASS_CANCEL,CLASS_CANCEL_SUCCESS,CLASS_CANCEL_FAILED,
-    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED, WORKBOOK_UPLOAD, WORKBOOK_UPLOAD_SUCCESS, WORKBOOK_UPLOAD_FAILED, STAR_BADGE_REPORT, STAR_BADGE_REPORT_SUCCESS, STAR_BADGE_REPORT_FAILED, STUDENT_ACTIVITY, STUDENT_ACTIVITY_SUCCESS, STUDENT_ACTIVITY_FAILED
+    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED, WORKBOOK_UPLOAD, WORKBOOK_UPLOAD_SUCCESS, WORKBOOK_UPLOAD_FAILED, STAR_BADGE_REPORT, STAR_BADGE_REPORT_SUCCESS, STAR_BADGE_REPORT_FAILED, STUDENT_ACTIVITY, STUDENT_ACTIVITY_SUCCESS, STUDENT_ACTIVITY_FAILED, RATING_TAGS, RATING_TAGS_SUCCESS, RATING_TAGS_FAILED, SUBMIT_TEACHER_RATING, SUBMIT_TEACHER_RATING_SUCCESS, SUBMIT_TEACHER_RATING_FAILED
 } from '../config/redux-action-types/dashboard'
 
 const initialState = { cartItems: [] }
@@ -638,6 +638,47 @@ export default function reducer(state=initialState,action){
                 ...state,loading : false,
                 parent_feedback_status : action.payload.data.status,
                 parent_feedback_response : action.payload.data
+            }
+        }
+
+
+        case RATING_TAGS :{
+            return{
+                ...state,loading : false
+            }
+        }
+        case RATING_TAGS_SUCCESS : {
+            return{
+                ...state,loading : false,
+                rating_tags_status : action.payload.data.status,
+                rating_tags_response : action.payload.data
+            }
+        }
+        case RATING_TAGS_FAILED :{
+            return{
+                ...state,loading : false,
+                rating_tags_status : action.payload.data.status,
+                rating_tags_response : action.payload.data
+            }
+        }
+
+        case SUBMIT_TEACHER_RATING :{
+            return{
+                ...state,loading : false
+            }
+        }
+        case SUBMIT_TEACHER_RATING_SUCCESS : {
+            return{
+                ...state,loading : false,
+                submit_teacher_rating_status : action.payload.data.status,
+                submit_teacher_rating_response : action.payload.data
+            }
+        }
+        case SUBMIT_TEACHER_RATING_FAILED :{
+            return{
+                ...state,loading : false,
+                submit_teacher_rating_status : action.payload.data.status,
+                submit_teacher_rating_response : action.payload.data
             }
         }
 

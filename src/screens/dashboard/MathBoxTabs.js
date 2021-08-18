@@ -5,10 +5,30 @@ import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles, SCREEN_HEIGTH, SCREEN_WIDTH } from '../../config/styles';
 import { IC_BOOK_DEMO_BG, ICON_CLOCK, CARD_BTN_ARROW, LIVE_CLASS_CARD_THUMB, IC_PARENT_MOM, IC_ALEXA_BOX, IC_MATH_BOXES, IC_MOBILE_HAND } from "../../assets/images";
 import { normalize } from 'react-native-elements';
+import { getLocalData } from '../../components/helpers/AsyncMethods';
 
 
 
 class MathBoxTabs extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+           
+            ParentCountry: Constants.INDIA
+        }
+
+
+    }
+
+    componentDidMount(){
+        getLocalData(Constants.ParentCountryName).then((name) => {
+           this.setState({
+               ParentCountry : JSON.parse(name)
+           })
+        })
+    }
+
+
 
 
     renderWhatWillYouGet = () => {
@@ -37,15 +57,19 @@ class MathBoxTabs extends Component {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10,marginBottom : 10 }}>
                     <View style={{ flex: 1, backgroundColor: '#FCDCDC', borderRadius: normalize(12), marginStart: normalize(8), marginEnd: normalize(4), justifyContent: 'center', alignContent: 'center' }}>
-                        <Text style={[CommonStyles.text_12__semi_bold, { flex: 1, marginStart: normalize(12), marginTop: normalize(12) }]}>Alexa enabled learning</Text>
+                        <Text style={[CommonStyles.text_12__semi_bold, { flex: 1, marginStart: normalize(12), marginTop: normalize(12),textAlign : 'center' }]}>Alexa enabled learning</Text>
 
-                        <Image style={{ height: normalize(80), width: normalize(80), resizeMode: 'center', borderRadius: normalize(12) }} source={IC_ALEXA_BOX} />
+                        <Image style={{ height: normalize(80), width: normalize(80), resizeMode: 'center', borderRadius: normalize(12),justifyContent : 'center',alignSelf : 'center'}} source={IC_ALEXA_BOX} />
 
                     </View>
-                    <View style={{ flex: 1, backgroundColor: '#C2F5EC', borderRadius: normalize(12), marginStart: normalize(4), marginEnd: normalize(8) }}>
+                    {
+                        this.state.ParentCountry == Constants.INDIA && 
+                        <View style={{ flex: 1, backgroundColor: '#C2F5EC', borderRadius: normalize(12), marginStart: normalize(4), marginEnd: normalize(8) }}>
                         <Image style={{ height: normalize(100), width: normalize(100), resizeMode: 'center', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MATH_BOXES} />
                         <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(12), marginTop: normalize(12) }]}>Mathbox every month</Text>
                     </View>
+                    }
+                    
 
                 </View>
             </View>

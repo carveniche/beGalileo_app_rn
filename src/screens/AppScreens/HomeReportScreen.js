@@ -579,13 +579,9 @@ class HomeReportScreen extends Component {
                         :
                         <View>
 
-                            {
-                                this.renderStarAndBadge()
-                            }
+
                             <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
-                                {
-                                    this.showFilterList()
-                                }
+
                                 {
                                     this.showAccuracyCard()
                                 }
@@ -610,7 +606,7 @@ class HomeReportScreen extends Component {
     renderStarAndBadge = () => {
         const { studentReportResponse } = this.props;
         return (
-            <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
+            <View style={{ height: normalize(50), flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
                 <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(studentReportResponse.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -686,7 +682,7 @@ class HomeReportScreen extends Component {
 
 
                             {(item.home_think_n_reasons.length > 0 || item.class_think_n_reasons.length > 0) &&
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Think N Reason</Text>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Think and Reason</Text>
                             }
 
 
@@ -787,7 +783,7 @@ class HomeReportScreen extends Component {
                         </View>
                         <View style={{ flex: 1, alignItems: 'center' }}>
                             <Text style={[CommonStyles.text_18_bold]}>{activityDatas.incorrect}</Text>
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>InCorrect Answers</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Incorrect Answers</Text>
                         </View>
                     </View>
 
@@ -829,7 +825,15 @@ class HomeReportScreen extends Component {
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         {/* <CustomBackButton onPress={this.onPressBack} /> */}
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
+                        {
+                            studentReportStatus &&
+                            this.renderStarAndBadge()
 
+                        }
+                         {
+                             studentReportStatus &&
+                            this.showFilterList()
+                        }
 
                         {
                             studentReportStatus &&
@@ -838,6 +842,7 @@ class HomeReportScreen extends Component {
 
 
                         }
+                       
                         {
                             loading &&
                             <SearchingRecordComponent title="Searching..." sub_title="Fetching reports" />

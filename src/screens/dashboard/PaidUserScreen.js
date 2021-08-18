@@ -3,17 +3,21 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BATCH_SELECTION, IC_MIDAS_SELECTION, IC_NUMERO, CARD_BTN_ARROW, LIVE_CLASS_TODAY, ICON_CLOCK, IC_SCHEDULE, IC_ACCURACY, IC_TIME_SPENT, IC_BADGE_SAMPLE_1, IC_BADGE_SAMPLE_2, IC_ACTIVITY, LIVE_CLASS_CARD_THUMB, IC_BANNER_3 } from "../../assets/images";
+import { IC_BATCH_SELECTION, IC_MIDAS_SELECTION, IC_NUMERO, CARD_BTN_ARROW, LIVE_CLASS_TODAY, AVATAR_TEACHER, IC_SCHEDULE, IC_ACCURACY, IC_TIME_SPENT, IC_BADGE_SAMPLE_1, IC_BADGE_SAMPLE_2, IC_ACTIVITY, LIVE_CLASS_CARD_THUMB, IC_BANNER_3 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { timeInHourFormat } from '../../components/helpers/CustomUtilMethods';
 import { getDifferenceFromTodayDate, getDisplayFormattedDate } from '../../components/helpers';
+import ComponentActivityItem from "../../components/ComponentActivityItem";
+import ComponentSpeedMathListItem from "../../components/ComponentSpeedMathListItem";
 import * as Progress from 'react-native-progress';
 import SvgUri from "react-native-svg-uri";
 import SubscriptionTabs from '../../components/subscription_tab';
 import AddCartFloatingButton from '../../components/AddCartFloatingButton';
+import { ReportListDateItem } from "../../components";
+import ComponentReschedule from "../../components/ComponentReschedule";
 
 class PaidUserScreen extends Component {
     constructor(props) {
@@ -23,8 +27,8 @@ class PaidUserScreen extends Component {
         };
     }
     componentDidMount() {
-       
-   
+
+
         if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined) {
 
         }
@@ -49,7 +53,7 @@ class PaidUserScreen extends Component {
         if (this.props.dashboardStatus) {
             this.props.dashboardResponse.students.map((item) => {
                 if (item.selected_student) {
-                    
+
 
                     selectedStudent = item;
                 }
@@ -170,96 +174,165 @@ class PaidUserScreen extends Component {
         )
     }
 
+
     lastPracticeDetails = (lastPracticeData) => {
+        console.log("Last Practice Data", lastPracticeData);
         return (
-            <View>
-                {
-                    lastPracticeData.home_practice_details.length > 0 &&
+            <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: 20, borderRadius: normalize(10) }}>
+                <View style={{ marginHorizontal: normalize(5), marginBottom: normalize(5) }}>
+                    <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text>
 
-                    <View style={{ marginTop: 12 }}>
-                        <Text style={[CommonStyles.text_14_bold]}>Recent Activity</Text>
-                        <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Home Practice</Text>
-                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
+                </View>
 
-                            {
-                                lastPracticeData.home_practice_details.map((item) => {
-                                    return (
-                                        <View style={{ margin: normalize(16) }}>
-                                            <Text style={[CommonStyles.text_14_bold]}>{item.tag_name}</Text>
-                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept_name}</Text>
-                                            <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                <Icon
-                                                    style={{ marginStart: normalize(8) }}
-                                                    size={15}
-                                                    name='check'
-                                                    color={COLOR.TEXT_COLOR_GREEN} />
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
-                                                <Icon
-                                                    style={{ marginStart: normalize(8) }}
-                                                    size={15}
-                                                    name='times'
-                                                    color={COLOR.RED} />
+                <View style={{ flexDirection: 'row' }}>
+                    {/* <View style={{ marginHorizontal : normalize(5) }}>
+                    <ReportListDateItem itemDay={"31 Jul 21"} />
+                    </View> */}
+                    <View style={{ flex: 1, marginHorizontal: normalize(5) }}>
+                        {
+                            lastPracticeData.home_practice_details.length > 0 &&
 
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
-                                                {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
-                                            </View>
-                                        </View>
-                                    )
-                                })
-                            }
+                            <View style={{ marginTop: normalize(2) }}>
+
+                                <View>
+
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), flex: 1 }]}>
+
+                                        {
+                                            lastPracticeData.home_practice_details.map((item) => {
+                                                return (
+
+                                                    <View style={{ flex: 1, margin: normalize(16) }}>
+                                                        <Text style={[CommonStyles.text_14_bold]}>{item.tag_name}</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept_name}</Text>
+                                                        <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='check'
+                                                                color={COLOR.TEXT_COLOR_GREEN} />
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='times'
+                                                                color={COLOR.RED} />
+
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                        </View>
+                                                    </View>
+
+
+                                                )
+                                            })
+                                        }
 
 
 
-                        </View>
+                                    </View>
+                                </View>
+
+                            </View>
+
+                        }
+
+                        {
+                            lastPracticeData.class_practice_details.length > 0 &&
+
+                            <View>
+
+                                {/* <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Class Practice</Text> */}
+                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+
+                                    {
+                                        lastPracticeData.class_practice_details.map((item) => {
+                                            return (
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.tag_name}</Text>
+                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept_name}</Text>
+                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='check'
+                                                            color={COLOR.TEXT_COLOR_GREEN} />
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='times'
+                                                            color={COLOR.RED} />
+
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                        {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                    </View>
+                                                </View>
+                                            )
+                                        })
+                                    }
+
+
+
+                                </View>
+                            </View>
+
+                        }
+                        {
+                            <View style={{ marginHorizontal: normalize(5) }}>
+                                {
+                                    lastPracticeData.speed_math_details.map((itemSpeedMath) => {
+                                        return (
+                                            <ComponentSpeedMathListItem conceptData={itemSpeedMath} />
+                                        )
+                                    })
+                                }
+
+                            </View>
+
+                        }
+                        <TouchableOpacity onPress={this.onPressViewAllActivity} style={{ flexDirection: 'row', marginTop: normalize(20), alignSelf: 'center' }}>
+                            <Image style={{ height: normalize(16), width: normalize(16), alignSelf: 'center', resizeMode: 'contain' }} source={IC_ACTIVITY} />
+                            <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View All Activites</Text>
+                        </TouchableOpacity>
                     </View>
+                </View>
 
-                }
-
-                {
-                    lastPracticeData.class_practice_details.length > 0 &&
-
-                    <View style={{ marginTop: 12 }}>
-
-                        <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Class Practice</Text>
-                        <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8) }]}>
-
-                            {
-                                lastPracticeData.class_practice_details.map((item) => {
-                                    return (
-                                        <View style={{ margin: normalize(16) }}>
-                                            <Text style={[CommonStyles.text_14_bold]}>{item.tag_name}</Text>
-                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.sub_concept_name}</Text>
-                                            <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                                <Icon
-                                                    style={{ marginStart: normalize(8) }}
-                                                    size={15}
-                                                    name='check'
-                                                    color={COLOR.TEXT_COLOR_GREEN} />
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
-                                                <Icon
-                                                    style={{ marginStart: normalize(8) }}
-                                                    size={15}
-                                                    name='times'
-                                                    color={COLOR.RED} />
-
-                                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
-                                                {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
-                                            </View>
-                                        </View>
-                                    )
-                                })
-                            }
-
-
-
-                        </View>
-                    </View>
-
-                }
 
             </View>
 
         )
+    }
+
+    currentlyLearning = () => {
+        return (
+            <View style={{ backgroundColor: COLOR.WHITE, marginVertical: normalize(20), borderRadius: normalize(15) }}>
+                <Text style={[CommonStyles.text_14_bold]}>
+                    Currently Learning
+                </Text>
+                <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(5), marginStart: normalize(1), marginEnd: normalize(1) }]}>
+                    <View style={{ margin: normalize(16) }}>
+                        <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>MATH CONCEPT</Text>
+                        <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Numbers upto 10</Text>
+
+                        <View style={{ flexDirection: 'row', marginTop: normalize(8), justifyContent: 'space-evenly' }}>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>6 Sub Concepts</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>1 Concept Test</Text>
+                        </View>
+                        <View style={{ marginTop: normalize(20) }}>
+                            <Progress.Bar progress={0.5} width={normalize(230)} color={COLOR.TEXT_COLOR_GREEN} />
+                            <Text style={[CommonStyles.text_9_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>50% Completed</Text>
+                        </View>
+
+                    </View>
+
+                </View>
+
+            </View>
+        )
+    }
+    onPressViewAllActivity = () => {
+        this.props.navigation.navigate(Constants.OverallActivitiesScreen)
     }
 
 
@@ -267,55 +340,34 @@ class PaidUserScreen extends Component {
     recentActivity = () => {
         const { currentKidDetails } = this.state;
         return (
-            <View style={{ marginTop: normalize(16) }}>
+            <View>
+                <View style={{ flex: 1, marginTop: normalize(16) }}>
 
 
-                {
+
+                    {
+
+                        currentKidDetails.activity_details.recent_activity_data.length > 0 &&
+                        this.lastPracticeDetails(currentKidDetails.activity_details.recent_activity_data[0])
+                    }
+                    {/* 
+                    {
+                        this.currentlyLearning()
+
+                    } */}
 
 
-                    this.lastPracticeDetails(currentKidDetails.activity_details)
-                }
-                {
-                    currentKidDetails.activity_details.mathzone.length > 0 &&
-                    this.mathZone(currentKidDetails.activity_details.mathzone)
-                }
-                {
-                    currentKidDetails.activity_details.logical_zone.length > 0 &&
-                    this.logicZone(currentKidDetails.activity_details.logical_zone)
-                }
 
 
-                {/* <View style={{ flexDirection: 'row', marginTop: normalize(20), alignSelf: 'center' }}>
-                    <Image style={{ height: normalize(16), width: normalize(16), alignSelf: 'center', resizeMode: 'contain' }} source={IC_ACTIVITY} />
-                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View All Activites</Text>
+
+
+
+
+
                 </View>
 
-
-                <View style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
-                    <Text style={[CommonStyles.text_14_bold]}>
-                        Currently Learning
-                    </Text>
-                    <View style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(1), marginEnd: normalize(1) }]}>
-                        <View style={{ margin: normalize(16) }}>
-                            <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>MATH CONCEPT</Text>
-                            <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Numbers upto 10</Text>
-
-                            <View style={{ flexDirection: 'row', marginTop: normalize(8), justifyContent: 'space-evenly' }}>
-                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>6 Sub Concepts</Text>
-                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>1 Concept Test</Text>
-                            </View>
-                            <View style={{ marginTop: normalize(20) }}>
-                                <Progress.Bar progress={0.5} width={normalize(230)} color={COLOR.TEXT_COLOR_GREEN} />
-                                <Text style={[CommonStyles.text_9_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>50% Completed</Text>
-                            </View>
-
-                        </View>
-
-                    </View>
-
-                </View> */}
-
             </View>
+
 
         )
     }
@@ -323,7 +375,7 @@ class PaidUserScreen extends Component {
 
     onPressAccuracyTimeSpent = () => {
         this.props.navigation.navigate('Report');
-      
+
     }
 
 
@@ -335,7 +387,7 @@ class PaidUserScreen extends Component {
 
         if (currentKidDetails.activity_details != "") {
             return (
-                <View style={{ marginBottom : normalize(20) }}>
+                <View style={{ marginBottom: normalize(20), marginHorizontal: normalize(5) }}>
                     <TouchableOpacity onPress={this.onPressAccuracyTimeSpent} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
                         <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(12), marginBottom: normalize(16), marginStart: normalize(16) }}>
@@ -345,7 +397,7 @@ class PaidUserScreen extends Component {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                                    <Text style={[CommonStyles.text_18_regular]}>{currentKidDetails.activity_details.accuracy}</Text>
+                                    <Text style={[CommonStyles.text_14_Regular]}>{currentKidDetails.activity_details.accuracy}</Text>
                                     <Text style={[CommonStyles.text_12_Regular, {}]}> %</Text>
                                     {/* <Icon
                                         style={{ marginStart: normalize(8) }}
@@ -366,7 +418,7 @@ class PaidUserScreen extends Component {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                                    <Text style={[CommonStyles.text_16_regular]}>{timeInHourFormat(currentKidDetails.activity_details.timespent)}</Text>
+                                    <Text style={[CommonStyles.text_14_Regular]}>{timeInHourFormat(currentKidDetails.activity_details.timespent)}</Text>
                                     {/* <Text style={[CommonStyles.text_12_Regular, {}]}>hrs</Text> */}
                                     {/* <Icon
                                     style={{ marginStart: normalize(8) }}
@@ -374,7 +426,7 @@ class PaidUserScreen extends Component {
                                     name='arrow-down'
                                     color={COLOR.TEXT_COLOR_GREEN} /> */}
                                 </View>
-                                <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
+                                <Text style={[CommonStyles.text_11_Regular, { marginTop: normalize(2) }]}>Last 7 days</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -393,7 +445,7 @@ class PaidUserScreen extends Component {
     checkLiveClassStatus = (liveClassDetails) => {
         console.log(getDifferenceFromTodayDate(liveClassDetails.start_date, liveClassDetails.time) + " OOOOOOO");
         return (
-            <View style={{ marginTop: normalize(20) }}>
+            <View style={{ marginTop: normalize(20), marginHorizontal: normalize(5) }}>
                 <Text style={[CommonStyles.text_18_semi_bold]}>Live Class</Text>
                 {
                     liveClassDetails.todays_class ?
@@ -422,7 +474,7 @@ class PaidUserScreen extends Component {
 
                         </View>
                         {/* <View style={{ flex: 1 }}>
-                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK N REASON</Text>
+                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>THINK and REASON</Text>
                             <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Patterns and Numbers</Text>
                         </View> */}
                     </View>
@@ -456,29 +508,29 @@ class PaidUserScreen extends Component {
 
     }
 
-    pendingClassStatus = () => {
+    pendingClassStatus = (totalClass, availableClass) => {
         return (
-            <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2), marginTop: normalize(20), borderRadius: normalize(20) }]}>
+            <View style={[CommonStyles.shadowContainer_border_20, { marginHorizontal: normalize(5), marginTop: normalize(20), borderRadius: normalize(20) }]}>
 
 
 
                 <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(10), marginBottom: normalize(10), marginEnd: normalize(5), marginStart: normalize(10) }}>
-                    <View style={{ flex: 1, marginTop: normalize(10),marginStart : normalize(10) }}>
-                        <Text style={[CommonStyles.text_12_bold]}>24 Classes</Text>
-                        <View style={{ justifyContent:'center' }}>
-                        <Text style={[CommonStyles.text_12__semi_bold]}>Completed : </Text>
-                        <Text style={[CommonStyles.text_18_bold]}>8 out of 16</Text>
+                    <View style={{ flex: 1, marginTop: normalize(10), marginStart: normalize(10) }}>
+                        <Text style={[CommonStyles.text_12_bold]}>{totalClass} Classes</Text>
+                        <View style={{ justifyContent: 'center' }}>
+                            <Text style={[CommonStyles.text_12__semi_bold]}>Available : </Text>
+                            <Text style={[CommonStyles.text_18_bold]}>{availableClass} out of {totalClass}</Text>
                         </View>
-                       
+
                         {/* <View>
                             <Text style={[CommonStyles.text_11_semi_bold,{ color : COLOR.TEXT_ALPHA_GREY }]}>Last Class Date</Text>
                             <Text style={[CommonStyles.text_12_regular]}>24 Jan 2021</Text>
                         </View> */}
-                       
+
 
                     </View>
 
-                    <Image style={{ flex: 1, height: normalize(100), alignSelf: 'center', width: normalize(100),marginEnd : normalize(20), resizeMode: 'contain' }} source={IC_BANNER_3} />
+                    <Image style={{ flex: 1, height: normalize(100), alignSelf: 'center', width: normalize(100), marginEnd: normalize(20), resizeMode: 'contain' }} source={IC_BANNER_3} />
                 </View>
 
 
@@ -488,11 +540,11 @@ class PaidUserScreen extends Component {
 
     renewSubscriptionCard = (expiringDetails) => {
         const nextSubscription = expiringDetails[0].next_subscription_to_show[0];
-       
+
         return (
 
 
-            <LinearGradient colors={['#F2E2FF', '#FFFFFF']} style={[CommonStyles.shadowContainer_border_20, { marginTop : normalize(20),marginBottom : normalize(10),marginStart : normalize(5),marginEnd : normalize(5) }]}>
+            <LinearGradient colors={['#F2E2FF', '#FFFFFF']} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginBottom: normalize(10), marginStart: normalize(5), marginEnd: normalize(5) }]}>
                 <View style={{ flex: 1, flexDirection: 'row', marginEnd: normalize(5), marginStart: normalize(10) }}>
 
                     <Text style={[CommonStyles.text_16_semi_bold, { flex: 3, marginStart: normalize(10), alignSelf: 'center' }]}>Get {nextSubscription.discount}% off on {nextSubscription.duration} month renewal</Text>
@@ -506,14 +558,14 @@ class PaidUserScreen extends Component {
                     <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, lineHeight: 18, marginTop: normalize(5) }]}>{nextSubscription.student_name}’s online learning{'\n'}subscription is about to over</Text>
                     {
                         expiringDetails[0].expiring_in_days > 0 ?
-                        <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Expiring on - {expiringDetails[0].current_subscription_end_date} | {expiringDetails[0].expiring_in_days} Days to go</Text>
-                        :
-                        <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Subscription Expired</Text>
+                            <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Expiring on - {expiringDetails[0].current_subscription_end_date} | {expiringDetails[0].expiring_in_days} Days to go</Text>
+                            :
+                            <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(4), color: COLOR.TEXT_COLOR_ORANGE }]}>Subscription Expired</Text>
                     }
-                  
+
 
                 </View>
-                <TouchableOpacity onPress={()=>this.onClickRenewSubscription(nextSubscription.duration)} style={{ flexDirection: 'row', marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(20), justifyContent: 'space-between' }}>
+                <TouchableOpacity onPress={() => this.onClickRenewSubscription(nextSubscription.duration)} style={{ flexDirection: 'row', marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(20), justifyContent: 'space-between' }}>
                     <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Renew</Text>
                     <Image style={{ height: normalize(28), alignSelf: 'center', width: normalize(28), resizeMode: "stretch" }} source={CARD_BTN_ARROW} />
                 </TouchableOpacity>
@@ -527,17 +579,17 @@ class PaidUserScreen extends Component {
     }
 
     onClickRenewSubscription = (mDuration) => {
-        this.props.navigation.navigate(Constants.RenewSubscription,{
-            duration : mDuration
+        this.props.navigation.navigate(Constants.RenewSubscription, {
+            duration: mDuration
         });
     }
 
     midasTestStatus = (details) => {
         const { currentKidDetails } = this.state;
-        
+
         if (details.midas_status) {
             return (
-                <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2), marginTop: normalize(20), borderRadius: normalize(20) }]}>
+                <View style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(5), marginEnd: normalize(5), marginTop: normalize(20), borderRadius: normalize(20) }]}>
                     <View style={{ flexDirection: 'row', marginStart: normalize(5), marginTop: normalize(16), marginBottom: normalize(2) }}>
                         <Image style={{ height: normalize(100), margin: normalize(5), width: normalize(100), resizeMode: "stretch" }} source={IC_MIDAS_SELECTION} />
 
@@ -579,10 +631,37 @@ class PaidUserScreen extends Component {
 
     }
 
+    onTeacherProfile = () => {
+        this.props.navigation.navigate(Constants.TeacherProfile);
+    }
+
+    teacherCard = (data) => {
+        console.log("Teacher Data", data)
+        return (
+            <View style={{ marginTop: normalize(10), marginBottom: normalize(80), backgroundColor: COLOR.WHITE, padding: normalize(10), borderRadius: normalize(15) }}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image style={{ height: normalize(70), width: normalize(70), alignSelf: 'center', resizeMode: 'contain', marginStart: normalize(8), marginTop: normalize(8) }} source={AVATAR_TEACHER} />
+                    <View style={{ marginTop: normalize(8), marginStart: normalize(10), justifyContent: 'center' }}>
+                        <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>Teacher</Text>
+                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.BLACK }]}>{data == "" ? "Name not found" : data}</Text>
+                        <TouchableOpacity onPress={this.onTeacherProfile}>
+                            <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_BLUE, paddingVertical: normalize(14) }]}>View Tutor's Profile</Text>
+                        </TouchableOpacity>
+                    </View>
+
+
+                </View>
+
+            </View>
+        )
+    }
+
+
+
     render() {
         const { currentKidDetails } = this.state;
         return (
-            <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY, paddingStart: normalize(5), paddingEnd: normalize(5) }}>
+            <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY }}>
 
 
                 {/* <View style={{ marginTop: normalize(20) }}>
@@ -597,9 +676,11 @@ class PaidUserScreen extends Component {
 
 
                 </View> */}
-                {/* {
-                    this.pendingClassStatus()
-                } */}
+
+                {
+                    currentKidDetails && currentKidDetails.totalClass > 0 &&
+                    this.pendingClassStatus(currentKidDetails.total_classes, currentKidDetails.available_classes)
+                }
                 {
                     currentKidDetails && currentKidDetails.subscription_about_to_expire &&
                     this.renewSubscriptionCard(currentKidDetails.expiring_subscription_details)
@@ -621,12 +702,16 @@ class PaidUserScreen extends Component {
                 }
 
 
-                {/* {
+                {
                     currentKidDetails && currentKidDetails.activity_details != "" &&
                     this.recentActivity()
 
 
-                } */}
+                }
+                {
+                    currentKidDetails &&
+                    this.teacherCard(currentKidDetails.student_demos[0].teacher)
+                }
 
 
 
@@ -645,7 +730,7 @@ class PaidUserScreen extends Component {
                             </View>
                             <View style={{ height: normalize(1), backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(8) }} />
                             <View style={{ marginStart: normalize(16), marginTop: normalize(8), marginBottom: normalize(16) }}>
-                                <Text style={CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }}>THINK N REASON</Text>
+                                <Text style={CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }}>THINK and REASON</Text>
                                 <Text style={[CommonStyles.text_14_bold, { marginTop: normalize(2) }]}>Patterns and Numbers</Text>
                             </View>
 

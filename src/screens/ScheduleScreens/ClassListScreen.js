@@ -8,7 +8,7 @@ import { IC_FILTER } from "../../assets/images";
 import * as Config from "../../config/configs";
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
-import { getDisplayTimeHours, secondsToHms } from '../../components/helpers';
+import { getDisplayTimeHours, secondsToHms,getClassesDateFormat } from '../../components/helpers';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import ReportFilterBottomDialog from '../../components/ReportFilterBottomDialog';
 import moment from 'moment';
@@ -76,12 +76,13 @@ class ClassListScreen extends Component {
                 { 
                     
                     upComingClasses.map((item, index) => {
-                  
+                        var classDate = getClassesDateFormat(item.start_date);
                             return (
                                 <TouchableOpacity onPress={() => this.onPressClassItem(Constants.UPCOMING_CLASSES, item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
                                     <View>
                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                         <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                        <Text style={[CommonStyles.text_12_bold]}>{classDate[1]}</Text>
                                     </View>
                                     <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 
@@ -120,13 +121,14 @@ class ClassListScreen extends Component {
                 {
                     completedClasses.map((item, index) => {
 
-
+                        var classDate = getClassesDateFormat(item.start_date);
                         return (
                             <TouchableOpacity onPress={() => this.onPressClassItem(classType, item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
 
                                 <View>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                    <Text style={[CommonStyles.text_12_bold]}>{classDate[1]}</Text>
                                 </View>
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 

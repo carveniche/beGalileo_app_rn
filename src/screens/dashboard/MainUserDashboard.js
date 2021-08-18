@@ -15,6 +15,7 @@ import NewUserScreen from './NewUserScreen';
 import PaidUserScreen from './PaidUserScreen';
 
 
+
 class MainUserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -36,10 +37,8 @@ class MainUserDashboard extends Component {
             })
         }
         this.renderDashboardData();
-        // getLocalData(Constants.ParentFirstName).then((name) => {
-        //     this.setState({
-        //         parentName: name
-        //     })
+        // getLocalData(Constants.ParentCountryName).then((country) => {
+        //    console.log("Parent Country ",country)
         // })
 
     }

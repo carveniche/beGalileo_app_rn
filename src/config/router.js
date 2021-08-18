@@ -47,6 +47,7 @@ import LiveClassSchedule from '../screens/ScheduleScreens/LiveClassSchedule';
 
 
 
+
 const AppStackNavigator = createStackNavigator({
     Splash: {
         screen: Splash,
@@ -342,10 +343,15 @@ const AppStackNavigator = createStackNavigator({
             headerTitle : ''
         }
     },
-    
-   
+    TeacherProfile: {
+        screen: TeacherProfile,
+        navigationOptions: {
+            headerShown: true,
+            headerBackTitleVisible : false,
+            headerTitle : ''
+        }
+    },
 
-   
     AddAddress: {
         screen: AddAddress,
         navigationOptions: {
@@ -393,7 +399,7 @@ const AppStackNavigator = createStackNavigator({
     TeacherProfile: {
         screen: TeacherProfile,
         navigationOptions: {
-            headerShown: true,
+            headerShown: false,
             headerBackTitleVisible : false,
             headerTitle : ''
         }

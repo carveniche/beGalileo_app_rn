@@ -175,6 +175,12 @@ export const CommonStyles = StyleSheet.create({
     color: COLOR.TEXT_COLOR_BLACK,
 
   },
+  text_11_Regular: {
+    fontSize: normalize(11),
+    lineHeight: 25,
+    fontFamily: Constants.Montserrat_Regular,
+    color: Constants.TEXT_COLOR_BLACK
+  },
   text_11_bold: {
     fontSize: normalize(11),
     lineHeight: 25,

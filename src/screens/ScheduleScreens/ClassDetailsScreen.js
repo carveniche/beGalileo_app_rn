@@ -16,6 +16,7 @@ import RadioForm, { RadioButtonInput, RadioButton, RadioButtonLabel } from 'reac
 import { getDisplayTimeHours, secondsToHms, timeInHourFormat } from '../../components/helpers';
 import ImagePicker from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
+import ComponentReschedule from "../../components/ComponentReschedule";
 const workBookStatusPrefix = 'workbook_status_';
 
 
@@ -47,6 +48,7 @@ class ClassDetailsScreen extends Component {
             mThinkNReason: false,
             mworkBook: false,
             workBookUpload: [],
+            rescheduleVisible: false,
             mWorkBookStatus: null,
             mSelectedWorkBookImage: null,
             mShowUploadChoice: false,
@@ -90,7 +92,7 @@ class ClassDetailsScreen extends Component {
                     <Text style={[CommonStyles.text_14_semi_bold, { alignSelf: 'center', marginStart: normalize(16) }]}>Assigned Homework</Text>
                 </View>
                 <View style={{ marginTop: normalize(30) }}>
-                    
+
                     {
                         homeWorkData.math_zone_data.length > 0 &&
                         this.showMathConcept(homeWorkData.math_zone_data)
@@ -110,6 +112,7 @@ class ClassDetailsScreen extends Component {
     }
 
     onClickAssignedHomeWork = (tag) => {
+        console.log("Work tag", tag);
         if (tag == 0) {
             this.setState(prevState => ({
                 mMathConcept: !prevState.mMathConcept
@@ -121,6 +124,7 @@ class ClassDetailsScreen extends Component {
             }));
         }
         if (tag == 2) {
+            console.log("Work Book ", this.state.mworkBook);
             this.setState(prevState => ({
                 mworkBook: !prevState.mworkBook
             }));
@@ -149,7 +153,7 @@ class ClassDetailsScreen extends Component {
     showMathConcept = (mathData) => {
         const { mMathConcept } = this.state;
 
-        
+
         return (
             <View>
                 <TouchableOpacity onPress={() => this.onClickAssignedHomeWork(0)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -193,7 +197,7 @@ class ClassDetailsScreen extends Component {
         return (
             <View>
                 <TouchableOpacity onPress={() => this.onClickAssignedHomeWork(1)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={[CommonStyles.text_12_bold]}>Think n Reason</Text>
+                    <Text style={[CommonStyles.text_12_bold]}>Think and Reason</Text>
 
 
                     <Image style={{ height: normalize(10), width: normalize(10), marginStart: normalize(20), resizeMode: 'contain', alignSelf: 'center' }} source={mThinkNReason ? IC_UP_ENTER : IC_DOWN_ENTER} />
@@ -267,6 +271,14 @@ class ClassDetailsScreen extends Component {
                     mworkBook &&
                     <View >
                         {
+                            workBookData.length < 1 &&
+                            <View>
+                                <Text style={[CommonStyles.text_12_Regular, { margin: 5 }]}>Workbook not assigned</Text>
+                            </View>
+                        }
+
+                        {
+
 
                             workBookData.map((item) => {
 
@@ -379,6 +391,8 @@ class ClassDetailsScreen extends Component {
                                     </View>
                                 )
                             })
+
+
                         }
 
 
@@ -560,22 +574,31 @@ class ClassDetailsScreen extends Component {
                 <TouchableOpacity onPress={this.onClickCancelClass}>
                     <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginTop: normalize(20) }]}>Cancel Class</Text>
                 </TouchableOpacity>
-
+                <TouchableOpacity onPress={this.onClickRescheduleClass}>
+                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginTop: normalize(20) }]}>Reschedule Class</Text>
+                </TouchableOpacity>
                 <View>
                     <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(40) }]}>Things to note</Text>
                     <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Join the call at least a minute or two before the scheduled meeting time.</Text>
                     <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Have a designated note taker.</Text>
-                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>You can cancel the class before 24 hours of confirmed time. </Text>
+                    <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_ORANGE, marginTop: normalize(16) }]}>You can cancel the class before 24 hours of confirmed time. </Text>
                 </View>
             </View>
         )
     }
 
     onCancelClassConfirmation = () => {
-        console.log(this.state.classData.live_class_id);
-        console.log(this.props.currentSelectedKid.student_id);
-        console.log(this.props.dashboardResponse.parent_id);
+
         this.props.cancelClass(this.props.dashboardResponse.parent_id, this.state.classData.live_class_id, this.props.currentSelectedKid.student_id)
+
+    }
+
+    onRescheduleClassConfirmation = () => {
+        console.log("Reschedule Visible ", this.state.rescheduleVisible);
+        this.setState({
+            rescheduleVisible: true
+        })
+        // this.props.cancelClass(this.props.dashboardResponse.parent_id, this.state.classData.live_class_id, this.props.currentSelectedKid.student_id)
 
     }
 
@@ -595,17 +618,46 @@ class ClassDetailsScreen extends Component {
         );
     }
 
+    onClickRescheduleClass = () => {
+        Alert.alert(
+            "Are you sure want to reschedule the class?",
+            "",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Yes", onPress: () => this.onRescheduleClassConfirmation() }
+            ],
+            { cancelable: false }
+        );
+    }
+
+    closeRescheduleClass = () => {
+        this.setState({
+            rescheduleVisible : false
+        })
+    }
+
+
+
+
     render() {
-        const { classData, classType, mShowUploadChoice } = this.state;
+        const { classData, classType, mShowUploadChoice, rescheduleVisible } = this.state;
 
 
 
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: COLOR.WHITE,
+                backgroundColor: rescheduleVisible ? COLOR.GRAY : COLOR.WHITE,
 
             }}>
+
+
+
+
                 <ScrollView
                     ref={ref => { this.scrollView = ref }}
 
@@ -631,7 +683,7 @@ class ClassDetailsScreen extends Component {
                                 }
                                 {
                                     classType != Constants.UPCOMING_CLASSES && classData.logical_quizzes &&
-                                    this.showPracticeDetails(classData.logical_quizzes, "Think N Reason")
+                                    this.showPracticeDetails(classData.logical_quizzes, "Think and Reason")
 
                                 }
 
@@ -684,6 +736,21 @@ class ClassDetailsScreen extends Component {
 
                     </View>
                 }
+
+                <Modal animationType="slide"
+                    transparent={true} visible={rescheduleVisible}>
+                    <View style={{ height: '80%', width: '100%', borderTopLeftRadius: normalize(10), borderTopRightRadius: normalize(10), backgroundColor: COLOR.WHITE, position: 'absolute', bottom: 0 }}>
+                        <TouchableOpacity onPress={this.closeRescheduleClass}>
+                            <Image source={IC_CLOSE_BLUE} style={{ height: 40, width: 40, resizeMode: 'contain', justifyContent: 'flex-end', alignSelf: 'flex-end' }} />
+                        </TouchableOpacity>
+
+                        <ComponentReschedule />
+                    </View>
+
+                </Modal>
+
+
+
             </View>
         );
     }

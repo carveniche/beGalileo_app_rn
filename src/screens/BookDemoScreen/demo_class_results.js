@@ -70,7 +70,7 @@ class DemoClassResults extends Component {
     renderLogicaloncept = (logicConcept) => {
         return (
             <View>
-                <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(20) }]}>THINK N REASON</Text>
+                <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(20) }]}>THINK and REASON</Text>
                 {
                     logicConcept.map((item) => {
                         return (

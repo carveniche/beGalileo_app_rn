@@ -504,14 +504,14 @@ class SubscriptionTabs extends Component {
     }
 
     onTabSelected = () => {
-        if (this.state.isGroupSelected)
-            this.setState({
-                isGroupSelected: false
-            })
-        else
-            this.setState({
-                isGroupSelected: true
-            })
+        // if (this.state.isGroupSelected)
+        //     this.setState({
+        //         isGroupSelected: false
+        //     })
+        // else
+        //     this.setState({
+        //         isGroupSelected: true
+        //     })
     }
     oneToOneClasses = () => {
         const groupPrefix = "group_sub_";

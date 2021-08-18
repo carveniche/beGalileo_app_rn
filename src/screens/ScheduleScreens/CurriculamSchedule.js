@@ -55,7 +55,7 @@ class CurriculamSchedule extends Component {
               ]
             },
             {
-              title: 'Think N Reason',
+              title: 'Think and Reason',
               header: 'Analogical Thinking',
               isReport: true,
               data: [

@@ -85,7 +85,7 @@ class ActivityReportList extends Component {
 
 
                             {(item.home_think_n_reasons.length > 0 || item.class_think_n_reasons.length > 0) &&
-                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Think N Reason</Text>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Think and Reason</Text>
                             }
 
 

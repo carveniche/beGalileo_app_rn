@@ -14,6 +14,7 @@ export const LIVE_CLASS_CARD_THUMB = require('./live_class_card_thumb.png');
 export const ICON_CLOCK = require('./icon_clock.png');
 export const CARD_BTN_ARROW = require('./card_btn_arrow.png');
 export const IC_TEACHER = require('./ic_teacher.png');
+export const AVATAR_TEACHER = require('./avatar_teacher.png');
 export const IMG_SHAKSHI = require('./IMG_SHAKSHI.png');
 export const IC_BUY_NOW = require('./ic_buy_now.png');
 export const IC_ADD_TO_CART = require('./ic_add_to_cart.png');

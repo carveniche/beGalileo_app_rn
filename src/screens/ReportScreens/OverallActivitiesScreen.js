@@ -112,7 +112,7 @@ class OverallActivitiesScreen extends Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'center' }}>
                                         <Text style={[CommonStyles.text_18_bold]}>{activityDatas.incorrect}</Text>
-                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>InCorrect Answers</Text>
+                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Incorrect Answers</Text>
                                     </View>
                                 </View>
                                 <AcitivityReportList />

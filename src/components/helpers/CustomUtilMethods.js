@@ -29,6 +29,13 @@ export function getDifferenceFromTodayDate(value, time) {
 
 }
 
+export function getClassesDateFormat(classDate){
+    if(classDate!= null || classDate != "")
+     return classDate.trim().split(" ");
+     else
+     return "";
+}
+
 export function getDayOfTheWeek(){
     var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 }
@@ -56,10 +63,10 @@ export function timeInHourFormat(mTime){
     var timeValue = "";
     var a = mTime.split(':');
     if(a[0] != "00"){
-      timeValue += a[0]+" H"
+      timeValue += a[0]+" Hr"
     }
     if(a[1] != "00"){
-        timeValue += " "+a[1]+" M"
+        timeValue += " "+a[1]+" Min"
     }
     if(mTime == "00:00:00")
         timeValue = "0";

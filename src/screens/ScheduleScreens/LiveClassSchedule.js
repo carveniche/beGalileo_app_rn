@@ -6,7 +6,7 @@ import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, LIVE_CLASS_TODAY, ICON_CLOCK, CARD_BTN_ARROW, IC_SCHEDULE } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
-import { secondsToHms, timeInHourFormat } from '../../components/helpers';
+import { secondsToHms, timeInHourFormat,getClassesDateFormat } from '../../components/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import DashboardHeader from '../../components/DashboardHeader';
@@ -33,12 +33,14 @@ class LiveClassSchedule extends Component {
 
                 {
                     upComingClasses.map((item, index) => {
+                        var classDate = getClassesDateFormat(item.start_date);
                         if (index < 3)
                             return (
                                 <TouchableOpacity onPress={() => this.onPressClassItem(Constants.UPCOMING_CLASSES, item)} style={{ flexDirection: 'row', marginTop: normalize(10) }}>
                                     <View>
                                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                         <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                        <Text style={[CommonStyles.text_12_bold]}>{classDate[1]}</Text>
                                     </View>
                                     <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 
@@ -78,6 +80,7 @@ class LiveClassSchedule extends Component {
                                 <View>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                  
                                 </View>
 
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
@@ -157,13 +160,15 @@ class LiveClassSchedule extends Component {
 
                 {
                     completedClasses.map((item, index) => {
-
-
+                            var classDate = getClassesDateFormat(item.start_date);
+                            console.log("Class Date ",classDate);
                         return (
                             <TouchableOpacity onPress={() => this.onPressClassItem(classType, item)} style={{ flexDirection: 'row', marginTop: normalize(10), overflow: 'visible' }}>
                                 <View>
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.day.substring(0, 2)}</Text>
                                     <Text style={[CommonStyles.text_12_bold]}>{item.start_date.substring(0, 2)}</Text>
+                                    <Text style={[CommonStyles.text_12_bold]}>{classDate[1]}</Text>
+                                    
                                 </View>
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
 
@@ -185,49 +190,7 @@ class LiveClassSchedule extends Component {
                                 </View>
 
 
-                                {
-                                    // item.practice_details && item.practice_details.length > 0 ?
-
-                                    // <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
-                                    //     {
-                                    //         item.practice_details.map((data) => {
-                                    //             return (
-                                    //                 <View style={{ margin: normalize(16) }}>
-                                    //                     <Text style={[CommonStyles.text_14_bold]}>{data.tag_name}</Text>
-                                    //                     {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{data.tag_name}</Text> */}
-                                    //                     <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
-                                    //                         <Icon
-                                    //                             style={{ marginStart: normalize(8) }}
-                                    //                             size={15}
-                                    //                             name='check'
-                                    //                             color={COLOR.TEXT_COLOR_GREEN} />
-                                    //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.correct}</Text>
-                                    //                         <Icon
-                                    //                             style={{ marginStart: normalize(8) }}
-                                    //                             size={15}
-                                    //                             name='times'
-                                    //                             color={COLOR.RED} />
-
-                                    //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{data.incorrect}</Text>
-                                    //                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{secondsToHms(data.timespent)}</Text>
-                                    //                     </View>
-                                    //                 </View>
-
-                                    //             )
-                                    //         })
-                                    //     }
-                                    // </View> :
-                                    // <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, flex: 1, marginStart: normalize(10) }]}>
-
-                                    //     <View style={{ margin: normalize(16) }}>
-                                    //         <Text style={[CommonStyles.text_14_bold]}>{item.time}</Text>
-                                    //         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>Teacher : {item.teacher}</Text>
-
-                                    //     </View>
-
-
-                                    // </View>
-                                }
+                               
 
 
 

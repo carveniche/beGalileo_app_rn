@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -560,6 +560,25 @@ export function cancelClass(parent_id, live_class_id, student_id){
     }
 }
 
+export function submitTeacherRating(parent_id, teacher_id, stars, review_ids, comments){
+    return{
+        type : SUBMIT_TEACHER_RATING,
+        payload : {
+            request: {
+                url : 'app_mathbox/create_rating',
+                params : {
+                    parent_id,
+                    teacher_id,
+                    stars,
+                    review_ids,
+                    comments
+
+                }
+            }
+        }
+    }
+}
+
 export function updateDeviceInfo(parent_id, regId,time_zone){
     return{
         type : DEVICE_INFO,
@@ -570,6 +589,21 @@ export function updateDeviceInfo(parent_id, regId,time_zone){
                     parent_id,
                     regId,
                     time_zone
+
+                }
+            }
+        }
+    }
+}
+
+export function getRatingTags(){
+    return{
+        type : RATING_TAGS,
+        payload : {
+            request: {
+                url : 'app_mathbox/reviews_list',
+                params : {
+                    
 
                 }
             }
