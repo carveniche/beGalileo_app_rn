@@ -5,10 +5,11 @@ import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { getRatingTags,submitTeacherRating } from '../../actions/dashboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { IC_TEACHER } from "../../assets/images"
+import { IC_TEACHER,AVATAR_TEACHER } from "../../assets/images"
 import { AirbnbRating, Rating } from "react-native-elements";
 import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from '../../components/CustomGradientButton';
+import { CustomBackButton } from '../../components';
 import Modal from 'react-native-modal';
 import { add } from "react-native-reanimated";
 
@@ -20,6 +21,8 @@ class TeacherProfile extends Component {
         this.state = {
             isSuscribedUser: false,
             showRateTeacher: false,
+            teacherName: "",
+            teacherId : 0,
             selectedRatingTags: [],
             textComment: "",
             reviewList: [
@@ -55,6 +58,11 @@ class TeacherProfile extends Component {
     }
 
     componentDidMount() {
+        var teacherData = this.props.navigation.getParam('teacherData', {});
+        this.setState({
+            teacherName : teacherData.name,
+            teacherId : teacherData.id
+        })
         this.props.getRatingTags();
     }
 
@@ -94,20 +102,31 @@ class TeacherProfile extends Component {
         })
     }
 
+    onPressBack=()=> {
+        const { goBack } = this.props.navigation;
+        
+        goBack();
+    }
+
 
 
     render() {
 
         const { ratingTagsStatus, ratingTagsResponse } = this.props;
-        const { isSuscribedUser, reviewList, showRateTeacher } = this.state
+        const { isSuscribedUser, reviewList, showRateTeacher,teacherName } = this.state
         return (
             <View style={[styles.mainContainer, { backgroundColor: showRateTeacher ? COLOR.BG_ALPHA_BLACK : COLOR.WHITE }]}>
+                
                 <ScrollView style={{ flex: 1 }}>
+                <View style={{ marginStart : normalize(10),marginTop : normalize(10) }}>
+                <CustomBackButton onPress={this.onPressBack}/>
+                </View>
                     <View>
-
+                
                         <View style={{ alignItems: "center" }}>
-                            <Image style={{ marginTop: normalize(20), height: normalize(80), width: normalize(80), resizeMode: "stretch" }} source={IC_TEACHER} />
-                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(10) }]}>Ananya J</Text>
+                        
+                            <Image style={{ marginTop: normalize(10), height: normalize(80), width: normalize(80), resizeMode: "stretch" }} source={AVATAR_TEACHER} />
+                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(10) }]}>{teacherName}</Text>
                             <View style={{ flexDirection: 'row', marginTop: normalize(4), justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginEnd: normalize(4) }]}>4.5</Text>
 
@@ -258,7 +277,8 @@ const mapStateToProps = (state) => {
     return {
         state: state.dashboard,
         ratingTagsStatus: state.dashboard.rating_tags_status,
-        ratingTagsResponse: state.dashboard.rating_tags_response
+        ratingTagsResponse: state.dashboard.rating_tags_response,
+        dashboardResponse: state.dashboard.dashboard_response
     }
 
 

@@ -708,10 +708,10 @@ class PaidUserScreen extends Component {
 
 
                 }
-                {
+                {/* {
                     currentKidDetails &&
                     this.teacherCard(currentKidDetails.student_demos[0].teacher)
-                }
+                } */}
 
 
 

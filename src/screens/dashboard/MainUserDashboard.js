@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW } from "../../assets/images";
+import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, AVATAR_TEACHER } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -65,13 +65,13 @@ class MainUserDashboard extends Component {
             }
 
         }
-        if(prevProps.currentSelectedKid != this.props.currentSelectedKid){
+        if (prevProps.currentSelectedKid != this.props.currentSelectedKid) {
             // console.log("Kid changed listnere in Dashboard");
             // console.log(this.props.currentSelectedKid.name);
-           // this.renderDashboardData();
-            
+            // this.renderDashboardData();
+
         }
-        if(prevProps.dashboardStatus != this.props.dashboardStatus){
+        if (prevProps.dashboardStatus != this.props.dashboardStatus) {
             this.renderDashboardData();
         }
 
@@ -86,28 +86,56 @@ class MainUserDashboard extends Component {
         if (this.props.dashboardStatus) {
             this.props.dashboardResponse.students.map((item) => {
                 if (item.selected_student) {
-                    
+
 
                     selectedStudent = item;
                 }
             })
         }
-        if(selectedStudent != null)
-        {
-            if(selectedStudent.paid_status)
-            {
+        if (selectedStudent != null) {
+            if (selectedStudent.paid_status) {
                 this.setState({
-                    isPaidUser : true
+                    isPaidUser: true
                 })
             }
-            else
-            {
+            else {
                 this.setState({
-                    isPaidUser : false
+                    isPaidUser: false
                 })
             }
         }
-      
+
+
+    }
+
+    onTeacherProfile = (item) => {
+        this.props.navigation.navigate(Constants.TeacherProfile,{ 
+            teacherData : item
+        });
+    }
+
+
+    teacherCard = (data) => {
+        console.log("Teacher Data", this.props.currentSelectedKid.teachers)
+       return data.map((item) => {
+            return (
+                <View style={{ marginTop: normalize(10), marginBottom: normalize(10), backgroundColor: COLOR.WHITE, padding: normalize(10), borderRadius: normalize(15) }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image style={{ height: normalize(70), width: normalize(70), alignSelf: 'center', resizeMode: 'contain', marginStart: normalize(8), marginTop: normalize(8) }} source={AVATAR_TEACHER} />
+                        <View style={{ marginTop: normalize(8), marginStart: normalize(10), justifyContent: 'center' }}>
+                            <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>Teacher</Text>
+                            <Text style={[CommonStyles.text_14_Regular, { color: COLOR.BLACK }]}>{item.name == "" ? "Name not found" : item.name}</Text>
+                            <TouchableOpacity onPress={()=>this.onTeacherProfile(item)}>
+                                <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_BLUE, paddingVertical: normalize(14) }]}>View Tutor's Profile</Text>
+                            </TouchableOpacity>
+                        </View>
+
+
+                    </View>
+
+                </View>
+            )
+        })
 
     }
 
@@ -130,14 +158,21 @@ class MainUserDashboard extends Component {
                     currentSelectedKid.paid_status &&
                     <SubscriptionTabs goToCartList={this.goToCartList} />
                 } */}
-               
+
                 {
-                   
+
                     isPaidUser ?
                         <PaidUserScreen navigation={this.props.navigation} />
                         :
                         <NewUserScreen navigation={this.props.navigation} />
                 }
+                <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY }}>
+                    {
+                        currentSelectedKid &&
+                        this.teacherCard(currentSelectedKid.teachers)
+                    }
+                </View>
+
 
                 {/* {
                     currentSelectedKid &&
