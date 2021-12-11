@@ -8,6 +8,7 @@ import {
     SEND_OTP,
     SEND_OTP_SUCCESS,
     SEND_OTP_FAILED,
+    EDIT_MOBILE_NUMBER,
     RESEND_OTP,
     RESEND_OTP_SUCCESS,
     RESEND_OTP_FAILED,
@@ -50,6 +51,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, requestRestore: false };
         case RESTORE_FAIL:
             return { ...state, requestRestore: false };
+        case EDIT_MOBILE_NUMBER :
+            return { ...state,showEnterOTP : false};    
         case SEND_OTP:
             return { ...state, loading: true }
         case SEND_OTP_SUCCESS:

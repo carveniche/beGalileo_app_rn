@@ -14,6 +14,8 @@ export const SEND_OTP = "SEND_OTP";
 export const SEND_OTP_SUCCESS = "SEND_OTP_SUCCESS";
 export const SEND_OTP_FAILED = "SEND_OTP_FAIL";
 
+export const EDIT_MOBILE_NUMBER = "EDIT_MOBILE_NUMBER";
+
 export const VERIFY_OTP = "VERIFY_OTP";
 export const VERIFY_OTP_SUCCESS = "VERIFY_OTP_SUCCESS";
 export const VERIFY_OTP_FAILED = "VERIFY_OTP_FAIL";

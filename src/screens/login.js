@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
-import { TESTING_EMAIL, TESTING_MOBILE_NUMBER } from "../config/configs";
-import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin } from '../actions/authenticate';
+import { TESTING_EMAIL, TESTING_MOBILE_NUMBER, SCREEN_HEIGHT, SCREEN_WIDTH } from "../config/configs";
+import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin,editMobileNumber } from '../actions/authenticate';
 import PhoneInput from 'react-native-phone-input';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal'
@@ -22,6 +22,7 @@ import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-com
 import { AppleButton, appleAuth } from '@invertase/react-native-apple-authentication';
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
+import EmailLogin from "./LoginScreens/EmailLogin";
 
 
 
@@ -44,7 +45,7 @@ class Login extends Component {
             isValidPhoneNumber: false,
             userNameError: false,
             userPasswordError: false,
-
+            signWithUserName: false,
             mUserName: '',
             mPassword: '',
             countryCode: '',
@@ -56,7 +57,7 @@ class Login extends Component {
             otpNumber_3: null,
             otpNumber_4: null,
             stateLoading: false,
-            myNumber: "",
+            myNumber: "8197713454",
             countryName: "",
             showFullBanner: true,
             parentCurrency: '',
@@ -145,23 +146,13 @@ class Login extends Component {
 
     getCountryFromIp = () => {
 
+
+
+
         this.setState({
             stateLoading: true
         });
-        //    var resp =  await axios.get('https://ipapi.co/json/').then((response) => {
-        //         let data = response.data;
-        //         console.log(data);
-        //         this.setState({
-        //             countryName: data.country_name,
-        //             countryCode: data.country_calling_code,
-        //             stateLoading: false
-        //         });
-        //     }).catch((error) => {
-        //         // this.setState({
-        //         //     stateLoading : false
-        //         // })
-        //         console.log(error);
-        //     });
+
 
         fetch('http://ip-api.com/json/', {
             method: 'GET'
@@ -177,7 +168,7 @@ class Login extends Component {
                 var currency = '';
 
                 //For Testing
-               // country = "Dubai";
+                // country = "Dubai";
 
 
                 if (country == Constants.INDIA)
@@ -215,8 +206,8 @@ class Login extends Component {
             .catch(p => console.log(p));
 
     otpHandler = (message) => {
-        if(message == null)
-        return;
+        if (message == null)
+            return;
         console.debug("OTP Message " + message);
         const otp = /(\d{4})/g.exec(message)[1];
         console.debug("OTP IDENTIFIED " + otp)
@@ -356,13 +347,13 @@ class Login extends Component {
         console.log("Existing User Country " + this.state.countryName + " -- " + this.state.countryCode);
         storeLocalData(Constants.ParentCountryCode, this.state.countryCode);
         storeLocalData(Constants.ParentCountryName, response.country);
-        
+
 
         if (response.country == Constants.INDIA || response.country == null)
             storeLocalData(Constants.ParentCurrency, Constants.INDIA_CURRENCY);
         else
             storeLocalData(Constants.ParentCurrency, Constants.OTHER_CURRENCY);
-       this.props.navigation.navigate(Constants.MainScreen);
+        this.props.navigation.navigate(Constants.MainScreen);
     }
 
     onOtpVerificationSuccess = () => {
@@ -631,6 +622,23 @@ class Login extends Component {
         })
     }
 
+    switchSignWithUserName = () => {
+        this.setState({
+            signWithUserName: true
+        })
+    }
+    switchSignInWithMobile = () => {
+
+        this.setState({
+            signWithUserName: false
+        })
+    }
+
+    editMobileNumber = () => {
+        console.log("Edit Mobile Number ",this.state.showEnterOTP);
+       this.props.editMobileNumber();
+    }
+
 
 
 
@@ -730,30 +738,40 @@ class Login extends Component {
         }
 
 
+
+
         const gmailLoginContent = (
 
             <View style={styles.googleSignInContainer}>
-                {
-                    Platform.OS == 'ios' &&
-                    <AppleButton
-                        buttonStyle={AppleButton.Style.BLACK}
-                        buttonType={AppleButton.Type.SIGN_IN}
-                        style={{
-                            width: 180, // You must specify a width
-                            height: 50, // You must specify a height
-                            fontSize: 15
-                        }}
-                        onPress={() => onAppleButtonPress()}
-                    />
-                }
+                <View>
+                    {
+                        Platform.OS == 'ios' &&
+                        <AppleButton
+                            buttonStyle={AppleButton.Style.BLACK}
+                            buttonType={AppleButton.Type.SIGN_IN}
+                            style={{
+                                width: 180, // You must specify a width
+                                height: 50, // You must specify a height
+                                fontSize: 15
+
+                            }}
+                            onPress={() => onAppleButtonPress()}
+                        />
+                    }
+                </View>
+                <View style={{ marginTop: normalize(15) }}>
+                    <GoogleSigninButton
+                        style={{ width: 180, height: 50, marginStart: 5, fontSize: 5 }}
+                        size={GoogleSigninButton.Size.Standard}
+                        color={GoogleSigninButton.Color.Dark}
+                        onPress={this.signIn}
+                        disabled={false} />
+
+                </View>
 
 
-                <GoogleSigninButton
-                    style={{ width: 180, height: 50, marginStart: 5, fontSize: 5 }}
-                    size={GoogleSigninButton.Size.Standard}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={this.signIn}
-                    disabled={false} />
+
+
 
             </View>
         );
@@ -821,7 +839,7 @@ class Login extends Component {
 
                 </View>
 
-                <Text style={[CommonStyles.text_12_Regular, { margin: 2, marginStart: 25 }]}>We will send you OTP on this number</Text>
+                <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(15), marginStart: 25 }]}>We will send you OTP on this number</Text>
                 <CustomGradientButton
                     style={styles.getOtpButton}
                     children="Get OTP"
@@ -844,6 +862,15 @@ class Login extends Component {
                     blurOnSubmit={false}
                     maxLength={6}  //setting limit of input
                 />
+                <View>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(20) }]}>OTP Sent to {this.state.myNumber}</Text>
+                    <TouchableOpacity onPress={this.editMobileNumber}>
+                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(20) }]}>Edit Number</Text>
+                    </TouchableOpacity>
+
+
+                </View>
+
                 <View style={styles.OtpContainer}>
 
                     <TextInput
@@ -930,12 +957,6 @@ class Login extends Component {
                 <StatusBar backgroundColor={COLOR.PRIMARY_BG} barStyle="dark-content" />
 
                 <KeyboardAwareScrollView>
-
-                    <View style={showFullBanner ? styles.bannerContianer : styles.bannerHalfContianer}>
-
-                        <LoginBanner onKeyboardOpen={this.onKeyboardOpen} />
-
-                    </View>
                     {stateLoading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
                     }
@@ -943,60 +964,49 @@ class Login extends Component {
                         <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
                     }
 
+                    <View style={showFullBanner ? styles.bannerContianer : styles.bannerHalfContianer}>
+
+                        <LoginBanner onKeyboardOpen={this.onKeyboardOpen} />
+
+                    </View>
+
+
                     <View style={styles.bottomContianer}>
-                        {showEnterOTP ? enterOTPContent :
-                            countryName != "" ?
-                                countryName == 'India' ?
-                                    mobileNumberContent : gmailLoginContent
-                                : <View />
+                        {
+                            this.state.signWithUserName ?
+
+                                <View style={{ flex: 1 }}>
+                                    <EmailLogin />
+
+                                    <TouchableOpacity onPress={this.switchSignInWithMobile}>
+                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', marginVertical: normalize(15), padding: normalize(5) }]}>Sign in with Mobile Number</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+
+
+
+                                :
+                                <View>
+                                    {showEnterOTP ?
+                                        enterOTPContent :
+                                        countryName != "" ?
+                                            countryName == 'India' ?
+                                                mobileNumberContent : gmailLoginContent
+                                            : <View />
+                                    }
+
+                                    <TouchableOpacity onPress={this.switchSignWithUserName}>
+                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', marginVertical: normalize(30), padding: normalize(5) }]}>Sign in with Email</Text>
+                                    </TouchableOpacity>
+                                </View>
                         }
 
-                        <View style={{ flex: 1, justifyContent: 'space-evenly', marginBottom: 2, marginTop: 20 }}>
-                            <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center' }]}>(Or)</Text>
-                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 25, marginBottom: 2 }}>
-
-                                {this.state.userNameError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
-                                <TextInput
-                                    ref={(input) => { this.Otp_4_TextInput = input; }}
-                                    placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                                    placeholder="Enter User Email"
-                                    style={styles.textInputBordered}
-                                    autoCapitalize="none"
-                                    onChangeText={this.addUserName.bind(this)}
-                                    value={this.state.mUserName}
-                                    blurOnSubmit={false}
-
-                                />
-                            </View>
-                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 2 }}>
-
-                                {this.state.userPasswordError && <Text style={styles.errorMessage}>Please enter a valid Password</Text>}
-                                <TextInput
-                                    ref={(input) => { this.Otp_4_TextInput = input; }}
-                                    placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                                    placeholder="Enter Password"
-                                    style={styles.textInputBordered}
-                                    secureTextEntry={true}
-                                    autoCapitalize="none"
-                                    onChangeText={this.addUserPassword.bind(this)}
-                                    value={this.state.mPassword}
-                                    blurOnSubmit={false}
-
-                                />
-                            </View>
-
-                            <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 2 }}>
-
-                                <CustomGradientButton
-                                    myRef={(input) => { this.btn_add_kid = input; }}
-                                    style={styles.loginButton}
-                                    children={"Login"}
-                                    onPress={this.onUserLogin}
-                                />
-                            </View>
 
 
-                        </View>
+                        {/* <EmailLogin /> */}
+
+
                     </View>
                 </KeyboardAwareScrollView>
 
@@ -1029,7 +1039,8 @@ const mapDispatchToProps = {
     sendOTPHashed,
     storeMobileNumber,
     storeAppleEmail,
-    existingUserLogin
+    existingUserLogin,
+    editMobileNumber
 };
 
 const styles = StyleSheet.create({
@@ -1038,29 +1049,29 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.PRIMARY_BG
     },
     bannerContianer: {
-
-        height: 350,
+        flex: 1,
+        height: (SCREEN_HEIGHT / 2)-100 ,
         backgroundColor: COLOR.WHITE
     },
     bannerHalfContianer: {
 
-
+        height : 250,
         backgroundColor: COLOR.WHITE
     },
     bottomContianer: {
-        flex: 2,
-        marginTop: normalize(5),
-
-        backgroundColor: COLOR.PRIMARY_BG
+        flex: 1,
+        height: SCREEN_HEIGHT / 2,
+        justifyContent: 'center'
     },
     countryCodeContainer: {
         padding: 0,
         borderRadius: 10
     },
     googleSignInContainer: {
+
         marginBottom: 5,
         marginTop: 25,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignSelf: 'center',
         justifyContent: 'center'
     },
@@ -1119,7 +1130,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginStart: 20,
         marginEnd: 20,
-        marginTop: 5,
+        marginTop: 15,
         paddingTop: 15,
 
         paddingBottom: 15

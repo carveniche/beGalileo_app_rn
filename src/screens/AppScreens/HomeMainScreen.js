@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator,AsyncStorage } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator,AsyncStorage, Platform } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -32,6 +32,17 @@ class HomeMainScreen extends Component {
     componentDidMount() {
             // console.log("Main Screeeen Parmas")
             // console.log(this.props.navigation.getParam('enrollProgram', "sssddd"));
+
+
+            // fetch('https://www.begalileo.com/app_mathbox/check_country_headers',{
+            //     method : 'GET'
+            // }).then((response)=>response.json())
+            // .then((responseJson)=>{
+            //     console.log("Mock API : ",responseJson)
+            // })
+    
+
+
         if (this.props.state.dashboard_status) {
             this.setState({
                 allKidsList: this.props.state.dashboard_response.students
@@ -94,7 +105,7 @@ class HomeMainScreen extends Component {
         .getToken()
         .then(token => {
          console.log("Device Token "+token);
-         this.props.updateDeviceInfo(parentUserId,token,JSON.parse(parentTimeZone));
+         this.props.updateDeviceInfo(parentUserId,token,JSON.parse(parentTimeZone),Platform.OS);
         });
     }  
 
@@ -114,10 +125,10 @@ class HomeMainScreen extends Component {
 
 
     componentDidUpdate(prevProps) {
-
+       
 
         if (prevProps.currentSelectedKid != undefined) {
-            if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
+            if (this.props.currentSelectedKid != null && this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
                
                 this.checkDashboardItems();
                 this.getCartItems();
@@ -222,10 +233,10 @@ class HomeMainScreen extends Component {
                 backgroundColor: COLOR.WHITE
             }}>
                 <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
-                {
+                {/* {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
-                }
+                } */}
 
                 <ScrollView>
                     <View style={{ flex: 1, justifyContent: 'flex-start' }}>

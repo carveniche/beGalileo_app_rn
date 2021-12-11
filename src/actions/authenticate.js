@@ -10,7 +10,7 @@ import {
     REGISTER_PARENT,
     GET_GRADE_DATA,
     REGISTER_STUDENT,
-    LOGOUT_REQUEST, DELETE_STUDENT, EDIT_STUDENT, EXISTING_USER_LOGIN
+    LOGOUT_REQUEST, DELETE_STUDENT, EDIT_STUDENT, EXISTING_USER_LOGIN, EDIT_MOBILE_NUMBER
 
 } from '../config/redux-action-types/authenticate';
 import FormData from 'form-data';
@@ -31,6 +31,11 @@ export function logOutUser() {
     return {
         type: LOGOUT_REQUEST,
 
+    }
+}
+export function editMobileNumber(){
+    return{
+        type : EDIT_MOBILE_NUMBER
     }
 }
 

@@ -642,6 +642,7 @@ class EditKidDetail extends Component {
 
                 </View>
               </View>
+             
 
               <View>
                 <CustomGradientButton

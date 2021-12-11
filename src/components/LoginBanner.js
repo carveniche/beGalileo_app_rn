@@ -146,15 +146,18 @@ const styles = StyleSheet.create({
         opacity: 0.7
     },
     image: {
-        position: 'absolute',
+     
         bottom: 0,
         right: 0,
         width: 120,
         height: 120,
+        marginTop : 20,
+        marginStart : 50,
         marginBottom: 50,
         marginEnd : 20,
+        overflow :'hidden',
 
-        resizeMode: 'contain'
+        resizeMode:'contain'
     },
 
     wrapper: {

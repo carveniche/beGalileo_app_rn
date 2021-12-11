@@ -10,33 +10,32 @@ import SvgUri from 'react-native-svg-uri';
 import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
-import { NavigationActions } from 'react-navigation';
+
+import { NavigationActions, StackActions } from 'react-navigation';
 
 class DemoConfirmation extends Component {
     state = {
         isCancelConfirmationDemoVisible: false,
-    
+
     }
 
-    componentDidMount(){
-        if(this.props.bookDemoStatus)
-        {
-         
+    componentDidMount() {
+        if (this.props.bookDemoStatus) {
+
             this.setState({
-                demoDate : this.props.state.book_demo_response.day,
-                demoTime : this.props.state.book_demo_response.time
+                demoDate: this.props.state.book_demo_response.day,
+                demoTime: this.props.state.book_demo_response.time
             })
         }
     }
 
-    componentDidUpdate(prevProps){
-        console.log(prevProps.cancelSlotStatus+"---"+this.props.cancelSlotStatus);
-       
-     
-        if(prevProps.cancelSlotStatus != this.props.cancelSlotStatus){
-           
-            if(this.props.cancelSlotStatus)
-            {
+    componentDidUpdate(prevProps) {
+        console.log(prevProps.cancelSlotStatus + "---" + this.props.cancelSlotStatus);
+
+
+        if (prevProps.cancelSlotStatus != this.props.cancelSlotStatus) {
+
+            if (this.props.cancelSlotStatus) {
                 console.log("Slot cancelled Successfully");
                 this.props.navigation.navigate(Constants.Dashboard);
             }
@@ -45,19 +44,24 @@ class DemoConfirmation extends Component {
     }
 
     rescheduleDemo = () => {
-       
+
         this.props.navigation.navigate(Constants.BookDemoScreen, {
             reScheduleDemo: true
         });
     }
 
     backToHome = () => {
-        this.props.navigation.navigate(Constants.Dashboard)
+        // this.props.navigation.navigate(Constants.MainScreen)
+        const navigateAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
+        });
+        this.props.navigation.dispatch(navigateAction);
     }
     showTeacherDetails = () => {
         this.props.navigation.navigate(Constants.TeacherProfile)
     }
-    
+
     cancleConfiramtiondemo = () => {
         console.log("Cancel  Confirmation")
         if (this.state.isCancelConfirmationDemoVisible) {
@@ -78,23 +82,23 @@ class DemoConfirmation extends Component {
         this.setState({
             isCancelConfirmationDemoVisible: false
         });
-        const slotId = this.props.navigation.getParam('demo_slot_id',0);
-        const demoStudentId = this.props.navigation.getParam('demo_student_id',0);
-        console.log("cancel demo "+slotId+"--"+demoStudentId);
-        this.props.cancelPreferredSlot(demoStudentId,slotId);
-       // this.props.navigation.navigate(Constants.Dashboard)
+        const slotId = this.props.navigation.getParam('demo_slot_id', 0);
+        const demoStudentId = this.props.navigation.getParam('demo_student_id', 0);
+        console.log("cancel demo " + slotId + "--" + demoStudentId);
+        this.props.cancelPreferredSlot(demoStudentId, slotId);
+        // this.props.navigation.navigate(Constants.Dashboard)
     }
     render() {
         const { isCancelConfirmationDemoVisible } = this.state;
-        const {loading } = this.props;
+        const { loading } = this.props;
 
         const isDemoConfirmed = this.props.navigation.getParam('isDemoConfirmed', false);
         return (
             <View style={styles.mainContainer}>
-                 {
-                        loading &&
-                        <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
-                    }
+                {
+                    loading &&
+                    <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
+                }
 
                 <ScrollView style={{ flex: 1 }}>
                     <View>
@@ -128,7 +132,7 @@ class DemoConfirmation extends Component {
                         <View style={{ flexDirection: 'row', marginTop: normalize(32), marginStart: normalize(20), justifyContent: 'space-evenly' }}>
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={CommonStyles.text_11_bold}>Time</Text>
-        <Text style={[CommonStyles.text_18_regular, { marginTop: normalize(4) }]}>{this.state.demoDate}{"\n"}{this.state.demoTime}</Text>
+                                <Text style={[CommonStyles.text_18_regular, { marginTop: normalize(4) }]}>{this.state.demoDate}{"\n"}{this.state.demoTime}</Text>
                             </View>
                             <View style={{ flexDirection: 'column', flex: 1, alignItems: 'center' }}>
                                 <Text style={CommonStyles.text_11_bold}>Duration</Text>
@@ -194,14 +198,14 @@ class DemoConfirmation extends Component {
                             isDemoConfirmed ?
                                 <View />
                                 :
-                                 <View style={{ marginTop: normalize(20), marginStart: normalize(30), marginEnd: normalize(30) }}>
-                                <CustomGradientButton
-                                    myRef={(input) => { this.btn_add_kid = input; }}
-                                    style={CommonStyles.green_button_gradient}
-                                    children="Back to home"
-                                    onPress={this.backToHome}
-                                />
-                            </View>
+                                <View style={{ marginTop: normalize(20), marginStart: normalize(30), marginEnd: normalize(30) }}>
+                                    <CustomGradientButton
+                                        myRef={(input) => { this.btn_add_kid = input; }}
+                                        style={CommonStyles.green_button_gradient}
+                                        children="Back to home"
+                                        onPress={this.backToHome}
+                                    />
+                                </View>
                         }
 
                         <TouchableOpacity onPress={this.rescheduleDemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
@@ -228,7 +232,7 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         bookDemoStatus: state.dashboard.book_demo_status,
         loading: state.dashboard.loading,
-        cancelSlotStatus : state.dashboard.cancel_slot_status
+        cancelSlotStatus: state.dashboard.cancel_slot_status
     }
 
 

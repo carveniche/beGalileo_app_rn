@@ -8,6 +8,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { getGradeDatas } from '../actions/authenticate';
 import { registerStudent } from '../actions/authenticate';
 import { getDashboardItems } from '../actions/authenticate';
+import { updateCurrentKid } from "../actions/dashboard";
 import CustomGradientButton from '../components/CustomGradientButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalSelector from 'react-native-modal-selector'
@@ -51,8 +52,8 @@ class AddKidDetail extends Component {
         super();
         this.state = {
             loading: false,
-            mChildName: null,
-            mChildLastName: null,
+            mChildName: "",
+            mChildLastName: "",
             avatarSource: null,
             gradeItemPressed: null,
             boardItemPressed : null,
@@ -86,6 +87,7 @@ class AddKidDetail extends Component {
         if (prevProps.submitStudentSuccess !== this.props.submitStudentSuccess) {
             if (this.props.submitStudentSuccess) {
                 const student = this.props.studentSubmitResponse;
+                console.log("Kid Add Response",student);
                 storeLocalData(Constants.IS_LOGGED_IN, true);
                 var kidDetail = {
                     userId: student.user_id,
@@ -93,7 +95,7 @@ class AddKidDetail extends Component {
                     avatar: student.avatar
                 };
                 if (this.state.isSubmit) {
-                    this.goToHome()
+                    this.goToBookDemo(student)
                 }
                 else {
                     this.setState({
@@ -377,15 +379,24 @@ class AddKidDetail extends Component {
 
     }
 
-    goToHome = () => {
+    goToBookDemo = (student) => {
+        console.log(student);
+        //this.props.updateCurrentKid(student)
+       this.props.navigation.push(Constants.BookDemoScreen,{
+           studentData : student,
+           from : "addKid"
+       });
+    }
 
+    goToHome = () => {
+       // this.props.navigation.push(Constants.BookDemoScreen);
 
         const navigateAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
         });
 
-        this.props.navigation.dispatch(navigateAction);
+        // this.props.navigation.dispatch(navigateAction);
         //  this.props.navigation.push(Constants.MainScreen);
     }
 
@@ -843,7 +854,7 @@ class AddKidDetail extends Component {
 
                                 <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
                                 <Text style={styles.textSubHeader}>Curriculam</Text>
-                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curricualm</Text>}
+                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curriculam</Text>}
                                 
                                          <FlatList
 
@@ -1021,7 +1032,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     getGradeDatas,
     registerStudent,
-    getDashboardItems
+    getDashboardItems,
+    updateCurrentKid
 };
 
 const styles = StyleSheet.create({

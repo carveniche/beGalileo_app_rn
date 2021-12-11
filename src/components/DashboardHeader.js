@@ -16,7 +16,7 @@ class DashboardHeader extends Component {
         super(props);
         this.state = {
             allKidsList: [],
-            selectedKid: 51397
+            selectedKid: 0
         };
     }
 
@@ -53,7 +53,7 @@ class DashboardHeader extends Component {
     }
 
     changeCurrentKid = (kid) => {
-
+        console.log("KID Detail",kid);
         if (kid.student_id == this.state.selectedKid)
             return;
         else

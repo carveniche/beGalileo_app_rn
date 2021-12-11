@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { CustomBackButton } from '../../components';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { getStudentActivity } from "../../actions/dashboard";
+import { getStudentActivity,getStudentActivityOnDates } from "../../actions/dashboard";
 import { IC_FILTER} from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
@@ -42,7 +42,7 @@ class OverallActivitiesScreen extends Component {
         console.log("To Date : " + tillDate);
         var start_date = moment(fromDate).format('DD-MM-YYYY');
         var end_date = moment(tillDate).format('DD-MM-YYYY');
-        this.props.getStudentActivity(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, 30);
+        this.props.getStudentActivityOnDates(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, start_date,end_date);
       
         this.onCloseFilter();
     }
@@ -151,7 +151,8 @@ const mapStateToProps = (state) => {
 
 }
 const mapDispatchToProps = {
-    getStudentActivity
+    getStudentActivity,
+    getStudentActivityOnDates
 };
 
 const styles = StyleSheet.create({

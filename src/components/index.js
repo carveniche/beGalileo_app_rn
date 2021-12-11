@@ -1,3 +1,4 @@
 import CustomBackButton from './CustomBackButton';
 import ReportListDateItem from './ReportListDateItem';
-export { CustomBackButton,ReportListDateItem }
+import UpdateNameMobileComponent from './UpdateNameMobileComponent';
+export { CustomBackButton,ReportListDateItem,UpdateNameMobileComponent }

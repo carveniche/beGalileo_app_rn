@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -177,8 +177,28 @@ export function getStudentActivity(parent_id,student_id,filter){
 }
 
 
+export function getStudentActivityOnDates(parent_id,student_id,start_date,end_date){
+    return{
+        type : STUDENT_ACTIVITY,
+        payload : {
+            request: {
+                url : 'app_mathbox/activity',
+                params : {
+                    parent_id,
+                    student_id,
+                    start_date,
+                    end_date
+                }
+            }
+        }
+    }
 
-export function doBookingDemo(student_id,slot_id,day){
+}
+
+
+
+
+export function doBookingDemo(student_id,slot_id,day,name,mobile){
     return{
         type : BOOK_DEMO,
         payload : {
@@ -187,7 +207,9 @@ export function doBookingDemo(student_id,slot_id,day){
                 params : {
                     student_id,
                     slot_id,
-                    day
+                    day,
+                    name,
+                    mobile
                 }
             }
         }
@@ -579,7 +601,23 @@ export function submitTeacherRating(parent_id, teacher_id, stars, review_ids, co
     }
 }
 
-export function updateDeviceInfo(parent_id, regId,time_zone){
+export function getTeacherRatings(parent_id, teacher_id){
+    return{
+        type : TEACHER_RATING,
+        payload : {
+            request: {
+                url : 'app_mathbox/teacher_ratings',
+                params : {
+                    parent_id,
+                    teacher_id
+
+                }
+            }
+        }
+    }
+}
+
+export function updateDeviceInfo(parent_id, regId,time_zone,device){
     return{
         type : DEVICE_INFO,
         payload : {
@@ -588,7 +626,8 @@ export function updateDeviceInfo(parent_id, regId,time_zone){
                 params : {
                     parent_id,
                     regId,
-                    time_zone
+                    time_zone,
+                    device
 
                 }
             }
@@ -629,6 +668,7 @@ export function getDemoResults(live_class_id,student_id,parent_id){
         }
     }
 }
+
 
 
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, SafeAreaView,YellowBox,BackHandler } from 'react-native';
 import { createStore, applyMiddleware, combineReducers } from "redux";
+import { LOGOUT_REQUEST } from './config/redux-action-types/authenticate';
 import { Provider } from "react-redux";
 import { COLOR } from './config/styles';
 import axios from 'axios';
@@ -32,10 +33,18 @@ const client = axios.create({
     return response;
   })
   
-  const reducer = combineReducers(reducers);
+  const appReducer = combineReducers(reducers);
 
 
-  const store = createStore(reducer, applyMiddleware(thunk,axiosMiddleware(client)));
+  const rootReducer = (state,action) => {
+    if(action.type == LOGOUT_REQUEST){
+      return appReducer(undefined,action)
+    }
+    return appReducer(state,action);
+  }
+
+
+  const store = createStore(rootReducer, applyMiddleware(thunk,axiosMiddleware(client)));
 
 
   export default class App extends Component {

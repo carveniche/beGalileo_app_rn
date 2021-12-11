@@ -29,17 +29,25 @@ class PaidUserScreen extends Component {
     componentDidMount() {
 
 
-        if (this.state.currentSelectedKid == undefined && this.props.dashboardResponse != undefined && this.props.dashboardResponse.students != undefined) {
+        
+        // if (this.props.dashboardStatus) {
+        //     this.setCurrentSessionKid()
+        // }
 
-        }
+
         this.renderDashboardData();
 
     }
 
-    setCurrentSelectedKid = () => {
-        console.log("Setting Current selected kid");
-        this.setState({
-            currentKidDetails: this.props.dashboardResponse.students[0]
+    setCurrentSessionKid = () => {
+        this.props.dashboardResponse.students.map((item) => {
+            if (item.selected_student) {
+
+                this.setState({
+                    currentSessionKid: item
+                })
+            }
+
         })
     }
 
@@ -59,6 +67,8 @@ class PaidUserScreen extends Component {
                 }
             })
         }
+
+        
         if (selectedStudent != null) {
             this.setState({
                 currentKidDetails: selectedStudent
@@ -87,7 +97,12 @@ class PaidUserScreen extends Component {
         }
 
         if (prevProps.dashboardStatus != this.props.dashboardStatus) {
-            this.renderDashboardData();
+           
+              //  this.setCurrentSessionKid();
+                this.renderDashboardData();
+           
+           
+           
         }
 
     }
@@ -519,7 +534,7 @@ class PaidUserScreen extends Component {
                         <Text style={[CommonStyles.text_12_bold]}>{totalClass} Classes</Text>
                         <View style={{ justifyContent: 'center' }}>
                             <Text style={[CommonStyles.text_12__semi_bold]}>Available : </Text>
-                            <Text style={[CommonStyles.text_18_bold]}>{availableClass} out of {totalClass}</Text>
+                            <Text style={[CommonStyles.text_16_bold]}>{availableClass} out of {totalClass}</Text>
                         </View>
 
                         {/* <View>
@@ -678,7 +693,7 @@ class PaidUserScreen extends Component {
                 </View> */}
 
                 {
-                    currentKidDetails && currentKidDetails.totalClass > 0 &&
+                    currentKidDetails && currentKidDetails.total_classes > 0 &&
                     this.pendingClassStatus(currentKidDetails.total_classes, currentKidDetails.available_classes)
                 }
                 {

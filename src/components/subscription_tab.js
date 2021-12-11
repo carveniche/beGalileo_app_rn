@@ -147,6 +147,7 @@ class SubscriptionTabs extends Component {
     setCheckBoxTrue = () => {
         console.log("Check Box True  : " + this.state.ParentCountry);
 
+
         this.props.state.dashboard_response.price_details[0].price_details.map((item, index) => {
 
             this.setState({
@@ -160,13 +161,11 @@ class SubscriptionTabs extends Component {
 
 
         if (this.props.state.dashboard_status) {
-
-
-            this.setState({
-                priceDetails: this.props.dashboard_response.price_details[0].price_details
-            })
-
-
+            if (this.props.dashboard_response.priceDetails != undefined) {
+                this.setState({
+                    priceDetails: this.props.dashboard_response.price_details[0].price_details
+                })
+            }
 
         }
         if (this.props.recommended)
@@ -294,7 +293,7 @@ class SubscriptionTabs extends Component {
         console.log(item);
         const index = recommendedIndex;
 
-       
+
         return (
             <TouchableOpacity onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
                 <View style={this.state.selectedSubscription == groupPrefix + index ?
@@ -397,7 +396,7 @@ class SubscriptionTabs extends Component {
 
     groupClasses() {
         const { ParentCountry } = this.state;
-       
+
 
         return this.state.priceDetails.map((item, index) =>
             this.props.recommended != item.duration &&

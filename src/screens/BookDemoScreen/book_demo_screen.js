@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator,Modal } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -11,12 +11,13 @@ import CustomGradientButton from '../../components/CustomGradientButton';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import Modal from 'react-native-modal';
+
 import { getDemoSlots, doBookingDemo } from '../../actions/dashboard';
 import { normalize } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import * as Config from '../../config/configs';
 import { NavigationActions } from 'react-navigation';
+import { UpdateNameMobileComponent } from "../../components";
 
 
 
@@ -38,6 +39,7 @@ class BookDemoScreen extends Component {
             eveningTimeSlotList: [],
             nightTimeSlotList: [],
             allKidsList: [],
+            updateMobileNumberDialog : false,
             currentKid: null
 
         }
@@ -46,10 +48,19 @@ class BookDemoScreen extends Component {
 
 
     componentDidMount() {
-        console.log("Book Demo Did Mount aaaaaaa");
-
-
-        if (this.props.state.dashboard_status) {
+     
+        var isFrom = this.props.navigation.getParam('from', "");
+        if(isFrom == "addKid")
+        {
+           
+            var studentParam = this.props.navigation.getParam('studentData',"");
+            console.log("From add Kid",studentParam);
+            this.setState({
+   
+                currentKid: studentParam
+            })  
+        }
+        else if (this.props.state.dashboard_status) {
             this.setState({
                 allKidsList: this.props.state.dashboard_response.students,
                 currentKid: this.props.state.current_selected_kid
@@ -256,8 +267,18 @@ class BookDemoScreen extends Component {
 
     }
 
-    scheduleDemo = () => {
 
+    callBackMobileNumberUpdate = (name,mobileNumber) => {
+        this.scheduleDemo(name,mobileNumber);
+    }
+
+    cancelMobileNumberUpdate = () => {
+        this.setState({
+            updateMobileNumberDialog : false
+        })
+    }
+
+    onBookDemo = () => {
         if (this.state.selectedDateText === "Choose Date") {
             this.setState({
                 selectDateError: true
@@ -277,15 +298,28 @@ class BookDemoScreen extends Component {
             });
             return
         }
-        console.log("Student ID : " + this.state.currentKid.student_id);
-        console.log("Slot: " + this.state.itemPressed);
-        console.log("day : " + this.state.selectedDate);
-        // console.log(DeviceInfo.getTimezone());
-        getLocalData(Constants.ParentTimeZone).then((timeZone) => {
-            console.log("Time Zone : "+timeZone);
-           
-        })
-        this.props.doBookingDemo(this.state.currentKid.student_id, this.state.itemPressed, this.state.selectedDate);
+        if(this.props.dashboardResponse.parent_details.mobile == "")
+        {
+            this.setState({
+                updateMobileNumberDialog : true
+            })
+        }
+        else
+        {
+            this.scheduleDemo("","")
+        }
+    }
+
+    
+
+
+
+    scheduleDemo = (name,mobile) => {
+       
+        this.cancelMobileNumberUpdate()
+       
+        
+        this.props.doBookingDemo(this.state.currentKid.student_id, this.state.itemPressed, this.state.selectedDate,name,mobile);
         //this.props.navigation.navigate("DemoConfirmation");
     }
 
@@ -293,7 +327,7 @@ class BookDemoScreen extends Component {
 
 
     render() {
-        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList,mBirthDateDialog } = this.state;
+        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList,mBirthDateDialog,updateMobileNumberDialog } = this.state;
         const { loading } = this.props;
         const { navigation } = this.props.navigation;
         const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
@@ -309,6 +343,7 @@ class BookDemoScreen extends Component {
                         loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                     }
+                    
 
                     <View style={{ flex: 1 }}>
                         <View style={{ marginTop: 15 }}>
@@ -445,7 +480,7 @@ class BookDemoScreen extends Component {
                                 myRef={(input) => { this.btn_add_kid = input; }}
                                 style={CommonStyles.green_button_gradient}
                                 children={reScheduleDemo ? "Reschedule Demo" : "Schedule demo"}
-                                onPress={this.scheduleDemo}
+                                onPress={this.onBookDemo}
                             />
                         </View>
                         {/* <Modal isVisible={true}>
@@ -466,7 +501,15 @@ class BookDemoScreen extends Component {
 
                         />
                     </View>
+                    {
+                        this.state.updateMobileNumberDialog &&
+                       
+                       <Modal transparent={true}>
+                           <UpdateNameMobileComponent cancelMobileNumberUpdate={this.cancelMobileNumberUpdate} callBackMobileNumberUpdate={this.callBackMobileNumberUpdate}  />
+                           </Modal>
+                    }
 
+                   
 
                 </ScrollView>
 
@@ -481,6 +524,7 @@ const mapStateToProps = (state) => {
     return {
         state: state.dashboard,
         loading: state.dashboard.loading,
+        dashboardResponse : state.dashboard.dashboard_response,
         demoSlotStatus: state.dashboard.demo_slot_status,
         bookDemoStatus: state.dashboard.book_demo_status
     }

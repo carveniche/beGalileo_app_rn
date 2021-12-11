@@ -31,7 +31,7 @@ class NewUserScreen extends Component {
             this.setCurrentSessionKid()
         }
 
-        
+
     }
 
     componentDidUpdate(prevProps) {
@@ -222,10 +222,14 @@ class NewUserScreen extends Component {
 
                     </View>
 
+                    {
+                      this.props.dashboardStatus &&  this.props.dashboardResponse.students.length > 0 &&
+                        <View style={{ marginStart: 5, marginEnd: 5 }}>
+                            <SubscriptionTabs goToCartList={this.goToCartList} />
+                        </View>
+                    }
 
-                    <View style={{ marginStart: 5, marginEnd: 5 }}>
-                        <SubscriptionTabs goToCartList={this.goToCartList} />
-                    </View>
+
 
 
 
@@ -242,10 +246,10 @@ class NewUserScreen extends Component {
                         <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
                             <Text style={CommonStyles.text_18_semi_bold}>
                                 Not sure about beGalileo Online based learning?
-                          </Text>
+                            </Text>
                             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
                                 some stats may be can come here
-                     </Text>
+                            </Text>
                             <TouchableOpacity
                                 style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}
                                 onPress={this.goToBookADemo}>
@@ -297,7 +301,7 @@ class NewUserScreen extends Component {
                             height={300}
                             play={true}
                             videoId={"bEJLVQJjeak"}
-                           
+
                         />
 
                         {/* <YouTube

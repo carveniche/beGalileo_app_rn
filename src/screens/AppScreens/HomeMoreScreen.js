@@ -82,22 +82,13 @@ class HomeMoreScreen extends Component {
     }
 
     onLogOutConfirmation = async () => {
-        // const asyncStorageKeys = await AsyncStorage.getAllKeys();
-        // console.log(asyncStorageKeys);
-        // if (asyncStorageKeys.length > 0) {
-        //     if (Platform.OS === 'android') {
-        //          AsyncStorage.clear().then(()=>this.goToLogin);
-        //     }
-        //     if (Platform.OS === 'ios') {
-        //          AsyncStorage.multiRemove(asyncStorageKeys).then(()=>this.goToLogin);
-        //     }
-        // }
+        
         const items = [[Constants.IS_LOGGED_IN, JSON.stringify(false)], [Constants.IsParentRegistered, JSON.stringify(false)]]
         AsyncStorage.multiSet(items).then(() => {
             this.props.logOutUser();
             this.goToLogin();
         })
-        //this.goToLogin();
+       
 
     }
     goToLogin = () => {

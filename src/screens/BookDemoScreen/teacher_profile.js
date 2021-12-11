@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { getRatingTags,submitTeacherRating } from '../../actions/dashboard';
+import { getRatingTags, submitTeacherRating, getTeacherRatings } from '../../actions/dashboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { IC_TEACHER,AVATAR_TEACHER } from "../../assets/images"
+import { IC_TEACHER, AVATAR_TEACHER } from "../../assets/images"
 import { AirbnbRating, Rating } from "react-native-elements";
 import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from '../../components/CustomGradientButton';
@@ -22,9 +22,10 @@ class TeacherProfile extends Component {
             isSuscribedUser: false,
             showRateTeacher: false,
             teacherName: "",
-            teacherId : 0,
+            teacherId: 0,
             selectedRatingTags: [],
             textComment: "",
+            userRating: "",
             reviewList: [
                 {
                     title: "Riya K",
@@ -59,11 +60,31 @@ class TeacherProfile extends Component {
 
     componentDidMount() {
         var teacherData = this.props.navigation.getParam('teacherData', {});
+
         this.setState({
-            teacherName : teacherData.name,
-            teacherId : teacherData.id
+            teacherName: teacherData.name,
+            teacherId: teacherData.id
         })
+        this.props.getTeacherRatings(this.props.dashboardResponse.parent_id, teacherData.id);
         this.props.getRatingTags();
+
+    }
+
+    getTeacherRatings = () => {
+
+        this.props.getTeacherRatings(this.props.dashboardResponse.parent_id, this.state.teacherId);
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log("Prev Props", prevProps.submitTeacherRatingStatus, this.props.submitTeacherRatingStatus)
+        if (prevProps.submitTeacherRatingStatus != this.props.submitTeacherRatingStatus) {
+
+            if (this.props.submitTeacherRatingStatus) {
+                console.log("Rating Submitted Successfully");
+                this.closeRatingModal();
+                this.getTeacherRatings();
+            }
+        }
     }
 
     openRateTeacher = () => {
@@ -81,18 +102,24 @@ class TeacherProfile extends Component {
     }
 
     submitTeacherRating = () => {
-        var stringRatingArr = "["+this.state.selectedRatingTags.toString()+"]";
-       
-        this.props.submitTeacherRating(51252,48880,this.state.userRating,stringRatingArr,this.state.textComment);
+        var stringRatingArr = "[" + this.state.selectedRatingTags.toString() + "]";
+        console.log(this.state.userRating);
+        if (this.state.userRating == "") {
+            alert("Please select star rating");
+        }
+        else {
+            this.props.submitTeacherRating(this.props.dashboardResponse.parent_id, this.state.teacherId, this.state.userRating, stringRatingArr, this.state.textComment);
+        }
+
     }
     checkRatingTag = (id, addTag) => {
-        console.log(id,addTag);
+        console.log(id, addTag);
         if (!addTag)
             this.setState({ selectedRatingTags: this.state.selectedRatingTags.concat(id) })
         else {
             const filteredItems = this.state.selectedRatingTags.filter(item => item !== id)
             this.setState({
-                selectedRatingTags : filteredItems
+                selectedRatingTags: filteredItems
             })
         }
     }
@@ -102,9 +129,9 @@ class TeacherProfile extends Component {
         })
     }
 
-    onPressBack=()=> {
+    onPressBack = () => {
         const { goBack } = this.props.navigation;
-        
+
         goBack();
     }
 
@@ -112,31 +139,37 @@ class TeacherProfile extends Component {
 
     render() {
 
-        const { ratingTagsStatus, ratingTagsResponse } = this.props;
-        const { isSuscribedUser, reviewList, showRateTeacher,teacherName } = this.state
+        const { ratingTagsStatus, ratingTagsResponse, teacherRatingStatus, teacherRatingResponse, loading } = this.props;
+        const { isSuscribedUser, reviewList, showRateTeacher, teacherName } = this.state
         return (
             <View style={[styles.mainContainer, { backgroundColor: showRateTeacher ? COLOR.BG_ALPHA_BLACK : COLOR.WHITE }]}>
-                
+                {
+                    loading &&
+                    <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
+                }
                 <ScrollView style={{ flex: 1 }}>
-                <View style={{ marginStart : normalize(10),marginTop : normalize(10) }}>
-                <CustomBackButton onPress={this.onPressBack}/>
-                </View>
+                    <View style={{ marginStart: normalize(10), marginTop: normalize(10) }}>
+                        <CustomBackButton onPress={this.onPressBack} />
+                    </View>
                     <View>
-                
+
                         <View style={{ alignItems: "center" }}>
-                        
+
                             <Image style={{ marginTop: normalize(10), height: normalize(80), width: normalize(80), resizeMode: "stretch" }} source={AVATAR_TEACHER} />
                             <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(10) }]}>{teacherName}</Text>
-                            <View style={{ flexDirection: 'row', marginTop: normalize(4), justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginEnd: normalize(4) }]}>4.5</Text>
+                            {
+                                teacherRatingStatus && <View style={{ flexDirection: 'row', marginTop: normalize(4), justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginEnd: normalize(4) }]}>{teacherRatingResponse.average_rating}</Text>
 
-                                <Icon name="star" size={normalize(12)} color={COLOR.TEXT_COLOR_BLACK} />
+                                    <Icon name="star" size={normalize(12)} color={COLOR.TEXT_COLOR_BLACK} />
 
 
-                            </View>
+                                </View>
+                            }
 
-                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(4) }]}>Education - B.A. Bed</Text>
-                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(4) }]}>Tutoring Experience - 9 yr</Text>
+
+                            {/* <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(4) }]}>Education - B.A. Bed</Text>
+                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(4) }]}>Tutoring Experience - 9 yr</Text> */}
 
 
                         </View>
@@ -147,42 +180,58 @@ class TeacherProfile extends Component {
                             </TouchableOpacity>
 
                         </View>
-                        <View style={{ marginTop: normalize(10), margin: normalize(20) }}>
-                            <Text style={[CommonStyles.text_14_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Parents Review</Text>
-                            <View style={{ marginTop: normalize(16) }}>
+                        {
+                            teacherRatingStatus &&
 
-                                {
-                                    reviewList.map((data, key) => (
-                                        <View key={key}>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ marginTop: normalize(10), margin: normalize(20) }}>
+                                <Text style={[CommonStyles.text_14_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>Parents Review</Text>
+                                <View style={{ marginTop: normalize(16) }}>
+                              
+                                    {
+                                        teacherRatingResponse.reviewList.length < 1 &&
+                                        <View>
+                                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK }]}>Be the first to Rate</Text>
+                                            </View>
+                                    }
+                                    {
+                                        teacherRatingResponse.reviewList.map((data, key) => (
+                                            <View key={key}>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>{data.title}</Text>
+                                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>{data.title}</Text>
 
 
-                                                <View style={{ flexDirection: 'row', marginTop: normalize(4), justifyContent: 'center', alignItems: 'center' }}>
-                                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginEnd: normalize(4) }]}>{data.star}</Text>
+                                                    <View style={{ flexDirection: 'row', marginTop: normalize(4), justifyContent: 'center', alignItems: 'center' }}>
+                                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLACK, marginEnd: normalize(4) }]}>{data.star}</Text>
 
-                                                    <Icon name="star" size={normalize(12)} color={COLOR.TEXT_COLOR_BLACK} />
+                                                        <Icon name="star" size={normalize(12)} color={COLOR.TEXT_COLOR_BLACK} />
 
 
+                                                    </View>
                                                 </View>
+                                                <View style={{
+                                                    flex: 1,
+                                                    flexDirection: 'row',
+                                                    flexWrap: 'wrap',
+                                                    paddingTop: 10
+                                                }}>
+                                                    {
+                                                        data.tags.map((tag, key) => (
+                                                            <View key={key} style={{ borderRadius: 20, borderWidth: 1, borderColor: COLOR.BORDER_COLOR_GREY, marginEnd: normalize(8) }}>
+                                                                <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, padding: normalize(5) }]}>{tag}</Text>
+                                                            </View>
+                                                        ))
+                                                    }
+                                                </View>
+                                                <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(12) }]}>{data.subtitle}</Text>
+                                                <View style={{ backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(20), marginBottom: normalize(10), height: normalize(1) }} />
                                             </View>
-                                            <View style={{ flexDirection: 'row', marginTop: normalize(5) }}>
-                                                {
-                                                    data.tags.map((tag, key) => (
-                                                        <View key={key} style={{ borderRadius: 20, borderWidth: 1, borderColor: COLOR.BORDER_COLOR_GREY, marginEnd: normalize(8) }}>
-                                                            <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_COLOR_BLACK, padding: normalize(5) }]}>{tag}</Text>
-                                                        </View>
-                                                    ))
-                                                }
-                                            </View>
-                                            <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(12) }]}>{data.subtitle}</Text>
-                                            <View style={{ backgroundColor: COLOR.BORDER_COLOR_GREY, marginTop: normalize(20), marginBottom: normalize(10), height: normalize(1) }} />
-                                        </View>
-                                    ))
-                                }
+                                        ))
+                                    }
+                                </View>
                             </View>
-                        </View>
+                        }
+
                     </View>
                     <Modal visible={showRateTeacher}>
                         <View style={{ backgroundColor: COLOR.WHITE, borderRadius: normalize(15) }}>
@@ -192,7 +241,7 @@ class TeacherProfile extends Component {
                                 <View>
                                     <View style={{ marginVertical: normalize(10) }}>
 
-                                        <Rating fractions={1} showRating={false} selectedColor={COLOR.BLACK} reviewColor={COLOR.GRAY} defaultRating={0} onFinishRating={this.ratingCompleted.bind(this)} />
+                                        <AirbnbRating showRating={false} selectedColor={COLOR.ORANGE} reviewColor={COLOR.GRAY} defaultRating={0} onFinishRating={this.ratingCompleted.bind(this)} />
 
                                     </View>
                                     {
@@ -278,7 +327,12 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         ratingTagsStatus: state.dashboard.rating_tags_status,
         ratingTagsResponse: state.dashboard.rating_tags_response,
-        dashboardResponse: state.dashboard.dashboard_response
+        dashboardResponse: state.dashboard.dashboard_response,
+        teacherRatingStatus: state.dashboard.teacher_rating_status,
+        teacherRatingResponse: state.dashboard.teacher_rating_response,
+        loading: state.dashboard.loading,
+        submitTeacherRatingStatus: state.dashboard.submit_teacher_rating_status,
+        submitTeacherRatingResponse: state.dashboard.submit_teacher_rating_response
     }
 
 
@@ -286,7 +340,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getRatingTags,
-    submitTeacherRating
+    submitTeacherRating,
+    getTeacherRatings
 };
 
 const styles = StyleSheet.create({
