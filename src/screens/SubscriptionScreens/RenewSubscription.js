@@ -46,7 +46,7 @@ class RenewSubscription extends Component {
                     
                    {
                        this.state.mDuration != null && 
-                       <SubscriptionTabs goToCartList={this.goToCartList} recommended={this.state.mDuration}/>
+                       <SubscriptionTabs goToCartList={this.goToCartList} recommended={this.state.mDuration} isRenew={true}/>
                    }
                         
                     

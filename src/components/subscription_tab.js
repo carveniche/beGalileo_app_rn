@@ -161,7 +161,9 @@ class SubscriptionTabs extends Component {
 
 
         if (this.props.state.dashboard_status) {
-            if (this.props.dashboard_response.priceDetails != undefined) {
+
+            if (this.props.dashboard_response.price_details != undefined) {
+                console.log("Price Details")
                 this.setState({
                     priceDetails: this.props.dashboard_response.price_details[0].price_details
                 })
@@ -171,14 +173,19 @@ class SubscriptionTabs extends Component {
         if (this.props.recommended)
             this.assignRecommendedIndex()
 
-        console.log("Subscription Tabs");
-        if (this.props.user_detail_response != undefined) {
-            console.log("user detail available");
-            console.log(this.props.user_detail_response);
+
+        if (this.props.dashboard_status) {
+            var tempCurrency = "";
+            if(this.props.dashboard_response.parent_details[0].country == Constants.INDIA)
+                tempCurrency = Constants.INDIA_CURRENCY;
+            else
+                tempCurrency = Constants.OTHER_CURRENCY;    
+
+
             this.setState({
-                ParentCountry: this.props.user_detail_response.parent_country,
-                ParentUserId: this.props.user_detail_response.parent_user_id,
-                currency: this.props.user_detail_response.parent_currency
+                ParentCountry: this.props.dashboard_response.parent_details[0].country,
+                ParentUserId: this.props.dashboard_response.parent_details[0].id,
+                currency: tempCurrency
             }, this.setCheckBoxTrue)
 
         }
@@ -512,6 +519,14 @@ class SubscriptionTabs extends Component {
         //         isGroupSelected: true
         //     })
     }
+
+
+
+    goToBookADemo = () => {
+
+        this.props.navigation.navigate(Constants.BookDemoScreen);
+    }
+
     oneToOneClasses = () => {
         const groupPrefix = "group_sub_";
         return this.state.oneToOneSubscriptionList.map((item, index) =>
@@ -598,7 +613,7 @@ class SubscriptionTabs extends Component {
                         {
                             this.recommendedSubscription()
                         }
-                        <Text style={[CommonStyles.text_14_semi_bold]}>Other Recommeded Programs for Sakshi</Text>
+                        <Text style={[CommonStyles.text_14_semi_bold]}>Other Recommeded Programs</Text>
                     </View>
 
 
@@ -609,11 +624,15 @@ class SubscriptionTabs extends Component {
 
                 <View style={{ flexDirection: "row", marginTop: normalize(20) }}>
                     <TouchableOpacity onPress={this.onTabSelected} style={isGroupSelected ? styles.tabItemSelected : styles.tabItem}>
-                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Classes</Text>
+                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Buy now</Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isGroupSelected ? styles.tabItem : styles.tabItemSelected]}>
-                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>1 to 1 Speical Classes</Text>
-                    </TouchableOpacity> */}
+                    {
+                        !this.props.isRenew &&
+                        <TouchableOpacity onPress={this.goToBookADemo} style={[{ marginStart: normalize(25) }, isGroupSelected ? styles.tabItem : styles.tabItemSelected]}>
+                            <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Book a demo</Text>
+                        </TouchableOpacity>
+                    }
+
                 </View>
 
 
@@ -644,16 +663,15 @@ const styles = StyleSheet.create({
     shadowContainerStyle: {
         //<--- Style with elevation
 
-        backgroundColor: COLOR.WHITE,
+        backgroundColor: COLOR.TARIFF_CARD,
         borderWidth: 1,
         borderRadius: normalize(24),
-        borderColor: '#ddd',
-        borderBottomWidth: 0,
+        borderColor: COLOR.TEXT_COLOR_HINT,
         shadowColor: COLOR.SHADOW_COLOR,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
-        elevation: 1,
+        shadowOffset: { width: 10, height: 10 },
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        elevation: 2,
     },
     selectedContainerStyle: {
         //<--- Style with elevation

@@ -42,7 +42,7 @@ class PaidUserDashboard extends Component {
 
                                 <View style={{ flex: 1, marginTop: normalize(20), marginBottom: normalize(20), marginEnd: normalize(5), marginStart: normalize(10) }}>
                                     <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>LIVE CLASS</Text>
-                                    <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>Choose Live class batch for Sakshi</Text>
+                                    <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>Choose Live class batch</Text>
                                     {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, marginTop: normalize(8) }]}>Pending</Text> */}
                                     <TouchableOpacity style={{ flexDirection: 'row', marginTop: normalize(20) }} onPress={this.onChooseBatchClick}>
                                         <Text style={[CommonStyles.text_12_bold, { flex: 1, color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Choose Batch</Text>
@@ -67,7 +67,7 @@ class PaidUserDashboard extends Component {
             <View>
                 <View style={{ marginTop: normalize(20) }}>
                     <Text style={[CommonStyles.text_18_semi_bold]}>Good things ahead!</Text>
-                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>Now Sakshi is just 1 step away from online learning</Text>
+                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>Now *** is just 1 step away from online learning</Text>
                     {
                         this.props.currentSelectedKid &&
                         this.checkLiveClassStatus()
@@ -80,7 +80,7 @@ class PaidUserDashboard extends Component {
 
                             <View style={{ flex: 1, marginTop: normalize(20), marginBottom: normalize(20), marginEnd: normalize(5), marginStart: normalize(10) }}>
                                 <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Midas</Text>
-                                <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>Sakshi needs to give MIDAS test to begin</Text>
+                                <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>*** needs to give MIDAS test to begin</Text>
                                 <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, marginTop: normalize(8) }]}>This is a mandatory test</Text>
                             </View>
                         </View>

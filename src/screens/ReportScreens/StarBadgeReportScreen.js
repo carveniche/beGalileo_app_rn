@@ -119,11 +119,11 @@ class StarBadgeReportScreen extends Component {
 
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: normalize(20), borderRadius: normalize(50), backgroundColor: COLOR.BG_ALPHA_BLUE, alignSelf: 'center', paddingStart: normalize(12), paddingEnd: normalize(12), paddingTop: normalize(9), paddingBottom: normalize(9) }}>
+                {/* <View style={{ flexDirection: 'row', marginTop: normalize(20), borderRadius: normalize(50), backgroundColor: COLOR.BG_ALPHA_BLUE, alignSelf: 'center', paddingStart: normalize(12), paddingEnd: normalize(12), paddingTop: normalize(9), paddingBottom: normalize(9) }}>
 
                     <Image style={{ height: normalize(20), width: normalize(23), resizeMode: 'contain' }} source={IC_CLAP_PLAIN} />
                     <Text style={[CommonStyles.text_12_bold, { color: COLOR.TAB_BOTTOM_BLUE, marginStart: normalize(4), alignSelf: 'center' }]}>Clap</Text>
-                </View>
+                </View> */}
 
 
 

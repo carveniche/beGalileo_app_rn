@@ -161,11 +161,30 @@ class HomeMainScreen extends Component {
            
             if(this.props.dashboardStatus)
             {
+                console.log("Refreshing Current selected kid");
+                this.setState({
+                    allKidsList: this.props.state.dashboard_response.students
+                })
+                this.refreshCurrentSelectedKid();
                 this.forceUpdate();
             }
         }
 
 
+    }
+
+
+    refreshCurrentSelectedKid = () => {
+        if(this.props.currentSelectedKid == null)
+        return;
+
+        this.props.dashboardResponse.students.map((item) => {
+            if (item.student_id == this.props.currentSelectedKid.student_id) {
+                this.props.updateCurrentKid(item);
+                
+            }
+
+        })
     }
 
     checkDashboardItems = () => {
@@ -293,7 +312,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     getDashboardItems,
     getCartItemList,
-    updateDeviceInfo
+    updateDeviceInfo,
+    updateCurrentKid
 };
 
 const styles = StyleSheet.create({

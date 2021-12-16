@@ -340,7 +340,7 @@ PODS:
   - react-native-pure-jwt (2.2.2):
     - JWT (~> 3.0.0-beta.11)
     - React
-  - react-native-razorpay (2.2.4):
+  - react-native-razorpay (2.2.8):
     - razorpay-pod
     - React
   - react-native-safe-area-context (0.7.3):
@@ -805,7 +805,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-payments: b5645a0d43e557604ba48d2bf0a44dd8a5db4ad6
   react-native-pure-jwt: 02e1675db5c3418e62f8a3f5c746cca712145477
-  react-native-razorpay: a7397b04b5c0c8bc77747b4d5eb88bae1e6e9156
+  react-native-razorpay: b35ef0a8067a725a288d9fb70a356d38d441bbe1
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-viewpager: 248267e605c2d4edd26924da7f15032d57ac0b75
   react-native-webview: aea3233f26253f5c360164ee87d01ef9f7b9a27f

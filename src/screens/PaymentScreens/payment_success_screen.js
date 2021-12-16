@@ -9,26 +9,41 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { removeFromCart } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
-import {NavigationActions,StackActions} from 'react-navigation'; 
+import { NavigationActions, StackActions } from 'react-navigation';
 
 
 class PaymentSuccessScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      isProfileIncomplete: false
     };
+  }
+
+  componentDidMount() {
+    if (this.props.dashboardResponse.parent_details[0].first_name == "" || this.props.dashboardResponse.parent_details[0].mobile == "" || this.props.dashboardResponse.parent_details[0].email == "") {
+      this.setState({
+        isProfileIncomplete: true
+      })
+    }
   }
 
   goToHome = () => {
 
-    const navigateAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
-    });
-  
-    this.props.navigation.dispatch(navigateAction);
-   // this.props.navigation.replace(Constants.MainScreen);
+    if (this.state.isProfileIncomplete) {
+      this.props.navigation.navigate(Constants.MoreProfileScreen);
+    }
+    else {
+      const navigateAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
+      });
+
+      this.props.navigation.dispatch(navigateAction);
+    }
+
+
+    // this.props.navigation.replace(Constants.MainScreen);
   }
 
   renderSubscriptionDetails = () => {
@@ -36,7 +51,7 @@ class PaymentSuccessScreen extends Component {
       return <View style={{ marginTop: normalize(20), borderRadius: normalize(24), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: normalize(9) }}>
           <View style={{ flex: 1, flexDirection: 'row', marginStart: normalize(10) }}>
-            <Image style={{ alignSelf: 'center', height: normalize(25), width: normalize(25),marginStart : normalize(10) }} source={{ uri: item.photo }} />
+            <Image style={{ alignSelf: 'center', height: normalize(25), width: normalize(25), marginStart: normalize(10) }} source={{ uri: item.photo }} />
             <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(6), alignSelf: 'center' }]}>{item.student_name}</Text>
           </View>
           <View style={{ flex: 1, alignSelf: 'center', marginStart: normalize(20), marginEnd: normalize(2) }}>
@@ -58,7 +73,7 @@ class PaymentSuccessScreen extends Component {
             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(4) }]}>With {item.boxes} Math boxes for {item.duration} months</Text>
           }
 
-        
+
         </View>
 
 
@@ -66,7 +81,10 @@ class PaymentSuccessScreen extends Component {
     })
   }
 
+
+
   render() {
+    const { isProfileIncomplete } = this.state;
     return (
       <ScrollView
         style={{
@@ -77,16 +95,21 @@ class PaymentSuccessScreen extends Component {
         <View style={{ margin: normalize(20) }}>
 
           <View>
+            
+            
+            <Text style={[CommonStyles.text_16_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(30),marginTop : normalize(15), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>Thank's for choosing beGalileo</Text>
             <Image style={{ resizeMode: 'contain', height: normalize(80), width: normalize(80), marginTop: normalize(20), marginBottom: normalize(20), height: normalize(40), alignSelf: 'center' }} source={PAYMENT_SUCCESS} />
             <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Payment Success!</Text>
 
-            <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(30), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>Let your kid take command by Switching to kids account</Text>
-
+           
+            <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_LIGHT_GREY, marginStart: normalize(30), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>We know you had many options to choose from. Rest Assured we are obsessed for your kids learning like no one else</Text>
             <TouchableOpacity style={{ marginTop: normalize(32) }}>
+
+              
               <CustomGradientButton
                 myRef={(input) => { this.btn_pay_now = input; }}
                 style={styles.btn_proceed_payment}
-                children={"Start Experiencing Online Learning"}
+                children={isProfileIncomplete ? "Complete Your Profile" : "Start Experiencing Online Learning"}
                 onPress={this.goToHome}
                 textStyling={[CommonStyles.text_12__semi_bold, { color: COLOR.WHITE }]}
 
@@ -144,7 +167,7 @@ const mapStateToProps = (state) => {
 
   return {
     loading: state.dashboard.loading,
-
+    dashboardResponse: state.dashboard.dashboard_response,
     update_payment_status: state.dashboard.update_payment_status,
     update_payment_response: state.dashboard.update_payment_response
 

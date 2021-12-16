@@ -119,14 +119,14 @@ const ReportFilterBottomDialog = (props) => {
           <View style={{ height: 1, backgroundColor: COLOR.BORDER_COLOR_GREY, margin: normalize(20) }} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
             <Text style={[CommonStyles.text_11_semi_bold, { alignSelf: 'center' }]}>{props.classType == Constants.UPCOMING_CLASSES ? "Or show next" : "Or show last"}</Text>
+            <TouchableOpacity onPress={() => onPressFilterDays(7)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
+              <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>7 Days</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPressFilterDays(14)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
+              <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>14 Days</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => onPressFilterDays(30)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
               <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>30 Days</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPressFilterDays(60)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
-              <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>60 Days</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPressFilterDays(90)} style={{ backgroundColor: COLOR.LIGHT_BLUE, paddingVertical: normalize(8), paddingHorizontal: normalize(12), borderRadius: normalize(24) }}>
-              <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLUE_LINk }]}>90 Days</Text>
             </TouchableOpacity>
           </View>
           <View style={{ height: 1, backgroundColor: COLOR.BORDER_COLOR_GREY, margin: normalize(20) }} />

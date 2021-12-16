@@ -15,6 +15,7 @@ import { payWithApplePay, payWithRazorPayFromCart } from '../../components/helpe
 import { normalize } from "react-native-elements";
 import RNRazorpayCheckout from 'react-native-razorpay';
 
+
 class CartListScreen extends Component {
     constructor(props) {
         super(props);
@@ -188,10 +189,10 @@ class CartListScreen extends Component {
 
 
         payWithRazorPayFromCart(order_response, this.state.netTotalPrice,
-            this.state.mLocalCountry,
-            this.state.localParentEmail,
-            this.state.localParentContactNumber,
-            this.state.localParentName,
+            this.props.dashboardResponse.parent_details[0].country,
+            this.props.dashboardResponse.parent_details[0].email,
+            this.props.dashboardResponse.parent_details[0].mobile,
+            this.props.dashboardResponse.parent_details[0].first_name,
             this.props.navigation,
             this.updateCartPaymentStatus
         )
@@ -326,7 +327,15 @@ class CartListScreen extends Component {
 
 
     proceedToAddress = () => {
-
+        // if(this.props.dashboardResponse.parent_details[0].name == "" || this.props.dashboardResponse.parent_details[0].mobile == "" || this.props.dashboardResponse.parent_details[0].email == "")
+        // {
+        //     showMessage({
+        //         message: "Please update profile to proceed",
+        //         type: "warning",
+        //     });
+        //     this.props.navigation.navigate(Constants.MoreProfileScreen);
+        //     return;
+        // }
        
         if (this.state.currency == Constants.INDIA_CURRENCY) {
             if(this.getMathBoxRequiredStatus())
@@ -667,6 +676,8 @@ const mapStateToProps = (state) => {
     return {
         cartItems: state.dashboard.cartItems,
         loading: state.dashboard.loading,
+        dashboardStatus: state.dashboard.dashboard_status,
+        dashboardResponse: state.dashboard.dashboard_response,
         get_cart_list_response: state.dashboard.get_cart_list_response,
         get_cart_list_status: state.dashboard.get_cart_list_status,
         apply_coupon_status: state.dashboard.apply_coupon_status,

@@ -223,7 +223,7 @@ class ChooseLiveBatch extends Component {
             }}>
                 <ScrollView removeClippedSubviews={false} style={{ flex: 1, marginStart: normalize(20), marginEnd: normalize(20) }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(20) }]}>Choose Live Class Batch {"\n"}For Sakshi</Text>
+                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(20) }]}>Choose Live Class Batch</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(4) }]}>2 days a week</Text>
 
 

@@ -38,10 +38,16 @@ class ActivityReportList extends Component {
 
     listAcitivityItem = (activityData) => {
 
+
         return activityData.map((item) => {
 
+            console.log("Activity Data Item", item);
+
+           
+
             return (
-                (item.home_concepts.length > 0 || item.class_concepts.length > 0 || item.home_think_n_reasons.length > 0 || item.class_think_n_reasons.length > 0 || item.speedmath.length > 0) ?
+                (item.home_concepts.length > 0 || item.class_concepts.length > 0 || item.home_think_n_reasons.length > 0 
+                    || item.class_think_n_reasons.length > 0 || item.speedmath.length > 0 || item.day_pre_tests.length > 0 || item.day_checkpoints.length > 0 || item.day_concept_tests.length > 0 )  ?
                     <View style={{ flexDirection: 'row', marginTop: normalize(20) }}>
                         <ReportListDateItem itemDay={item.day} />
                         <View style={{ flex: 1, marginStart: normalize(20), marginEnd: normalize(2) }}>
@@ -121,6 +127,114 @@ class ActivityReportList extends Component {
 
                                 </View>
                             }
+
+                            {
+                                item.day_pre_tests.length > 0 &&
+                                <View>
+                                    <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Pre Test</Text>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                        {
+                                            item.day_pre_tests.map((item) => {
+                                                return (
+                                                    <View style={{ margin: normalize(16) }}>
+                                                        <Text style={[CommonStyles.text_14_bold]}>{item.sub_concept_name}</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                        <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='check'
+                                                                color={COLOR.TEXT_COLOR_GREEN} />
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='times'
+                                                                color={COLOR.RED} />
+
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                        </View>
+                                                    </View>
+                                                )
+                                            })
+                                        }
+                                    </View>
+                                </View>
+                            }
+                            {
+                                item.day_concept_tests.length > 0 &&
+                                <View>
+                                    <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Concept Test</Text>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                        {
+                                            item.day_concept_tests.map((item) => {
+                                                return (
+                                                    <View style={{ margin: normalize(16) }}>
+                                                        <Text style={[CommonStyles.text_14_bold]}>{item.test_name}</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                        <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='check'
+                                                                color={COLOR.TEXT_COLOR_GREEN} />
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='times'
+                                                                color={COLOR.RED} />
+
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                        </View>
+                                                    </View>
+                                                )
+                                            })
+                                        }
+                                    </View>
+                                </View>
+                            }
+
+                            {
+                                item.day_checkpoints.length > 0 &&
+                                <View>
+                                    <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Check Point</Text>
+                                    <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                        {
+                                            item.day_checkpoints.map((item) => {
+                                                return (
+                                                    <View style={{ margin: normalize(16) }}>
+                                                        <Text style={[CommonStyles.text_14_bold]}>{item.sub_concept_name}</Text>
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                        <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='check'
+                                                                color={COLOR.TEXT_COLOR_GREEN} />
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                            <Icon
+                                                                style={{ marginStart: normalize(8) }}
+                                                                size={15}
+                                                                name='times'
+                                                                color={COLOR.RED} />
+
+                                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                            {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                        </View>
+                                                    </View>
+                                                )
+                                            })
+                                        }
+                                    </View>
+                                </View>
+                            }
+
+
+
+
                             {(item.speedmath.length > 0) &&
                                 <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(5) }]}>Speed Math</Text>
                             }
@@ -139,18 +253,7 @@ class ActivityReportList extends Component {
                                 </View>
                             }
 
-
-
-
-
-
-
                         </View>
-
-
-
-
-
                     </View> : <View></View>
             )
         })

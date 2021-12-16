@@ -152,8 +152,8 @@ class MainUserDashboard extends Component {
                 {/* {
                     currentSelectedKid &&
                     this.checkDemoClassStatus()
-                }
-                {
+                } */}
+                {/* {
                     currentSelectedKid &&
                     currentSelectedKid.paid_status &&
                     <SubscriptionTabs goToCartList={this.goToCartList} />

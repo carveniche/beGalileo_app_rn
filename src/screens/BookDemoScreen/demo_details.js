@@ -26,6 +26,7 @@ class DemoDetails extends Component {
         var demoDetails = navigation.getParam('demoDetail', null);
         console.log("Demo Details")
         console.log(demoDetails.student_id);
+        console.log(this.props.currentSelectedKid);
         if (demoDetails != null) {
             this.setState({
                 isDemoConfirmed: demoDetails.demo_confirmed,
@@ -251,7 +252,8 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         loading: state.dashboard.loading,
         bookDemoStatus: state.dashboard.book_demo_status,
-        cancelSlotStatus: state.dashboard.cancel_slot_status
+        cancelSlotStatus: state.dashboard.cancel_slot_status,
+        currentSelectedKid: state.dashboard.current_selected_kid
     }
 
 

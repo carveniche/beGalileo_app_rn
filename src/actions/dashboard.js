@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING, UPDATE_PROFILE
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -159,12 +159,30 @@ export function getStudentReportData(student_id,filter){
 
 }
 
+export function getStudentActivityOnDates(parent_id,student_id,start_date,end_date){
+    return{
+        type : STUDENT_ACTIVITY,
+        payload : {
+            request: {
+                url : 'app_mathbox/activity_new',
+                params : {
+                    parent_id,
+                    student_id,
+                    start_date,
+                    end_date
+                }
+            }
+        }
+    }
+
+}
+
 export function getStudentActivity(parent_id,student_id,filter){
     return{
         type : STUDENT_ACTIVITY,
         payload : {
             request: {
-                url : 'app_mathbox/activity',
+                url : 'app_mathbox/activity_new',
                 params : {
                     parent_id,
                     student_id,
@@ -177,23 +195,27 @@ export function getStudentActivity(parent_id,student_id,filter){
 }
 
 
-export function getStudentActivityOnDates(parent_id,student_id,start_date,end_date){
+export function updateParentProfile(parent_id,mobile,email,first_name,last_name){
     return{
-        type : STUDENT_ACTIVITY,
+        type : UPDATE_PROFILE,
         payload : {
             request: {
-                url : 'app_mathbox/activity',
+                url : 'app_mathbox/update_profile',
                 params : {
                     parent_id,
-                    student_id,
-                    start_date,
-                    end_date
+                    mobile,
+                    email,
+                    first_name,
+                    last_name
                 }
             }
         }
     }
 
 }
+
+
+
 
 
 

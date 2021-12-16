@@ -57,7 +57,7 @@ class Login extends Component {
             otpNumber_3: null,
             otpNumber_4: null,
             stateLoading: false,
-            myNumber: "8197713454",
+            myNumber: "",
             countryName: "",
             showFullBanner: true,
             parentCurrency: '',
@@ -979,7 +979,7 @@ class Login extends Component {
                                     <EmailLogin />
 
                                     <TouchableOpacity onPress={this.switchSignInWithMobile}>
-                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', marginVertical: normalize(15), padding: normalize(5) }]}>Sign in with Mobile Number</Text>
+                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center',  padding: normalize(5) }]}>Sign in with Mobile Number</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -997,7 +997,7 @@ class Login extends Component {
                                     }
 
                                     <TouchableOpacity onPress={this.switchSignWithUserName}>
-                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', marginVertical: normalize(30), padding: normalize(5) }]}>Sign in with Email</Text>
+                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', marginVertical: normalize(20), padding: normalize(5) }]}>Sign in with Email</Text>
                                     </TouchableOpacity>
                                 </View>
                         }
@@ -1050,7 +1050,7 @@ const styles = StyleSheet.create({
     },
     bannerContianer: {
         flex: 1,
-        height: (SCREEN_HEIGHT / 2)-100 ,
+        height: (SCREEN_HEIGHT / 2.5),
         backgroundColor: COLOR.WHITE
     },
     bannerHalfContianer: {

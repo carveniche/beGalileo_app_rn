@@ -300,10 +300,10 @@ class CartAddress extends Component {
     proceedToPayment = (order_response) => {
 
         payWithRazorPayFromAddress(order_response, this.state.netTotalPrice,
-            this.state.mParentCountryName,
-            this.state.localParentEmail,
-            this.state.localParentContactNumber,
-            this.state.localParentName,
+            this.props.dashboardResponse.parent_details[0].country,
+            this.props.dashboardResponse.parent_details[0].email,
+            this.props.dashboardResponse.parent_details[0].mobile,
+            this.props.dashboardResponse.parent_details[0].first_name,
             this.props.navigation,
             this.updateAddressPaymentStatus
         )
@@ -476,6 +476,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
+        dashboardResponse: state.dashboard.dashboard_response,
         list_address_status: state.dashboard.list_address_status,
         list_address_response: state.dashboard.list_address_response,
         remove_address_status: state.dashboard.remove_address_status,

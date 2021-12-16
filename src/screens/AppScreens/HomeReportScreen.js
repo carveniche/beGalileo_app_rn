@@ -58,13 +58,17 @@ class HomeReportScreen extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
+            if(this.props.currentSelectedKid != null)
+            {
+                if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
 
-            if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-
-                //   this.checkDashboardItems();
-                this.checkReportDatas();
-                this.checkActivtiyDatas();
+                    //   this.checkDashboardItems();
+                    this.checkReportDatas();
+                    this.checkActivtiyDatas();
+                }
             }
+
+         
         }
     }
     checkDashboardItems = () => {
@@ -575,7 +579,7 @@ class HomeReportScreen extends Component {
                 {
                     studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
 
-                        <NoRecordFoundComponent title="No Report is generated yet." sub_title="Your kid needs to give a MIDAS test." />
+                        <NoRecordFoundComponent title="No Report is generated yet." sub_title="" />
                         :
                         <View>
 
@@ -754,7 +758,7 @@ class HomeReportScreen extends Component {
 
     }
 
-    renderAcitivityScreeen = () => {
+    recentAcitivityScreeen = () => {
         const activityDatas = this.props.studentActivityReport;
 
         return (
@@ -851,7 +855,7 @@ class HomeReportScreen extends Component {
 
                         {
                             studentActivityStatus && studentActivityReport.problems_solved > 1 &&
-                            this.renderAcitivityScreeen()
+                            this.recentAcitivityScreeen()
                         }
 
 

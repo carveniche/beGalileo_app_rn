@@ -50,7 +50,7 @@ class HomeScheduleScreen extends Component {
             }
         }
         if (prevProps.currentSelectedKid != undefined) {
-            if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
+            if (this.props.currentSelectedKid != undefined && this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
 
                 this.getStudentClasses();
 

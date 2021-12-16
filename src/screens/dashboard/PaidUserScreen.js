@@ -29,7 +29,7 @@ class PaidUserScreen extends Component {
     componentDidMount() {
 
 
-        
+
         // if (this.props.dashboardStatus) {
         //     this.setCurrentSessionKid()
         // }
@@ -68,7 +68,7 @@ class PaidUserScreen extends Component {
             })
         }
 
-        
+
         if (selectedStudent != null) {
             this.setState({
                 currentKidDetails: selectedStudent
@@ -97,12 +97,12 @@ class PaidUserScreen extends Component {
         }
 
         if (prevProps.dashboardStatus != this.props.dashboardStatus) {
-           
-              //  this.setCurrentSessionKid();
-                this.renderDashboardData();
-           
-           
-           
+
+            //  this.setCurrentSessionKid();
+            this.renderDashboardData();
+
+
+
         }
 
     }
@@ -204,15 +204,15 @@ class PaidUserScreen extends Component {
                     <ReportListDateItem itemDay={"31 Jul 21"} />
                     </View> */}
                     <View style={{ flex: 1, marginHorizontal: normalize(5) }}>
+
                         {
                             lastPracticeData.home_practice_details.length > 0 &&
 
                             <View style={{ marginTop: normalize(2) }}>
 
                                 <View>
-
+                                    <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Home Practice</Text>
                                     <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), flex: 1 }]}>
-
                                         {
                                             lastPracticeData.home_practice_details.map((item) => {
                                                 return (
@@ -242,22 +242,19 @@ class PaidUserScreen extends Component {
                                                 )
                                             })
                                         }
-
-
-
                                     </View>
                                 </View>
-
                             </View>
 
                         }
+
 
                         {
                             lastPracticeData.class_practice_details.length > 0 &&
 
                             <View>
 
-                                {/* <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Class Practice</Text> */}
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Class Practice</Text>
                                 <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
 
                                     {
@@ -292,6 +289,119 @@ class PaidUserScreen extends Component {
                                 </View>
                             </View>
 
+                        }
+
+
+                        {
+                            lastPracticeData.pre_test.length > 0 &&
+                            <View>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Pre Test</Text>
+                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                    {
+                                        lastPracticeData.pre_test.map((item) => {
+                                            return (
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.sub_concept_name}</Text>
+                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='check'
+                                                            color={COLOR.TEXT_COLOR_GREEN} />
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='times'
+                                                            color={COLOR.RED} />
+
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                        {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                    </View>
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </View>
+                            </View>
+                        }
+
+                        {
+                            lastPracticeData.concept_test.length > 0 &&
+                            <View>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Concept Test</Text>
+                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                    {
+                                        lastPracticeData.concept_test.map((item) => {
+                                            return (
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.test_name}</Text>
+                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='check'
+                                                            color={COLOR.TEXT_COLOR_GREEN} />
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='times'
+                                                            color={COLOR.RED} />
+
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                        {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                    </View>
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </View>
+                            </View>
+                        }
+
+                        {
+                            lastPracticeData.checkpont.length > 0 &&
+                            <View>
+                                <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(15), marginTop: normalize(10) }]}>Check Point</Text>
+                                <View style={[CommonStyles.shadowContainer_border_20, { backgroundColor: COLOR.WHITE, marginTop: normalize(8), marginHorizontal: normalize(5) }]}>
+                                    {
+                                        lastPracticeData.checkpont.map((item) => {
+                                            return (
+                                                <View style={{ margin: normalize(16) }}>
+                                                    <Text style={[CommonStyles.text_14_bold]}>{item.sub_concept_name}</Text>
+                                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(2) }]}>{item.status}</Text>
+                                                    <View style={{ flexDirection: 'row', marginTop: normalize(8), alignItems: 'center' }}>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='check'
+                                                            color={COLOR.TEXT_COLOR_GREEN} />
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.correct}</Text>
+                                                        <Icon
+                                                            style={{ marginStart: normalize(8) }}
+                                                            size={15}
+                                                            name='times'
+                                                            color={COLOR.RED} />
+
+                                                        <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(5) }]}>{item.total - item.correct}</Text>
+                                                        {/* <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginStart: normalize(10) }]}>{item.timespent} hrs</Text> */}
+                                                    </View>
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </View>
+                            </View>
+                        }
+
+
+
+
+                        {(lastPracticeData.speed_math_details.length > 0) &&
+                            <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(5) }]}>Speed Math</Text>
                         }
                         {
                             <View style={{ marginHorizontal: normalize(5) }}>
@@ -412,7 +522,7 @@ class PaidUserScreen extends Component {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                                    <Text style={[CommonStyles.text_14_Regular]}>{currentKidDetails.activity_details.accuracy}</Text>
+                                    <Text style={[CommonStyles.text_14_Regular]}>{currentKidDetails.activity_details.accuracy.toFixed(2)}</Text>
                                     <Text style={[CommonStyles.text_12_Regular, {}]}> %</Text>
                                     {/* <Icon
                                         style={{ marginStart: normalize(8) }}

@@ -95,7 +95,8 @@ class AddKidDetail extends Component {
                     avatar: student.avatar
                 };
                 if (this.state.isSubmit) {
-                    this.goToBookDemo(student)
+                    this.goToHome();
+                    //this.goToBookDemo(student)
                 }
                 else {
                     this.setState({
@@ -396,8 +397,8 @@ class AddKidDetail extends Component {
             actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
         });
 
-        // this.props.navigation.dispatch(navigateAction);
-        //  this.props.navigation.push(Constants.MainScreen);
+         this.props.navigation.dispatch(navigateAction);
+          //this.props.navigation.push(Constants.MainScreen);
     }
 
 

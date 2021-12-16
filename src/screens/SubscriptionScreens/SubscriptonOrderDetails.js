@@ -49,7 +49,7 @@ class SubscriptonOrderDetails extends Component {
           <View style={{ marginStart: normalize(16), marginTop: normalize(15), marginBottom: normalize(15), flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row' }}>
               <Image style={{ borderRadius: 100, height: normalize(30), width: normalize(30), resizeMode: "stretch" }} source={IMG_SHAKSHI} />
-              <Text style={[CommonStyles.text_12__semi_bold, { alignSelf: 'center', marginStart: normalize(8) }]}>Sakshi</Text>
+              <Text style={[CommonStyles.text_12__semi_bold, { alignSelf: 'center', marginStart: normalize(8) }]}>***</Text>
             </View>
             <View style={{ flexDirection: 'row', alignSelf: 'center', marginEnd: normalize(16) }}>
               <Text style={[CommonStyles.text_12_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Group Class | </Text>

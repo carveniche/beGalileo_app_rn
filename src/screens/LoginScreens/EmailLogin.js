@@ -16,8 +16,8 @@ const EmailLogin = () => {
     const dispatch = useDispatch()
     const authenticate = useSelector((state) => state.authenticate);
     const [userNameError, setUserNameError] = useState(false);
-    const [mUserName, setMuserName] = useState('spandan.dassjc@gmail.com');
-    const [mPassword, setMpassword] = useState('4417');
+    const [mUserName, setMuserName] = useState('');
+    const [mPassword, setMpassword] = useState('');
     const [mResetEmail, setResetEmail] = useState('');
     const [resetEmailError, setResetEmailError] = useState(false);
     const [resetEmailErrorMsg,setResetEmailErrorMsg] = useState('');
@@ -105,10 +105,10 @@ const EmailLogin = () => {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View>
 
 
-            <View style={{ flex: 1, justifyContent: 'center', marginBottom: 2 }}>
+            <View style={{  justifyContent: 'center', marginBottom: 2 }}>
 
                 <View style={{ marginLeft: 20, marginRight: 20, marginTop: 25, marginBottom: 2 }}>
 

@@ -25,7 +25,7 @@ class DemoClassResults extends Component {
 
     componentDidMount() {
         console.log("Democ class results");
-        console.log(this.props.currentSelectedKid.student_demos);
+        console.log(this.props.currentSelectedKid);
         console.log(this.props.dashboardResponse.parent_id);
         this.props.getDemoResults(this.props.currentSelectedKid.student_demos[0].demo_class_id, this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id);
     }

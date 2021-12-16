@@ -18,7 +18,7 @@ class MoreLiveClassBatchScreens extends Component {
         this.state = {
             liveBatchDatas: [
                 {
-                    name: 'Sakshi',
+                    name: 'S',
                     image: IMG_SHAKSHI,
                     classType: 'Group Class',
                     grade: 'Grade 1',

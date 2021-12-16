@@ -78,6 +78,7 @@ export default class LoginBanner extends React.Component {
                     <View style={styles.headerContianer}>
                         <Text style={[CommonStyles.text_12_Regular, styles.headerTextItem]}>{headerText[0]}</Text>
                         <Text style={[CommonStyles.text_12_Regular, styles.subHeaderTextItem]}>{subHeaderText[0]}</Text>
+
                     </View>
                     {this.state.showImage &&
 
@@ -85,6 +86,7 @@ export default class LoginBanner extends React.Component {
 
 
                     }
+
                 </View>
                 <View style={[styles.subItemContianer, { backgroundColor: colorBg[1] }]}>
                     <View style={styles.headerContianer}>
@@ -123,41 +125,39 @@ const styles = StyleSheet.create({
     subItemContianer: {
         flex: 1,
         margin: '2%',
-        backgroundColor: COLOR.RED,
         borderRadius: 30
 
     },
     headerContianer: {
 
         flexDirection: 'column',
-        marginTop: '8%',
-        marginStart: '5%',
-        marginEnd: '15%'
+
     },
     headerTextItem: {
+        marginTop : 20,
+        marginHorizontal : 10,
         fontSize: normalize(15),
         fontWeight: 'bold',
         color: COLOR.TEXT_COLOR_BLUE
     },
     subHeaderTextItem: {
+
         fontSize: normalize(12),
         marginTop: 10,
+        marginHorizontal : 10,
         color: "#353639",
         opacity: 0.7
     },
     image: {
-     
-        bottom: 0,
-        right: 0,
-        width: 120,
-        height: 120,
-        marginTop : 20,
-        marginStart : 50,
-        marginBottom: 50,
-        marginEnd : 20,
-        overflow :'hidden',
-
-        resizeMode:'contain'
+        flex : 1,
+        width: 200,
+        height: 80,
+        overflow: 'hidden',
+        marginStart : 10,
+        justifyContent : 'center',
+        alignContent : 'center',
+        alignSelf : 'center',
+        resizeMode : 'contain'
     },
 
     wrapper: {

@@ -223,10 +223,12 @@ class NewUserScreen extends Component {
                     </View>
 
                     {
-                      this.props.dashboardStatus &&  this.props.dashboardResponse.students.length > 0 &&
-                        <View style={{ marginStart: 5, marginEnd: 5 }}>
-                            <SubscriptionTabs goToCartList={this.goToCartList} />
-                        </View>
+                        this.props.dashboardStatus && this.props.dashboardResponse.students.length > 0 &&
+                            <View style={{ marginStart: 5, marginEnd: 5 }}>
+                               
+                                <SubscriptionTabs goToCartList={this.goToCartList} navigation={this.props.navigation}   />
+                            </View>
+                           
                     }
 
 

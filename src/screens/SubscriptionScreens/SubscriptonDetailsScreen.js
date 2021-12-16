@@ -47,7 +47,7 @@ class SubscriptonDetailsScreen extends Component {
 
             <CustomBackButton onPress={this.onPressBack} />
 
-            <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>Sakshi’s Subscription</Text>
+            <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>*** Subscription</Text>
             <View style={{ flexDirection: 'row', marginTop: normalize(8) }}>
               <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Group Class</Text>
               <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8), marginEnd: normalize(8), color: COLOR.TEXT_ALPHA_GREY }]}>|</Text>
