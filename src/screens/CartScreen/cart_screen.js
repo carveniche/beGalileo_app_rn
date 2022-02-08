@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, VirtualizedList, ColorPropType, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, VirtualizedList, ColorPropType, ActivityIndicator, PanResponder } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET } from "../../config/configs";
 import { IMG_SHAKSHI, IC_REMOVE_ITEM, IC_CLOSE_BLUE, CART_INDICATOR_MY_CART } from '../../assets/images';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder,updatePaymentStatus } from "../../actions/dashboard";
+import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder, updatePaymentStatus } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
@@ -29,7 +29,7 @@ class CartListScreen extends Component {
             applyCouponDialog: false,
             userCouponCode: "",
             isValidCouponCode: true,
-            isCouponApplied : false,
+            isCouponApplied: false,
             netTotalPrice: 0,
             cartTotalPrice: 0,
             cartDiscountPrice: 0,
@@ -44,52 +44,33 @@ class CartListScreen extends Component {
     }
 
     componentDidMount() {
-
-
-        getLocalData(Constants.ParentFirstName).then((parentName) => {
-            console.log("Parent Name " + parentName);
+        if (this.props.dashboardStatus) {
+            let parentDetail = this.props.dashboardResponse.parent_details[0];
+            let parentCurrency = parentDetail.currency == Constants.INDIA ? Constants.INDIA_CURRENCY : Constants.OTHER_CURRENCY
             this.setState({
-                localParentName: parentName.slice(1, -1),
+                localParentName: parentDetail.first_name + " " + parentDetail.last_name,
+                localParentEmail: parentDetail.email,
+                localParentContactNumber: parentDetail.mobile,
+                currency: parentDetail.currency,
+                mLocalCountry: parentDetail.country,
+                mParentId: parentDetail.id
 
             })
-        })
-        getLocalData(Constants.ParentEmail).then((parentEmail) => {
-            console.log("Parent Email " + parentEmail);
-            this.setState({
-                localParentEmail: JSON.parse(parentEmail),
 
-            })
-        })
-        getLocalData(Constants.ParentMobileNumber).then((parentMobileNumber) => {
-            console.log("Parent Mobile Number " + parentMobileNumber);
-            this.setState({
-                localParentContactNumber: JSON.parse(parentMobileNumber),
+            //this.calculatePriceDetails();
+            this.getCartListScreen();
+        }
 
-            })
-        })
-        this.calculatePriceDetails();
-        this.getCartListScreen();
+
 
 
     }
 
 
     getCartListScreen = () => {
-        AsyncStorage.multiGet([Constants.ParentUserId, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
-            console.log("Async Multi get");
-            console.log(response);
-            var localParentCountry = JSON.parse(response[1][1]);
-            var localParentUserId = response[0][1]
-            var localParentCurrency = JSON.parse(response[2][1])
-            this.setState({
-                currency: localParentCurrency,
-                mLocalCountry: localParentCountry,
-                mParentId: localParentUserId
-            })
-            console.log(localParentCurrency);
-            this.props.getCartItemList(localParentUserId, localParentCountry)
-
-        })
+     
+        if(this.props.dashboardStatus)
+        this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id,this.props.dashboardResponse.parent_details[0].country)
 
     }
 
@@ -134,15 +115,14 @@ class CartListScreen extends Component {
                 }, this.calculatePriceDetails)
             }
             else {
-                if(this.props.apply_coupon_status != null)
-                {
+                if (this.props.apply_coupon_status != null) {
                     this.setState({
                         isValidCouponCode: false,
                         couponDiscount: 0
                     }, this.calculatePriceDetails)
                 }
-                
-                
+
+
             }
         }
         if (prevProps.remove_coupon_status != this.props.remove_coupon_status) {
@@ -156,32 +136,31 @@ class CartListScreen extends Component {
         }
         if (prevProps.remove_from_cart_status != this.props.remove_from_cart_status) {
             if (this.props.remove_from_cart_status) {
-                this.calculatePriceDetails()
+                this.getCartListScreen()
             }
         }
         if (prevProps.update_payment_status != this.props.update_payment_status) {
-            if(this.props.update_payment_status != null)
-            {
+            if (this.props.update_payment_status != null) {
                 if (this.props.update_payment_status) {
                     this.props.navigation.navigate(Constants.PaymentSuccessScreen);
                 }
                 else
                     this.props.navigation.navigate(Constants.PaymentFailedScreen);
             }
-           
-         
+
+
 
         }
 
     }
 
-    
 
-    updateCartPaymentStatus = (razorpay_payment_id,isFrom) => {
-      
-        console.log("Cart Payment Success Id "+razorpay_payment_id,this.props.get_cart_list_response.mathbox_order_id);
-        if(isFrom == "cart")
-         this.props.updatePaymentStatus(razorpay_payment_id, this.state.mParentId, this.props.get_cart_list_response.mathbox_order_id,this.state.localParentContactNumber,this.state.localParentEmail,"razor")
+
+    updateCartPaymentStatus = (razorpay_payment_id, isFrom) => {
+
+        console.log("Cart Payment Success Id " + razorpay_payment_id, this.props.get_cart_list_response.mathbox_order_id);
+        if (isFrom == "cart")
+            this.props.updatePaymentStatus(razorpay_payment_id, this.state.mParentId, this.props.get_cart_list_response.mathbox_order_id, this.state.localParentContactNumber, this.state.localParentEmail, "razor")
     }
 
     proceedToPayment = (order_response) => {
@@ -199,43 +178,40 @@ class CartListScreen extends Component {
 
         return;
 
-      
+
     }
 
 
     calculatePriceDetails = () => {
 
-
+        
         var mathBoxPriceTotal = 0;
         var cartPriceTotal = 0;
         var cartDiscountTotal = 0;
         var netPriceTotal = 0;
         this.props.cartItems.map((item) => {
+      
             var cartDiscount = item.display_amount - item.amount;
             var mathBoxPricePerPack = item.boxes * 500;
-            console.log(this.state.mathBoxPrice + " - Math Box  : " + mathBoxPricePerPack + " --  " + item.boxes);
-            console.log("Math Box Required : ", item.mathbox_required + "-- " + item.amount);
+           
             if (!item.mathbox_required)
                 mathBoxPriceTotal += mathBoxPricePerPack;
-            cartPriceTotal += item.amount;
+            cartPriceTotal += item.display_amount;
             cartDiscountTotal += cartDiscount;
+            
 
 
         })
-        //  netPriceTotal = this.state.finalAmountAfterCoupon + mathBoxPriceTotal;
-        netPriceTotal = cartPriceTotal - mathBoxPriceTotal;
-        console.log("Coupon Discount : " + this.state.couponDiscount);
+        
+        netPriceTotal += 0;
+        if(this.props.get_cart_list_status)
+            netPriceTotal = this.props.get_cart_list_response.net_amount;
 
-        //For Testing
-        // netPriceTotal = 1;
-
-
-        //netPriceTotal = cartPriceTotal;
-        netPriceTotal = netPriceTotal - this.state.couponDiscount;
-        console.log("Mathbox Total : " + mathBoxPriceTotal);
-        console.log("CartPrice Total : " + cartPriceTotal);
-        console.log("CartDiscount Total : " + cartDiscountTotal);
-        console.log("NetTotal Total : " + netPriceTotal);
+         if(this.props.apply_coupon_status && this.state.isCouponApplied)
+            netPriceTotal = this.props.apply_coupon_response.net_amount;
+     
+        
+      
         this.setState({
             cartTotalPrice: cartPriceTotal,
             cartDiscountPrice: cartDiscountTotal,
@@ -286,19 +262,20 @@ class CartListScreen extends Component {
     }
 
     onRemoveCoupon = () => {
-        Alert.alert(
-            "Are you Sure want to remove applied coupon?",
-            "",
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () => this.onRemoveCouponConfirmation() }
-            ],
-            { cancelable: false }
-        );
+        this.onRemoveCouponConfirmation()
+        // Alert.alert(
+        //     "Are you Sure want to remove applied coupon?",
+        //     "",
+        //     [
+        //         {
+        //             text: "Cancel",
+        //             onPress: () => console.log("Cancel Pressed"),
+        //             style: "cancel"
+        //         },
+        //         { text: "OK", onPress: () => this.onRemoveCouponConfirmation() }
+        //     ],
+        //     { cancelable: false }
+        // );
 
     }
 
@@ -336,10 +313,12 @@ class CartListScreen extends Component {
         //     this.props.navigation.navigate(Constants.MoreProfileScreen);
         //     return;
         // }
-       
+
+
+
         if (this.state.currency == Constants.INDIA_CURRENCY) {
-            if(this.getMathBoxRequiredStatus())
-                    this.goToAddressScreen();
+            console.log("Currency",this.state.currency);  if (this.getMathBoxRequiredStatus())
+                this.goToAddressScreen();
             else
                 this.doCreatePaymentOrder();
         }
@@ -362,18 +341,18 @@ class CartListScreen extends Component {
 
 
 
-    
+
 
     getProceedButtonText = () => {
 
         if (this.state.currency != Constants.INDIA_CURRENCY)
-            return "Proceed to Payment"
+            return "Proceed to Payment";
         else {
 
             if (this.getMathBoxRequiredStatus())
                 return "Proceed to Address";
             else
-               return "Proceed to Payment";    
+                return "Proceed to Payment";
 
         }
     }
@@ -381,6 +360,9 @@ class CartListScreen extends Component {
 
 
     returnCalculatedPrice = (item) => {
+
+        return item.net_amount;
+
         if (!item.mathbox_required) {
             var mathBoxPrice = item.duration * 500;
             var reducedPrice = item.amount - mathBoxPrice;
@@ -425,7 +407,7 @@ class CartListScreen extends Component {
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={[CommonStyles.text_18_bold]}>{this.state.currency}. {this.returnCalculatedPrice(item)}</Text>
+                                <Text style={[CommonStyles.text_18_bold]}>{this.state.currency} {this.returnCalculatedPrice(item)}</Text>
 
                             </View>
                             <View style={{ marginTop: normalize(4), marginTop: normalize(4) }}>
@@ -458,12 +440,12 @@ class CartListScreen extends Component {
                     backgroundColor: COLOR.WHITE
                 }}
             >
-                 {
-                        loading &&
-                        <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
-                    }
+                {
+                    loading &&
+                    <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
+                }
                 <View style={{ marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(30) }}>
-                   
+
 
                     {
                         this.props.cartItems && this.props.cartItems.length > 0 ?
@@ -553,14 +535,14 @@ class CartListScreen extends Component {
 
                                     </View>
 
-                                    <View>
+                                    {/* <View>
                                         <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, marginTop: normalize(24) }]}>Need help?</Text>
-                                    </View>
+                                    </View> */}
                                 </View>
                                 <View style={{ marginTop: normalize(16), flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
                                         <Text style={[CommonStyles.text_12_Regular]}>You pay</Text>
-                                        <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>{this.state.currency}. {this.state.netTotalPrice}</Text>
+                                        <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>{this.state.currency} {this.state.netTotalPrice}</Text>
                                     </View>
                                     <View>
                                         <CustomGradientButton
@@ -609,7 +591,7 @@ class CartListScreen extends Component {
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
                                 <TextInput
-                                    style={[CommonStyles.text_12_Regular, { flex : 1,paddingVertical : 20,paddingHorizontal : 10,textAlignVertical : 'center',justifyContent : 'center' }]}
+                                    style={[CommonStyles.text_12_Regular, { flex: 1, paddingVertical: 20, paddingHorizontal: 10, textAlignVertical: 'center', justifyContent: 'center' }]}
                                     placeholder={"Enter Coupon Code"}
                                     value={userCouponCode}
                                     onChangeText={(userCouponCode) => this.setState({ userCouponCode })}
@@ -617,7 +599,7 @@ class CartListScreen extends Component {
                                 />
                                 {
                                     this.state.userCouponCode.length > 2 && !this.state.isCouponApplied && !loading ?
-                                        <TouchableOpacity onPress={this.applyCouponCode} style={{ justifyContent : 'center' }}>
+                                        <TouchableOpacity onPress={this.applyCouponCode} style={{ justifyContent: 'center' }}>
                                             <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginEnd: normalize(16) }]} >Apply</Text>
                                         </TouchableOpacity>
 
@@ -627,7 +609,7 @@ class CartListScreen extends Component {
 
                             </View>
                             {
-                                !isValidCouponCode && !loading  ?
+                                !isValidCouponCode && !loading ?
                                     <Text style={[CommonStyles.text_12_Regular, { color: COLOR.RED, marginTop: normalize(7) }]}>Invalid coupon code</Text>
                                     : <View />
                             }

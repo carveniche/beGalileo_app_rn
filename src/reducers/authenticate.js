@@ -117,13 +117,13 @@ export default function reducer(state = initialState, action) {
             return { ...state, loading: false ,storeMobileSucess : false,response: action.payload.data }
         }
         case REGISTER_PARENT:{
-            return { ...state, loading: true ,submitParentSuccess : false,response: action.payload.data }
+            return { ...state, loading: true ,submit_parent_status : null,submit_parent_response: action.payload.data }
         }
         case REGISTER_PARENT_SUCCESS:{
-            return { ...state, loading: false ,submitParentSuccess : action.payload.data.status,response: action.payload.data }
+            return { ...state, loading: false ,submit_parent_status : action.payload.data.status,submit_parent_response: action.payload.data }
         }
         case REGISTER_PARENT_FAILED:{
-            return { ...state, loading: false ,submitParentSuccess : false,response: action.payload.data }
+            return { ...state, loading: false ,submit_parent_status : false,submit_parent_response: action.payload.data }
         }
 
 

@@ -145,6 +145,7 @@ class SubscriptionTabs extends Component {
     }
 
     setCheckBoxTrue = () => {
+
         console.log("Check Box True  : " + this.state.ParentCountry);
 
 
@@ -157,7 +158,6 @@ class SubscriptionTabs extends Component {
     }
 
     componentDidMount() {
-
 
 
         if (this.props.state.dashboard_status) {
@@ -176,10 +176,10 @@ class SubscriptionTabs extends Component {
 
         if (this.props.dashboard_status) {
             var tempCurrency = "";
-            if(this.props.dashboard_response.parent_details[0].country == Constants.INDIA)
+            if (this.props.dashboard_response.parent_details[0].country == Constants.INDIA)
                 tempCurrency = Constants.INDIA_CURRENCY;
             else
-                tempCurrency = Constants.OTHER_CURRENCY;    
+                tempCurrency = Constants.OTHER_CURRENCY;
 
 
             this.setState({
@@ -228,22 +228,24 @@ class SubscriptionTabs extends Component {
         })
         if (this.props.dashboard_response && this.props.dashboard_response.price_details[0]) {
             var isMathBoxSelected = false;
-            console.log("Student Id :" + this.props.currentSelectedKid.student_id);
-            console.log("parent Id : " + this.state.ParentUserId);
-            console.log("Stage Id : " + this.props.dashboard_response.price_details[0].stage_id);
-            console.log("Subscription Id : " + item.subscription_id);
-            console.log("Selected MAth Box :" + this.state[groupPrefixCheckBox + index])
-            if (this.state[groupPrefixCheckBox + index])
-                isMathBoxSelected = true
-            else
-                isMathBoxSelected = false
+
+            if (item.currency == Constants.INDIA_CURRENCY) {
+                if (this.state[groupPrefixCheckBox + index])
+                    isMathBoxSelected = true
+                else
+                    isMathBoxSelected = false
+            }
+
+
+
+
 
 
             this.props.addToCart(this.props.dashboard_response.price_details[0].stage_id,
                 item.subscription_id,
                 this.state.ParentUserId,
                 this.props.currentSelectedKid.student_id,
-                "India",
+                this.props.dashboard_response.parent_details[0].country,
                 isMathBoxSelected
             )
 
@@ -285,9 +287,9 @@ class SubscriptionTabs extends Component {
 
     }
     getPriceForPackage = (item, index) => {
-
-        var mathBoxPrice = item.duration * 500;
-        var reducedPrice = item.original_price - mathBoxPrice;
+        console.log("Item PKG", item);
+        var mathBoxPrice = item.mathbox_price;
+        var reducedPrice = item.original_price + mathBoxPrice;
         return reducedPrice;
 
     }
@@ -317,8 +319,9 @@ class SubscriptionTabs extends Component {
                             <View>
                                 {
                                     this.state[groupPrefixCheckBox + index] ?
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text> :
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency}  {this.getPriceForPackage(item, index)}</Text>
+
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency}  {this.getPriceForPackage(item, index)}</Text> :
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency}  {item.original_price}</Text>
                                 }
 
                             </View>
@@ -329,7 +332,7 @@ class SubscriptionTabs extends Component {
 
                             </View>
                             <View style={{ alignItems: 'flex-end', }}>
-                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{this.state.currency} {item.display_price}</Text>
+                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{item.currency} {item.display_price}</Text>
 
                             </View>
                         </View>
@@ -352,7 +355,7 @@ class SubscriptionTabs extends Component {
                                         </View>
 
                                         <View style={{ marginStart: normalize(8) }}>
-                                            <Text style={[CommonStyles.text_12_bold]}>{this.state.currency} {item.boxes * 500}</Text>
+                                            <Text style={[CommonStyles.text_12_bold]}>{item.currency} {item.mathbox_price}</Text>
                                             <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(1) }]}>Includes {item.boxes} Math boxes</Text>
                                         </View>
                                     </View>
@@ -422,8 +425,9 @@ class SubscriptionTabs extends Component {
                             <View>
                                 {
                                     this.state[groupPrefixCheckBox + index] ?
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency} {item.original_price}</Text> :
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{this.state.currency}  {this.getPriceForPackage(item, index)}</Text>
+
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {this.getPriceForPackage(item, index)}</Text> :
+                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {item.original_price}</Text>
                                 }
 
                             </View>
@@ -434,7 +438,7 @@ class SubscriptionTabs extends Component {
 
                             </View>
                             <View style={{ alignItems: 'flex-end', }}>
-                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{this.state.currency} {item.display_price}</Text>
+                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{item.currency} {item.display_price}</Text>
 
                             </View>
                         </View>
@@ -457,7 +461,7 @@ class SubscriptionTabs extends Component {
                                         </View>
 
                                         <View style={{ marginStart: normalize(8) }}>
-                                            <Text style={[CommonStyles.text_12_bold]}>{this.state.currency} {item.boxes * 500}</Text>
+                                            <Text style={[CommonStyles.text_12_bold]}>{item.currency} {item.mathbox_price}</Text>
                                             <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(1) }]}>Includes {item.boxes} Math boxes</Text>
                                         </View>
                                     </View>
@@ -488,10 +492,14 @@ class SubscriptionTabs extends Component {
                                     onPress={() => this.onBuyNowPress(index, item)}
                                 />
                             </View>
-                            <TouchableOpacity onPress={() => this.addToCart(index, item)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Image style={{ height: normalize(24), width: normalize(24), marginStart: normalize(16), alignSelf: 'center' }} source={IC_ADD_TO_CART} />
-                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(16), alignSelf: 'center' }]}>Add to Cart</Text>
-                            </TouchableOpacity>
+                            {
+                                !(this.props.onlyBuyNow || this.props.isRenew) &&
+                                <TouchableOpacity onPress={() => this.addToCart(index, item)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Image style={{ height: normalize(24), width: normalize(24), marginStart: normalize(16), alignSelf: 'center' }} source={IC_ADD_TO_CART} />
+                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(16), alignSelf: 'center' }]}>Add to Cart</Text>
+                                </TouchableOpacity>
+                            }
+
                         </View>
                         :
                         this.state.subscriptionAddedToCart == groupPrefix + index ?
@@ -549,8 +557,8 @@ class SubscriptionTabs extends Component {
 
                             </View>
                             <View style={{ alignItems: 'flex-end', }}>
-                                <Text style={[CommonStyles.text_12_regular]}>{this.state.currency},2500</Text>
-                                <Text style={[CommonStyles.text_12_regular]}>{this.state.currency}. 2499 /month</Text>
+                                <Text style={[CommonStyles.text_12_regular]}>2500</Text>
+                                <Text style={[CommonStyles.text_12_regular]}>2499 /month</Text>
                             </View>
                         </View>
                         <View style={{ borderWidth: 1, marginTop: normalize(16), borderColor: COLOR.BORDER_COLOR_GREY }} />
@@ -567,7 +575,7 @@ class SubscriptionTabs extends Component {
                             </View>
 
                             <View style={{ marginStart: normalize(8) }}>
-                                <Text style={[CommonStyles.text_12_bold]}>{this.state.currency} 1700</Text>
+                                <Text style={[CommonStyles.text_12_bold]}> 1700</Text>
                                 <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(1) }]}>Includes 12 Math boxes for 12 months</Text>
                             </View>
                         </View>
@@ -627,7 +635,7 @@ class SubscriptionTabs extends Component {
                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Buy now</Text>
                     </TouchableOpacity>
                     {
-                        !this.props.isRenew &&
+                        !(this.props.onlyBuyNow || this.props.isRenew) &&
                         <TouchableOpacity onPress={this.goToBookADemo} style={[{ marginStart: normalize(25) }, isGroupSelected ? styles.tabItem : styles.tabItemSelected]}>
                             <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Book a demo</Text>
                         </TouchableOpacity>

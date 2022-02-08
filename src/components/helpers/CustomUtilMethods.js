@@ -29,21 +29,21 @@ export function getDifferenceFromTodayDate(value, time) {
 
 }
 
-export function getClassesDateFormat(classDate){
-    if(classDate!= null || classDate != "")
-     return classDate.trim().split(" ");
-     else
-     return "";
+export function getClassesDateFormat(classDate) {
+    if (classDate != null || classDate != "")
+        return classDate.trim().split(" ");
+    else
+        return "";
 }
 
-export function getDayOfTheWeek(){
-    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+export function getDayOfTheWeek() {
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 }
 
 export function secondsToHms(d) {
-    console.log("Seconds to time",d);
-    if(d==0)
-    return 0;
+    console.log("Seconds to time", d);
+    if (d == 0)
+        return 0;
     d = Number(d);
     d = Number(3800);
     var h = Math.floor(d / 3600);
@@ -53,34 +53,54 @@ export function secondsToHms(d) {
     var hDisplay = h > 0 ? h + (h == 1 ? " Hr " : " Hrs ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " Min " : " Mins ") : "";
     var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    return hDisplay + mDisplay; 
+    return hDisplay + mDisplay;
 }
 
-export function timeInHourFormat(mTime){
- 
-    if(mTime == undefined || mTime == 0)
+export function timeInHourFormat(mTime) {
+
+    if (mTime == undefined || mTime == 0)
         return "0 Mins";
     var timeValue = "";
     var a = mTime.split(':');
-    if(a[0] != "00"){
-      timeValue += a[0]+" Hr"
+    if (a[0] != "00") {
+        timeValue += a[0] + " Hr"
     }
-    if(a[1] != "00"){
-        timeValue += " "+a[1]+" Min"
+    if (a[1] != "00") {
+        timeValue += " " + a[1] + " Min"
     }
-    if(mTime == "00:00:00")
+    if (mTime == "00:00:00")
         timeValue = "0";
     return timeValue;
-    
+
+}
+
+export function getMaxDateFromToday(days) {
+
+    var date = new Date();
+    var res = date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    date = new Date(res);
+    return date;
 }
 
 
 function replaceAll(str, find, replace) {
-    var escapedFind=find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    var escapedFind = find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     return str.replace(new RegExp(escapedFind, 'g'), replace);
 
 }
 
-export function getDisplayFormattedDate(dateValue){
+export function getDisplayFormattedDate(dateValue) {
     return moment(dateValue).format('MMM DD, YYYY');
 }
+
+export function getValueDayOfTheWeek(day) {
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[day];
+}
+export function getValueOfMonth(month) {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    return monthNames[month];
+}
+

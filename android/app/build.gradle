@@ -139,8 +139,8 @@ android {
         applicationId "com.begalileorndev"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 60
-        versionName "1.60"
+        versionCode 66
+        versionName "1.66"
         multiDexEnabled true
            ndk {
                 abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"

@@ -87,7 +87,7 @@ class AddKidDetail extends Component {
         if (prevProps.submitStudentSuccess !== this.props.submitStudentSuccess) {
             if (this.props.submitStudentSuccess) {
                 const student = this.props.studentSubmitResponse;
-                console.log("Kid Add Response",student);
+                
                 storeLocalData(Constants.IS_LOGGED_IN, true);
                 var kidDetail = {
                     userId: student.user_id,
@@ -110,7 +110,7 @@ class AddKidDetail extends Component {
     }
 
     showDatePicker = () => {
-        // let tommorow = moment(new Date).add(1, 'day')
+     
         var maxDateValue = new Date();
         var pastYear = maxDateValue.getFullYear() - 1;
         maxDateValue.setFullYear(pastYear);
@@ -119,10 +119,7 @@ class AddKidDetail extends Component {
             mBirthDateDialog: true
         })
 
-        // this.refs.dobDialog.open({
-        //     date: new Date(),
-        //     maxDate: new Date(maxDateValue)
-        // });
+        
     }
 
     onDOBDatePicked = (date) => {
@@ -146,31 +143,6 @@ class AddKidDetail extends Component {
 
 
 
-    // static getDerivedStateFromProps(nextProps, state) {
-
-    //     if (nextProps.submitStudentSuccess !== state.submitStudentSuccess) {
-    //         if (nextProps.submitStudentSuccess) {
-
-    //             const student = nextProps.studentSubmitResponse;
-    //             var kidDetail = {
-    //                 userId: student.user_id,
-    //                 name: student.student_first_name + " " + student.student_last_name,
-    //                 avatar: student.avatar
-    //             };
-    //             console.log("Student Submit Success");
-    //             return {
-    //                 allKidsList: [...state.allKidsList, kidDetail],
-    //                 submitStudentSuccess: nextProps.submitStudentSuccess
-
-    //             }
-
-    //         }
-
-    //     }
-
-
-    //     return null;
-    // }
 
 
     componentDidMount() {
@@ -202,45 +174,10 @@ class AddKidDetail extends Component {
                 allKidsList: this.props.dashboard_response.students,
                 showAddkidForm: false
             })
-            // this.props.dashboard_response.students.map((student)=>{
-            //     var kidDetail = {
-            //         userId: student.user_id,
-            //         name: student.student_first_name + " " + student.student_last_name,
-            //         avatar: student.avatar
-            //     };
-            //     console.log("Student Submit Success");
-            //     this.setState({
-            //         allKidsList: [...this.state.allKidsList, kidDetail],
-            //     },
-            //     console.log(this.state.allKidsList)
-            //     )
-
-
-
-            // })
+          
         }
 
-        //for test
-        // this.setState({
-        //     allKidsList: [
-        //         {
-        //             name: 'ANNS',
-        //             user_id : 1
-        //         },
-        //         {
-        //             name: 'ARIS',
-        //             user_id : 2
-        //         },
-        //         {
-        //             name: 'ANNS',
-        //             user_id : 3
-        //         },
-        //         {
-        //             name: 'ARIS',
-        //             user_id : 4
-        //         }
-        //     ]
-        // })
+       
     }
 
     onGenderChange = (value) => {
@@ -258,7 +195,8 @@ class AddKidDetail extends Component {
         console.log("Edit Kid Details");
         console.log(item);
         this.props.navigation.navigate(Constants.EditKidDetail, {
-            editKidItem: item
+            editKidItem: item,
+            totalKids : this.state.allKidsList.length
         });
     }
 
@@ -272,35 +210,19 @@ class AddKidDetail extends Component {
             })
             return;
         }
-        if (this.state.mChildName == null) {
+        if (this.state.mChildName == "") {
             this.setState({
                 mChildNameError: true
             })
             isValidationSuccess = false
         }
-        // if (this.state.mChildLastName == null) {
-        //     this.setState({
-        //         mChildNameError: true
-        //     })
-        //     isValidationSuccess = false
-        // }
-        // else {
-        //     this.setState({
-        //         mChildNameError: false
-        //     })
-        // }
-
-        // if (this.state.mBirthDate == null) {
-        //     this.setState({
-        //         mChildBirthDateError: true
-        //     })
-        //     isValidationSuccess = false
-        // }
-        // else {
-        //     this.setState({
-        //         mChildBirthDateError: false
-        //     })
-        // }
+        else
+        {
+            this.setState({
+                mChildNameError: false
+            }) 
+        }
+        
         if (this.state.mChildGrade == null) {
             this.setState({
                 mChildGradeError: true
@@ -370,6 +292,7 @@ class AddKidDetail extends Component {
     }
 
     onSubmitAndGoHome = () => {
+        console.log("Submit and go home")
         if (this.state.showAddkidForm)
             this.addKidDetails(true);
         else {
@@ -530,8 +453,8 @@ class AddKidDetail extends Component {
                 data={this.state.allKidsList}
                 numColumns={2}
                 contentContainerStyle={{ flexDirection: 'column' }}
-                key={'_'}
-                keyExtractor={item => "_" + item.user_id}
+                // key={'_'+Date.now()}
+               //  keyExtractor={item => "_" + Date.now()}
                 renderItem={({ item: data }) => {
                     return (
                         <TouchableOpacity onPress={() => this.editKidDetail(data)} style={{ flex: 1, margin: 20 }}>
@@ -561,10 +484,8 @@ class AddKidDetail extends Component {
             <FlatList
                 horizontal
                 data={this.state.allKidsList}
-
                 contentContainerStyle={{ flexDirection: 'row' }}
-                key={'#'}
-                keyExtractor={item => "#" + item.user_id}
+                key={'#'+Date.now()}
                 renderItem={({ item: data }) => {
                     return (
                         <View style={{ flex: 1, margin: 15 }}>
@@ -848,14 +769,14 @@ class AddKidDetail extends Component {
                                                 renderItem={this.gradeRowData}
                                                 horizontal={false}
                                                 keyExtractor={(item, index) => 'grade_' + index}
-                                                keyExtractor={item => item.id}
+                                                
                                                 numColumns={3}
                                             />
                                 </View>
 
                                 <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
-                                <Text style={styles.textSubHeader}>Curriculam</Text>
-                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curriculam</Text>}
+                                <Text style={styles.textSubHeader}>Curriculum</Text>
+                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curriculum</Text>}
                                 
                                          <FlatList
 
@@ -864,7 +785,7 @@ class AddKidDetail extends Component {
                                                 renderItem={this.boardRowData}
                                                 horizontal={false}
                                                 keyExtractor={(item, index) => 'board_' + index}
-                                                keyExtractor={item => item.id}
+                                         
                                                 numColumns={3}
                                             />
                                 </View>

@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, ScrollView, Platform } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
 import { CheckBox } from 'react-native-elements'
 import { normalize } from '../components/helpers';
-import { registerParent } from '../actions/authenticate';
+import { registerParent, pre_update_email } from '../actions/authenticate';
+import { updateDeviceInfo } from "../actions/dashboard";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import CustomGradientButton from '../components/CustomGradientButton';
 import * as Constants from '../components/helpers/Constants';
 import { isValidEmail, allowOnlyAlphabets } from '../components/helpers';
 import { useNavigation } from '@react-navigation/native';
 import { storeLocalData } from "../components/helpers/AsyncMethods";
+let parent_id = 0;
 
 class ParentProfile extends Component {
     constructor() {
@@ -30,7 +32,7 @@ class ParentProfile extends Component {
             lastNameError: false,
             pinCodeError: false,
             confirmPinCodeError: false,
-            pinCodeMatchError : false,
+            pinCodeMatchError: false,
             isGoogleLogin: false,
             myNumber: ""
 
@@ -44,11 +46,12 @@ class ParentProfile extends Component {
     confirmPinCodeTextInput = [];
 
     componentDidMount() {
-        const propParentMobile = this.props.navigation.getParam('myNumber', "");
+        const propParentMobile = this.props.navigation.getParam('parentNumber', "");
         const propParentEmail = this.props.navigation.getParam('parentEmail', "");
         const propParentFirstName = this.props.navigation.getParam('parentFirstName', "");
         const propParentLastName = this.props.navigation.getParam('parentLastName', "");
-        const propParentTimeZone = this.props.navigation.getParam('parentTimeZone', "Asia/Kolkata");
+        const propParentTimeZone = this.props.navigation.getParam('parentTimeZone', "");
+        parent_id = this.props.navigation.getParam('parentId', 0);
         this.setState({
             myNumber: propParentMobile,
             mUserName: propParentFirstName,
@@ -73,38 +76,69 @@ class ParentProfile extends Component {
 
 
     }
-    // componentDidUpdate(prevProps) {
-    //     console.log(prevProps);
-    // }
-    static getDerivedStateFromProps(nextProps, state) {
-        console.log("Get Derived State");
-        console.log(nextProps.state);
-        // Return null to indicate no change to state.
-        if (nextProps.state.submitParentSuccess !== state.submitParentSuccess) {
-            if (nextProps.state.submitParentSuccess) {
-                const response = nextProps.state.response;
-                console.log("inside submit parent success");
-                console.log(response);
+
+    updateDeviceToken = () => {
+
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.submit_parent_status != this.props.submit_parent_status) {
+            if (this.props.submit_parent_status == null)
+                return
+            if (this.props.submit_parent_status) {
+                const response = this.props.submit_parent_response;
                 storeLocalData(Constants.IsParentRegistered, true);
                 storeLocalData(Constants.ParentUserId, response.user_id);
                 storeLocalData(Constants.ParentEmail, response.email);
                 storeLocalData(Constants.ParentFirstName, response.first_name);
                 storeLocalData(Constants.ParentLastName, response.last_name);
                 storeLocalData(Constants.ParentMobileNumber, response.mobile);
-                nextProps.navigation.navigate(Constants.AddKidDetail, {
+
+                this.props.updateDeviceInfo(response.user_id, Date.now().toString(), "", Platform.OS);
+                this.props.navigation.navigate(Constants.AddKidDetail, {
                     fromParent: true
                 });
-                return {
-
-                    submitParentSuccess: nextProps.state.submitParentSuccess
-
-                }
+            }
+            else {
+                console.log("Parent submission failed", this.props.submit_parent_response)
+                showMessage({
+                    message: this.props.submit_parent_response.message,
+                    type: "danger",
+                });
             }
         }
-
-        return null;
-
     }
+    // static getDerivedStateFromProps(nextProps, state) {
+    //     console.log("Get Derived State");
+    //     console.log(nextProps.state);
+    //     // Return null to indicate no change to state.
+    //     if (nextProps.state.submitParentSuccess !== state.submitParentSuccess) {
+    //         if (nextProps.state.submitParentSuccess) {
+    //             const response = nextProps.state.response;
+    //             console.log("inside submit parent success");
+    //             console.log(response);
+    //             storeLocalData(Constants.IsParentRegistered, true);
+    //             storeLocalData(Constants.ParentUserId, response.user_id);
+    //             storeLocalData(Constants.ParentEmail, response.email);
+    //             storeLocalData(Constants.ParentFirstName, response.first_name);
+    //             storeLocalData(Constants.ParentLastName, response.last_name);
+    //             storeLocalData(Constants.ParentMobileNumber, response.mobile);
+    //             nextProps.navigation.navigate(Constants.AddKidDetail, {
+    //                 fromParent: true
+    //             });
+    //             return {
+
+    //                 submitParentSuccess: nextProps.state.submitParentSuccess
+
+    //             }
+    //         }
+    //     }
+
+    //     return null;
+
+    // }
+
+
+
 
 
 
@@ -193,7 +227,7 @@ class ParentProfile extends Component {
 
     }
     onPressSubmit = () => {
-
+        const { mUserEmail, mUserName, mUserLastName } = this.state;
         // this.props.navigation.navigate('AddKidDetail',{ 
         //     user_id : "50115"
         //  });
@@ -254,51 +288,51 @@ class ParentProfile extends Component {
             })
         }
 
-        if (this.state.pinCode.length < 4) {
-            this.setState({
-                pinCodeError: true
-            })
-            isValidationSuccess = false
-        }
-        else {
-            this.setState({
-                pinCodeError: false
-            })
-        }
-        if (this.state.confirmPinCode.length < 4) {
-            this.setState({
-                confirmPinCodeError: true
-            })
-            isValidationSuccess = false
-        }
-        else {
-            this.setState({
-                confirmPinCodeError: false
-            })
-        }
-        if(this.state.pinCode.length == 4 && this.state.confirmPinCode.length == 4)
-        {
-            console.log(JSON.stringify(this.state.pinCode)+"---"+JSON.stringify(this.state.confirmPinCode));
-            if(JSON.stringify(this.state.confirmPinCode) !== JSON.stringify(this.state.pinCode)){
-                console.log("inside if")
-                this.setState({
-                    pinCodeMatchError: true
-                })
-                isValidationSuccess = false
-            }
-            else
-            {
-                console.log("outside if")
-                this.setState({
-                    pinCodeMatchError: false
-                })
-            }
-        }     
-       
+        // if (this.state.pinCode.length < 4) {
+        //     this.setState({
+        //         pinCodeError: true
+        //     })
+        //     isValidationSuccess = false
+        // }
+        // else {
+        //     this.setState({
+        //         pinCodeError: false
+        //     })
+        // }
+        // if (this.state.confirmPinCode.length < 4) {
+        //     this.setState({
+        //         confirmPinCodeError: true
+        //     })
+        //     isValidationSuccess = false
+        // }
+        // else {
+        //     this.setState({
+        //         confirmPinCodeError: false
+        //     })
+        // }
+        // if(this.state.pinCode.length == 4 && this.state.confirmPinCode.length == 4)
+        // {
+        //     console.log(JSON.stringify(this.state.pinCode)+"---"+JSON.stringify(this.state.confirmPinCode));
+        //     if(JSON.stringify(this.state.confirmPinCode) !== JSON.stringify(this.state.pinCode)){
+        //         console.log("inside if")
+        //         this.setState({
+        //             pinCodeMatchError: true
+        //         })
+        //         isValidationSuccess = false
+        //     }
+        //     else
+        //     {
+        //         console.log("outside if")
+        //         this.setState({
+        //             pinCodeMatchError: false
+        //         })
+        //     }
+        // }     
+
 
         if (isValidationSuccess) {
             //this.props.navigation.navigate('AddKidDetail');
-            this.props.registerParent(this.state.myNumber, this.state.mUserEmail, this.state.mUserName, this.state.mUserLastName, JSON.stringify(this.state.pinCode), this.state.mUserTimeZone);
+            this.props.pre_update_email(parent_id, mUserEmail, mUserName, mUserLastName);
             console.debug("Validation Success");
         }
 
@@ -340,128 +374,140 @@ class ParentProfile extends Component {
 
         return (
 
+            <ScrollView contentContainerStyle={{ justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
+                <View
+                    style={{ backgroundColor: COLOR.WHITE, flex: 1, justifyContent: 'center' }}
+                >
 
-            <ScrollView
-                style={{ backgroundColor: COLOR.WHITE }}
-            >
+                    <Text style={[CommonStyles.text_14_semi_bold, styles.textHeader]}>Parent Profile</Text>
 
+                    {loading &&
+                        <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
+                    }
 
-                <Text style={styles.textHeader}>Parent Profile</Text>
-
-                {loading &&
-                    <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
-                }
-                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                    <Text style={styles.textSubHeader}>Email Id</Text>
-                    {this.state.emailError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
-                    <TextInput
-                        ref={(input) => { this.email_id_input = input; }}
-                        placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                        keyboardType='email-address'
-                        style={styles.textInputBordered}
-                        editable={this.state.isEmailEditable}
-                        autoCapitalize='none'
-                        onChangeText={(text) => this.setState({ mUserEmail: text })}
-                        value={this.state.mUserEmail}
-                        blurOnSubmit={false}
-                    //setting limit of input
-                    />
-
-
-                </View>
-                {
-                    this.state.isGoogleLogin &&
                     <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                        <Text style={styles.textSubHeader}>Mobile Number</Text>
-                        {this.state.mobileNumberError && <Text style={styles.errorMessage}>Please enter a valid mobile number</Text>}
+                        <Text style={styles.textSubHeader}>Email Id</Text>
+                        {this.state.emailError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
                         <TextInput
                             ref={(input) => { this.email_id_input = input; }}
                             placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                            keyboardType='number-pad'
+                            keyboardType='email-address'
                             style={styles.textInputBordered}
+                            editable={this.state.isEmailEditable}
+                            returnKeyType="next"
                             autoCapitalize='none'
-                            onChangeText={(text) => this.onMobileNumberChanged(text)}
-                            value={this.state.myNumber}
+                            onSubmitEditing={() => { this.first_name_input.focus(); }}
+                            onChangeText={(text) => this.setState({ mUserEmail: text })}
+                            value={this.state.mUserEmail}
                             blurOnSubmit={false}
                         //setting limit of input
                         />
 
 
                     </View>
-                }
 
-                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                    <Text style={styles.textSubHeader}>First Name</Text>
-                    {this.state.fullNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
-                    <TextInput
-                        ref={(input) => { this.Otp_4_TextInput = input; }}
-                        placeholderTextColor={COLOR.TEXT_COLOR_HINT}
 
-                        style={styles.textInputBordered}
-                        onChangeText={this.addUserName.bind(this)}
-                        value={this.state.mUserName}
-                        blurOnSubmit={false}
+                    {
+                        this.state.isGoogleLogin &&
+                        <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+                            <Text style={styles.textSubHeader}>Mobile Number</Text>
+                            {this.state.mobileNumberError && <Text style={styles.errorMessage}>Please enter a valid mobile number</Text>}
+                            <TextInput
+                                ref={(input) => { this.mobile_number_input = input; }}
+                                placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                keyboardType='number-pad'
+                                style={styles.textInputBordered}
+                                autoCapitalize='none'
+                                returnKeyType="next"
+                                onSubmitEditing={() => { this.first_name_input.focus(); }}
+                                onChangeText={(text) => this.onMobileNumberChanged(text)}
+                                value={this.state.myNumber}
+                                blurOnSubmit={false}
+                            //setting limit of input
+                            />
 
-                    />
-                </View>
-                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                    <Text style={styles.textSubHeader}>Last Name</Text>
-                    {this.state.fullNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
-                    <TextInput
-                        ref={(input) => { this.Otp_4_TextInput = input; }}
-                        placeholderTextColor={COLOR.TEXT_COLOR_HINT}
 
-                        style={styles.textInputBordered}
-                        onChangeText={this.addUserLastName.bind(this)}
-                        value={this.state.mUserLastName}
-                        blurOnSubmit={false}
+                        </View>
+                    }
 
-                    />
-                </View>
-                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                    <Text style={styles.textSubHeader}>Set Pin Code</Text>
-                    {this.state.pinCodeError && <Text style={styles.errorMessage}>Please enter PinCode</Text>}
-                    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
-                    <View style={styles.pinCodeContainer}>
-                        {this.renderPinCodeInput()}
+                    <View style={{ marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 2 }}>
+                        <Text style={styles.textSubHeader}>First Name</Text>
+                        {this.state.fullNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
+                        <TextInput
+                            ref={(input) => { this.first_name_input = input; }}
+                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                            returnKeyType="next"
+                            style={styles.textInputBordered}
+                            onSubmitEditing={() => { this.last_name_input.focus(); }}
+                            onChangeText={this.addUserName.bind(this)}
+                            value={this.state.mUserName}
+                            blurOnSubmit={false}
+
+                        />
                     </View>
-                    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
-                </View>
+                    <View style={{ marginLeft: 20, marginRight: 20, marginTop: 10, marginBottom: 2 }}>
+                        <Text style={styles.textSubHeader}>Last Name</Text>
+                        {this.state.fullNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
+                        <TextInput
+                            ref={(input) => { this.last_name_input = input; }}
+                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                            returnKeyType="done"
+                          
+                            style={styles.textInputBordered}
+                            onChangeText={this.addUserLastName.bind(this)}
+                            value={this.state.mUserLastName}
+                            blurOnSubmit={false}
 
-                <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-                    <Text style={styles.textSubHeader}>Confirm Pin Code</Text>
-                    {this.state.confirmPinCodeError && <Text style={styles.errorMessage}>Please enter Confirm PinCode</Text>}
-                    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
-                    <View style={styles.pinCodeContainer}>
-                        {this.renderConfirmPinCodeInput()}
+                        />
                     </View>
-                    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
+                    {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+    <Text style={styles.textSubHeader}>Set Pin Code</Text>
+    {this.state.pinCodeError && <Text style={styles.errorMessage}>Please enter PinCode</Text>}
+    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
+    <View style={styles.pinCodeContainer}>
+        {this.renderPinCodeInput()}
+    </View>
+    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
+</View> */}
+
+                    {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
+    <Text style={styles.textSubHeader}>Confirm Pin Code</Text>
+    {this.state.confirmPinCodeError && <Text style={styles.errorMessage}>Please enter Confirm PinCode</Text>}
+    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
+    <View style={styles.pinCodeContainer}>
+        {this.renderConfirmPinCodeInput()}
+    </View>
+    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
+</View> */}
+                    {/* <View style={styles.checkBoxStyle}>
+                        <CheckBox
+                            textStyle={{ fontSize: 12 }}
+                            containerStyle={{ backgroundColor: COLOR.WHITE }}
+                            center
+                            title='I wish to receive latest updates and news via email.'
+                            checked={this.state.emailAlertsCheck}
+                            onIconPress={this.onEmailAlertsPress}
+                        />
+                    </View> */}
+                    <View style={{ marginBottom: 15, marginTop: normalize(20) }}>
+                        <CustomGradientButton
+                       
+                            style={styles.submitButton}
+                            children="Proceed to Add Kids"
+                            onPress={this.onPressSubmit}
+                        />
+                    </View>
+
+
+
+
+
+
+
+
+
                 </View>
-                <View style={styles.checkBoxStyle}>
-                    <CheckBox
-                        textStyle={{ fontSize: 12 }}
-                        containerStyle={{ backgroundColor: COLOR.WHITE }}
-                        center
-                        title='I wish to receive latest updates and news via email.'
-                        checked={this.state.emailAlertsCheck}
-                        onIconPress={this.onEmailAlertsPress}
-                    />
-                </View>
-                <View style={{ flex: 1, justifyContent: 'center',marginBottom : 15 }}>
-                    <CustomGradientButton
-
-                        style={styles.submitButton}
-                        children="Proceed to Add Kids"
-                        onPress={this.onPressSubmit}
-                    />
-                </View>
-
-
-
-
-
             </ScrollView>
-
 
         )
     }
@@ -472,24 +518,27 @@ const mapStateToProps = (state) => {
     return {
 
         state: state.authenticate,
-        loading: state.authenticate.loading
+        loading: state.authenticate.loading,
+        submit_parent_status: state.authenticate.submit_parent_status,
+        submit_parent_response: state.authenticate.submit_parent_response
 
     }
 
 }
 
 const mapDispatchToProps = {
-    registerParent
+    registerParent,
+    pre_update_email,
+    updateDeviceInfo
 };
 const styles = StyleSheet.create({
     textHeader: {
-        fontSize: 15,
-        textAlign: "left",
-        marginTop: 15,
-        marginBottom: 5,
-        marginStart: 20,
-        color: COLOR.TEXT_COLOR_BLUE,
-        fontFamily: "Montserrat-SemiBold"
+
+        textAlign: "center",
+        marginTop: 1,
+        marginBottom: 15,
+        marginStart: 0,
+        color: COLOR.TEXT_COLOR_BLUE
     },
     textSubHeader: {
         fontSize: 12,
@@ -516,7 +565,7 @@ const styles = StyleSheet.create({
     },
     textInputBordered: {
         textAlign: 'left',
-        padding: 10,
+        padding: 20,
         alignSelf: 'stretch',
         borderRadius: 10,
         borderWidth: 1.5,
@@ -540,7 +589,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.WHITE,
         marginStart: 10,
         marginEnd: 10,
-        marginTop: 2,
+        marginTop: 10,
         marginBottom: 2,
         borderRadius: 0,
         borderRightWidth: 0

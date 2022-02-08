@@ -68,8 +68,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        console.log("Component Mount Login");
-        console.log(this.state);
+       
         GoogleSignin.configure();
         if (this.phone !== undefined) {
             this.setState({
@@ -102,12 +101,11 @@ class Login extends Component {
 
     }
     signIn = async () => {
-        console.log("google sign in");
+     
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            console.log("google sign in success");
-            console.log(userInfo);
+           
             this.setState({ userInfo });
             this.onGoogleLoginSuccess(userInfo);
 
@@ -129,8 +127,7 @@ class Login extends Component {
 
     onGoogleLoginSuccess = (userInfo) => {
 
-        console.log("google sign in");
-        console.log(userInfo.user);
+      
         const user = userInfo.user;
         this.setState({
             isGoogleLogin: true,
@@ -159,12 +156,11 @@ class Login extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
+               
                 var country = responseJson.country.replace(/^"(.*)"$/, '$1');
                 var countryCode = responseJson.countryCode.replace(/^"(.*)"$/, '$1');
                 var timeZone = responseJson.timezone.replace(/^"(.*)"$/, '$1');
-                console.log("Time Zone : " + timeZone);
-                console.log(this.state);
+               
                 var currency = '';
 
                 //For Testing
@@ -208,9 +204,9 @@ class Login extends Component {
     otpHandler = (message) => {
         if (message == null)
             return;
-        console.debug("OTP Message " + message);
+       
         const otp = /(\d{4})/g.exec(message)[1];
-        console.debug("OTP IDENTIFIED " + otp)
+        
         this.setState({
             otpNumber_1: otp[0],
             otpNumber_2: otp[1],
@@ -256,7 +252,7 @@ class Login extends Component {
 
 
         if (prevProps.user_login_status != this.props.user_login_status) {
-            console.log(prevProps.user_login_status + " === " + this.props.user_login_status);
+           
             if (this.props.user_login_status != undefined && this.props.user_login_status !== null) {
                 if (this.props.user_login_status) {
                     this.existingUserToDashboard(this.props.user_login_response);
@@ -288,39 +284,75 @@ class Login extends Component {
                 storeLocalData(Constants.ParentCountryName, this.state.countryName);
                 storeLocalData(Constants.ParentCurrency, this.state.parentCurrency);
                 storeLocalData(Constants.ParentTimeZone, this.state.timeZone);
-                console.log("Ssssssssssssss");
-                console.log(response);
+               
                 if (response.new_user) {
 
-                    this.props.navigation.navigate(Constants.AddKidDetail, {
-                        fromParent: true
+                    if(response.email == "" | response.email == "NUll" | response.email == "null" | response.email=="NULL")
+                        {
+                            this.props.navigation.navigate(Constants.ParentProfile, {
+                                parentId:response.user_id,
+                                parentNumber: this.state.myNumber,
+                                parentTimeZone: this.state.timeZone,
+                                parentEmail : response.email
+                            });
+                        }
+                        else{
+                            this.props.navigation.navigate(Constants.AddKidDetail, {
+                                fromParent: true,
+                                parentEmail : response.email
+                            });
+                        }
+
+                    // this.props.navigation.navigate(Constants.AddKidDetail, {
+                    //     fromParent: true,
+                    //     parentEmail : response.email
+                    // });
+                    if (this.state.isGoogleLogin) {
+
+                        // this.props.navigation.navigate(Constants.ParentProfile, {
+                        //     parentEmail: this.state.parentEmail,
+                        //     parentFirstName: this.state.userInfo.user.givenName,
+                        //     parentLastName: this.state.userInfo.user.familyName,
+                        //     parentTimeZone: this.state.timeZone
+                        // });
+                        this.props.navigation.navigate(Constants.AddKidDetail, {
+                        fromParent: true,
+                        parentEmail : response.email
                     });
-                    // if (this.state.isGoogleLogin) {
 
-                    //     this.props.navigation.navigate(Constants.ParentProfile, {
-                    //         parentEmail: this.state.parentEmail,
-                    //         parentFirstName: this.state.userInfo.user.givenName,
-                    //         parentLastName: this.state.userInfo.user.familyName,
-                    //         parentTimeZone: this.state.timeZone
-                    //     });
+                    }
+                    else if (this.state.isAppleLogin) {
 
-                    // }
-                    // else if (this.state.isAppleLogin) {
+                        // this.props.navigation.navigate(Constants.ParentProfile, {
+                        //     parentEmail: this.state.parentEmail,
+                        //     parentFirstName: this.state.parentFirstName,
+                        //     parentLastName: this.state.parentLastName,
+                        //     parentTimeZone: this.state.timeZone
+                        // });
+                        this.props.navigation.navigate(Constants.AddKidDetail, {
+                        fromParent: true,
+                        parentEmail : response.email
+                    });
 
-                    //     this.props.navigation.navigate(Constants.ParentProfile, {
-                    //         parentEmail: this.state.parentEmail,
-                    //         parentFirstName: this.state.parentFirstName,
-                    //         parentLastName: this.state.parentLastName,
-                    //         parentTimeZone: this.state.timeZone
-                    //     });
-
-                    // }
-                    // else {
-                    //     this.props.navigation.navigate(Constants.ParentProfile, {
-                    //         myNumber: this.state.myNumber,
-                    //         parentTimeZone: this.state.timeZone
-                    //     });
-                    // }
+                    }
+                    else {
+                        if(response.email == "" | response.email == "NUll" | response.email == "null" | response.email=="NULL")
+                        {
+                            this.props.navigation.navigate(Constants.ParentProfile, {
+                                parentId:response.user_id,
+                                parentNumber: this.state.myNumber,
+                                parentTimeZone: this.state.timeZone,
+                                parentEmail : response.email
+                            });
+                        }
+                        else{
+                            this.props.navigation.navigate(Constants.AddKidDetail, {
+                                fromParent: true,
+                                parentEmail : response.email
+                            });
+                        }
+                       
+                    }
 
 
 
@@ -328,7 +360,7 @@ class Login extends Component {
                 else {
                     this.existingUserToDashboard(response);
                 }
-                console.log(response);
+         
             }
 
         }
@@ -361,7 +393,7 @@ class Login extends Component {
     }
 
     onPressFlag() {
-        console.log(this.state);
+
         this.setState({
             showCountryList: true
         })
@@ -411,7 +443,7 @@ class Login extends Component {
         }
         else {
             var userOTP = otp_value1 + "" + otp_value2 + "" + otp_value3 + "" + otp_value4;
-            console.debug("User OTP : " + userOTP)
+           
             this.props.verifyOTP(userOTP, this.state.myNumber)
         }
 
@@ -443,7 +475,7 @@ class Login extends Component {
             })
         }
         if (isValidCred) {
-            console.log(this.state.mUserName);
+            
             this.props.existingUserLogin(this.state.mUserName, this.state.mPassword);
         }
 
@@ -454,7 +486,7 @@ class Login extends Component {
 
     handleSubmitMobileNumber() {
 
-        console.debug("Length : " + this.state.myNumber)
+     
 
         //for Testing
         if (this.state.myNumber == TESTING_MOBILE_NUMBER) {
@@ -504,9 +536,9 @@ class Login extends Component {
 
 
     focusPrevious(key, index) {
-        console.log("On Back Press")
+   
         if (key === 'Backspace' && index !== 0) {
-            console.log("back Space pressed" + index)
+           
             if (index == 3)
                 this.Otp_4_TextInput.focus();
             else if (index == 2)
@@ -521,7 +553,7 @@ class Login extends Component {
     onOTPChanged(text, id) {
         let newText = '';
         let numbers = '0123456789';
-        console.log("Text : " + text + "---" + id);
+       
 
 
         for (var i = 0; i < text.length; i++) {
@@ -529,7 +561,7 @@ class Login extends Component {
                 newText = newText + text[i];
             }
         }
-        console.log(newText);
+       
         if (id == 0) {
             this.setState({ otpNumber_1: newText });
             if (newText != "")
@@ -557,7 +589,7 @@ class Login extends Component {
 
     onAutoOtpTextChange = (text) => {
         const { otpNumber_4, otpNumber_3, otpNumber_2, otpNumber_1 } = this.state;
-        console.log("Text value Changed " + text);
+     
         this.setState({
             autoOtpIos: text
         })
@@ -586,12 +618,12 @@ class Login extends Component {
         if (Platform.OS === 'android') {
             RNOtpVerify.getHash()
                 .then(hashKey => {
-                    console.debug("Hash Key : " + hashKey[0])
+                   
                     this.props.sendOTPHashed(this.state.myNumber, hashKey);
                     this.startListeningForOtp();
                 })
                 .catch(err => {
-                    console.debug("Hash Key Failed : " + err)
+                 
                     this.props.sendOTP(this.state.myNumber);
                 });
         }
@@ -605,7 +637,7 @@ class Login extends Component {
     }
 
     reSendOTP = () => {
-        console.debug("Re Sending OTP");
+        
         this.props.reSendOTP(this.state.myNumber);
 
     }
@@ -635,7 +667,7 @@ class Login extends Component {
     }
 
     editMobileNumber = () => {
-        console.log("Edit Mobile Number ",this.state.showEnterOTP);
+        
        this.props.editMobileNumber();
     }
 
@@ -731,7 +763,7 @@ class Login extends Component {
                 // user is authenticated
             }
             else {
-                console.log(credentialState);
+               
                 alert("Login Failed");
 
             }
@@ -991,7 +1023,7 @@ class Login extends Component {
                                     {showEnterOTP ?
                                         enterOTPContent :
                                         countryName != "" ?
-                                            countryName == 'India' ?
+                                            countryName == Constants.INDIA ?
                                                 mobileNumberContent : gmailLoginContent
                                             : <View />
                                     }

@@ -11,6 +11,7 @@ import CustomGradientButton from './CustomGradientButton';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';
 
+
 const ReportFilterBottomDialog = (props) => {
   const datePicker = useRef();
   const [fromDate, setFromDate] = useState("Choose date");
@@ -40,6 +41,10 @@ const ReportFilterBottomDialog = (props) => {
     }
 
   }
+  function findDayDifference(date1, date2) {
+    // always round down
+    return Math.floor((Math.abs(date2-date1))/(1000*60*60*24));
+  }
 
   openDatePicker = (tag) => {
     console.log("Open Dae " + tag);
@@ -53,6 +58,13 @@ const ReportFilterBottomDialog = (props) => {
       }
       else {
         if (fromDateRaw) {
+          let dateDiff = findDayDifference(fromDateRaw,mMaxDate);
+          console.log("Maximum Before : ",mMaxDate)
+          if(dateDiff >= 31)
+          {
+            mMaxDate = moment(fromDateRaw, "DD-MM-YYYY").add(30, 'days').toDate();
+          }
+          console.log("Maximum After : ",mMaxDate);
           datePicker.current.open({
             date: fromDateRaw,
             minDate: fromDateRaw,
@@ -144,6 +156,7 @@ const ReportFilterBottomDialog = (props) => {
               }}
             />
           </View>
+
 
           <DatePickerDialog ref={datePicker} onDatePicked={onDOBDatePicked} />
 

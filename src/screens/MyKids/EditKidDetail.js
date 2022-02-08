@@ -55,6 +55,7 @@ class EditKidDetail extends Component {
       mChildGenderError: null,
       mChildGradeError: null,
       mChildBoardError: null,
+      totalKids: 0
     };
   }
 
@@ -62,6 +63,7 @@ class EditKidDetail extends Component {
   componentDidMount() {
 
     var kidDetail = this.props.navigation.getParam('editKidItem', null);
+    var totalKidLen = this.props.navigation.getParam('totalKids', 0)
     this.props.getGradeDatas();
     this.setState({
       kidDetails: kidDetail,
@@ -71,7 +73,8 @@ class EditKidDetail extends Component {
       mChildBoard: kidDetail.board,
       selectedDateText: kidDetail.dob,
       mBirthDate: kidDetail.dob,
-      mKidGender: kidDetail.gender
+      mKidGender: kidDetail.gender,
+      totalKids: totalKidLen
     })
     this.onGenderChange(kidDetail.gender);
 
@@ -642,7 +645,8 @@ class EditKidDetail extends Component {
 
                 </View>
               </View>
-             
+
+
 
               <View>
                 <CustomGradientButton
@@ -651,24 +655,31 @@ class EditKidDetail extends Component {
                   children="Save Details"
                   onPress={this.onClickSaveDetails}
                 />
-                <View style={{
-                  flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
-                  marginBottom: 20
-                }}>
 
-                  <Text
-                    onPress={() => this.onClickDeleteStudent(false)}
-                    style={{
-                      color: COLOR.TEXT_COLOR_GREEN,
-                      fontSize: 15,
-                      marginStart: 10,
-                      padding: 15,
-                      fontFamily: 'Montserrat-Regular',
-                      justifyContent: 'center',
-                      alignSelf: 'center'
-                    }}>Remove Child</Text>
-                </View>
+                {
+                  this.state.totalKids > 1 &&
+                  <View style={{
+                    flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
+                    marginBottom: 20
+                  }}>
+
+                    <Text
+                      onPress={() => this.onClickDeleteStudent(false)}
+                      style={{
+                        color: COLOR.TEXT_COLOR_GREEN,
+                        fontSize: 15,
+                        marginStart: 10,
+                        padding: 15,
+                        fontFamily: 'Montserrat-Regular',
+                        justifyContent: 'center',
+                        alignSelf: 'center'
+                      }}>Remove Child</Text>
+                  </View>
+                }
+
               </View>
+
+
 
 
 

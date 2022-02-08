@@ -97,7 +97,7 @@ class PaymentSuccessScreen extends Component {
           <View>
             
             
-            <Text style={[CommonStyles.text_16_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(30),marginTop : normalize(15), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>Thank's for choosing beGalileo</Text>
+            <Text style={[CommonStyles.text_16_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(30),marginTop : normalize(15), marginEnd: normalize(30), textAlign: "center", marginTop: normalize(8) }]}>Thanks for choosing beGalileo</Text>
             <Image style={{ resizeMode: 'contain', height: normalize(80), width: normalize(80), marginTop: normalize(20), marginBottom: normalize(20), height: normalize(40), alignSelf: 'center' }} source={PAYMENT_SUCCESS} />
             <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Payment Success!</Text>
 

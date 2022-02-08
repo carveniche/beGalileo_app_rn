@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator,Modal } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator, Modal as EModal, Dimensions } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -10,14 +10,17 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Modal from "react-native-modal";
+
 import moment from "moment";
 
-import { getDemoSlots, doBookingDemo } from '../../actions/dashboard';
+import { getDemoSlots, doBookingDemo, doReScheduleDemo } from '../../actions/dashboard';
 import { normalize } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import * as Config from '../../config/configs';
 import { NavigationActions } from 'react-navigation';
-import { UpdateNameMobileComponent } from "../../components";
+import { UpdateNameMobileComponent, ChooseGridDateComponent } from "../../components";
+import { getMaxDateFromToday } from "../../components/helpers/CustomUtilMethods";
 
 
 
@@ -32,14 +35,16 @@ class BookDemoScreen extends Component {
             itemPressed: null,
             selectDateError: false,
             selectDateErrorMessage: "",
-            mBirthDateDialog : false,
+            currentSelectedDateIndex: 0,
+            mBirthDateDialog: false,
+            scheduledTime: "",
             timeSlotsList: [],
             mrngTimeSlotList: [],
             afternoonTimeSlotList: [],
             eveningTimeSlotList: [],
             nightTimeSlotList: [],
             allKidsList: [],
-            updateMobileNumberDialog : false,
+            updateMobileNumberDialog: false,
             currentKid: null
 
         }
@@ -48,17 +53,16 @@ class BookDemoScreen extends Component {
 
 
     componentDidMount() {
-     
+
         var isFrom = this.props.navigation.getParam('from', "");
-        if(isFrom == "addKid")
-        {
-           
-            var studentParam = this.props.navigation.getParam('studentData',"");
-            console.log("From add Kid",studentParam);
+        if (isFrom == "addKid") {
+
+            var studentParam = this.props.navigation.getParam('studentData', "");
+            console.log("From add Kid", studentParam);
             this.setState({
-   
+
                 currentKid: studentParam
-            })  
+            })
         }
         else if (this.props.state.dashboard_status) {
             this.setState({
@@ -68,19 +72,38 @@ class BookDemoScreen extends Component {
 
         }
         let todayDate = new Date();
-        todayDate.setDate(todayDate.getDate() + 1);
-        this.setState({
-            dobDate: todayDate,
-            selectedDateText: moment(todayDate).format('DD-MMM-YYYY'),
-            selectedDate: moment(todayDate).format('YYYY-MM-DD')
-        }, () => {
-            this.getTimeSlotsFromDate();
-        });
+        const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
+
+        if (reScheduleDemo) {
+            const scheduledDate = this.props.navigation.getParam('scheduledDate', todayDate);
+            const scheduledTimeParam = this.props.navigation.getParam('scheduledTime', "");
+            this.setState({
+                dobDate: scheduledDate,
+                selectedDateText: moment(scheduledDate).format('DD-MMM-YYYY'),
+                selectedDate: moment(scheduledDate).format('YYYY-MM-DD'),
+                scheduledTime: scheduledTimeParam
+            }, () => {
+                this.getTimeSlotsFromDate();
+            });
+
+        }
+        else {
+            this.setState({
+                dobDate: todayDate,
+                selectedDateText: moment(todayDate).format('DD-MMM-YYYY'),
+                selectedDate: moment(todayDate).format('YYYY-MM-DD')
+            }, () => {
+                this.getTimeSlotsFromDate();
+            });
+        }
+
+
 
 
     }
 
     getTimeSlotsFromDate = () => {
+        console.log("Selected Date", this.state.selectedDateText)
         this.setState({
             demoSlotStatus: false
         })
@@ -92,6 +115,9 @@ class BookDemoScreen extends Component {
     }
 
     setTimeSlotList = (slotList) => {
+
+
+
         this.setState({
             mrngTimeSlotList: [],
             afternoonTimeSlotList: [],
@@ -111,28 +137,42 @@ class BookDemoScreen extends Component {
 
 
 
-        // var mrngMatchString = ['3 AM','4 AM','5 AM','6 AM','5 AM','9 AM','10 AM','11 AM','12 PM'];
-        // var mrngMatchString = ['3 AM','4 AM','5 AM','6 AM','5 AM','9 AM','10 AM','11 AM','12 PM'];
         slotList.map((item) => {
-            console.log(item)
+            const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
+
+            if (reScheduleDemo) {
+                
+                const scheduledTimeParam = this.props.navigation.getParam('scheduledTime', "");
+                const scheduledDateParam = this.props.navigation.getParam('scheduledDate', "");
+                var dateRescheduled = moment(scheduledDateParam).format('YYYY-MM-DD');
+                console.log("Mathch Chec :",this.state.selectedDate);
+                console.log("Mathch Item :",dateRescheduled);
+                if(item.time == scheduledTimeParam.trim() & this.state.selectedDate === dateRescheduled)
+                {
+                    this.onItemTimeSelected(item.slot_id)
+                    console.log("Mathch Found",scheduledTimeParam,item.time);
+                }
+                    
+            }
+
             if (mrngMatchString.includes(item.time)) {
-                console.log("Mrng Time " + item.time)
+
                 mrngDataList.push(item);
 
             }
 
             else if (afternoonMatchString.includes(item.time)) {
-                console.log("Afern Time " + item.time)
+
                 afternoonDataList.push(item);
             }
 
             else if (evngMatchString.includes(item.time)) {
-                console.log("Evng Time " + item.time)
+
                 eveningDataList.push(item);
             }
 
             else if (nightMatchString.includes(item.time)) {
-                console.log("Night Time " + item.time)
+
                 nightDataList.push(item);
             }
 
@@ -147,6 +187,7 @@ class BookDemoScreen extends Component {
             nightTimeSlotList: nightDataList
         })
     }
+
 
     componentDidUpdate(prevProps) {
 
@@ -177,15 +218,6 @@ class BookDemoScreen extends Component {
 
 
 
-    static getDerivedStateFromProps(nextProps, state) {
-
-
-
-        return null;
-    }
-
-
-
     onItemTimeSelected(itemId) {
         console.log(itemId);
         this.setState({
@@ -195,7 +227,7 @@ class BookDemoScreen extends Component {
 
     showDatePicker = () => {
         this.setState({
-            mBirthDateDialog : true
+            mBirthDateDialog: true
         })
         // var today = new Date()
         // this.refs.dobDialog.open({
@@ -242,13 +274,14 @@ class BookDemoScreen extends Component {
     );
 
 
-    onDOBDatePicked = (date) => {
+    onDOBDatePicked = (date, currentIndex) => {
         //Here you will get the selected date
 
         this.setState({
             dobDate: date,
             selectedDateText: moment(date).format('DD-MMM-YYYY'),
-            selectedDate: moment(date).format('YYYY-MM-DD')
+            selectedDate: moment(date).format('YYYY-MM-DD'),
+            currentSelectedDateIndex: currentIndex
         }, () => {
             this.getTimeSlotsFromDate();
         });
@@ -258,9 +291,9 @@ class BookDemoScreen extends Component {
 
     closeDatePicker = () => {
         this.setState({
-          mBirthDateDialog: false
+            mBirthDateDialog: false
         })
-      }
+    }
 
     onDateChange = (event, selectedDate) => {
         console.log("Selected date " + selectedDate);
@@ -268,17 +301,18 @@ class BookDemoScreen extends Component {
     }
 
 
-    callBackMobileNumberUpdate = (name,mobileNumber) => {
-        this.scheduleDemo(name,mobileNumber);
+    callBackMobileNumberUpdate = (name, mobileNumber, email) => {
+        this.scheduleDemo(name, mobileNumber, email);
     }
 
     cancelMobileNumberUpdate = () => {
         this.setState({
-            updateMobileNumberDialog : false
+            updateMobileNumberDialog: false
         })
     }
 
     onBookDemo = () => {
+
         if (this.state.selectedDateText === "Choose Date") {
             this.setState({
                 selectDateError: true
@@ -298,36 +332,68 @@ class BookDemoScreen extends Component {
             });
             return
         }
-        if(this.props.dashboardResponse.parent_details.mobile == "")
-        {
-            this.setState({
-                updateMobileNumberDialog : true
-            })
+
+
+
+        const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
+
+        if (reScheduleDemo) {
+            console.log("Reschedule Demo");
+            this.reScheduleDemo()
+
         }
-        else
-        {
-            this.scheduleDemo("","")
+        else {
+            console.log("Book a demo");
+            if (this.props.dashboardResponse.parent_details[0].mobile == "" ||
+                this.props.dashboardResponse.parent_details[0].first_name == "" ||
+                this.props.dashboardResponse.parent_details[0].first_name == "NULL" ||
+                this.props.dashboardResponse.parent_details[0].email == "" ||
+                this.props.dashboardResponse.parent_details[0].email == null
+            ) {
+
+                this.setState({
+                    updateMobileNumberDialog: true
+                })
+            }
+            else {
+                // console.log("QWQWQWQW",this.props.dashboardResponse.parent_details[0]);
+                this.scheduleDemo("", "", "")
+            }
         }
+
+
     }
 
-    
 
 
+    reScheduleDemo = () => {
+        const reScheduleDemoParam = this.props.navigation.getParam('reScheduleDemo', false);
 
-    scheduleDemo = (name,mobile) => {
-       
+        let demoPreferredSlotId = 0;
+        if (reScheduleDemoParam)
+            demoPreferredSlotId = this.props.bookDemoResponse.preferred_slot_id;
+        else
+            demoPreferredSlotId = this.props.currentSelectedKid.student_demos[0].preferred_slot_id;
+
+        this.props.doReScheduleDemo(this.props.dashboardResponse.parent_id, this.state.currentKid.student_id, demoPreferredSlotId, this.state.itemPressed, this.state.selectedDate);
+
+    }
+
+
+    scheduleDemo = (name, mobile, email) => {
+
         this.cancelMobileNumberUpdate()
-       
-        
-        this.props.doBookingDemo(this.state.currentKid.student_id, this.state.itemPressed, this.state.selectedDate,name,mobile);
-        //this.props.navigation.navigate("DemoConfirmation");
+
+        console.log("Booking a demo");
+        this.props.doBookingDemo(this.state.currentKid.student_id, this.state.itemPressed, this.state.selectedDate, name, mobile, email);
+
     }
 
 
 
 
     render() {
-        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList,mBirthDateDialog,updateMobileNumberDialog } = this.state;
+        const { isCancelConfirmationDemoVisible, timeSlotsList, allKidsList, currentKid, mrngTimeSlotList, afternoonTimeSlotList, eveningTimeSlotList, nightTimeSlotList, mBirthDateDialog, updateMobileNumberDialog } = this.state;
         const { loading } = this.props;
         const { navigation } = this.props.navigation;
         const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
@@ -343,11 +409,11 @@ class BookDemoScreen extends Component {
                         loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                     }
-                    
+
 
                     <View style={{ flex: 1 }}>
                         <View style={{ marginTop: 15 }}>
-                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>{reScheduleDemo ? "ReSchedule a demo" : "Book a FREE Demo"}</Text>
+                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>{reScheduleDemo ? "Reschedule a demo" : "Book a FREE Demo"}</Text>
                         </View>
 
 
@@ -483,33 +549,37 @@ class BookDemoScreen extends Component {
                                 onPress={this.onBookDemo}
                             />
                         </View>
-                        {/* <Modal isVisible={true}>
-                            <DateTimePicker
-                                testID="dateTimePicker"
-                                value={this.state.selectedDateText}
-                                mode={'date'}
-                                is24Hour={true}
-                                display="default"
-                                onChange={this.onDateChange}
-                            />
-                        </Modal> */}
-                        <DateTimePickerModal
+
+                        {/* <DateTimePickerModal
                             isVisible={mBirthDateDialog}
                             mode="date"
+                            minimumDate={getMaxDateFromToday(1)}
+                            maximumDate={getMaxDateFromToday(7)}
                             onConfirm={this.onDOBDatePicked}
                             onCancel={this.closeDatePicker}
 
-                        />
-                    </View>
-                    {
-                        this.state.updateMobileNumberDialog &&
-                       
-                       <Modal transparent={true}>
-                           <UpdateNameMobileComponent cancelMobileNumberUpdate={this.cancelMobileNumberUpdate} callBackMobileNumberUpdate={this.callBackMobileNumberUpdate}  />
-                           </Modal>
-                    }
+                            
+                        /> */}
+                        {
+                            mBirthDateDialog &&
+                            <EModal transparent={true}>
+                                <ChooseGridDateComponent onDOBDatePicked={this.onDOBDatePicked} closeDatePicker={this.closeDatePicker} currentIndex={this.state.currentSelectedDateIndex} />
+                            </EModal>
+                        }
 
-                   
+
+
+
+                    </View>
+
+
+                    <Modal isVisible={this.state.updateMobileNumberDialog} transparent={true}>
+                        <UpdateNameMobileComponent parent_details={this.props.dashboardResponse.parent_details[0]} cancelMobileNumberUpdate={this.cancelMobileNumberUpdate} callBackMobileNumberUpdate={this.callBackMobileNumberUpdate} />
+                    </Modal>
+
+
+
+
 
                 </ScrollView>
 
@@ -524,9 +594,12 @@ const mapStateToProps = (state) => {
     return {
         state: state.dashboard,
         loading: state.dashboard.loading,
-        dashboardResponse : state.dashboard.dashboard_response,
+        dashboardResponse: state.dashboard.dashboard_response,
         demoSlotStatus: state.dashboard.demo_slot_status,
-        bookDemoStatus: state.dashboard.book_demo_status
+        bookDemoStatus: state.dashboard.book_demo_status,
+        bookDemoResponse: state.dashboard.book_demo_response,
+        currentSelectedKid: state.dashboard.current_selected_kid,
+
     }
 
 
@@ -534,7 +607,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getDemoSlots,
-    doBookingDemo
+    doBookingDemo,
+    doReScheduleDemo
 };
 
 const styles = StyleSheet.create({
@@ -543,8 +617,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLOR.WHITE,
         justifyContent: 'flex-start',
-        marginStart: 10,
-        marginEnd: 10
+        paddingHorizontal: 10
     },
     textHeader: {
         fontSize: 15,

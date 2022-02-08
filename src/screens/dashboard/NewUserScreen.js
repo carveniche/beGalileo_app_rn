@@ -13,8 +13,8 @@ import SubscriptionTabs from '../../components/subscription_tab';
 import AddCartFloatingButton from '../../components/AddCartFloatingButton';
 import MathBoxTabs from '../dashboard/MathBoxTabs';
 import { WebView } from 'react-native-webview';
-import YouTube from 'react-native-youtube';
-import YoutubePlayer from "react-native-youtube-iframe";
+// import YouTube from 'react-native-youtube';
+// import YoutubePlayer from "react-native-youtube-iframe";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 
@@ -139,27 +139,36 @@ class NewUserScreen extends Component {
 
                             </View>
                             <View style={{ flex: 1, marginStart: normalize(16) }}>
-                                <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Live demo Class</Text>
-                                {
-                                    currentSessionKid.demo_confirmed ?
-                                        <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is confirmed.</Text>
-                                        :
-                                        <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is booked</Text>
-                                }
+                                {/* <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}>Upcoming Trial Class</Text> */}
+
+                                <Text style={[CommonStyles.text_12_bold, { flexShrink: 1, color: COLOR.TEXT_COLOR_BLACK, marginTop: normalize(8) }]}>Demo class for {currentSessionKid.name} is {currentSessionKid.student_demos[0].status}</Text>
+
 
                                 <View style={{ flexDirection: 'row', marginTop: normalize(8) }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "contain" }} source={ICON_CLOCK} />
                                     <Text style={[CommonStyles.text_12_Regular, { marginStart: normalize(8) }]}>{currentSessionKid.student_demos[0].date} | {currentSessionKid.student_demos[0].time}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
-                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
-                                    <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
-                                </TouchableOpacity>
                                 {
-                                    !currentSessionKid.demo_confirmed &&
+                                    currentSessionKid.student_demos[0].status != 'Cancelled' &&
+                                    <TouchableOpacity onPress={() => this.goToDemoDetails(currentSessionKid)} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>View Details</Text>
+                                        <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
+                                    </TouchableOpacity>
+                                }
+
+                                {
+                                    currentSessionKid.student_demos[0].status == 'booked' &&
                                     <View>
                                         <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
                                     </View>
+                                }
+
+                                {
+                                    currentSessionKid.student_demos[0].status == 'Cancelled' &&
+                                    <TouchableOpacity onPress={() => this.goToBookADemo()} style={{ flexDirection: 'row', marginTop: normalize(24), marginEnd: normalize(10), marginBottom: normalize(10), justifyContent: 'space-between' }}>
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_BLUE, marginStart: normalize(8), alignSelf: 'center' }]}>Rebook demo</Text>
+                                        <Image style={{ height: normalize(28), width: normalize(28), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
+                                    </TouchableOpacity>
                                 }
 
 
@@ -224,11 +233,11 @@ class NewUserScreen extends Component {
 
                     {
                         this.props.dashboardStatus && this.props.dashboardResponse.students.length > 0 &&
-                            <View style={{ marginStart: 5, marginEnd: 5 }}>
-                               
-                                <SubscriptionTabs goToCartList={this.goToCartList} navigation={this.props.navigation}   />
-                            </View>
-                           
+                        <View style={{ marginStart: 5, marginEnd: 5 }}>
+
+                            <SubscriptionTabs goToCartList={this.goToCartList} navigation={this.props.navigation} />
+                        </View>
+
                     }
 
 
@@ -238,7 +247,11 @@ class NewUserScreen extends Component {
 
                 </View>
                 <View>
-                    <MathBoxTabs />
+                    {
+                        this.props.dashboardStatus &&
+                        <MathBoxTabs country={this.props.dashboardResponse.parent_details[0].country} />
+                    }
+
                 </View>
 
                 {
@@ -274,14 +287,14 @@ class NewUserScreen extends Component {
                     <View style={{ backgroundColor: '#EEF8FE', marginTop: normalize(32), borderRadius: normalize(12), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents \nare saying about \nbeGalileo'}</Text>
                         <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'Online learning experience \nwith kids and parents'}</Text>
-                        <Image style={{ height: normalize(200), width: '100%', resizeMode: 'stretch', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
-                        <TouchableOpacity style={{ padding: 20 }} onPress={() => {
+                        <Image style={{ height: normalize(200), width: '100%', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
+                        {/* <TouchableOpacity style={{ padding: 20 }} onPress={() => {
                             this.setState({
                                 demoVideo: true
                             })
                         }}>
                             <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 20 }} source={IC_PLAY_BLUE} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                     </View>
                 </View>
@@ -299,12 +312,12 @@ class NewUserScreen extends Component {
                         }}>
                             <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
                         </TouchableOpacity>
-                        <YoutubePlayer
+                        {/* <YoutubePlayer
                             height={300}
                             play={true}
-                            videoId={"bEJLVQJjeak"}
+                            videoId={"mIl0eoUK6X8"}
 
-                        />
+                        /> */}
 
                         {/* <YouTube
                             videoId="bEJLVQJjeak" // The YouTube video ID

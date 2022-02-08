@@ -53,7 +53,7 @@ class HomeMoreScreen extends Component {
 
     onClickMykids = () => {
         getLocalData(Constants.ParentUserId).then((parentId) => {
-            console.log("Parent Id " + parentId);
+        
             this.props.navigation.navigate(Constants.AddKidDetail, {
                 user_id: parentId,
                 isFrom: Constants.ExistingUser

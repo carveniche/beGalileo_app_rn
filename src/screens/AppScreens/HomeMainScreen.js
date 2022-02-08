@@ -114,11 +114,15 @@ class HomeMainScreen extends Component {
 
 
     getCartItems = () => {
+        if(this.props.dashboardStatus)
+        {
+            this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id,this.props.dashboardResponse.parent_details[0].country)
+        }
        
-        getLocalData(Constants.ParentUserId).then((parentId) => {
-            console.log("Parent Id " + parentId);
-            this.props.getCartItemList(parentId, "India")
-        })
+        // getLocalData(Constants.ParentUserId).then((parentId) => {
+        //     console.log(" Cart Items QQQ Parent Id " + parentId);
+        //     this.props.getCartItemList(parentId, "")
+        // })
 
 
     }
@@ -136,14 +140,7 @@ class HomeMainScreen extends Component {
             }
         }
 
-        if (prevProps.addCartStatus != this.props.addCartStatus) {
-            if (this.props.addCartStatus) {
-               
-
-            }
-
-
-        }
+      
         if (prevProps.get_cart_list_status != this.props.get_cart_list_status) {
             if (this.props.get_cart_list_status) {
                 console.log("LIST CART STATUS");
@@ -188,8 +185,27 @@ class HomeMainScreen extends Component {
     }
 
     checkDashboardItems = () => {
+        AsyncStorage.multiGet([Constants.ParentUserId,Constants.ParentFirstName,Constants.ParentLastName, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
+            console.log("WWWWWWWW");
+            console.log(JSON.parse(response[0][1]));
+            console.log(JSON.parse(response[1][1]));
+            console.log(JSON.parse(response[2][1]));
+            console.log(JSON.parse(response[3][1]));
+            console.log(JSON.parse(response[4][1]));      
+        })
+        AsyncStorage.multiGet([Constants.ParentUserId,Constants.ParentCountryName]).then(response => {
+            console.log("AAAAAAAAAAA",response);
+            console.log(JSON.parse(response[0][1]));
+            console.log(JSON.parse(response[1][1]));
+     
+          
+      
+        }).catch(err=>{
+            console.log("Get Multi Err ",err);
+        })
        
         getLocalData(Constants.ParentUserId).then((parentId) => {
+            console.log("BBBBBB");
             console.log("Parent Id " + parentId);
             this.props.getDashboardItems(parentId, "India", this.props.currentSelectedKid.student_id)
         })

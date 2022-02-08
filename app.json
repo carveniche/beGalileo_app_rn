@@ -11,8 +11,9 @@
       "web"
     ],
     "assetBundlePatterns": [
-      "**/*"
-    ],
+      "src/assets/**/*",
+      "packages/ui-lib-native/assets/**/*"
+      ],
     "android": {
       "package": "com.begalileorndev"
     },

@@ -60,55 +60,22 @@ class CartAddress extends Component {
     }
 
     parseParentDetails = () => {
-        getLocalData(Constants.ParentUserId).then((parentId) => {
-            console.log("Parent Id " + parentId);
+
+        if (this.props.dashboardStatus) {
+            let parentDetail = this.props.dashboardResponse.parent_details[0];
+            let parentCurrency = parentDetail.currency == Constants.INDIA ? Constants.INDIA_CURRENCY : Constants.OTHER_CURRENCY
             this.setState({
-                localParentId: parentId,
+                localParentId: parentDetail.id,
+                localParentName: parentDetail.first_name + " " + parentDetail.last_name,
+                localParentEmail: parentDetail.email,
+                localParentContactNumber: parentDetail.mobile,
+                mParentCurrency: parentDetail.currency,
+                mParentCountryName: parentDetail.country
+               
 
             })
-        })
-        getLocalData(Constants.ParentFirstName).then((parentName) => {
-            console.log("Parent Name " + parentName);
-            this.setState({
-                localParentName: parentName.slice(1, -1),
-
-            })
-        })
-        getLocalData(Constants.ParentEmail).then((parentEmail) => {
-            console.log("Parent Email " + parentEmail);
-            this.setState({
-                localParentEmail: JSON.parse(parentEmail)
-
-            })
-        })
-        getLocalData(Constants.ParentMobileNumber).then((parentMobileNumber) => {
-            console.log("Parent Mobile Number " + parentMobileNumber);
-            this.setState({
-                localParentContactNumber: JSON.parse(parentMobileNumber),
-
-            })
-        })
-        getLocalData(Constants.ParentCurrency).then((parentCurrency) => {
-
-            this.setState({
-                mParentCurrency: JSON.parse(parentCurrency),
-
-            })
-        })
-        getLocalData(Constants.ParentCountryCode).then((parentCountryCode) => {
-
-            this.setState({
-                mParentCountryCode: JSON.parse(parentCountryCode),
-
-            })
-        })
-        getLocalData(Constants.ParentCountryName).then((parentCountryName) => {
-
-            this.setState({
-                mParentCountryName: JSON.parse(parentCountryName),
-
-            })
-        })
+        }
+       
     }
 
     componentDidUpdate(prevProps) {
@@ -119,8 +86,9 @@ class CartAddress extends Component {
         }
         if (prevProps.create_order_status != this.props.create_order_status) {
             if (this.props.create_order_status) {
+                console.log("calling Payment");
 
-                this.proceedToPayment(this.props.create_order_response)
+               // this.proceedToPayment(this.props.create_order_response)
             }
         }
         if (prevProps.update_payment_status != this.props.update_payment_status) {
@@ -476,6 +444,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
+        dashboardStatus : state.dashboard.dashboard_response,
         dashboardResponse: state.dashboard.dashboard_response,
         list_address_status: state.dashboard.list_address_status,
         list_address_response: state.dashboard.list_address_response,

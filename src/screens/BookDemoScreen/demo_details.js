@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { cancelPreferredSlot } from '../../actions/dashboard';
+import { cancelPreferredSlot,cancelConfirmedDemo } from '../../actions/dashboard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { IC_RESCHEDULE_DEMO, IC_CANCEL_DEMO, IC_TEACHER, IC_DEMO_CONFIRM_SUCCESS, CARD_BTN_ARROW } from "../../assets/images"
 import SvgUri from 'react-native-svg-uri';
@@ -51,9 +51,13 @@ class DemoDetails extends Component {
     }
 
     rescheduleDemo = () => {
-
+        console.log("Demo Details", this.props.state);
         this.props.navigation.navigate(Constants.BookDemoScreen, {
-            reScheduleDemo: true
+            reScheduleDemo: true,
+            scheduledDate: this.state.demoDetail.date,
+            demoStatus : this.state.demoDetail.status,
+            scheduledTime: this.state.demoDetail.time.replace(":00", ""),
+            preferred_slot_id: this.state.demoDetail.preferred_slot_id
         });
     }
 
@@ -63,7 +67,7 @@ class DemoDetails extends Component {
         //     index: 0,
         //     actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
         //   });
-        
+
         //   this.props.navigation.dispatch(navigateAction);
     }
     showTeacherDetails = () => {
@@ -87,15 +91,27 @@ class DemoDetails extends Component {
 
     }
     cancelDemo = () => {
-        console.log(this.state.studentId);
-        console.log(this.state.demoDetail.preferred_slot_id);
+       
         this.setState({
             isCancelConfirmationDemoVisible: false
         });
-
-
+        if(this.state.isDemoConfirmed)
+        {
+           
+            this.props.cancelConfirmedDemo(this.props.dashboardResponse.parent_id, this.state.demoDetail.demo_class_id);
+        }
+        else
         this.props.cancelPreferredSlot(this.state.studentId, this.state.demoDetail.preferred_slot_id);
-        //this.props.navigation.navigate(Constants.Dashboard)
+       
+    }
+
+    isCancellable = () => {
+        if(this.state.demoDetail != undefined)
+        {
+            console.log("Time ",this.state.demoDetail.time)
+        }
+        
+        return true;
     }
     render() {
         const { isCancelConfirmationDemoVisible, isDemoConfirmed, demoDetail } = this.state;
@@ -210,21 +226,22 @@ class DemoDetails extends Component {
 
                         </View>
                         {
-                            isDemoConfirmed ?
-                                <View />
-                                :
-                                <View>
-                                    <TouchableOpacity onPress={this.rescheduleDemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
-                                        <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_RESCHEDULE_DEMO} />
-                                        <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Reschedule Demo</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.cancleConfiramtiondemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
-                                        <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_CANCEL_DEMO} />
-                                        <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Cancel Demo</Text>
-                                    </TouchableOpacity>
-                                </View>
-
+                            this.isCancellable() &&
+                            <View>
+                                <TouchableOpacity onPress={this.rescheduleDemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_RESCHEDULE_DEMO} />
+                                    <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Reschedule Demo</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.cancleConfiramtiondemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_CANCEL_DEMO} />
+                                    <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Cancel Demo</Text>
+                                </TouchableOpacity>
+                            </View>
                         }
+
+
+
+
 
                         <View style={{ marginTop: normalize(20), marginStart: normalize(30), marginEnd: normalize(30) }}>
                             <CustomGradientButton
@@ -252,6 +269,7 @@ const mapStateToProps = (state) => {
         state: state.dashboard,
         loading: state.dashboard.loading,
         bookDemoStatus: state.dashboard.book_demo_status,
+        dashboardResponse: state.dashboard.dashboard_response,
         cancelSlotStatus: state.dashboard.cancel_slot_status,
         currentSelectedKid: state.dashboard.current_selected_kid
     }
@@ -260,7 +278,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    cancelPreferredSlot
+    cancelPreferredSlot,
+    cancelConfirmedDemo
 };
 
 const styles = StyleSheet.create({

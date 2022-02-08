@@ -220,7 +220,7 @@ export function updateParentProfile(parent_id,mobile,email,first_name,last_name)
 
 
 
-export function doBookingDemo(student_id,slot_id,day,name,mobile){
+export function doBookingDemo(student_id,slot_id,day,name,mobile,email){
     return{
         type : BOOK_DEMO,
         payload : {
@@ -231,7 +231,44 @@ export function doBookingDemo(student_id,slot_id,day,name,mobile){
                     slot_id,
                     day,
                     name,
-                    mobile
+                    mobile,
+                    email
+                }
+            }
+        }
+    }
+}
+
+export function doReScheduleDemo(parent_id,student_id,preferred_slot_id,slot_id,day){
+    return{
+        type : BOOK_DEMO,
+        payload : {
+            request: {
+                url : 'app_mathbox/reschedule_demo',
+                params : {
+                    parent_id, 
+                    student_id,
+                    preferred_slot_id, 
+                    slot_id,
+                    day
+                }
+            }
+        }
+    }
+}
+
+export function doReScheduleDemoConfirmed(parent_id,student_id,preferred_slot_id,slot_id,day){
+    return{
+        type : BOOK_DEMO,
+        payload : {
+            request: {
+                url : 'app_mathbox/reschedule_demo',
+                params : {
+                    parent_id, 
+                    student_id,
+                    preferred_slot_id, 
+                    slot_id,
+                    day
                 }
             }
         }
@@ -296,6 +333,21 @@ export function cancelPreferredSlot(student_id,preferred_slot_id){
                 params : {
                     student_id,
                    preferred_slot_id
+                }
+            }
+        }
+    }
+}
+
+export function cancelConfirmedDemo(parent_id,live_class_id){
+    return{
+        type : CANCEL_SLOT,
+        payload : {
+            request: {
+                url : 'app_mathbox/cancel_demo',
+                params : {
+                    parent_id,
+                    live_class_id
                 }
             }
         }

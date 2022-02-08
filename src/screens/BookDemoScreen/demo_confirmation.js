@@ -44,9 +44,13 @@ class DemoConfirmation extends Component {
     }
 
     rescheduleDemo = () => {
-
+        console.log("demo Time",this.props.state.book_demo_response.preferred_slot_id)
         this.props.navigation.navigate(Constants.BookDemoScreen, {
-            reScheduleDemo: true
+            reScheduleDemo: true,
+            scheduledDate : this.state.demoDate,
+            demoStatus : 'booked',
+            scheduledTime : this.state.demoTime.replace(":00",""),
+            preferred_slot_id : this.props.state.book_demo_response.preferred_slot_id
         });
     }
 
@@ -84,9 +88,9 @@ class DemoConfirmation extends Component {
         });
         const slotId = this.props.navigation.getParam('demo_slot_id', 0);
         const demoStudentId = this.props.navigation.getParam('demo_student_id', 0);
-        console.log("cancel demo " + slotId + "--" + demoStudentId);
+    
         this.props.cancelPreferredSlot(demoStudentId, slotId);
-        // this.props.navigation.navigate(Constants.Dashboard)
+        
     }
     render() {
         const { isCancelConfirmationDemoVisible } = this.state;

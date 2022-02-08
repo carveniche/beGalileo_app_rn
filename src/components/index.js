@@ -1,4 +1,5 @@
 import CustomBackButton from './CustomBackButton';
 import ReportListDateItem from './ReportListDateItem';
 import UpdateNameMobileComponent from './UpdateNameMobileComponent';
-export { CustomBackButton,ReportListDateItem,UpdateNameMobileComponent }
+import ChooseGridDateComponent from './ChooseGridDateComponent';
+export { CustomBackButton,ReportListDateItem,UpdateNameMobileComponent,ChooseGridDateComponent }

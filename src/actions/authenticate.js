@@ -188,6 +188,22 @@ export function registerParent(mobile, email, first_name, last_name, pin, time_z
         }
     }
 }
+export function pre_update_email(parent_id, email, first_name, last_name) {
+    return {
+        type: REGISTER_PARENT,
+        payload: {
+            request: {
+                url: 'app_mathbox/update_email_before_add_child',
+                params: {
+                    parent_id,
+                    email,
+                    first_name,
+                    last_name
+                }
+            }
+        }
+    }
+}
 
 export function registerStudent(user_id, first_name, last_name, dob, grade, board, gender, photo, time_zone) {
     console.log(photo)

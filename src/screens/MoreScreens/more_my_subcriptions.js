@@ -10,6 +10,8 @@ import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
+import CustomGradientButton from "../../components/CustomGradientButton";
+import { NavigationActions, StackActions } from 'react-navigation';
 
 
 class MoreMySubscriptions extends Component {
@@ -48,7 +50,7 @@ class MoreMySubscriptions extends Component {
                         flex: 1, width: 0,
                         flexGrow: 1
                     }}>
-                        <View style={{ flexDirection: 'row', marginStart : normalize(5) }}>
+                        <View style={{ flexDirection: 'row', marginStart: normalize(5) }}>
                             <Image style={{ borderRadius: 100, height: normalize(28), width: normalize(28), resizeMode: "stretch" }} source={{ uri: dataElement.photo }} />
                             <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', marginStart: normalize(6) }]}>{dataElement.student_name}</Text>
                         </View>
@@ -56,8 +58,8 @@ class MoreMySubscriptions extends Component {
                     </View>
 
                     <View style={{
-                        flex: 1,  width: 0,
-                        flexGrow: 1,marginEnd : normalize(5)
+                        flex: 1, width: 0,
+                        flexGrow: 1, marginEnd: normalize(5)
                     }}>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, textAlign: 'right' }]}>{dataElement.live_classes} Live Classes</Text>
 
@@ -80,7 +82,7 @@ class MoreMySubscriptions extends Component {
                     </View>
 
                     <View style={{ marginTop: normalize(4), marginTop: normalize(12), marginBottom: normalize(12) }}>
-                        <Text style={[CommonStyles.text_16_semi_bold]}>{ dataElement.expired ?  "Expired on" : "Expires on"}</Text>
+                        <Text style={[CommonStyles.text_16_semi_bold]}>{dataElement.expired ? "Expired on" : "Expires on"}</Text>
                         <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(4) }]}>{dataElement.subscription_end_date}</Text>
                     </View>
                     <View style={{ marginTop: normalize(4), marginTop: normalize(12), marginBottom: normalize(12) }}>
@@ -103,6 +105,10 @@ class MoreMySubscriptions extends Component {
 
         )
 
+    }
+
+    onBuySubscription = () => {
+        this.props.navigation.navigate(Constants.ShowSubscriptions);
     }
 
     render() {
@@ -132,7 +138,19 @@ class MoreMySubscriptions extends Component {
                         {
                             subscription_details_status && this.props.subscription_details_response.subscription_details != null && this.props.subscription_details_response.subscription_details.length > 0 ?
                                 this.renderSubscriptionDetails()
-                                : <NoRecordFoundComponent title="No subscriptions details found" sub_title="" />
+                                :
+                                <View>
+
+                                    <NoRecordFoundComponent title="No subscriptions details found" sub_title="" />
+                                    <CustomGradientButton
+                                        myRef={(input) => { this.btn_edit_student = input; }}
+                                        style={styles.addKidButton}
+                                        children="Buy subscription"
+                                        onPress={this.onBuySubscription}
+                                    />
+                                  
+                                </View>
+
 
                         }
 
@@ -180,6 +198,15 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         color: COLOR.TEXT_COLOR_BLUE,
         fontFamily: "Montserrat-Regular"
+    },
+    addKidButton: {
+        alignItems: 'center',
+        marginStart: 20,
+        marginEnd: 20,
+        marginTop: 20,
+        paddingTop: 15,
+
+        paddingBottom: 15
     },
 });
 

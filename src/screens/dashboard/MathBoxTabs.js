@@ -12,20 +12,13 @@ import { getLocalData } from '../../components/helpers/AsyncMethods';
 class MathBoxTabs extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-           
-            ParentCountry: Constants.INDIA
-        }
+       
 
 
     }
 
     componentDidMount(){
-        getLocalData(Constants.ParentCountryName).then((name) => {
-           this.setState({
-               ParentCountry : JSON.parse(name)
-           })
-        })
+       
     }
 
 
@@ -46,27 +39,27 @@ class MathBoxTabs extends Component {
                         with Vidoes and
                         Brain Development Activities</Text>
 
-                        <Image style={{ height: normalize(80), width: normalize(130), flexDirection: 'row', flexWrap: 'wrap', resizeMode: 'center', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
+                        <Image style={{ height: normalize(80), width: normalize(130), flexDirection: 'row', flexWrap: 'wrap', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
 
                     </View>
                     <View style={{ flex: 1, backgroundColor: '#C1D0F4', borderRadius: normalize(12), marginStart: normalize(4), marginEnd: normalize(8) }}>
-                        <Image style={{ height: normalize(100), width: normalize(100), resizeMode: 'center', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MOBILE_HAND} />
+                        <Image style={{ height: normalize(100), width: normalize(100), resizeMode: 'contain', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MOBILE_HAND} />
                         <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(12), marginTop: normalize(12) }]}>Track daily progress of your kid</Text>
                     </View>
 
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: 10,marginBottom : 10 }}>
+                <View style={{ flexDirection: 'row',height : 200 ,marginTop: 10,marginBottom : 10 }}>
                     <View style={{ flex: 1, backgroundColor: '#FCDCDC', borderRadius: normalize(12), marginStart: normalize(8), marginEnd: normalize(4), justifyContent: 'center', alignContent: 'center' }}>
                         <Text style={[CommonStyles.text_12__semi_bold, { flex: 1, marginStart: normalize(12), marginTop: normalize(12),textAlign : 'center' }]}>Alexa enabled learning</Text>
 
-                        <Image style={{ height: normalize(80), width: normalize(80), resizeMode: 'center', borderRadius: normalize(12),justifyContent : 'center',alignSelf : 'center'}} source={IC_ALEXA_BOX} />
+                        <Image style={{ height: normalize(60), width: normalize(60), resizeMode:'contain', borderRadius: normalize(12),justifyContent : 'center',alignSelf : 'center'}} source={IC_ALEXA_BOX} />
 
                     </View>
                     {
-                        this.state.ParentCountry == Constants.INDIA && 
+                        this.props.country == Constants.INDIA && 
                         <View style={{ flex: 1, backgroundColor: '#C2F5EC', borderRadius: normalize(12), marginStart: normalize(4), marginEnd: normalize(8) }}>
-                        <Image style={{ height: normalize(100), width: normalize(100), resizeMode: 'center', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MATH_BOXES} />
-                        <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(12), marginTop: normalize(12) }]}>Mathbox every month</Text>
+                        <Image style={{ height: normalize(100), width: normalize(120), resizeMode: 'contain', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MATH_BOXES} />
+                        <Text style={[CommonStyles.text_11_semi_bold, { marginStart: normalize(12), marginTop: normalize(12) }]}>Math and coding integrated curriculum</Text>
                     </View>
                     }
                     

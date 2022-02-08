@@ -37,9 +37,7 @@ class DemoClassResults extends Component {
     }
 
     onClickEnrollProgram = () => {
-        this.props.navigation.navigate(Constants.Dashboard,{
-            enrollProgram : "enroll"
-        });
+        this.props.navigation.navigate(Constants.ShowSubscriptions)
     }
 
 
@@ -176,8 +174,8 @@ class DemoClassResults extends Component {
                     />
                 </View>
 
-                <TouchableOpacity onPress={this.onCLickViewCurriculam}>
-                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, textAlign: 'center', marginBottom: normalize(40) }]}>View Full Curriculam</Text>
+                <TouchableOpacity onPress={this.onCLickViewCurriculum}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, textAlign: 'center', marginBottom: normalize(40) }]}>View Full Curriculum</Text>
                 </TouchableOpacity>
 
 

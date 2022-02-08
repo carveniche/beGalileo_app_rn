@@ -117,10 +117,10 @@ class Splash extends Component {
         if (JSON.parse(localData))
             this.props.navigation.navigate(Constants.MainScreen);
         else {
-            const isParentRegistered = await getLocalData(Constants.IsParentRegistered);
-            if (JSON.parse(isParentRegistered))
-                this.props.navigation.navigate(Constants.AddKidDetail)
-            else
+            // const isParentRegistered = await getLocalData(Constants.IsParentRegistered);
+            // if (JSON.parse(isParentRegistered))
+            //     this.props.navigation.navigate(Constants.AddKidDetail)
+            // else
                 this.props.navigation.navigate(Constants.Login);
         }
 
@@ -152,7 +152,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.60</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.70</Text>
             </View>
         )
     }
