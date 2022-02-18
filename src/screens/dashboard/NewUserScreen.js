@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback,Linking } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -13,9 +13,9 @@ import SubscriptionTabs from '../../components/subscription_tab';
 import AddCartFloatingButton from '../../components/AddCartFloatingButton';
 import MathBoxTabs from '../dashboard/MathBoxTabs';
 import { WebView } from 'react-native-webview';
-// import YouTube from 'react-native-youtube';
-// import YoutubePlayer from "react-native-youtube-iframe";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import YouTube from 'react-native-youtube';
+//import YoutubePlayer from "react-native-youtube-iframe";
+//import { Rating, AirbnbRating } from 'react-native-ratings';
 
 
 class NewUserScreen extends Component {
@@ -288,38 +288,35 @@ class NewUserScreen extends Component {
                         <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents \nare saying about \nbeGalileo'}</Text>
                         <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'Online learning experience \nwith kids and parents'}</Text>
                         <Image style={{ height: normalize(200), width: '100%', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
-                        {/* <TouchableOpacity style={{ padding: 20 }} onPress={() => {
-                            this.setState({
-                                demoVideo: true
-                            })
+                        <TouchableOpacity style={{ padding: 20 }} onPress={() => {
+                            Linking.openURL('https://www.youtube.com/watch?v=bEJLVQJjeak')
+                            // this.setState({
+                            //     demoVideo: true
+                            // })
                         }}>
                             <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 20 }} source={IC_PLAY_BLUE} />
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
 
                     </View>
                 </View>
-                <Modal
-                    animationType={"fade"}
-                    transparent={true}
-                    visible={this.state.demoVideo}
-                    onRequestClose={this.closeModal}
-                >
-                    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.TEXT_ALPHA_GREY }} >
-                        <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30 }} onPress={() => {
-                            this.setState({
-                                demoVideo: false
-                            })
-                        }}>
-                            <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
-                        </TouchableOpacity>
-                        {/* <YoutubePlayer
+                {/* <View>
+                        
+                        <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.TEXT_ALPHA_GREY }} >
+                            <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30 }} onPress={() => {
+                                this.setState({
+                                    demoVideo: false
+                                })
+                            }}>
+                                <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
+                            </TouchableOpacity>
+                             <YoutubePlayer
                             height={300}
                             play={true}
-                            videoId={"mIl0eoUK6X8"}
+                            videoId={"7BEyc8Z53io"}
 
-                        /> */}
+                        />  
 
-                        {/* <YouTube
+                            <YouTube
                             videoId="bEJLVQJjeak" // The YouTube video ID
                             play={this.state.demoVideo} // control playback of video with true/false
                             inLine // control whether the video should play in fullscreen or inline
@@ -329,10 +326,13 @@ class NewUserScreen extends Component {
                             onChangeQuality={e => this.setState({ quality: e.quality })}
                             onError={e => this.setState({ error: e.error })}
                             style={{ alignSelf: 'stretch', height: 300 }}
-                        /> */}
-                    </View>
+                            
+                        /> 
+                        </View>
 
-                </Modal>
+           
+                </View> */}
+
 
             </View>
 

@@ -57,7 +57,7 @@ const client = axios.create({
     }
 
     handleBackButton() {
-      return true;
+     // return true;
     }
 
     render() {

@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING, UPDATE_PROFILE
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING, UPDATE_PROFILE, RESCHEDULE_SLOT, RESCHEDULE_UPCOMING
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -216,8 +216,38 @@ export function updateParentProfile(parent_id,mobile,email,first_name,last_name)
 
 
 
+export function geteUpcomingRescheduleSlots(parent_id,student_id,live_class_id){
+    return{
+        type : RESCHEDULE_SLOT,
+        payload : {
+            request: {
+                url : 'app_mathbox/reschedule',
+                params : {
+                    parent_id, 
+                    student_id,
+                    live_class_id
+                }
+            }
+        }
+    }
+}
 
-
+export function doUpdateRescheduleClass(parent_id,student_id,live_class_id,new_date){
+    return{
+        type : RESCHEDULE_UPCOMING,
+        payload : {
+            request: {
+                url : 'app_mathbox/update_rescheduled_class',
+                params : {
+                    parent_id, 
+                    student_id,
+                    live_class_id,
+                    new_date
+                }
+            }
+        }
+    }
+}
 
 
 export function doBookingDemo(student_id,slot_id,day,name,mobile,email){

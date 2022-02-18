@@ -567,6 +567,9 @@ class HomeReportScreen extends Component {
 
 
 
+    textNoRecordMessage = () => {
+
+    }
 
 
     showAllReportDatas = () => {
@@ -579,7 +582,7 @@ class HomeReportScreen extends Component {
                 {
                     studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
 
-                        <NoRecordFoundComponent title="No Report is generated yet." sub_title="" />
+                        <NoRecordFoundComponent title="No Report is generated yet " sub_title="" />
                         :
                         <View>
 

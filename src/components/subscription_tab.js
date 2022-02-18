@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, Pressable, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { CheckBox } from 'react-native-elements'
 import * as Constants from '../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../config/styles';
@@ -410,107 +410,108 @@ class SubscriptionTabs extends Component {
 
         return this.state.priceDetails.map((item, index) =>
             this.props.recommended != item.duration &&
-            <TouchableOpacity onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
-                <View style={this.state.selectedSubscription == groupPrefix + index ?
-                    styles.selectedContainerStyle :
-                    this.state.subscriptionAddedToCart == groupPrefix + index ? styles.cartAddedContainerStyle :
-                        styles.shadowContainerStyle} >
-                    <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(16) }}>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
-                                {/* <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.display_price}</Text> */}
-                            </View>
-                            {/* <Text>Check Box  : {String(this.state[groupPrefixCheckBox + index])}</Text> */}
-                            <View>
-                                {
-                                    this.state[groupPrefixCheckBox + index] ?
-
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {this.getPriceForPackage(item, index)}</Text> :
-                                        <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {item.original_price}</Text>
-                                }
-
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(4) }}>
-                            <View>
-                                <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.classes} Classes</Text>
-
-                            </View>
-                            <View style={{ alignItems: 'flex-end', }}>
-                                <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{item.currency} {item.display_price}</Text>
-
-                            </View>
-                        </View>
-
-
-                        {
-                            ParentCountry == Constants.INDIA && item.boxes !== "" ?
+            <Pressable onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
+                <View>
+                    <View style={this.state.selectedSubscription == groupPrefix + index ?
+                        styles.selectedContainerStyle :
+                        this.state.subscriptionAddedToCart == groupPrefix + index ? styles.cartAddedContainerStyle :
+                            styles.shadowContainerStyle} >
+                        <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(16) }}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
+                                <View style={{ flexDirection: "row" }}>
+                                    <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
+                                    {/* <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.display_price}</Text> */}
+                                </View>
+                                {/* <Text>Check Box  : {String(this.state[groupPrefixCheckBox + index])}</Text> */}
                                 <View>
-                                    <View style={{ borderWidth: 1, marginTop: normalize(16), borderColor: COLOR.BORDER_COLOR_GREY }} />
+                                    {
+                                        this.state[groupPrefixCheckBox + index] ?
 
-                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: normalize(12) }}>
+                                            <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {this.getPriceForPackage(item, index)}</Text> :
+                                            <Text style={[CommonStyles.text_18_semi_bold]}>{item.currency} {item.original_price}</Text>
+                                    }
 
-                                        <View style={{ height: normalize(25), width: normalize(25) }}>
-                                            <CheckBox
-                                                containerStyle={{ padding: 0, margin: 0 }}
-                                                size={25}
-                                                onPress={() => this.onCheckBoxChecked(index)}
-                                                checked={this.state[groupPrefixCheckBox + index]}
-                                            />
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(4) }}>
+                                <View>
+                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}>{item.classes} Classes</Text>
+
+                                </View>
+                                <View style={{ alignItems: 'flex-end', }}>
+                                    <Text style={[{ textDecorationLine: 'line-through', textDecorationStyle: 'solid' }, CommonStyles.text_12_regular]}>{item.currency} {item.display_price}</Text>
+
+                                </View>
+                            </View>
+
+
+                            {
+                                ParentCountry == Constants.INDIA && item.boxes !== "" ?
+                                    <View>
+                                        <View style={{ borderWidth: 1, marginTop: normalize(16), borderColor: COLOR.BORDER_COLOR_GREY }} />
+
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: normalize(12) }}>
+
+                                            <View style={{  width: normalize(25) }}>
+                                                <CheckBox
+                                                    containerStyle={{  margin: 0,padding : 20 }}
+                                                    size={30}
+                                                    onPress={() => this.onCheckBoxChecked(index)}
+                                                    checked={this.state[groupPrefixCheckBox + index]}
+                                                />
+                                            </View>
+
+                                            <View style={{ marginStart: normalize(35) }}>
+                                                <Text style={[CommonStyles.text_12_bold]}>{item.currency} {item.mathbox_price}</Text>
+                                                <Text style={[CommonStyles.text_12_regular, {  }]}>Includes {item.boxes} Math boxes</Text>
+                                            </View>
                                         </View>
+                                    </View> :
+                                    <View></View>
 
-                                        <View style={{ marginStart: normalize(8) }}>
-                                            <Text style={[CommonStyles.text_12_bold]}>{item.currency} {item.mathbox_price}</Text>
-                                            <Text style={[CommonStyles.text_12_regular, { marginTop: normalize(1) }]}>Includes {item.boxes} Math boxes</Text>
-                                        </View>
-                                    </View>
-                                </View> :
-                                <View></View>
-
-                        }
+                            }
 
 
-                        <View>
+                            <View>
+
+                            </View>
 
                         </View>
 
                     </View>
+                    {
+                        this.state.selectedSubscription == groupPrefix + index ?
+                            <View style={{ flexDirection: 'row', marginTop: normalize(12) }}>
+                                <View>
+                                    <CustomGradientButtonIcon
+                                        myRef={(input) => { this.btn_add_kid = input; }}
+                                        style={{ padding: 10, flexDirection: 'row' }}
+                                        children="Buy Now"
+                                        icon={IC_BUY_NOW}
+                                        iconStyle={{ height: normalize(24), width: normalize(24), marginStart: normalize(26) }}
+                                        textStyling={{ marginStart: normalize(12), alignSelf: 'center', marginEnd: normalize(26) }}
+                                        onPress={() => this.onBuyNowPress(index, item)}
+                                    />
+                                </View>
+                                {
+                                    !(this.props.onlyBuyNow || this.props.isRenew) &&
+                                    <TouchableOpacity onPress={() => this.addToCart(index, item)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Image style={{ height: normalize(24), width: normalize(24), marginStart: normalize(16), alignSelf: 'center' }} source={IC_ADD_TO_CART} />
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(16), alignSelf: 'center' }]}>Add to Cart</Text>
+                                    </TouchableOpacity>
+                                }
+
+                            </View>
+                            :
+                            this.state.subscriptionAddedToCart == groupPrefix + index ?
+                                <View style={{ justifyContent: 'center', marginTop: normalize(12) }}>
+                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, alignSelf: 'center' }]}>Subscription Added to cart</Text>
+                                </View>
+                                : <View />
+                    }
 
                 </View>
-                {
-                    this.state.selectedSubscription == groupPrefix + index ?
-                        <View style={{ flexDirection: 'row', marginTop: normalize(12) }}>
-                            <View>
-                                <CustomGradientButtonIcon
-                                    myRef={(input) => { this.btn_add_kid = input; }}
-                                    style={{ padding: 10, flexDirection: 'row' }}
-                                    children="Buy Now"
-                                    icon={IC_BUY_NOW}
-                                    iconStyle={{ height: normalize(24), width: normalize(24), marginStart: normalize(26) }}
-                                    textStyling={{ marginStart: normalize(12), alignSelf: 'center', marginEnd: normalize(26) }}
-                                    onPress={() => this.onBuyNowPress(index, item)}
-                                />
-                            </View>
-                            {
-                                !(this.props.onlyBuyNow || this.props.isRenew) &&
-                                <TouchableOpacity onPress={() => this.addToCart(index, item)} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Image style={{ height: normalize(24), width: normalize(24), marginStart: normalize(16), alignSelf: 'center' }} source={IC_ADD_TO_CART} />
-                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(16), alignSelf: 'center' }]}>Add to Cart</Text>
-                                </TouchableOpacity>
-                            }
-
-                        </View>
-                        :
-                        this.state.subscriptionAddedToCart == groupPrefix + index ?
-                            <View style={{ justifyContent: 'center', marginTop: normalize(12) }}>
-                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, alignSelf: 'center' }]}>Subscription Added to cart</Text>
-                            </View>
-                            : <View />
-                }
-
-
-            </TouchableOpacity>
+            </Pressable>
 
 
         )

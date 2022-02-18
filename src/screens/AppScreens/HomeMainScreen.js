@@ -30,17 +30,7 @@ class HomeMainScreen extends Component {
         parentName : ''
     }
     componentDidMount() {
-            // console.log("Main Screeeen Parmas")
-            // console.log(this.props.navigation.getParam('enrollProgram', "sssddd"));
-
-
-            // fetch('https://www.begalileo.com/app_mathbox/check_country_headers',{
-            //     method : 'GET'
-            // }).then((response)=>response.json())
-            // .then((responseJson)=>{
-            //     console.log("Mock API : ",responseJson)
-            // })
-    
+       
 
 
         if (this.props.state.dashboard_status) {
@@ -69,6 +59,8 @@ class HomeMainScreen extends Component {
 
     }
 
+
+   
 
      requestUserPermission = async() => {
         const authStatus = await messaging().requestPermission();

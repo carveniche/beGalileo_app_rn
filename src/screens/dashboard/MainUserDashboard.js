@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert,BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -28,7 +28,7 @@ class MainUserDashboard extends Component {
     }
 
     componentDidMount() {
-
+       
         if (this.props.dashboardStatus) {
 
 
@@ -42,6 +42,9 @@ class MainUserDashboard extends Component {
         // })
 
     }
+
+   
+
 
     getCurrentSelectedKidData = () => {
         if (this.props.dashboardResponse != undefined) {
@@ -116,7 +119,7 @@ class MainUserDashboard extends Component {
 
 
     teacherCard = (data) => {
-        console.log("Teacher Data", this.props.currentSelectedKid.teachers)
+    
        return data.map((item) => {
             return (
                 <View style={{ marginTop: normalize(10), marginBottom: normalize(10), backgroundColor: COLOR.WHITE, padding: normalize(10), borderRadius: normalize(15) }}>

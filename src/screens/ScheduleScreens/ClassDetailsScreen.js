@@ -8,7 +8,7 @@ import { uploadWorkBook } from '../../actions/dashboard';
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { cancelClass } from '../../actions/dashboard';
+import { cancelClass, geteUpcomingRescheduleSlots } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
 import CustomGradientButton from '../../components/CustomGradientButton';
@@ -57,11 +57,20 @@ class ClassDetailsScreen extends Component {
     }
 
     componentDidUpdate(prevProps) {
+
         if (prevProps.classCancelResponse != this.props.classCancelResponse) {
             if (this.props.classCancelResponse && this.props.classCancelResponse.status) {
                 this.props.navigation.goBack();
             }
         }
+
+        if (prevProps.rescheduleSlotStatus != this.props.rescheduleSlotStatus) {
+
+            if (this.props.rescheduleSlotStatus) {
+                this.showRescheduleSlots()
+            }
+        }
+
     }
 
 
@@ -281,8 +290,14 @@ class ClassDetailsScreen extends Component {
 
 
                             workBookData.map((item) => {
+                                if (item.teacher_uploaded) {
 
-
+                                    return (
+                                        <View>
+                                            <Text style={[CommonStyles.text_11_Regular, { margin: 10 }]}>Homework uploaded</Text>
+                                        </View>
+                                    )
+                                }
                                 var radio_props = [
                                     { label: 'Not Started', value: 0 },
                                     { label: 'In Progress', value: 1 },
@@ -511,7 +526,8 @@ class ClassDetailsScreen extends Component {
         this.setState({
             mSelectedItem: item,
             mShowUploadChoice: true
-        })
+        }, () => this.selectPdfWorkBook())
+
     }
 
 
@@ -593,12 +609,16 @@ class ClassDetailsScreen extends Component {
 
     }
 
-    onRescheduleClassConfirmation = () => {
-        console.log("Reschedule Visible ", this.state.rescheduleVisible);
+    showRescheduleSlots = () => {
         this.setState({
             rescheduleVisible: true
         })
-        // this.props.cancelClass(this.props.dashboardResponse.parent_id, this.state.classData.live_class_id, this.props.currentSelectedKid.student_id)
+    }
+
+    onRescheduleClassConfirmation = () => {
+
+
+        this.props.geteUpcomingRescheduleSlots(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, this.state.classData.live_class_id)
 
     }
 
@@ -636,7 +656,7 @@ class ClassDetailsScreen extends Component {
 
     closeRescheduleClass = () => {
         this.setState({
-            rescheduleVisible : false
+            rescheduleVisible: false
         })
     }
 
@@ -656,7 +676,9 @@ class ClassDetailsScreen extends Component {
             }}>
 
 
-
+                {this.props.loading &&
+                    <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
+                }
 
                 <ScrollView
                     ref={ref => { this.scrollView = ref }}
@@ -737,17 +759,22 @@ class ClassDetailsScreen extends Component {
                     </View>
                 }
 
-                <Modal animationType="slide"
-                    transparent={true} visible={rescheduleVisible}>
-                    <View style={{ height: '80%', width: '100%', borderTopLeftRadius: normalize(10), borderTopRightRadius: normalize(10), backgroundColor: COLOR.WHITE, position: 'absolute', bottom: 0 }}>
-                        <TouchableOpacity onPress={this.closeRescheduleClass}>
-                            <Image source={IC_CLOSE_BLUE} style={{ height: 40, width: 40, resizeMode: 'contain', justifyContent: 'flex-end', alignSelf: 'flex-end' }} />
-                        </TouchableOpacity>
+                {
+                    this.props.rescheduleSlotStatus &&
+                    <Modal animationType="slide"
+                        transparent={true} visible={rescheduleVisible}>
+                        <View style={{ height: '80%', width: '100%', borderTopLeftRadius: normalize(10), borderTopRightRadius: normalize(10), backgroundColor: COLOR.WHITE, position: 'absolute', bottom: 0 }}>
+                            <TouchableOpacity onPress={this.closeRescheduleClass}>
+                                <Image source={IC_CLOSE_BLUE} style={{ height: 40, width: 40, resizeMode: 'contain', justifyContent: 'flex-end', alignSelf: 'flex-end' }} />
+                            </TouchableOpacity>
 
-                        <ComponentReschedule />
-                    </View>
+                            <ComponentReschedule rescheduleSlots={this.props.rescheduleSlotResponse.slot_details} />
+                        </View>
 
-                </Modal>
+                    </Modal>
+                }
+
+
 
 
 
@@ -767,8 +794,11 @@ const mapStateToProps = (state) => {
         dashboardStatus: state.dashboard.dashboard_status,
         dashboardResponse: state.dashboard.dashboard_response,
         classCancelStatus: state.dashboard.class_cancel_status,
-        classCancelResponse: state.dashboard.class_cancel_response
-
+        classCancelResponse: state.dashboard.class_cancel_response,
+        rescheduleSlotStatus: state.dashboard.reschedule_slot_status,
+        rescheduleSlotResponse: state.dashboard.reschedule_slot_response,
+        rescheduleUpcomingStatus: state.dashboard.reschedule_upcoming_status,
+        rescheduleUpcomingResponse: state.dashboard.reschedule_upcoming_response,
 
 
     }
@@ -778,7 +808,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     uploadWorkBook,
-    cancelClass
+    cancelClass,
+    geteUpcomingRescheduleSlots
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassDetailsScreen);

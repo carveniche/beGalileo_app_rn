@@ -28,7 +28,7 @@ import {
     STUDENT_CLASSES_FAILED, DELETE_STUDENT, DELETE_STUDENT_SUCCESS, DELETE_STUDENT_FAILED, 
     APPLY_COUPON, APPLY_COUPON_SUCCESS, APPLY_COUPON_FAILED, REMOVE_COUPON, REMOVE_COUPON_SUCCESS, 
     REMOVE_COUPON_FAILED, CANCEL_DEMO, CANCEL_DEMO_SUCCESS, CANCEL_DEMO_FAILED, RESCHEDULE_DEMO, CLASS_CANCEL,CLASS_CANCEL_SUCCESS,CLASS_CANCEL_FAILED,
-    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED, WORKBOOK_UPLOAD, WORKBOOK_UPLOAD_SUCCESS, WORKBOOK_UPLOAD_FAILED, STAR_BADGE_REPORT, STAR_BADGE_REPORT_SUCCESS, STAR_BADGE_REPORT_FAILED, STUDENT_ACTIVITY, STUDENT_ACTIVITY_SUCCESS, STUDENT_ACTIVITY_FAILED, RATING_TAGS, RATING_TAGS_SUCCESS, RATING_TAGS_FAILED, SUBMIT_TEACHER_RATING, SUBMIT_TEACHER_RATING_SUCCESS, SUBMIT_TEACHER_RATING_FAILED, TEACHER_RATING, TEACHER_RATING_SUCCESS, TEACHER_RATING_FAILED, UPDATE_PROFILE, UPDATE_PROFILE_SUCCESS, UPDATE_PROFILE_FAILED
+    RESCHEDULE_DEMO_SUCCESS,RESCHEDULE_DEMO_FAILED, SET_USER_DETAILS, STUDENT_REPORT,STUDENT_REPORT_SUCCESS,STUDENT_REPORT_FAILED, DEMO_RESULT, DEMO_RESULT_FAILED, DEMO_RESULT_SUCCESS, PARENT_FEEDBACK, PARENT_FEEDBACK_SUCCESS, PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, STUDENT_CATEGORY_CLASSES_SUCCESS, STUDENT_CATEGORY_CLASSES_FAILED, WORKBOOK_UPLOAD, WORKBOOK_UPLOAD_SUCCESS, WORKBOOK_UPLOAD_FAILED, STAR_BADGE_REPORT, STAR_BADGE_REPORT_SUCCESS, STAR_BADGE_REPORT_FAILED, STUDENT_ACTIVITY, STUDENT_ACTIVITY_SUCCESS, STUDENT_ACTIVITY_FAILED, RATING_TAGS, RATING_TAGS_SUCCESS, RATING_TAGS_FAILED, SUBMIT_TEACHER_RATING, SUBMIT_TEACHER_RATING_SUCCESS, SUBMIT_TEACHER_RATING_FAILED, TEACHER_RATING, TEACHER_RATING_SUCCESS, TEACHER_RATING_FAILED, UPDATE_PROFILE, UPDATE_PROFILE_SUCCESS, UPDATE_PROFILE_FAILED, RESCHEDULE_SLOT, RESCHEDULE_SLOT_SUCCESS, RESCHEDULE_SLOT_FAILED, RESCHEDULE_UPCOMING, RESCHEDULE_UPCOMING_SUCCESS, RESCHEDULE_UPCOMING_FAILED
 } from '../config/redux-action-types/dashboard'
 
 const initialState = { cartItems: [] }
@@ -743,6 +743,49 @@ export default function reducer(state=initialState,action){
                 ...state,loading : false,
                 update_profile_status : action.payload.data.status,
                 update_profile_response : action.payload.data
+            }
+        }
+
+
+        case RESCHEDULE_SLOT :{
+            return{
+                ...state,loading : true,reschedule_slot_status : null , reschedule_slot_response : null
+            }
+        }
+        case RESCHEDULE_SLOT_SUCCESS : {
+            return{
+                ...state,loading : false,
+                reschedule_slot_status : action.payload.data.status,
+                reschedule_slot_response : action.payload.data
+            }
+        }
+        case RESCHEDULE_SLOT_FAILED :{
+            return{
+                ...state,loading : false,
+                reschedule_slot_status : action.payload.data.status,
+                reschedule_slot_response : action.payload.data
+            }
+        }
+
+
+
+        case RESCHEDULE_UPCOMING :{
+            return{
+                ...state,loading : true,reschedule_upcoming_status : null , reschedule_upcoming_response : null
+            }
+        }
+        case RESCHEDULE_UPCOMING_SUCCESS : {
+            return{
+                ...state,loading : false,
+                reschedule_upcoming_status : action.payload.data.status,
+                reschedule_upcoming_response : action.payload.data
+            }
+        }
+        case RESCHEDULE_UPCOMING_FAILED :{
+            return{
+                ...state,loading : false,
+                reschedule_upcoming_status : action.payload.data.status,
+                reschedule_upcoming_response : action.payload.data
             }
         }
 

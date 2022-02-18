@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -28,7 +28,7 @@ class PaidUserScreen extends Component {
     }
     componentDidMount() {
 
-
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
         // if (this.props.dashboardStatus) {
         //     this.setCurrentSessionKid()
@@ -38,6 +38,15 @@ class PaidUserScreen extends Component {
         this.renderDashboardData();
 
     }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+      }
+  
+      handleBackButton() {
+          console.log("On Back Pressed");
+        return true;
+      }
 
     setCurrentSessionKid = () => {
         this.props.dashboardResponse.students.map((item) => {
@@ -568,7 +577,7 @@ class PaidUserScreen extends Component {
 
 
     checkLiveClassStatus = (liveClassDetails) => {
-        console.log(getDifferenceFromTodayDate(liveClassDetails.start_date, liveClassDetails.time) + " OOOOOOO");
+   
         return (
             <View style={{ marginTop: normalize(20), marginHorizontal: normalize(5) }}>
                 <Text style={[CommonStyles.text_18_semi_bold]}>Live Class</Text>
@@ -761,7 +770,7 @@ class PaidUserScreen extends Component {
     }
 
     teacherCard = (data) => {
-        console.log("Teacher Data", data)
+       
         return (
             <View style={{ marginTop: normalize(10), marginBottom: normalize(80), backgroundColor: COLOR.WHITE, padding: normalize(10), borderRadius: normalize(15) }}>
                 <View style={{ flexDirection: 'row' }}>
