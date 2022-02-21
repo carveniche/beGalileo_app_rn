@@ -452,7 +452,7 @@ export default function reducer(state=initialState,action){
 
         case STUDENT_CLASSES :{
             return{
-                ...state,loading : true
+                ...state,loading : false
             }
         }
         case STUDENT_CLASSES_SUCCESS : {

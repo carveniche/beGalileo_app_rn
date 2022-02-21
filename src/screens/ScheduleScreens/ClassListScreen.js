@@ -12,6 +12,7 @@ import { getDisplayTimeHours, secondsToHms,getClassesDateFormat } from '../../co
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
 import ReportFilterBottomDialog from '../../components/ReportFilterBottomDialog';
 import moment from 'moment';
+import { NavigationEvents } from 'react-navigation';
 
 class ClassListScreen extends Component {
     constructor(props) {
@@ -33,7 +34,7 @@ class ClassListScreen extends Component {
         this.setState({
             classType: classType
         })
-        this.getStudentClasses(classType)
+       // this.getStudentClasses(classType)
     }
 
 
@@ -44,6 +45,11 @@ class ClassListScreen extends Component {
             return "incomplete";
         else if (classType == Constants.UPCOMING_CLASSES)
             return "upcoming";
+    }
+
+    onComponentFocus = () => {
+        console.log("On Component Focus ");
+          this.getStudentClasses(this.state.classType);
     }
 
     getStudentClasses = (mClassType) => {
@@ -265,6 +271,7 @@ class ClassListScreen extends Component {
                 backgroundColor: COLOR.WHITE,
 
             }}>
+                <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
                     <View style={{
 

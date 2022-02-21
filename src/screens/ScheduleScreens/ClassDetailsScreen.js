@@ -8,7 +8,7 @@ import { uploadWorkBook } from '../../actions/dashboard';
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { cancelClass, geteUpcomingRescheduleSlots } from '../../actions/dashboard';
+import { cancelClass, geteUpcomingRescheduleSlots,doUpdateRescheduleClass } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { CustomBackButton } from '../../components';
 import CustomGradientButton from '../../components/CustomGradientButton';
@@ -17,6 +17,7 @@ import { getDisplayTimeHours, secondsToHms, timeInHourFormat } from '../../compo
 import ImagePicker from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
 import ComponentReschedule from "../../components/ComponentReschedule";
+import { showMessage, hideMessage } from "react-native-flash-message";
 const workBookStatusPrefix = 'workbook_status_';
 
 
@@ -65,9 +66,34 @@ class ClassDetailsScreen extends Component {
         }
 
         if (prevProps.rescheduleSlotStatus != this.props.rescheduleSlotStatus) {
+            if(this.props.rescheduleSlotStatus != null)
+            {
+                if (this.props.rescheduleSlotStatus) {
+                    this.showRescheduleSlots()
+                }
+                else
+                {
+                    showMessage({
+                        message: this.props.rescheduleSlotResponse.message,
+                        type: "danger",
+                    });
+                }
+            }
+            
+        }
 
-            if (this.props.rescheduleSlotStatus) {
-                this.showRescheduleSlots()
+        if (prevProps.rescheduleUpcomingStatus != this.props.rescheduleUpcomingStatus) {
+
+            if (this.props.rescheduleUpcomingStatus) {
+                this.closeRescheduleClass()
+                this.onPressBack()
+            }
+            else
+            {
+                showMessage({
+                    message: this.props.rescheduleUpcomingResponse.message,
+                    type: "danger",
+                });
             }
         }
 
@@ -84,6 +110,11 @@ class ClassDetailsScreen extends Component {
             classData: classData
         })
     }
+
+
+
+
+    
 
     onPressBack = () => {
         const { goBack } = this.props.navigation;
@@ -615,6 +646,12 @@ class ClassDetailsScreen extends Component {
         })
     }
 
+    updateRescheduleClass = (new_date,slot_id) => {
+     
+     this.props.doUpdateRescheduleClass(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, this.state.classData.live_class_id,new_date,slot_id)
+
+    }
+
     onRescheduleClassConfirmation = () => {
 
 
@@ -768,7 +805,7 @@ class ClassDetailsScreen extends Component {
                                 <Image source={IC_CLOSE_BLUE} style={{ height: 40, width: 40, resizeMode: 'contain', justifyContent: 'flex-end', alignSelf: 'flex-end' }} />
                             </TouchableOpacity>
 
-                            <ComponentReschedule rescheduleSlots={this.props.rescheduleSlotResponse.slot_details} />
+                            <ComponentReschedule rescheduleSlots={this.props.rescheduleSlotResponse.slot_details} callBackUpdate={this.updateRescheduleClass} />
                         </View>
 
                     </Modal>
@@ -809,7 +846,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     uploadWorkBook,
     cancelClass,
-    geteUpcomingRescheduleSlots
+    geteUpcomingRescheduleSlots,
+    doUpdateRescheduleClass
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassDetailsScreen);

@@ -232,7 +232,7 @@ export function geteUpcomingRescheduleSlots(parent_id,student_id,live_class_id){
     }
 }
 
-export function doUpdateRescheduleClass(parent_id,student_id,live_class_id,new_date){
+export function doUpdateRescheduleClass(parent_id,student_id,live_class_id,new_date,slot_id){
     return{
         type : RESCHEDULE_UPCOMING,
         payload : {
@@ -242,7 +242,8 @@ export function doUpdateRescheduleClass(parent_id,student_id,live_class_id,new_d
                     parent_id, 
                     student_id,
                     live_class_id,
-                    new_date
+                    new_date,
+                    slot_id
                 }
             }
         }

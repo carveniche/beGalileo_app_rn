@@ -93,6 +93,10 @@ export function getDisplayFormattedDate(dateValue) {
     return moment(dateValue).format('MMM DD, YYYY');
 }
 
+export function getDisplayFormattedMonthDay(dateValue) {
+    return moment(dateValue).format('MMM DD');
+}
+
 export function getValueDayOfTheWeek(day) {
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[day];

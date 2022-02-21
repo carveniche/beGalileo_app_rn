@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles, BAR_CHART_COLORS, BAR_CHART_COLOR_LINES } from '../../config/styles';
-import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2, IC_BANNER_1 } from "../../assets/images";
+import { IC_CLOSE_BLUE, IC_DOWN_ENTER, IC_ACCURACY, IC_TIME_SPENT, IC_STARS_EARN, IC_BADGES_EARNED_1, IC_BADGES_EARNED_2, IC_BANNER_1 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +23,8 @@ import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { List } from 'react-native-paper';
 import AcitivityReportList from "../ReportScreens/AcitivityReportList";
 import ReportFilterBottomDialog from "../../components/ReportFilterBottomDialog";
+import ReportDaySelector from "../../components/ReportDaySelector";
+import NoRecordDemoComponent from "../../components/NoRecordDemoComponent";
 
 
 const listFilterDays = [7, 30, 60];
@@ -58,8 +60,7 @@ class HomeReportScreen extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.currentSelectedKid != undefined) {
-            if(this.props.currentSelectedKid != null)
-            {
+            if (this.props.currentSelectedKid != null) {
                 if (this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
 
                     //   this.checkDashboardItems();
@@ -68,7 +69,7 @@ class HomeReportScreen extends Component {
                 }
             }
 
-         
+
         }
     }
     checkDashboardItems = () => {
@@ -146,13 +147,34 @@ class HomeReportScreen extends Component {
     filterDatas = (e) => {
         console.log("Filter days " + e);
         this.setState({
-            filterExpanded: !this.state.filterExpanded,
+            filterExpanded: false,
             currentFilterDays: e
         }, this.checkReportDatas)
     }
 
+    closeFilterDays = () => {
+        this.setState({
+            filterExpanded: false
+        })
+    }
+
     showFilterList = () => {
         const { currentFilterDays } = this.state;
+
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginStart: 20, marginEnd: 20 }}>
+                <TouchableOpacity onPress={() => this.filterDatas(7)} style={currentFilterDays == 7 ? styles.dayButtonSelected : styles.dayButton}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: currentFilterDays == 7 ? COLOR.WHITE : COLOR.BLUE_LINk }]}>7 Days</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.filterDatas(30)} style={currentFilterDays == 30 ? styles.dayButtonSelected : styles.dayButton}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: currentFilterDays == 30 ? COLOR.WHITE : COLOR.BLUE_LINk }]}>30 Days</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.filterDatas(60)} style={currentFilterDays == 60 ? styles.dayButtonSelected : styles.dayButton}>
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: currentFilterDays == 60 ? COLOR.WHITE : COLOR.BLUE_LINk }]}>60 Days</Text>
+                </TouchableOpacity>
+            </View>
+        )
+
         return (
             <View>
                 <List.Accordion
@@ -571,41 +593,55 @@ class HomeReportScreen extends Component {
 
     }
 
+    noReportSubTitle = () => {
+        return "For last " + this.state.currentFilterDays + " days"
+    }
+
+
+
 
     showAllReportDatas = () => {
         const { currentSelectedKid, studentActivityStatus, studentReportResponse } = this.props;
         console.log("Student Report Response", studentReportResponse);
         return (
-            <View style={{ flex: 1 }}>
+
+          
+              
 
 
-                {
-                    studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
+                        <View style={{ flex: 1 }}>
+                            {
+                                studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
 
-                        <NoRecordFoundComponent title="No Report is generated yet " sub_title="" />
-                        :
-                        <View>
-
-
-                            <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
-
-                                {
-                                    this.showAccuracyCard()
-                                }
-                                {
-                                    this.showTimeSpentCard()
-                                }
-                            </View>
+                                    <NoRecordFoundComponent title="No Report is generated " sub_title={this.noReportSubTitle()} />
+                                    :
+                                    <View>
 
 
-                            {/* {
+                                        <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+
+                                            {
+                                                this.showAccuracyCard()
+                                            }
+                                            {
+                                                this.showTimeSpentCard()
+                                            }
+                                        </View>
+
+
+                                        {/* {
                             this.recentActivity()
                         } */}
+                                    </View>
+
+                            }
                         </View>
 
-                }
+                       
+                
 
-            </View>
+
+     
 
         )
     }
@@ -819,9 +855,14 @@ class HomeReportScreen extends Component {
         goBack();
     }
 
+    onBuySubscription = () => {
+        console.log("SSSS");
+        this.props.navigation.navigate(Constants.ShowSubscriptions);
+    }
+
     render() {
         const { currentSelectedKid, studentReportStatus, studentActivityStatus, studentActivityReport, loading } = this.props;
-        const { showTimeSpentChart, showAccuracyChart, accuracyChartData } = this.state;
+        const { showTimeSpentChart, showAccuracyChart, accuracyChartData, filterExpanded } = this.state;
         return (
             <View style={{
                 flex: 1,
@@ -833,23 +874,31 @@ class HomeReportScreen extends Component {
                         {/* <CustomBackButton onPress={this.onPressBack} /> */}
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
                         {
-                            studentReportStatus &&
+                           !loading && studentReportStatus && currentSelectedKid.paid_status &&
                             this.renderStarAndBadge()
 
                         }
-                         {
-                             studentReportStatus &&
+                        {
+                           !loading && studentReportStatus && currentSelectedKid.paid_status && 
                             this.showFilterList()
                         }
 
                         {
-                            studentReportStatus &&
+                            !loading && studentReportStatus && currentSelectedKid.paid_status && 
 
                             this.showAllReportDatas()
 
+                        }
+                        {
+
+                            !loading && !currentSelectedKid.paid_status &&
+                            <View style={{ flex :1 }}>
+                                <NoRecordDemoComponent title="Report unavailble for Demo user" sub_title="Please subscribe for subscription" onBuySubscription={this.onBuySubscription}/>
+                            </View>
+
 
                         }
-                       
+
                         {
                             loading &&
                             <SearchingRecordComponent title="Searching..." sub_title="Fetching reports" />
@@ -857,9 +906,28 @@ class HomeReportScreen extends Component {
 
 
                         {
-                            studentActivityStatus && studentActivityReport.problems_solved > 1 &&
+                           !loading && studentActivityStatus && studentActivityReport.problems_solved > 1 &&
                             this.recentAcitivityScreeen()
                         }
+
+                        {
+                            filterExpanded &&
+                            <Modal animationType="slide"
+                                transparent={true} visible={filterExpanded}>
+                                <View style={{ height: '40%', width: '100%', borderTopLeftRadius: normalize(10), borderTopRightRadius: normalize(10), backgroundColor: COLOR.BORDER_COLOR_GREEN, position: 'absolute', bottom: 0 }}>
+                                    <TouchableOpacity onPress={this.closeFilterDays}>
+                                        <Image source={IC_CLOSE_BLUE} style={{ marginTop: 10, marginEnd: 10, height: 40, width: 40, resizeMode: 'contain', justifyContent: 'flex-end', alignSelf: 'flex-end' }} />
+                                    </TouchableOpacity>
+
+                                    <ReportDaySelector onPressFilterDays={this.filterDatas} />
+                                </View>
+
+                            </Modal>
+                        }
+
+
+
+
 
 
 
@@ -870,8 +938,8 @@ class HomeReportScreen extends Component {
 
                     </View>
 
-                </ScrollView>
-            </View>
+                </ScrollView >
+            </View >
         );
     }
 }
@@ -918,6 +986,24 @@ const styles = StyleSheet.create({
         color: COLOR.TEXT_COLOR_BLUE,
         fontFamily: "Montserrat-Regular"
     },
+    dayButton: {
+        marginTop: 20,
+        alignSelf: 'center',
+        backgroundColor: COLOR.WHITE,
+        paddingVertical: normalize(8),
+        paddingHorizontal: normalize(12),
+        borderRadius: normalize(24),
+        textAlign: 'center'
+    },
+    dayButtonSelected: {
+        marginTop: 20,
+        alignSelf: 'center',
+        backgroundColor: COLOR.BORDER_COLOR_GREEN,
+        paddingVertical: normalize(8),
+        paddingHorizontal: normalize(20),
+        borderRadius: normalize(24),
+        textAlign: 'center'
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeReportScreen);

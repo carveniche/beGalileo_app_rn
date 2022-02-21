@@ -27,7 +27,7 @@ class HomeScheduleScreen extends Component {
     }
     onComponentFocus = () => {
         console.log("On Component Focus ");
-        //  this.getStudentClasses();
+          this.getStudentClasses();
     }
 
     componentDidMount() {

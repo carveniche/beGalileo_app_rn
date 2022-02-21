@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { AreaChart, Path } from 'react-native-svg-charts'
+import { AreaChart, Path, XAxis, YAxis } from 'react-native-svg-charts'
 import { Dimensions } from "react-native";
 import { COLOR, BAR_CHART_COLORS, BAR_CHART_COLOR_LINES } from '../config/styles';
 import { normalize } from 'react-native-elements';
 import * as shape from 'd3-shape'
 import { LineChart } from 'react-native-chart-kit';
+import { getDisplayFormattedMonthDay } from './helpers/CustomUtilMethods';
 const screenWidth = Dimensions.get("window").width;
 
 class BarChartScreen extends Component {
@@ -13,32 +14,38 @@ class BarChartScreen extends Component {
         super(props);
         this.state = {
             datas: [
-                [13,25,13,0],
-                [99,0,0,67]
-            ]
-            
+                [],
+                []
+            ],
+            xAxisData: [],
+            xAxisDataValue : []
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Bar Chart Screen");
         console.log(this.props.accuracyData);
         var data1 = [];
         var data2 = [];
+        var xData  = [];
+        var xDataVal = []
         var totalArray = []
-        this.props.accuracyData.map((element,index)=>{
+        this.props.accuracyData.map((element, index) => {
             data1[index] = element.math_zone_accuracy;
             data2[index] = element.logic_zone_accuracy;
-        
+            xData[index] = index,
+            xDataVal[index] = element.day
         })
-        console.log(data1);
-        console.log(data2);
+        console.log("DAta 1", data1);
+        console.log("DAta 2", data2);
+        console.log("X data",xData);
         totalArray[0] = data1;
         totalArray[1] = data2;
-        console.log(totalArray);
-        console.log(this.state.datas);
+       
         this.setState({
-            datas : totalArray
+            datas: totalArray,
+            xAxisData : xData,
+            xAxisDataValue : xDataVal
         })
 
     }
@@ -51,8 +58,14 @@ class BarChartScreen extends Component {
 
     )
 
+    getXvalue = (index) => {
+        let displayValue = getDisplayFormattedMonthDay(this.state.xAxisDataValue[index])
+    console.log("X AXIS",displayValue);
+        return displayValue;
+    }
+
     graphList = () => {
-        const { datas, colors, colorLines } = this.state;
+        const { datas,xAxisData ,colors, colorLines } = this.state;
 
         return datas.map((element, index) => {
             const Line = ({ line }) => (
@@ -74,6 +87,13 @@ class BarChartScreen extends Component {
                     curve={shape.curveNatural}
                 >
                     <Line />
+                    <XAxis
+                        style={{ marginHorizontal: -10}}
+                        data={xAxisData}
+                        formatLabel={(value, index) => this.getXvalue(index)}
+                        contentInset={{ left: 20, right: 20 }}
+                        svg={{ fontSize: 10, fill: 'black',fontWeight : 'bold' }}
+                    />
                 </AreaChart>
 
 
@@ -91,7 +111,7 @@ class BarChartScreen extends Component {
         const keys = ['apples', 'bananas', 'cherries', 'dates']
 
         return (
-            <View style={{ height: 150 }}>
+            <View style={{ height: 200,marginTop : 20 }}>
                 {
                     this.graphList()
                 }
