@@ -229,7 +229,7 @@ class DemoClassResults extends Component {
         return (
 
             <View style={styles.mainContainer}>
-                <ScrollView style={{ marginTop: 10, marginStart: 20, marginEnd: 20, marginBottom: 10 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 10, marginStart: 20, marginEnd: 20, marginBottom: 10 }}>
                     {
                         loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />

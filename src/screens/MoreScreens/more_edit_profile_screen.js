@@ -29,7 +29,7 @@ class MoreEditProfileScreen extends Component {
 
     }}>
         
-        <ScrollView >
+        <ScrollView showsVerticalScrollIndicator={false} >
             <View style={{
             marginStart: normalize(20),
             marginEnd: normalize(20),

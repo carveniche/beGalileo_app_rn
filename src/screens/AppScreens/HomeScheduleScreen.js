@@ -27,7 +27,7 @@ class HomeScheduleScreen extends Component {
     }
     onComponentFocus = () => {
         console.log("On Component Focus ");
-          this.getStudentClasses();
+        this.getStudentClasses();
     }
 
     componentDidMount() {
@@ -94,25 +94,27 @@ class HomeScheduleScreen extends Component {
                 flex: 1,
                 backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
-                <ScrollView>
+                <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow : 1 }}>
                     <View style={{ flex: 1 }}>
                         <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
 
                         <DashboardHeader headerTitle="Schedule" headerDescription="See your Kids schedule" allKidsList={allKidsList} />
 
 
-
-
-                        <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
-                            <View style={{ flexDirection: "row", marginStart: normalize(10), marginTop: normalize(20), marginBottom: normalize(20) }}>
-                                <TouchableOpacity onPress={this.onTabSelected} style={isLiveTabSelected ? styles.tabItemSelected : styles.tabItem}>
-                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Live Class</Text>
+                        {/* {student_class_status &&
+                            <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+                                <View style={{ flexDirection: "row", marginStart: normalize(10), marginTop: normalize(20), marginBottom: normalize(20) }}>
+                                    <TouchableOpacity onPress={this.onTabSelected} style={isLiveTabSelected ? styles.tabItemSelected : styles.tabItem}>
+                                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Live Class</Text>
+                                    </TouchableOpacity>
+                                     <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isLiveTabSelected ? styles.tabItem : styles.tabItemSelected]}>
+                                        <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Curriculam</Text>
                                 </TouchableOpacity>
-                                {/* <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isLiveTabSelected ? styles.tabItem : styles.tabItemSelected]}>
-                                    <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Curriculam</Text>
-                                </TouchableOpacity> */}
+                                </View>
                             </View>
-                        </View>
+                        } */}
+
+
 
                         {/* {
                                             isLiveTabSelected ?
@@ -125,7 +127,10 @@ class HomeScheduleScreen extends Component {
                         }
                         {
                             student_class_status &&
-                            <LiveClassSchedule navigation={this.props.navigation} />
+                            <View style={{ flex : 1 }}>
+                                <LiveClassSchedule navigation={this.props.navigation} />
+                                </View>
+                            
 
                         }
 

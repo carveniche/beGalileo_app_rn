@@ -157,7 +157,7 @@ class MoreLiveClassBatchScreens extends Component {
                 backgroundColor: COLOR.WHITE,
 
             }}>
-                <ScrollView >
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{
                         flex: 1,
                         marginStart: normalize(10),

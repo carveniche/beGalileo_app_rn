@@ -147,7 +147,7 @@ class TeacherProfile extends Component {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 }
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
                     <View style={{ marginStart: normalize(10), marginTop: normalize(10) }}>
                         <CustomBackButton onPress={this.onPressBack} />
                     </View>

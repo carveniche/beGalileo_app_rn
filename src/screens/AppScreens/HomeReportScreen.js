@@ -605,43 +605,43 @@ class HomeReportScreen extends Component {
         console.log("Student Report Response", studentReportResponse);
         return (
 
-          
-              
 
 
-                        <View style={{ flex: 1 }}>
-                            {
-                                studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
-
-                                    <NoRecordFoundComponent title="No Report is generated " sub_title={this.noReportSubTitle()} />
-                                    :
-                                    <View>
 
 
-                                        <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+            <View style={{ flex: 1 }}>
+                {
+                    studentReportResponse.total_time_spent == "00:00:00" && studentReportResponse.total_accuracy == 0.0 ?
 
-                                            {
-                                                this.showAccuracyCard()
-                                            }
-                                            {
-                                                this.showTimeSpentCard()
-                                            }
-                                        </View>
+                        <NoRecordFoundComponent title="No Report is generated " sub_title={this.noReportSubTitle()} />
+                        :
+                        <View>
 
 
-                                        {/* {
+                            <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+
+                                {
+                                    this.showAccuracyCard()
+                                }
+                                {
+                                    this.showTimeSpentCard()
+                                }
+                            </View>
+
+
+                            {/* {
                             this.recentActivity()
                         } */}
-                                    </View>
-
-                            }
                         </View>
 
-                       
-                
+                }
+            </View>
 
 
-     
+
+
+
+
 
         )
     }
@@ -856,7 +856,7 @@ class HomeReportScreen extends Component {
     }
 
     onBuySubscription = () => {
-        console.log("SSSS");
+       
         this.props.navigation.navigate(Constants.ShowSubscriptions);
     }
 
@@ -868,32 +868,46 @@ class HomeReportScreen extends Component {
                 flex: 1,
                 backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
 
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         {/* <CustomBackButton onPress={this.onPressBack} /> */}
                         <DashboardHeader headerTitle="Report" headerDescription="See your kids progress" />
                         {
-                           !loading && studentReportStatus && currentSelectedKid.paid_status &&
-                            this.renderStarAndBadge()
+                            !loading && studentReportStatus && currentSelectedKid != null && currentSelectedKid.paid_status &&
+
+                            <View style={{ flex : 1 }}>
+                                {
+                                     this.renderStarAndBadge()
+                                    
+                                }
+                                {
+                                    this.showFilterList()
+                                }
+                                {
+                                    this.showAllReportDatas()
+                                }
+                                
+                            </View>
+                           
 
                         }
-                        {
-                           !loading && studentReportStatus && currentSelectedKid.paid_status && 
+                        {/* {
+                            !loading && studentReportStatus && currentSelectedKid.paid_status &&
                             this.showFilterList()
                         }
 
                         {
-                            !loading && studentReportStatus && currentSelectedKid.paid_status && 
+                            !loading && studentReportStatus && currentSelectedKid.paid_status &&
 
                             this.showAllReportDatas()
 
-                        }
+                        } */}
                         {
 
-                            !loading && !currentSelectedKid.paid_status &&
-                            <View style={{ flex :1 }}>
-                                <NoRecordDemoComponent title="Report unavailble for Demo user" sub_title="Please subscribe for subscription" onBuySubscription={this.onBuySubscription}/>
+                            !loading && currentSelectedKid !=null && !currentSelectedKid.paid_status &&
+                            <View style={{ flex: 1 }}>
+                                <NoRecordDemoComponent title="Report unavailble for Demo user" sub_title="Please subscribe for subscription" onBuySubscription={this.onBuySubscription} />
                             </View>
 
 
@@ -906,7 +920,7 @@ class HomeReportScreen extends Component {
 
 
                         {
-                           !loading && studentActivityStatus && studentActivityReport.problems_solved > 1 &&
+                            !loading && studentActivityStatus && studentActivityReport.problems_solved > 1 &&
                             this.recentAcitivityScreeen()
                         }
 

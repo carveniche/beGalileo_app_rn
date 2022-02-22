@@ -102,7 +102,7 @@ class ViewCurriculam extends Component {
     render() {
         const { loading, currentSelectedKid } = this.props;
         return (
-            <ScrollView style={{ flex: 1,backgroundColor : COLOR.WHITE }}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1,backgroundColor : COLOR.WHITE }}>
                 {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />

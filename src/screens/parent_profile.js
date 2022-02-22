@@ -374,7 +374,7 @@ class ParentProfile extends Component {
 
         return (
 
-            <ScrollView contentContainerStyle={{ justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
                 <View
                     style={{ backgroundColor: COLOR.WHITE, flex: 1, justifyContent: 'center' }}
                 >

@@ -125,7 +125,7 @@ class DemoDetails extends Component {
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 }
 
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
                     <View>
                         <View style={{ marginTop: normalize(20), marginStart: normalize(12) }}>
                             <Text style={CommonStyles.text_18_bold}>{isDemoConfirmed ? "Your demo is confirmed" : "Demo class booked \nWaiting for confirmation"}</Text>

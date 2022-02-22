@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import DashboardHeader from '../../components/DashboardHeader';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
+import NoRecordDemoComponent from "../../components/NoRecordDemoComponent";
 
 
 class LiveClassSchedule extends Component {
@@ -23,7 +24,7 @@ class LiveClassSchedule extends Component {
     showUpComingClasses = (upComingClasses) => {
 
         return (
-            <View style={{ backgroundColor: COLOR.WHITE, paddingStart: normalize(10), paddingEnd: normalize(10), paddingBottom: normalize(20), borderBottomStartRadius: 24, borderBottomEndRadius: 24 }}>
+            <View style={{ backgroundColor: COLOR.WHITE, borderRadius: 24, paddingHorizontal: normalize(10), paddingVertical: normalize(20), marginTop: normalize(20) }}>
                 <View style={{ flexDirection: 'row', marginBottom: normalize(10), justifyContent: 'space-between' }}>
                     <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
                     <TouchableOpacity onPress={() => this.onPressViewAll(Constants.UPCOMING_CLASSES, upComingClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
@@ -225,8 +226,13 @@ class LiveClassSchedule extends Component {
         }
     }
 
+    onBuySubscription = () => {
+
+        this.props.navigation.navigate(Constants.ShowSubscriptions);
+    }
+
     render() {
-        const { student_class_status, student_class_response,loading } = this.props;
+        const { student_class_status, student_class_response,loading,currentSelectedKid } = this.props;
         return (
             <View style={{ flex : 1,flexDirection : 'column' }}>
 
@@ -248,7 +254,7 @@ class LiveClassSchedule extends Component {
                 }
              
                 {
-                    student_class_status && !loading && student_class_response.upcoming_classes.length < 1 && student_class_response.completed_classes.length < 1 && student_class_response.incomplete_classes.length < 1 && 
+                    currentSelectedKid !=null && currentSelectedKid.paid_status  && student_class_status && !loading && student_class_response.upcoming_classes.length < 1 && student_class_response.completed_classes.length < 1 && student_class_response.incomplete_classes.length < 1 && 
                     <View style={{ flex : 1,flexDirection : 'column',justifyContent: 'center',alignItems : 'center' }}>
                          <NoRecordFoundComponent title={"No classes found"}/>
                         </View>
@@ -256,8 +262,13 @@ class LiveClassSchedule extends Component {
                        
                 }
 
-
-
+                {
+                    !loading && currentSelectedKid !=null && !currentSelectedKid.paid_status &&
+                    <View style={{ flex: 1 }}>
+                        <NoRecordDemoComponent title="Class unavailble for Demo user" sub_title="Please subscribe for live class" onBuySubscription={this.onBuySubscription} />
+                    </View>
+                                           
+                }
 
 
 
