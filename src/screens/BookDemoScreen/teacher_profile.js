@@ -11,7 +11,7 @@ import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import { CustomBackButton } from '../../components';
 import Modal from 'react-native-modal';
-import { add } from "react-native-reanimated";
+
 
 
 class TeacherProfile extends Component {

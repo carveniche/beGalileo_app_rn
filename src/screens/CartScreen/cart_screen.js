@@ -1,19 +1,20 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, VirtualizedList, ColorPropType, ActivityIndicator, PanResponder } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, VirtualizedList, ColorPropType, ActivityIndicator, PanResponder, Modal } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET } from "../../config/configs";
+import { RAZOR_PAY_TEST_KEY, RAZOR_PAY_TEST_SECRET, SCREEN_WIDTH } from "../../config/configs";
 import { IMG_SHAKSHI, IC_REMOVE_ITEM, IC_CLOSE_BLUE, CART_INDICATOR_MY_CART } from '../../assets/images';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { removeFromCart, getCartItemList, doApplyCoupon, doRemoveCoupon, createPaymentOrder, updatePaymentStatus } from "../../actions/dashboard";
 import CustomGradientButton from '../../components/CustomGradientButton';
-import Modal from 'react-native-modal';
+
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from '@react-native-community/async-storage';
 import { payWithApplePay, payWithRazorPayFromCart } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
 import RNRazorpayCheckout from 'react-native-razorpay';
+import { CustomBackButton } from "../../components";
 
 
 class CartListScreen extends Component {
@@ -68,9 +69,9 @@ class CartListScreen extends Component {
 
 
     getCartListScreen = () => {
-     
-        if(this.props.dashboardStatus)
-        this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id,this.props.dashboardResponse.parent_details[0].country)
+
+        if (this.props.dashboardStatus)
+            this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id, this.props.dashboardResponse.parent_details[0].country)
 
     }
 
@@ -184,34 +185,34 @@ class CartListScreen extends Component {
 
     calculatePriceDetails = () => {
 
-        
+
         var mathBoxPriceTotal = 0;
         var cartPriceTotal = 0;
         var cartDiscountTotal = 0;
         var netPriceTotal = 0;
         this.props.cartItems.map((item) => {
-      
+
             var cartDiscount = item.display_amount - item.amount;
             var mathBoxPricePerPack = item.boxes * 500;
-           
+
             if (!item.mathbox_required)
                 mathBoxPriceTotal += mathBoxPricePerPack;
             cartPriceTotal += item.display_amount;
             cartDiscountTotal += cartDiscount;
-            
+
 
 
         })
-        
+
         netPriceTotal += 0;
-        if(this.props.get_cart_list_status)
+        if (this.props.get_cart_list_status)
             netPriceTotal = this.props.get_cart_list_response.net_amount;
 
-         if(this.props.apply_coupon_status && this.state.isCouponApplied)
+        if (this.props.apply_coupon_status && this.state.isCouponApplied)
             netPriceTotal = this.props.apply_coupon_response.net_amount;
-     
-        
-      
+
+
+
         this.setState({
             cartTotalPrice: cartPriceTotal,
             cartDiscountPrice: cartDiscountTotal,
@@ -317,7 +318,7 @@ class CartListScreen extends Component {
 
 
         if (this.state.currency == Constants.INDIA_CURRENCY) {
-            console.log("Currency",this.state.currency);  if (this.getMathBoxRequiredStatus())
+            console.log("Currency", this.state.currency); if (this.getMathBoxRequiredStatus())
                 this.goToAddressScreen();
             else
                 this.doCreatePaymentOrder();
@@ -429,12 +430,18 @@ class CartListScreen extends Component {
             </View>
         )
     }
+    onPressBack = () => {
+        const { goBack } = this.props.navigation;
+
+        goBack();
+    }
 
     render() {
         const { cartItems, loading } = this.props
         const { confirmCancelDialog, applyCouponDialog, userCouponCode, isValidCouponCode } = this.state;
         return (
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 style={{
                     flex: 1,
                     backgroundColor: COLOR.WHITE
@@ -444,6 +451,10 @@ class CartListScreen extends Component {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 }
+
+                <View style={{ marginStart: 20 }}>
+                    <CustomBackButton onPress={this.onPressBack} />
+                </View>
                 <View style={{ marginStart: normalize(20), marginEnd: normalize(20), marginBottom: normalize(30) }}>
 
 
@@ -559,83 +570,102 @@ class CartListScreen extends Component {
                             <View />
                     }
 
+                    {
+                        confirmCancelDialog &&
+                        <Modal transparent={true}>
+                            <View style={{ flex : 1,backgroundColor : COLOR.TEXT_ALPHA_GREY,justifyContent : 'center' }}>
+                                <View style={{ backgroundColor: COLOR.WHITE, marginHorizontal: normalize(10), borderRadius: normalize(12) }}>
+                                    <View>
+                                        <Text style={{ color: COLOR.BLACK, fontFamily: Constants.Montserrat_Regular, fontSize: normalize(14), padding: normalize(30), textAlign: 'center' }}>beGalileo is a great gift for your child. Are you sure you want to remove it from the cart?</Text>
+                                        <View style={{ borderColor: COLOR.LIGHT_BORDER_COLOR, borderWidth: 1 }} />
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignSelf: 'stretch' }}>
+                                            <TouchableOpacity style={{ color: COLOR.BLACK, flex: 1, fontFamily: Constants.Montserrat_Regular, padding: normalize(15) }} onPress={this.removeCartItem}>
+                                                <Text style={[CommonStyles.text_14_bold,{ textAlign: 'center' }]}>Yes</Text>
+                                            </TouchableOpacity>
 
-                    <Modal isVisible={confirmCancelDialog}>
-                        <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(10), borderRadius: normalize(12) }}>
-                            <View>
-                                <Text style={{ color: COLOR.BLACK, fontFamily: Constants.Montserrat_Regular, fontSize: normalize(14), padding: normalize(30), textAlign: 'center' }}>beGalileo is a great gift for your child. Are you sure you want to remove it from the cart?</Text>
-                                <View style={{ borderColor: COLOR.LIGHT_BORDER_COLOR, borderWidth: 1 }} />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignSelf: 'stretch' }}>
-                                    <TouchableOpacity style={{ color: COLOR.BLACK, flex: 1, fontFamily: Constants.Montserrat_Regular, padding: normalize(15) }} onPress={this.removeCartItem}>
-                                        <Text style={{ fontFamily: Constants.Montserrat_Regular, textAlign: 'center', fontSize: normalize(14) }}>Yes</Text>
-                                    </TouchableOpacity>
+                                            <TouchableOpacity style={{ color: COLOR.BLACK, flex: 1, fontFamily: Constants.Montserrat_Regular, padding: normalize(15) }} onPress={this.closeConfirmationdemo}>
+                                            <Text style={[CommonStyles.text_14_bold,{ textAlign: 'center',color : COLOR.TEXT_COLOR_GREEN }]}>No</Text>
+                                            </TouchableOpacity>
 
-                                    <TouchableOpacity style={{ color: COLOR.BLACK, flex: 1, fontFamily: Constants.Montserrat_Regular, padding: normalize(15) }} onPress={this.closeConfirmationdemo}>
-                                        <Text style={{ fontFamily: Constants.Montserrat_Regular, textAlign: 'center', fontSize: normalize(14) }}>No</Text>
-                                    </TouchableOpacity>
+                                        </View>
 
+                                    </View>
                                 </View>
-
                             </View>
-                        </View>
 
-                    </Modal>
-                    <Modal isVisible={applyCouponDialog}>
-                        <View style={{ backgroundColor: COLOR.WHITE, padding: normalize(20) }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={[CommonStyles.text_12__semi_bold, { alignSelf: 'center' }]}>Apply coupon</Text>
-                                <TouchableOpacity onPress={this.closeApplyCoupon}>
-                                    <Image style={{ borderRadius: 100, height: normalize(30), width: normalize(30), resizeMode: "stretch" }} source={IC_CLOSE_BLUE} />
-                                </TouchableOpacity>
 
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
-                                <TextInput
-                                    style={[CommonStyles.text_12_Regular, { flex: 1, paddingVertical: 20, paddingHorizontal: 10, textAlignVertical: 'center', justifyContent: 'center' }]}
-                                    placeholder={"Enter Coupon Code"}
-                                    value={userCouponCode}
-                                    onChangeText={(userCouponCode) => this.setState({ userCouponCode })}
+                        </Modal>
+                    }
 
-                                />
-                                {
-                                    this.state.userCouponCode.length > 2 && !this.state.isCouponApplied && !loading ?
-                                        <TouchableOpacity onPress={this.applyCouponCode} style={{ justifyContent: 'center' }}>
-                                            <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginEnd: normalize(16) }]} >Apply</Text>
+                    {
+                        applyCouponDialog &&
+                        <Modal transparent={true}>
+                            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: COLOR.TEXT_ALPHA_GREY }}>
+                                <View style={{height : 375 ,backgroundColor: COLOR.WHITE, justifyContent : 'space-evenly',borderTopStartRadius : 24,borderTopEndRadius : 24 }}>
+                                    <View style={{ flexDirection: 'row',marginTop : 27,marginStart : 20,justifyContent : 'space-between' }}>
+                                        <Text style={[CommonStyles.text_12__semi_bold, { alignSelf: 'center' }]}>Apply coupon</Text>
+                                        <TouchableOpacity onPress={this.closeApplyCoupon}>
+                                            <Image style={{  height: normalize(30), width: normalize(30), resizeMode : 'contain',padding : 20,marginEnd : 20 }} source={IC_CLOSE_BLUE} />
                                         </TouchableOpacity>
 
-                                        : <View></View>
-                                }
-
-
-                            </View>
-                            {
-                                !isValidCouponCode && !loading ?
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.RED, marginTop: normalize(7) }]}>Invalid coupon code</Text>
-                                    : <View />
-                            }
-
-                            <View style={{ marginTop: normalize(32), marginBottom: normalize(24), flexDirection: 'row', justifyContent: 'space-between' }}>
-                                {
-                                    this.props.apply_coupon_status && this.state.isCouponApplied &&
-                                    <View>
-                                        <Text style={[CommonStyles.text_12_Regular]}>Maximum savings</Text>
-                                        <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>{this.state.currency}. {this.props.apply_coupon_response.coupon_discount}</Text>
                                     </View>
-                                }
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop : 30,marginHorizontal : 20 ,borderRadius: normalize(12), borderWidth: normalize(1), borderColor: COLOR.BORDER_COLOR_GREY }}>
+                                        <TextInput
+                                            style={[CommonStyles.text_12_Regular, { flex: 1, paddingVertical: 20, paddingHorizontal: 10, textAlignVertical: 'center', justifyContent: 'center' }]}
+                                            placeholder={"Enter Coupon Code"}
+                                            value={userCouponCode}
+                                            onChangeText={(userCouponCode) => this.setState({ userCouponCode })}
 
-                                <View>
-                                    <CustomGradientButton
-                                        myRef={(input) => { this.btn_pay_now = input; }}
-                                        style={styles.btn_proceed_address}
-                                        children={"Proceed to cart"}
-                                        onPress={this.proceedToCart}
-                                    />
+                                        />
+                                        {
+                                            this.state.userCouponCode.length > 2 && !this.state.isCouponApplied && !loading ?
+                                                <TouchableOpacity onPress={this.applyCouponCode} style={{ justifyContent: 'center' }}>
+                                                    <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginEnd: normalize(16) }]} >Apply</Text>
+                                                </TouchableOpacity>
+
+                                                : <View></View>
+                                        }
+
+
+                                    </View>
+                                    {
+                                        !isValidCouponCode && !loading ?
+                                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.RED, marginTop: normalize(7),marginStart : 20 }]}>Invalid coupon code</Text>
+                                            : <View />
+                                    }
+
+                                    <View style={{ marginHorizontal : 20,marginTop: normalize(32), marginBottom: normalize(30), flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        {
+                                            this.props.apply_coupon_status && this.state.isCouponApplied &&
+                                            <View>
+                                                <Text style={[CommonStyles.text_12_Regular]}>Maximum savings</Text>
+                                                <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(2) }]}>{this.state.currency}. {this.props.apply_coupon_response.coupon_discount}</Text>
+                                            </View>
+                                        }
+
+                                        <View>
+                                            <CustomGradientButton
+                                                myRef={(input) => { this.btn_pay_now = input; }}
+                                                style={styles.btn_proceed_address}
+                                                children={"Proceed to cart"}
+                                                onPress={this.proceedToCart}
+                                            />
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
 
-                    </Modal>
+
+                        </Modal>
+                    }
+
+
+
                 </View>
+
+
+
+
             </ScrollView>
 
         )

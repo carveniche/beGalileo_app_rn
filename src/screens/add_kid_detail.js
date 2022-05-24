@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalSelector from 'react-native-modal-selector'
 import { allowOnlyAlphabets, isValidDate } from '../components/helpers'
 import RadioForm, { RadioButton } from 'react-native-simple-radio-button';
-import { IC_PROFILE_PIC } from "../assets/images";
+import { IC_PROFILE_PIC,ADD_ANOTHER_CHILD } from "../assets/images";
 import { getLocalData, storeLocalData } from "../components/helpers/AsyncMethods";
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -111,10 +111,7 @@ class AddKidDetail extends Component {
 
     showDatePicker = () => {
      
-        var maxDateValue = new Date();
-        var pastYear = maxDateValue.getFullYear() - 1;
-        maxDateValue.setFullYear(pastYear);
-
+       
         this.setState({
             mBirthDateDialog: true
         })
@@ -491,9 +488,9 @@ class AddKidDetail extends Component {
                         <View style={{ flex: 1, margin: 15 }}>
                             {
                                 data.photo == null ?
-                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode: "stretch", alignSelf: 'center' }} source={IC_PROFILE_PIC} />
+                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode :'contain', alignSelf: 'center' }} source={IC_PROFILE_PIC} />
                                     :
-                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode: "stretch", alignSelf: 'center' }} source={{ uri: data.photo }} />
+                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode: 'contain', alignSelf: 'center' }} source={{ uri: data.photo }} />
                             }
                             <Text style={{ fontFamily: 'Montserrat-Regular', justifyContent: 'center', alignSelf: 'center', marginTop: 5 }}>{data.name}</Text>
                         </View>
@@ -503,6 +500,18 @@ class AddKidDetail extends Component {
 
 
         )
+    }
+
+    onFocusIn = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+        });
+    }
+
+    onFocusOut = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+        });
     }
 
     closeAddKidForm = () => {
@@ -606,7 +615,7 @@ class AddKidDetail extends Component {
                     }}>
                     {
                         this.props.dashboard_status &&
-                        <View style={{ margin: 5 }}>
+                        <View style={{ margin: 10 }}>
                             <CustomBackButton onPress={this.onPressBack} />
                         </View>
                     }
@@ -651,7 +660,7 @@ class AddKidDetail extends Component {
                                 <View style={{ justifyContent: 'center', marginTop: 20 }}>
 
                                     <View style={{ alignSelf: 'center' }}>
-                                        <Image style={{ borderRadius: 100, height: 120, width: 120, resizeMode: "stretch" }} source={this.state.avatarSource == null ? IC_PROFILE_PIC : this.state.avatarSource} />
+                                        <Image style={{ borderRadius: 100, height: 120, width: 120, resizeMode : 'contain' }} source={this.state.avatarSource == null ? IC_PROFILE_PIC : this.state.avatarSource} />
                                         <View style={styles.edit_profile_icon} >
                                             <Icon
                                                 onPress={this.onChooseImageClick}
@@ -675,6 +684,8 @@ class AddKidDetail extends Component {
                                         placeholder="Enter a short screen name"
                                         keyboardType='default'
                                         style={styles.nametextInputBordered}
+                                        onFocus={() => this.onFocusIn(this.child_name_input)}
+                                        onBlur={() => this.onFocusOut(this.child_name_input)}
                                         onChangeText={this.addUserName.bind(this)}
                                         value={this.state.mChildName}
                                         blurOnSubmit={false}
@@ -910,11 +921,7 @@ class AddKidDetail extends Component {
                             flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
                             marginBottom: 20
                         }}>
-                            <Icon
-                                style={{ backgroundColor: 'white' }}
-                                size={25}
-                                name='user'
-                                color={COLOR.TEXT_COLOR_GREEN} />
+                            <Image style={{  height: 16, width: 16, resizeMode: 'contain' }} source={ADD_ANOTHER_CHILD} />
                             <Text
                                 onPress={() => this.addKidDetails(false)}
                                 style={{
@@ -999,7 +1006,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderRadius: 10,
         borderWidth: 1.5,
-        borderColor: COLOR.BORDER_COLOR_GREEN,
+        borderColor: COLOR.LIGHT_BORDER_COLOR,
         backgroundColor: COLOR.WHITE
     },
     dropDownBordered: {

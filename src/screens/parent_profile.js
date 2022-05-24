@@ -52,6 +52,14 @@ class ParentProfile extends Component {
         const propParentLastName = this.props.navigation.getParam('parentLastName', "");
         const propParentTimeZone = this.props.navigation.getParam('parentTimeZone', "");
         parent_id = this.props.navigation.getParam('parentId', 0);
+
+
+
+        if(propParentEmail != "" && propParentMobile !== "")
+        {
+            this.goToAddKids(parent_id)
+        }
+
         this.setState({
             myNumber: propParentMobile,
             mUserName: propParentFirstName,
@@ -66,15 +74,28 @@ class ParentProfile extends Component {
             })
         }
 
-        // getLocalData(Constants.ParentTimeZone).then((timeZone) => {
-        //     this.setState({
-        //         mUserTimeZone: JSON.parse(timeZone)
-        //     })
-        // })
+
+    }
 
 
+    onFocusIn = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+        });
+    }
+
+    onFocusOut = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+        });
+    }
 
 
+    goToAddKids = (parent_id) => {
+        this.props.navigation.navigate(Constants.AddKidDetail, {
+            user_id: parent_id,
+            isFrom: Constants.ExistingUser
+        });
     }
 
     updateDeviceToken = () => {
@@ -107,38 +128,6 @@ class ParentProfile extends Component {
             }
         }
     }
-    // static getDerivedStateFromProps(nextProps, state) {
-    //     console.log("Get Derived State");
-    //     console.log(nextProps.state);
-    //     // Return null to indicate no change to state.
-    //     if (nextProps.state.submitParentSuccess !== state.submitParentSuccess) {
-    //         if (nextProps.state.submitParentSuccess) {
-    //             const response = nextProps.state.response;
-    //             console.log("inside submit parent success");
-    //             console.log(response);
-    //             storeLocalData(Constants.IsParentRegistered, true);
-    //             storeLocalData(Constants.ParentUserId, response.user_id);
-    //             storeLocalData(Constants.ParentEmail, response.email);
-    //             storeLocalData(Constants.ParentFirstName, response.first_name);
-    //             storeLocalData(Constants.ParentLastName, response.last_name);
-    //             storeLocalData(Constants.ParentMobileNumber, response.mobile);
-    //             nextProps.navigation.navigate(Constants.AddKidDetail, {
-    //                 fromParent: true
-    //             });
-    //             return {
-
-    //                 submitParentSuccess: nextProps.state.submitParentSuccess
-
-    //             }
-    //         }
-    //     }
-
-    //     return null;
-
-    // }
-
-
-
 
 
 
@@ -176,6 +165,18 @@ class ParentProfile extends Component {
         pinCode[index] = value;
         this.setState({ pinCode });
         // this.props.getOtp(otp.join(''));
+    }
+
+    onFocus() {
+        this.setState({
+            backgroundColor: 'green'
+        })
+    }
+
+    onBlur() {
+        this.setState({
+            backgroundColor: '#ededed'
+        })
     }
 
     renderPinCodeInput() {
@@ -227,7 +228,7 @@ class ParentProfile extends Component {
 
     }
     onPressSubmit = () => {
-        const { mUserEmail, mUserName, mUserLastName } = this.state;
+        const { mUserEmail, mUserName, mUserLastName, myNumber } = this.state;
         // this.props.navigation.navigate('AddKidDetail',{ 
         //     user_id : "50115"
         //  });
@@ -288,52 +289,12 @@ class ParentProfile extends Component {
             })
         }
 
-        // if (this.state.pinCode.length < 4) {
-        //     this.setState({
-        //         pinCodeError: true
-        //     })
-        //     isValidationSuccess = false
-        // }
-        // else {
-        //     this.setState({
-        //         pinCodeError: false
-        //     })
-        // }
-        // if (this.state.confirmPinCode.length < 4) {
-        //     this.setState({
-        //         confirmPinCodeError: true
-        //     })
-        //     isValidationSuccess = false
-        // }
-        // else {
-        //     this.setState({
-        //         confirmPinCodeError: false
-        //     })
-        // }
-        // if(this.state.pinCode.length == 4 && this.state.confirmPinCode.length == 4)
-        // {
-        //     console.log(JSON.stringify(this.state.pinCode)+"---"+JSON.stringify(this.state.confirmPinCode));
-        //     if(JSON.stringify(this.state.confirmPinCode) !== JSON.stringify(this.state.pinCode)){
-        //         console.log("inside if")
-        //         this.setState({
-        //             pinCodeMatchError: true
-        //         })
-        //         isValidationSuccess = false
-        //     }
-        //     else
-        //     {
-        //         console.log("outside if")
-        //         this.setState({
-        //             pinCodeMatchError: false
-        //         })
-        //     }
-        // }     
 
 
         if (isValidationSuccess) {
             //this.props.navigation.navigate('AddKidDetail');
-            this.props.pre_update_email(parent_id, mUserEmail, mUserName, mUserLastName);
-            console.debug("Validation Success");
+            this.props.pre_update_email(parent_id, mUserEmail, mUserName, mUserLastName, myNumber);
+           
         }
 
 
@@ -367,6 +328,18 @@ class ParentProfile extends Component {
         })
     }
 
+    onFocusIn = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+        });
+    }
+
+    onFocusOut = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+        });
+    }
+
 
 
     render() {
@@ -374,12 +347,12 @@ class ParentProfile extends Component {
 
         return (
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
                 <View
                     style={{ backgroundColor: COLOR.WHITE, flex: 1, justifyContent: 'center' }}
                 >
 
-                    <Text style={[CommonStyles.text_14_semi_bold, styles.textHeader]}>Parent Profile</Text>
+                    <Text style={[CommonStyles.text_16_semi_bold, styles.textHeader]}>Parent Profile</Text>
 
                     {loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
@@ -396,6 +369,8 @@ class ParentProfile extends Component {
                             editable={this.state.isEmailEditable}
                             returnKeyType="next"
                             autoCapitalize='none'
+                            onFocus={() => this.onFocusIn(this.email_id_input)}
+                            onBlur={() => this.onFocusOut(this.email_id_input)}
                             onSubmitEditing={() => { this.first_name_input.focus(); }}
                             onChangeText={(text) => this.setState({ mUserEmail: text })}
                             value={this.state.mUserEmail}
@@ -419,6 +394,8 @@ class ParentProfile extends Component {
                                 style={styles.textInputBordered}
                                 autoCapitalize='none'
                                 returnKeyType="next"
+                                onFocus={() => this.onFocusIn(this.mobile_number_input)}
+                                onBlur={() => this.onFocusOut(this.mobile_number_input)}
                                 onSubmitEditing={() => { this.first_name_input.focus(); }}
                                 onChangeText={(text) => this.onMobileNumberChanged(text)}
                                 value={this.state.myNumber}
@@ -438,6 +415,8 @@ class ParentProfile extends Component {
                             placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                             returnKeyType="next"
                             style={styles.textInputBordered}
+                            onFocus={() => this.onFocusIn(this.first_name_input)}
+                            onBlur={() => this.onFocusOut(this.first_name_input)}
                             onSubmitEditing={() => { this.last_name_input.focus(); }}
                             onChangeText={this.addUserName.bind(this)}
                             value={this.state.mUserName}
@@ -452,7 +431,8 @@ class ParentProfile extends Component {
                             ref={(input) => { this.last_name_input = input; }}
                             placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                             returnKeyType="done"
-                          
+                            onFocus={() => this.onFocusIn(this.last_name_input)}
+                            onBlur={() => this.onFocusOut(this.last_name_input)}
                             style={styles.textInputBordered}
                             onChangeText={this.addUserLastName.bind(this)}
                             value={this.state.mUserLastName}
@@ -460,51 +440,15 @@ class ParentProfile extends Component {
 
                         />
                     </View>
-                    {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-    <Text style={styles.textSubHeader}>Set Pin Code</Text>
-    {this.state.pinCodeError && <Text style={styles.errorMessage}>Please enter PinCode</Text>}
-    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
-    <View style={styles.pinCodeContainer}>
-        {this.renderPinCodeInput()}
-    </View>
-    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
-</View> */}
-
-                    {/* <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
-    <Text style={styles.textSubHeader}>Confirm Pin Code</Text>
-    {this.state.confirmPinCodeError && <Text style={styles.errorMessage}>Please enter Confirm PinCode</Text>}
-    {this.state.pinCodeMatchError && <Text style={styles.errorMessage}>Pincode and Confirm Pincode is not matching</Text>}
-    <View style={styles.pinCodeContainer}>
-        {this.renderConfirmPinCodeInput()}
-    </View>
-    <Text style={styles.textSubFooter}>Require for switching from Child to Parent profile.</Text>
-</View> */}
-                    {/* <View style={styles.checkBoxStyle}>
-                        <CheckBox
-                            textStyle={{ fontSize: 12 }}
-                            containerStyle={{ backgroundColor: COLOR.WHITE }}
-                            center
-                            title='I wish to receive latest updates and news via email.'
-                            checked={this.state.emailAlertsCheck}
-                            onIconPress={this.onEmailAlertsPress}
-                        />
-                    </View> */}
+                   
                     <View style={{ marginBottom: 15, marginTop: normalize(20) }}>
                         <CustomGradientButton
-                       
+
                             style={styles.submitButton}
                             children="Proceed to Add Kids"
                             onPress={this.onPressSubmit}
                         />
                     </View>
-
-
-
-
-
-
-
-
 
                 </View>
             </ScrollView>
@@ -569,7 +513,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderRadius: 10,
         borderWidth: 1.5,
-        borderColor: COLOR.BORDER_COLOR_GREEN,
+        borderColor: COLOR.LIGHT_BORDER_COLOR,
         backgroundColor: COLOR.WHITE
     },
 

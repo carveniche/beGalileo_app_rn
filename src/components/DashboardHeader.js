@@ -8,8 +8,7 @@ import { updateCurrentKid } from '../actions/dashboard';
 import * as Config  from '../config/configs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
-import { cos } from "react-native-reanimated";
-import { getLocalData } from '../components/helpers/AsyncMethods';
+
 
 class DashboardHeader extends Component {
     constructor(props) {
@@ -81,7 +80,7 @@ class DashboardHeader extends Component {
                     <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(4) }]}>{headerDescription}</Text>
                 </View>
 
-                <ScrollView  showsHorizontalScrollIndicator={false} horizontal={true} style={{ flexDirection: 'row', marginBottom: normalize(10) }}>
+                <ScrollView  showsHorizontalScrollIndicator={false} horizontal={true} style={{ flexDirection: 'row',marginBottom: normalize(10),marginStart : 10 }}>
                     {kidList}
                 </ScrollView>
             </View>

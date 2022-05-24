@@ -16,7 +16,7 @@ import RNRazorpayCheckout from 'react-native-razorpay';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { payWithApplePay, payWithRazorPayFromAddress } from '../../components/helpers/payment_methods';
 import { normalize } from "react-native-elements";
-import { add } from "react-native-reanimated";
+
 
 class CartAddress extends Component {
     constructor(props) {

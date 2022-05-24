@@ -3,16 +3,13 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, AVATAR_TEACHER } from "../../assets/images";
-import LinearGradient from 'react-native-linear-gradient';
-import { addToCart } from "../../actions/dashboard";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {  AVATAR_TEACHER } from "../../assets/images";
+
 import { normalize, Card } from "react-native-elements";
-import SvgUri from "react-native-svg-uri";
-import SubscriptionTabs from '../../components/subscription_tab';
-import AddCartFloatingButton from '../../components/AddCartFloatingButton';
+
 import NewUserScreen from './NewUserScreen';
 import PaidUserScreen from './PaidUserScreen';
+
 
 
 
@@ -28,18 +25,12 @@ class MainUserDashboard extends Component {
     }
 
     componentDidMount() {
+
+      
        
-        if (this.props.dashboardStatus) {
-
-
-            this.setState({
-                //priceDetails: this.props.dashboardResponse.price_details
-            })
-        }
+     
         this.renderDashboardData();
-        // getLocalData(Constants.ParentCountryName).then((country) => {
-        //    console.log("Parent Country ",country)
-        // })
+       
 
     }
 

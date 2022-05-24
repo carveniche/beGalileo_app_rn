@@ -1,13 +1,29 @@
 import React, { Component } from "react";
 import { AppStack,AuthStack } from "../config/router";
-import { View, Text } from "react-native";
-import Splash from "../screens/splash";
 import { connect } from 'react-redux';
-import { restoreSession } from '../actions/authenticate'
-import * as Constants from '../components/helpers/Constants'
-import { getLocalData, storeLocalData } from '../components/helpers/AsyncMethods'
+import { restoreSession } from '../actions/authenticate';
+import * as Sentry from "@sentry/react-native";
+import { SENTRY_BASE_URL } from "../config/configs";
+
+// Construct a new instrumentation instance. This is needed to communicate between the integration and React
+const routingInstrumentation = new Sentry.ReactNavigationV4Instrumentation();
+
+Sentry.init({
+    dsn: SENTRY_BASE_URL,
+    enableOutOfMemoryTracking: false,
+    integrations: [
+      new Sentry.ReactNativeTracing({
+        tracingOrigins: ["localhost", "begalileo.com", /^\//],
+        // ... other options
+      }),
+    ],
+    tracesSampleRate: 1.0,
+  });
+  
 
 class Root extends Component {
+
+    appContainer = React.createRef();
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +32,7 @@ class Root extends Component {
     }
 
     componentDidMount() {
-       
+        routingInstrumentation.registerAppContainer(this.appContainer);
       
     }
 
@@ -25,7 +41,7 @@ class Root extends Component {
     render() {
 
         
-            return <AppStack />
+            return <AppStack ref={this.appContainer}/>
 
     }
 }

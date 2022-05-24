@@ -5,7 +5,7 @@ import { Dimensions } from "react-native";
 import { COLOR, PIE_CHART_COLORS, CommonStyles } from '../config/styles';
 import { normalize } from 'react-native-elements';
 import PieChartCircle from '../components/PieChartCircle';
-import { ceil } from 'react-native-reanimated';
+
 
 
 const screenWidth = Dimensions.get("window").width;

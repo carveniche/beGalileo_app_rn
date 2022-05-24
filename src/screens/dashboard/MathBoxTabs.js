@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles, SCREEN_HEIGTH, SCREEN_WIDTH } from '../../config/styles';
-import { IC_BOOK_DEMO_BG, ICON_CLOCK, CARD_BTN_ARROW, LIVE_CLASS_CARD_THUMB, IC_PARENT_MOM, IC_ALEXA_BOX, IC_MATH_BOXES, IC_MOBILE_HAND } from "../../assets/images";
+import { IC_BOOK_DEMO_BG, ICON_CLOCK, CARD_BTN_ARROW, LIVE_CLASS_CARD_THUMB, IC_PARENT_MOM, IC_ALEXA_BOX, IC_MATH_BOXES, IC_MOBILE_HAND,MATH_CODING_CURRICULAM,ALEXA_DEVICES } from "../../assets/images";
 import { normalize } from 'react-native-elements';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 
@@ -52,13 +52,13 @@ class MathBoxTabs extends Component {
                     <View style={{ flex: 1, backgroundColor: '#FCDCDC', borderRadius: normalize(12), marginStart: normalize(8), marginEnd: normalize(4), justifyContent: 'center', alignContent: 'center' }}>
                         <Text style={[CommonStyles.text_12__semi_bold, { flex: 1, marginStart: normalize(12), marginTop: normalize(12),textAlign : 'center' }]}>Alexa enabled learning</Text>
 
-                        <Image style={{ height: normalize(60), width: normalize(60), resizeMode:'contain', borderRadius: normalize(12),justifyContent : 'center',alignSelf : 'center'}} source={IC_ALEXA_BOX} />
+                        <Image style={{ height: normalize(100), width: normalize(100), resizeMode:'contain', borderRadius: normalize(12),justifyContent : 'center',alignSelf : 'center'}} source={ALEXA_DEVICES} />
 
                     </View>
                     {
                         this.props.country == Constants.INDIA && 
                         <View style={{ flex: 1, backgroundColor: '#C2F5EC', borderRadius: normalize(12), marginStart: normalize(4), marginEnd: normalize(8) }}>
-                        <Image style={{ height: normalize(100), width: normalize(120), resizeMode: 'contain', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={IC_MATH_BOXES} />
+                        <Image style={{ height: normalize(80), width: normalize(100), resizeMode: 'contain', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 0 }} source={MATH_CODING_CURRICULAM} />
                         <Text style={[CommonStyles.text_11_semi_bold, { marginStart: normalize(12), marginTop: normalize(12) }]}>Math and coding integrated curriculum</Text>
                     </View>
                     }

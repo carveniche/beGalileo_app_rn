@@ -6,13 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.horcrux.svg.SvgPackage;
-import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
-import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.faizal.OtpVerify.RNOtpVerifyPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -29,12 +23,18 @@ import expo.modules.permissions.PermissionsPackage;
 import expo.modules.filesystem.FileSystemPackage;
 import expo.modules.updates.UpdatesController;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
+
+import com.twiliorn.library.TwilioPackage;
+
+
 public class MainApplication extends Application implements ReactApplication {
+
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
     new BasePackageList().getPackageList(),
     null
@@ -50,7 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
-
+      packages.add(new TwilioPackage());
 
       return packages;
     }
@@ -87,6 +87,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+
     SoLoader.init(this, /* native exopackage */ false);
     //initializeFlipper(this); // Remove this line if you don't want Flipper enabled
 

@@ -24,7 +24,7 @@ class LiveClassSchedule extends Component {
     showUpComingClasses = (upComingClasses) => {
 
         return (
-            <View style={{ backgroundColor: COLOR.WHITE, borderRadius: 24, paddingHorizontal: normalize(10), paddingVertical: normalize(20), marginTop: normalize(20) }}>
+            <View style={{ backgroundColor: COLOR.WHITE,  paddingHorizontal: normalize(10), paddingVertical: normalize(20) }}>
                 <View style={{ flexDirection: 'row', marginBottom: normalize(10), justifyContent: 'space-between' }}>
                     <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
                     <TouchableOpacity onPress={() => this.onPressViewAll(Constants.UPCOMING_CLASSES, upComingClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
@@ -265,7 +265,7 @@ class LiveClassSchedule extends Component {
                 {
                     !loading && currentSelectedKid !=null && !currentSelectedKid.paid_status &&
                     <View style={{ flex: 1 }}>
-                        <NoRecordDemoComponent title="Class unavailble for Demo user" sub_title="Please subscribe for live class" onBuySubscription={this.onBuySubscription} />
+                        <NoRecordDemoComponent title="Class not availble for Demo user" sub_title="Please subscribe for live class" onBuySubscription={this.onBuySubscription} />
                     </View>
                                            
                 }

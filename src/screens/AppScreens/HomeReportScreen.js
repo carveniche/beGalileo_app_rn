@@ -207,7 +207,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showTimeSpentChart } = this.state;
         return (
-            <TouchableOpacity onPress={this.changeTimeSpentChartView} style={[CommonStyles.shadowContainer_border_20, { marginTop: normalize(20), marginStart: normalize(2), marginEnd: normalize(2) }]}>
+            <TouchableOpacity onPress={this.changeTimeSpentChartView} style={[CommonStyles.boxShadow, { backgroundColor : COLOR.WHITE,marginTop: normalize(20), marginHorizontal : 10,borderRadius : 20 }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_TIME_SPENT} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16) }}>
                     <View style={{ flex: 1 }}>
@@ -266,7 +266,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showAccuracyChart } = this.state;
         return (
-            <TouchableOpacity onPress={this.changeAccuracyChartView} style={[CommonStyles.shadowContainer_border_20, { marginStart: normalize(2), marginEnd: normalize(2) }]}>
+            <TouchableOpacity onPress={this.changeAccuracyChartView} style={[CommonStyles.boxShadow, { backgroundColor : COLOR.WHITE,marginHorizontal : 10,borderRadius : 20 }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
 
@@ -618,7 +618,7 @@ class HomeReportScreen extends Component {
                         <View>
 
 
-                            <View style={{ backgroundColor: COLOR.WHITE, paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+                            <View style={{  paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
 
                                 {
                                     this.showAccuracyCard()
@@ -649,7 +649,7 @@ class HomeReportScreen extends Component {
     renderStarAndBadge = () => {
         const { studentReportResponse } = this.props;
         return (
-            <View style={{ height: normalize(50), flexDirection: 'row', marginTop: normalize(20), justifyContent: 'space-evenly' }}>
+            <View style={{ height: normalize(48), flexDirection: 'row', marginTop: normalize(20), marginHorizontal : 20 ,justifyContent: 'space-evenly' }}>
                 <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(studentReportResponse.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>

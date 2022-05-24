@@ -101,7 +101,7 @@ class HomeScheduleScreen extends Component {
                         <DashboardHeader headerTitle="Schedule" headerDescription="See your Kids schedule" allKidsList={allKidsList} />
 
 
-                        {/* {student_class_status &&
+                        {student_class_status &&
                             <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
                                 <View style={{ flexDirection: "row", marginStart: normalize(10), marginTop: normalize(20), marginBottom: normalize(20) }}>
                                     <TouchableOpacity onPress={this.onTabSelected} style={isLiveTabSelected ? styles.tabItemSelected : styles.tabItem}>
@@ -112,15 +112,8 @@ class HomeScheduleScreen extends Component {
                                 </TouchableOpacity>
                                 </View>
                             </View>
-                        } */}
+                        } 
 
-
-
-                        {/* {
-                                            isLiveTabSelected ?
-                                                <LiveClassSchedule />
-                                                : <CurriculamSchedule />
-                                        } */}
                         {
                             loading &&
                             <SearchingRecordComponent title="Searching..." sub_title="Fetching class details" />
@@ -128,7 +121,13 @@ class HomeScheduleScreen extends Component {
                         {
                             student_class_status &&
                             <View style={{ flex : 1 }}>
-                                <LiveClassSchedule navigation={this.props.navigation} />
+                                {
+                                    isLiveTabSelected ? 
+                                    <LiveClassSchedule navigation={this.props.navigation} />
+                                    :
+                                    <CurriculamSchedule />
+                                }
+                               
                                 </View>
                             
 

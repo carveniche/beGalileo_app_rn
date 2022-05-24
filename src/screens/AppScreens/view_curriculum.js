@@ -9,6 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
+import { CustomBackButton } from "../../components";
 
 class ViewCurriculam extends Component {
     state = {
@@ -35,13 +36,14 @@ class ViewCurriculam extends Component {
         return view_curriculam_response.math_skills.map((item) => {
             return (
 
-                <View style={{ marginTop: normalize(8), borderColor: COLOR.BORDER_COLOR_GREY, borderRadius: 15, borderWidth: 2 }}>
+                <View style={{ marginTop: normalize(16), borderColor: COLOR.BORDER_COLOR_GREY, borderRadius: 15, borderWidth: 2 }}>
                     <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(16), marginTop: normalize(16) }]}>{item.name}</Text>
                     {
                         item.tags.map((tag) => {
                             return (
-                                <View style={{ marginStart: normalize(16) }}>
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}><Text style={{ color: COLOR.TEXT_COLOR_BLACK, fontSize: normalize(10) }}>{'\u2B24'}</Text> {tag.name}</Text>
+                                <View style={{ marginStart: normalize(16), flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                                    <Text style={{ color: COLOR.TEXT_COLOR_BLACK, fontSize: normalize(6), marginEnd: 5, alignSelf: 'center', backgroundColor: COLOR.BG_ALPHA_BLUE }}>{'\u2B24'}</Text>
+                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}> {tag.name}</Text>
 
                                 </View>
                             )
@@ -76,8 +78,9 @@ class ViewCurriculam extends Component {
                     {
                         item.tags.map((tag) => {
                             return (
-                                <View style={{ marginStart: normalize(16) }}>
-                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16) }]}><Text style={{ color: COLOR.TEXT_COLOR_BLACK, fontSize: normalize(10) }}>{'\u2B24'}</Text> {tag.name}</Text>
+                                <View style={{ marginStart: normalize(16), flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
+                                    <Text style={{ color: COLOR.TEXT_COLOR_BLACK, fontSize: normalize(6), marginEnd: 5, alignSelf: 'center', backgroundColor: COLOR.BG_ALPHA_BLUE }}>{'\u2B24'}</Text>
+                                    <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_ALPHA_GREY }]}> {tag.name}</Text>
 
                                 </View>
                             )
@@ -98,16 +101,24 @@ class ViewCurriculam extends Component {
 
 
     }
+    onPressBack = () => {
+        const { goBack } = this.props.navigation;
+        goBack();
+    }
+
 
     render() {
         const { loading, currentSelectedKid } = this.props;
         return (
-            <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1,backgroundColor : COLOR.WHITE }}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: COLOR.WHITE }}>
                 {
                     loading &&
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 }
-
+               <View style={{ marginStart : 20 }}>
+               <CustomBackButton onPress={this.onPressBack} />
+               </View>
+             
                 <View style={{ flex: 1, marginStart: normalize(20), marginEnd: normalize(20) }}>
 
                     <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>Curriculum</Text>
@@ -115,7 +126,7 @@ class ViewCurriculam extends Component {
                         <Image style={{ borderRadius: 100, height: normalize(50), width: normalize(50), resizeMode: "stretch" }} source={{ uri: currentSelectedKid.photo }} />
                         <View style={{ justifyContent: 'center', marginStart: normalize(14) }}>
                             <Text style={[CommonStyles.text_14_bold, { color: COLOR.TEXT_COLOR_BLACK }]}>For {currentSelectedKid.name}</Text>
-                            <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_COLOR_GREY, marginTop: normalize(6) }]}>{currentSelectedKid.grade}</Text>
+                            <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_COLOR_GREY, marginTop: normalize(2) }]}>{currentSelectedKid.grade}</Text>
                         </View>
                     </View>
 
@@ -147,7 +158,7 @@ class ViewCurriculam extends Component {
                     }
 
 
-                   
+
 
                 </View>
             </ScrollView>

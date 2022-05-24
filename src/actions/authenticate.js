@@ -188,7 +188,7 @@ export function registerParent(mobile, email, first_name, last_name, pin, time_z
         }
     }
 }
-export function pre_update_email(parent_id, email, first_name, last_name) {
+export function pre_update_email(parent_id, email, first_name, last_name,contact_no) {
     return {
         type: REGISTER_PARENT,
         payload: {
@@ -198,7 +198,8 @@ export function pre_update_email(parent_id, email, first_name, last_name) {
                     parent_id,
                     email,
                     first_name,
-                    last_name
+                    last_name,
+                    contact_no
                 }
             }
         }

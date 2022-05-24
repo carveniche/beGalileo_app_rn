@@ -6,6 +6,7 @@ import { getLocalData, storeLocalData } from '../components/helpers/AsyncMethods
 import * as Constants from '../components/helpers/Constants';
 
 
+
 class Splash extends Component {
     constructor() {
         super();
@@ -19,31 +20,32 @@ class Splash extends Component {
             opacity: new Animated.Value(1),
             entryOpacity: 1,
             index: 0,
-            isAnimCompleted : false
+            isAnimCompleted: false
 
         }
 
     }
     componentDidMount() {
         console.log("Splash Component Did Mount");
+        // Check whether an initial notification is available
+       
+
     }
 
-  
+
 
     onLoad = () => {
-       
-        if(!this.state.isAnimCompleted)
-        {
+
+        if (!this.state.isAnimCompleted) {
             console.log("Loading animation");
-            if(this.state.index == 0)
-            {
+            if (this.state.index == 0) {
                 Animated.timing(this.state.opacity, {
                     toValue: 0.1,
                     duration: 2000,
                     useNativeDriver: true,
-                }).start(()=>{
+                }).start(() => {
                     this.setState({
-                        index : 2
+                        index: 2
                     })
                 });
             }
@@ -52,15 +54,15 @@ class Splash extends Component {
                     toValue: 1,
                     duration: 2000,
                     useNativeDriver: true,
-                }).start(()=>this.checkIsUserLogged());
+                }).start(() => this.checkIsUserLogged());
             }
         }
-        
-       
+
+
 
     }
 
-   
+
 
 
 
@@ -105,15 +107,15 @@ class Splash extends Component {
         }
     }
 
-   
+
 
 
     checkIsUserLogged = async () => {
         this.setState({
-            isAnimCompleted : true
+            isAnimCompleted: true
         })
         const localData = await getLocalData(Constants.IS_LOGGED_IN);
-      
+
         if (JSON.parse(localData))
             this.props.navigation.navigate(Constants.MainScreen);
         else {
@@ -121,7 +123,7 @@ class Splash extends Component {
             // if (JSON.parse(isParentRegistered))
             //     this.props.navigation.navigate(Constants.AddKidDetail)
             // else
-                this.props.navigation.navigate(Constants.Login);
+            this.props.navigation.navigate(Constants.Login);
         }
 
 
@@ -130,7 +132,7 @@ class Splash extends Component {
 
     render() {
 
-        
+
         return (
             <View
                 style={[
@@ -142,7 +144,7 @@ class Splash extends Component {
                 <Animated.Image
                     onLoad={this.onLoad}
                     source={this.images[this.state.index]}
-                    
+
                     style={[
                         {
                             opacity: this.state.opacity,
@@ -152,7 +154,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.70</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.75</Text>
             </View>
         )
     }

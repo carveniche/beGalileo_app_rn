@@ -1,14 +1,19 @@
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 require_relative '../node_modules/react-native-unimodules/cocoapods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+
+target 'ImageNotification' do
+  pod 'Firebase/Messaging', '~> 7.6.0' # eg 6.31.0
+end
 
 target 'beGalileorndev' do
   rnPrefix = "../node_modules/react-native"
 
   # React Native and its dependencies
   pod 'FBLazyVector', :path => "#{rnPrefix}/Libraries/FBLazyVector"
-  pod 'FBReactNativeSpec', :path => "#{rnPrefix}/Libraries/FBReactNativeSpec"
+  pod 'FBReactNativeSpec', :path => "#{rnPrefix}/React/FBReactNativeSpec"
   pod 'RCTRequired', :path => "#{rnPrefix}/Libraries/RCTRequired"
   pod 'RCTTypeSafety', :path => "#{rnPrefix}/Libraries/TypeSafety"
   pod 'React', :path => "#{rnPrefix}/"
@@ -30,11 +35,14 @@ target 'beGalileorndev' do
   pod 'React-jsiexecutor', :path => "#{rnPrefix}/ReactCommon/jsiexecutor"
   pod 'React-jsinspector', :path => "#{rnPrefix}/ReactCommon/jsinspector"
   pod 'React-callinvoker', :path => "#{rnPrefix}/ReactCommon/callinvoker"
+  pod 'React-perflogger', :path => "#{rnPrefix}/ReactCommon/reactperflogger"
   pod 'ReactCommon/turbomodule/core', :path => "#{rnPrefix}/ReactCommon"
+  pod 'React-runtimeexecutor', :path => "#{rnPrefix}/ReactCommon/runtimeexecutor"
   pod 'Yoga', :path => "#{rnPrefix}/ReactCommon/yoga"
   pod 'DoubleConversion', :podspec => "#{rnPrefix}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rnPrefix}/third-party-podspecs/glog.podspec"
-  pod 'Folly', :podspec => "#{rnPrefix}/third-party-podspecs/Folly.podspec"
+  pod 'RCT-Folly', :podspec => '../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec'
+  pod 'react-native-twilio-video-webrtc', path: '../node_modules/react-native-twilio-video-webrtc'
 
  
 
@@ -45,12 +53,9 @@ target 'beGalileorndev' do
 
   # react-native-cli autolinking
   use_native_modules!
-  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
 
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
 end

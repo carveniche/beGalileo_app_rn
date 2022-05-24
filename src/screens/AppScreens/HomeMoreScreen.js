@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_SWITCH_PROFILE, IC_PROFILE_PIC, IMG_SHAKSHI, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_NOTIFICATIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS, IC_MORE_HELP } from "../../assets/images";
+import {  IC_PROFILE_PIC, IMG_SHAKSHI, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS,IC_MORE_LOGOUT,ICON_HELP,IC_MORE_NOTIFICATIONS } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { logOutUser } from "../../actions/authenticate";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -45,6 +45,13 @@ class HomeMoreScreen extends Component {
 
     onMyAddressClick = () => {
         this.props.navigation.navigate(Constants.MoreMyAddressScreen);
+    }
+
+    onMoreHelpScreen = () => {
+        this.props.navigation.navigate(Constants.MoreHelpScreen);
+    }
+    onNoificationClick = () => {
+        this.props.navigation.navigate(Constants.MoreNotificationScreen);
     }
 
     onMoreMySubcriptionsClick = () => {
@@ -173,14 +180,29 @@ class HomeMoreScreen extends Component {
                                 </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
                             </TouchableOpacity>
+                            <TouchableOpacity onPress={this.onNoificationClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_NOTIFICATIONS} />
+                                    <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Notifications</Text>
+                                </View>
+                                <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.onMoreHelpScreen} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={ICON_HELP} />
+                                    <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Help</Text>
+                                </View>
+                                <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
+                            </TouchableOpacity>
                             <TouchableOpacity onPress={this.onClickLogOut} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     {/* <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_CARD_DETAILS} /> */}
-                                    <Icon
+                                    {/* <Icon
                                         style={{ marginStart: normalize(8) }}
                                         size={25}
                                         name='sign-out'
-                                        color={COLOR.TEXT_COLOR_ORANGE} />
+                                        color={COLOR.TEXT_COLOR_ORANGE} /> */}
+                                          <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_LOGOUT} />
                                     <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Log Out</Text>
                                 </View>
                                 {/* <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} /> */}

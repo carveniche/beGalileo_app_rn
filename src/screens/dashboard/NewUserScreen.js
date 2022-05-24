@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback,Linking } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback, Linking } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
-import { COLOR, CommonStyles } from '../../config/styles';
+import { COLOR, CommonStyles,cardBoxShadowStyle } from '../../config/styles';
 import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE, IC_STAR_LAYOUT, IC_BANNER_2 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
@@ -127,14 +127,14 @@ class NewUserScreen extends Component {
         if (currentSessionKid.student_demos != null && currentSessionKid.student_demos[0].status != 'Completed')
             return (
 
-                <View>
+                <View style={{ marginTop : normalize(10) }}>
 
-                    <Card containerStyle={{ margin: normalize(10), borderRadius: normalize(24) }}>
+                    <View style={[CommonStyles.boxShadow ,{ backgroundColor : COLOR.WHITE,margin: normalize(10), borderRadius: normalize(24) }]}>
 
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ height: normalize(110), marginStart: normalize(5), marginTop: normalize(5) }}>
-                                <View style={{ flex: 1, borderRadius: 20, backgroundColor: COLOR.LOGIN_BANNER_BG, justifyContent: 'flex-end', alignSelf: 'center' }}>
-                                    <Image style={{ alignSelf: 'center', height: normalize(80), marginStart: normalize(10), width: normalize(80), borderRadius: 20, resizeMode: "stretch" }} source={LIVE_CLASS_CARD_THUMB} />
+                                <View style={{ height: normalize(102), width: normalize(102), borderRadius: 20, backgroundColor: COLOR.LOGIN_BANNER_BG, overflow: 'hidden' }}>
+                                    <Image style={{ height: normalize(78), width: normalize(100), resizeMode: 'contain', position: "absolute", bottom: 0, right: 0 }} source={LIVE_CLASS_CARD_THUMB} />
                                 </View>
 
                             </View>
@@ -159,7 +159,7 @@ class NewUserScreen extends Component {
                                 {
                                     currentSessionKid.student_demos[0].status == 'booked' &&
                                     <View>
-                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginStart: normalize(8), marginTop: normalize(8), alignSelf: 'center' }]}>Waiting for confirmation</Text>
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginBottom: normalize(2), marginTop: normalize(1),marginEnd : normalize(10) ,alignSelf: 'center' }]}>Waiting for confirmation</Text>
                                     </View>
                                 }
 
@@ -179,7 +179,7 @@ class NewUserScreen extends Component {
 
 
 
-                    </Card>
+                    </View>
                 </View>
             )
     }
@@ -194,6 +194,7 @@ class NewUserScreen extends Component {
     }
 
     render() {
+        const B = (props) => <Text style={{ fontWeight: 'bold' }}>{props.children}</Text>
         const { currentSessionKid } = this.state;
         return (
             <View style={{ backgroundColor: COLOR.BG_FAQ_GRERY }}>
@@ -217,10 +218,10 @@ class NewUserScreen extends Component {
                         {
                             currentSessionKid &&
                             <View>
-                                <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
-                                <Text style={[CommonStyles.text_14_Regular, { alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed Program for Kindergarten kids Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
+                                <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_LIGHT_BLACK, alignSelf: 'center' }]}>Online learning for {currentSessionKid.name}</Text>
+                                <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, alignSelf: 'center', marginTop: normalize(20), marginStart: normalize(10), marginEnd: normalize(10), textAlign: 'center' }]}>A well designed<B> Program for Kindergarten kids </B> Includes live classes, practice sessions, Mathboxes and much more to help in develop learning ordered thinking, Analogical thinking, Number Sense, Visual & abstract addition and subtraction including number bonds.. </Text>
                                 <TouchableOpacity onPress={this.goToViewCurriculum}>
-                                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(10) }]}>View Full Curriculum</Text>
+                                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, alignSelf: 'center', marginTop: normalize(25), marginBottom: normalize(16) }]}>View Full Curriculum</Text>
                                 </TouchableOpacity>
                             </View>
                         }
@@ -233,7 +234,11 @@ class NewUserScreen extends Component {
 
                     {
                         this.props.dashboardStatus && this.props.dashboardResponse.students.length > 0 &&
-                        <View style={{ marginStart: 5, marginEnd: 5 }}>
+                        <View style={{ marginStart: 5, marginEnd: 5 ,marginTop : normalize(16) }}>
+                            {
+
+                            }
+                             <Text style={[CommonStyles.text_14_semi_bold,{ alignSelf : 'center',color : COLOR.TEXT_TITLE_HEADLINE }]}>Choose subscription</Text> 
 
                             <SubscriptionTabs goToCartList={this.goToCartList} navigation={this.props.navigation} />
                         </View>

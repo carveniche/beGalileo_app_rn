@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Pressable } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import { IC_SWITCH_PROFILE, IC_PROFILE_PIC, IMG_SHAKSHI, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_NOTIFICATIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS, IC_MORE_HELP } from "../../assets/images";
+import { IC_DOWN_ENTER } from "../../assets/images";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,6 +17,9 @@ import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ImagePicker from 'react-native-image-picker';
 import moment from "moment";
+import { getMaxDateForChildDOB, getMinDateForChildDOB } from "../../UTILS/CommonUtils";
+import { CustomBackButton } from "../../components";
+
 
 
 const options = {
@@ -36,6 +39,7 @@ const options = {
 class EditKidDetail extends Component {
   constructor(props) {
     super(props);
+    this.boardSelector = React.createRef();
     this.state = {
       kidDetails: null,
       mChildName: null,
@@ -392,6 +396,31 @@ class EditKidDetail extends Component {
     })
   }
 
+
+  showBoardSelector = () => {
+    this.boardSelector.current.open()
+  }
+
+
+  onFocusIn = (inputRef) => {
+    inputRef.setNativeProps({
+      borderColor: COLOR.LIGHT_BORDER_GREEN
+    });
+  }
+
+  onFocusOut = (inputRef) => {
+    inputRef.setNativeProps({
+      borderColor: COLOR.LIGHT_BORDER_COLOR
+    });
+  }
+
+  onPressBack = () => {
+    const { goBack } = this.props.navigation;
+
+    goBack();
+}
+
+
   render() {
     var radio_props = [
       { label: 'Male', value: 0 },
@@ -410,6 +439,9 @@ class EditKidDetail extends Component {
             justifyContent: 'space-between',
             backgroundColor: COLOR.WHITE
           }}>
+             <View style={{ marginStart : 20 }}>
+                            <CustomBackButton onPress={this.onPressBack} />
+                        </View>
           {
             loading &&
             <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
@@ -417,7 +449,7 @@ class EditKidDetail extends Component {
           {
             kidDetails &&
             <View style={{ justifyContent: 'center' }}>
-              <View style={{ marginTop: 5, marginStart: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ marginTop: 1, marginStart: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.textHeader}>{kidDetails.name}</Text>
                 {/* {
                                         allKidsList && allKidsList.length ?
@@ -437,7 +469,7 @@ class EditKidDetail extends Component {
 
               </View>
 
-              <View style={{ justifyContent: 'center', marginTop: 20 }}>
+              <View style={{ justifyContent: 'center', marginTop: 5 }}>
 
                 <View style={{ alignSelf: 'center' }}>
                   {
@@ -464,6 +496,8 @@ class EditKidDetail extends Component {
               <DateTimePickerModal
                 isVisible={mBirthDateDialog}
                 mode="date"
+                minimumDate={getMinDateForChildDOB()}
+                maximumDate={getMaxDateForChildDOB()}
                 onConfirm={this.onDOBDatePicked}
                 onCancel={this.closeDatePicker}
 
@@ -472,12 +506,14 @@ class EditKidDetail extends Component {
                 <Text style={styles.textSubHeader}>First name</Text>
                 {this.state.mChildNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
                 <TextInput
-                  ref={(input) => { this.child_name_input = input; }}
+                  ref={(input) => { this.child_first_name_input = input; }}
                   placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                   placeholder="First Name"
                   keyboardType='default'
                   style={styles.nametextInputBordered}
                   onChangeText={this.addUserName.bind(this)}
+                  onFocus={() => this.onFocusIn(this.child_first_name_input)}
+                  onBlur={() => this.onFocusOut(this.child_first_name_input)}
                   value={this.state.mChildName}
                   blurOnSubmit={false}
 
@@ -487,13 +523,15 @@ class EditKidDetail extends Component {
                 <Text style={styles.textSubHeader}>Last name</Text>
                 {this.state.mChildNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
                 <TextInput
-                  ref={(input) => { this.child_name_input = input; }}
+                  ref={(input) => { this.child_last_name_input = input; }}
                   placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                   placeholder="Last Name"
                   keyboardType='default'
                   style={styles.nametextInputBordered}
                   onChangeText={this.addUserLastName.bind(this)}
                   value={this.state.mChildLastName}
+                  onFocus={() => this.onFocusIn(this.child_last_name_input)}
+                  onBlur={() => this.onFocusOut(this.child_last_name_input)}
                   blurOnSubmit={false}
 
                 />
@@ -503,17 +541,13 @@ class EditKidDetail extends Component {
               <View style={{ marginLeft: 20, marginRight: 20, marginTop: 2, marginBottom: 2 }}>
                 <Text style={styles.textSubHeader}>Birth Date</Text>
                 {this.state.mChildBirthDateError && <Text style={styles.errorMessage}>Please enter a valid Date</Text>}
-                <TouchableOpacity style={{ flexDirection: 'row', borderColor: COLOR.BORDER_COLOR_GREEN, borderWidth: 2, borderRadius: 15, margin: 5 }} onPress={this.showDatePicker}>
+                <TouchableOpacity style={{ flexDirection: 'row', borderColor: COLOR.BORDER_COLOR_GREY, borderWidth: 2, borderRadius: 15, margin: 5 }} onPress={this.showDatePicker}>
                   <View style={{ flexDirection: 'row', margin: 20 }}>
-                    <Text style={{ fontSize: normalize(14), alignSelf: 'center', marginStart: 5, color: COLOR.BLACK, fontFamily: Constants.Montserrat_Regular }}>{this.state.selectedDateText}</Text>
+                    <Text style={[CommonStyles.text_14_semi_bold, { alignSelf: 'center', marginStart: 5, color: COLOR.TEXT_ALPHA_GREY, fontFamily: Constants.Montserrat_Regular }]}>{this.state.selectedDateText == "" ? 'Choose birth date' : this.state.selectedDateText}</Text>
                   </View>
 
                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginEnd: 15 }}>
-                    <Icon
-
-                      size={25}
-                      name='angle-down'
-                      color={COLOR.TEXT_COLOR_BLUE} />
+                    <Image style={{ height: 15, width: 15, alignSelf: 'flex-end', marginRight: 20 }} source={IC_DOWN_ENTER} resizeMode="contain" />
                   </View>
 
                 </TouchableOpacity>
@@ -571,6 +605,7 @@ class EditKidDetail extends Component {
                   <View style={styles.modalListContainer}>
                     <ModalSelector
                       initValue="Select Grade"
+                      style={{ flex: 1 }}
                       selectStyle={{ backgroundColor: 'white', borderColor: 'white' }}
                       data={this.gradeDataList()}
                       ref={selector => { this.gradeSelector = selector; }}
@@ -578,15 +613,11 @@ class EditKidDetail extends Component {
                         this.onGradeChange(option);
                       }}
                     >
-                      <Text style={{ margin: 5, fontSize: 12, padding: 10 }}>{this.state.mChildGrade == null ? "Select Grade" : this.state.mChildGrade}</Text>
+                      <Text style={[CommonStyles.text_14_semi_bold, { margin: 5, fontSize: 12, padding: 10, color: COLOR.TEXT_ALPHA_GREY }]}>{this.state.mChildGrade == null ? "Select Grade" : this.state.mChildGrade}</Text>
                     </ModalSelector>
 
 
-                    <Icon
-                      style={{ backgroundColor: 'white', padding: 5 }}
-                      size={30}
-                      name='angle-down'
-                      color='#517fa4' />
+                    <Image style={{ height: 15, width: 15, alignSelf: 'center', marginRight: 20 }} source={IC_DOWN_ENTER} resizeMode="contain" />
 
 
 
@@ -595,12 +626,14 @@ class EditKidDetail extends Component {
 
 
                 </View>
-                <View style={{ flex: 1, alignSelf: 'stretch', marginStart: 5 }}>
+
+                <View onPress={this.showBoardSelector} style={{ flex: 1, alignSelf: 'stretch', marginStart: 5 }}>
                   <Text style={styles.textSubHeader}>Curriculum</Text>
                   {this.state.mChildBoardError && <Text style={styles.errorMessage}>Select Board</Text>}
                   <View style={styles.modalListContainer}>
                     <ModalSelector
                       initValue="Select Board"
+                      style={{ flex: 1 }}
                       selectStyle={{ backgroundColor: 'white', borderColor: 'white' }}
                       data={this.boardListData()}
                       ref={selector => { this.boardSelector = selector; }}
@@ -610,18 +643,16 @@ class EditKidDetail extends Component {
                         this.onBoardChange(option);
                       }}
                     >
-                      <Text style={{ margin: 5, fontSize: 12, padding: 10 }}>{this.state.mChildBoard == null ? "Select Board" : this.state.mChildBoard}</Text>
+                      <Text style={[CommonStyles.text_14_semi_bold, { margin: 5, fontSize: 12, padding: 10, color: COLOR.TEXT_ALPHA_GREY }]}>{this.state.mChildBoard == null ? "Select Board" : this.state.mChildBoard}</Text>
                     </ModalSelector>
 
 
-                    <Icon
-                      style={{ backgroundColor: 'white', padding: 5 }}
-                      size={30}
-                      name='angle-down'
-                      color='#517fa4' />
+                    <Image style={{ height: 15, width: 15, alignSelf: 'center', marginRight: 20 }} source={IC_DOWN_ENTER} resizeMode="contain" />
 
                   </View>
                 </View>
+
+
 
               </View>
               <View style={{ marginLeft: 20, marginRight: 20, marginTop: 5, marginBottom: 5 }}>
@@ -757,7 +788,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: COLOR.BORDER_COLOR_GREEN,
+    borderColor: COLOR.BORDER_COLOR_GREY,
     backgroundColor: COLOR.WHITE
   },
   dropDownBordered: {
@@ -799,7 +830,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: COLOR.BORDER_COLOR_GREEN,
+    borderColor: COLOR.BORDER_COLOR_GREY,
     backgroundColor: COLOR.WHITE
   },
   errorMessage: {

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator,AsyncStorage, Platform } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, AsyncStorage, Platform, BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
 import { IC_PROFILE_PIC, IMG_SARTHAK, IMG_SHAKSHI } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
-import { getDashboardItems, getCartItemList, updateCurrentKid,updateDeviceInfo } from '../../actions/dashboard';
+import { getDashboardItems, getCartItemList, updateCurrentKid, updateDeviceInfo } from '../../actions/dashboard';
 import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import SubscriptionTabs from '../../components/subscription_tab';
@@ -14,103 +14,158 @@ import PaidUserDashboard from '../dashboard/paid_user_dashboard';
 import MainUserDashboard from '../dashboard/MainUserDashboard';
 import DashboardHeader from '../../components/DashboardHeader';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 import messaging from '@react-native-firebase/messaging';
+import * as Sentry from '@sentry/react-native';
+
 
 
 
 
 class HomeMainScreen extends Component {
 
+    constructor(props) {
+        super(props);
+        this.handleBackButton = this.handleBackButton.bind(this);
 
+    }
     state = {
         allKidsList: [],
         isPaidUser: false,
         mathBoxOrderId: 0,
-        parentName : ''
+        parentName: ''
     }
     componentDidMount() {
-       
 
+        //const currentDSN = Sentry.getCurrentHub().getClient().getOptions().dsn;
+
+        console.log("QWQWWW",Sentry.getCurrentHub());
+    
+      
+        
+
+        Sentry.setUser({
+            id: 'test-id-0',
+            email: 'testing@testing.test',
+            username: 'USER-TEST',
+            specialField: 'special user field',
+            specialFieldNumber: 418,
+          });
+      
+          Sentry.setTag('SINGLE-TAG', "SINGLE TAG TEST");
+
+
+          Sentry.setContext('TEST-CONTEXT', {
+            stringTest: 'Hello',
+            numberTest: 404,
+            objectTest: {
+              foo: 'bar',
+            },
+            arrayTest: ['foo', 'bar', 400],
+            nullTest: null,
+            undefinedTest: undefined,
+          });
+      
+          Sentry.addBreadcrumb({
+            level: Sentry.Severity.Info,
+            message: `TEST-BREADCRUMB-INFO: DATE STRING`,
+          }); 
+
+
+          Sentry.captureMessage('Hai Capotured message');
+
+
+
+          BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);  
 
         if (this.props.state.dashboard_status) {
             this.setState({
                 allKidsList: this.props.state.dashboard_response.students
             })
         }
-        
+
         getLocalData(Constants.ParentFirstName).then((name) => {
-            
+
             this.setState({
-                parentName : JSON.parse(name)
+                parentName: JSON.parse(name)
             })
         })
 
         getLocalData(Constants.ParentTimeZone).then((timeZone) => {
-            
-           console.log("Time Zone is : "+JSON.parse(timeZone));
+
+            console.log("Time Zone is : " + JSON.parse(timeZone));
         })
-       
-        
-       
+
+
+
         this.getCartItems();
         this.requestUserPermission();
         this.updateDeviceToken();
 
+
     }
 
 
-   
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
 
-     requestUserPermission = async() => {
+    handleBackButton() {
+        this.props.navigation.goBack(this.props.currentScreen.name);
+       // return true;
+    }
+
+
+
+
+    requestUserPermission = async () => {
         const authStatus = await messaging().requestPermission();
         const enabled =
-          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-      
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
         if (enabled) {
-          console.log('Authorization status:', authStatus);
+            console.log('Authorization status:', authStatus);
         }
-      }
+    }
 
 
     updateDeviceToken = async () => {
 
-    
 
-          var parentUserId =  await getLocalData(Constants.ParentUserId);
-          var parentTimeZone = await getLocalData(Constants.ParentTimeZone);
-        
 
-          console.log("Parent User id",parentUserId);
+        var parentUserId = await getLocalData(Constants.ParentUserId);
+        var parentTimeZone = await getLocalData(Constants.ParentTimeZone);
 
-          console.log("Parent Time Zone",parentTimeZone);
+
+        console.log("Parent User id", parentUserId);
+
+        console.log("Parent Time Zone", parentTimeZone);
         // getLocalData(Constants.ParentUserId).then((name) => {
         //     console.log("Firebase Device Token");
         //     console.log(name);
         //     console.log("ZZZZ");
-           
+
         // })
 
 
         messaging()
-        .getToken()
-        .then(token => {
-         console.log("Device Token "+token);
-         this.props.updateDeviceInfo(parentUserId,token,JSON.parse(parentTimeZone),Platform.OS);
-        });
-    }  
+            .getToken()
+            .then(token => {
+                console.log("@@@@@@@@@ Device Token " + token);
+                this.props.updateDeviceInfo(parentUserId, token, JSON.parse(parentTimeZone), Platform.OS);
+            });
+    }
 
 
-    
+
 
 
     getCartItems = () => {
-        if(this.props.dashboardStatus)
-        {
-            this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id,this.props.dashboardResponse.parent_details[0].country)
+        if (this.props.dashboardStatus) {
+            this.props.getCartItemList(this.props.dashboardResponse.parent_details[0].id, this.props.dashboardResponse.parent_details[0].country)
         }
-       
+
         // getLocalData(Constants.ParentUserId).then((parentId) => {
         //     console.log(" Cart Items QQQ Parent Id " + parentId);
         //     this.props.getCartItemList(parentId, "")
@@ -121,22 +176,22 @@ class HomeMainScreen extends Component {
 
 
     componentDidUpdate(prevProps) {
-       
+
 
         if (prevProps.currentSelectedKid != undefined) {
             if (this.props.currentSelectedKid != null && this.props.currentSelectedKid.student_id !== prevProps.currentSelectedKid.student_id) {
-               
+
                 this.checkDashboardItems();
                 this.getCartItems();
 
             }
         }
 
-      
+
         if (prevProps.get_cart_list_status != this.props.get_cart_list_status) {
             if (this.props.get_cart_list_status) {
                 console.log("LIST CART STATUS");
-               
+
                 this.setState({
                     mathBoxOrderId: this.props.get_cart_list_response.mathbox_order_id
 
@@ -146,10 +201,9 @@ class HomeMainScreen extends Component {
 
         }
 
-        if(prevProps.dashboardResponse != this.props.dashboardResponse){
-           
-            if(this.props.dashboardStatus)
-            {
+        if (prevProps.dashboardResponse != this.props.dashboardResponse) {
+
+            if (this.props.dashboardStatus) {
                 console.log("Refreshing Current selected kid");
                 this.setState({
                     allKidsList: this.props.state.dashboard_response.students
@@ -164,41 +218,40 @@ class HomeMainScreen extends Component {
 
 
     refreshCurrentSelectedKid = () => {
-        if(this.props.currentSelectedKid == null)
-        return;
+        if (this.props.currentSelectedKid == null)
+            return;
 
         this.props.dashboardResponse.students.map((item) => {
             if (item.student_id == this.props.currentSelectedKid.student_id) {
                 this.props.updateCurrentKid(item);
-                
+
             }
 
         })
     }
 
     checkDashboardItems = () => {
-        AsyncStorage.multiGet([Constants.ParentUserId,Constants.ParentFirstName,Constants.ParentLastName, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
+        AsyncStorage.multiGet([Constants.ParentUserId, Constants.ParentFirstName, Constants.ParentLastName, Constants.ParentCountryName, Constants.ParentCurrency]).then(response => {
             console.log("WWWWWWWW");
             console.log(JSON.parse(response[0][1]));
             console.log(JSON.parse(response[1][1]));
             console.log(JSON.parse(response[2][1]));
             console.log(JSON.parse(response[3][1]));
-            console.log(JSON.parse(response[4][1]));      
+            console.log(JSON.parse(response[4][1]));
         })
-        AsyncStorage.multiGet([Constants.ParentUserId,Constants.ParentCountryName]).then(response => {
-            console.log("AAAAAAAAAAA",response);
+        AsyncStorage.multiGet([Constants.ParentUserId, Constants.ParentCountryName]).then(response => {
+            console.log("AAAAAAAAAAA", response);
             console.log(JSON.parse(response[0][1]));
             console.log(JSON.parse(response[1][1]));
-     
-          
-      
-        }).catch(err=>{
-            console.log("Get Multi Err ",err);
+
+
+
+        }).catch(err => {
+            console.log("Get Multi Err ", err);
         })
-       
+
         getLocalData(Constants.ParentUserId).then((parentId) => {
-            console.log("BBBBBB");
-            console.log("Parent Id " + parentId);
+
             this.props.getDashboardItems(parentId, "India", this.props.currentSelectedKid.student_id)
         })
 
@@ -223,6 +276,7 @@ class HomeMainScreen extends Component {
     }
 
     goToCartList = () => {
+       
         if (this.props.cartItems != undefined && this.props.cartItems.length > 0)
             this.props.navigation.navigate(Constants.CartListScreen);
         else
@@ -239,10 +293,10 @@ class HomeMainScreen extends Component {
     }
 
     getHeaderTitle = () => {
-        if(this.state.parentName != null)
-            return "Hi "+this.state.parentName;
+        if (this.state.parentName != null)
+            return "Hi " + this.state.parentName;
         else
-            return "Hi";    
+            return "Hi";
     }
 
 
@@ -265,7 +319,7 @@ class HomeMainScreen extends Component {
                     <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                 } */}
 
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false} >
                     <View style={{ flex: 1, justifyContent: 'flex-start' }}>
 
                         <DashboardHeader headerTitle={this.getHeaderTitle()} headerDescription="See your Kids activity" allKidsList={allKidsList} />
@@ -300,14 +354,14 @@ class HomeMainScreen extends Component {
 
 }
 const mapStateToProps = (state) => {
-   
+
     return {
         state: state.dashboard,
         loading: state.dashboard.loading,
         cartItems: state.dashboard.cartItems,
         dashboardStatus: state.dashboard.dashboard_status,
-        dashboardResponse : state.dashboard.dashboard_response,
-        user_detail_response : state.dashboard.user_detail_response,
+        dashboardResponse: state.dashboard.dashboard_response,
+        user_detail_response: state.dashboard.user_detail_response,
         currentSelectedKid: state.dashboard.current_selected_kid,
         addCartStatus: state.dashboard.add_cart_status,
         get_cart_list_response: state.dashboard.get_cart_list_response,

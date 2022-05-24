@@ -14,7 +14,7 @@ import RadioForm, { RadioButton } from 'react-native-simple-radio-button';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
-import { add } from "react-native-reanimated";
+
 Geocoder.init('AIzaSyCLJ8eLdOh0HezxlyyKDRLCkQSCrmQSsE4');
 
 class AddAddress extends Component {

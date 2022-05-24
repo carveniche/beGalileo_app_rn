@@ -7,7 +7,7 @@ import Login from '../screens/login';
 import Splash from '../screens/splash';
 import ParentProfile from '../screens/parent_profile';
 import AddKidDetail from '../screens/add_kid_detail';
-import RateDemoClass  from '../screens/BookDemoScreen/rate_demo_class';
+import RateDemoClass from '../screens/BookDemoScreen/rate_demo_class';
 import FaqScreen from '../screens/AppScreens/faq_screen';
 import Dashboard from '../screens/AppScreens/dashboard';
 import HomeReportScreen from "../screens/AppScreens/HomeReportScreen";
@@ -33,6 +33,7 @@ import SubscriptonDetailsScreen from "../screens/SubscriptionScreens/Subscripton
 import SubscriptonOrderDetails from "../screens/SubscriptionScreens/SubscriptonOrderDetails";
 import SubscriptonMathboxDetails from "../screens/SubscriptionScreens/SubscriptonMathboxDetails";
 import MoreMyAddressScreen from "../screens/MoreScreens/more_my_address_screen";
+import MoreHelpScreen from "../screens/MoreScreens/more_help_screen";
 import EditKidDetail from "../screens/MyKids/EditKidDetail";
 import MainScreen from "../screens/AppScreens/MainScreen";
 import Main from "react-native-country-picker-modal";
@@ -43,6 +44,8 @@ import ShowSubscriptions from "../screens/SubscriptionScreens/ShowSubscriptions"
 import ClassDetailsScreen from '../screens/ScheduleScreens/ClassDetailsScreen';
 import ClassListScreen from '../screens/ScheduleScreens/ClassListScreen';
 import LiveClassSchedule from '../screens/ScheduleScreens/LiveClassSchedule';
+import MoreNotificationScreen from '../screens/MoreScreens/more_notification_screen';
+import ParentConnect from "../screens/ParentPeakScreen/ParentConnect";
 
 
 
@@ -55,8 +58,8 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
 
         }
 
@@ -66,49 +69,49 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-   
-    
+
+
     ParentProfile: {
         screen: ParentProfile,
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-   
+
     CartAddress: {
         screen: CartAddress,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    
-   
-    
-    
+
+
+
+
     AddKidDetail: {
         screen: AddKidDetail,
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     EditKidDetail: {
         screen: EditKidDetail,
         navigationOptions: {
-            headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
 
 
         }
@@ -116,74 +119,83 @@ const AppStackNavigator = createStackNavigator({
     BookDemoScreen: {
         screen: BookDemoScreen,
         navigationOptions: {
-            headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
 
 
         }
     },
-   
-   RateDemoClass:{
-       screen : RateDemoClass,
-       navigationOptions:{
-           headerShown : false,
-           headerBackTitleVisible : false,
-           headerTitle : ''
-       }
-   },
-    
-   DemoClassResults:{
-    screen : DemoClassResults,
-    navigationOptions:{
-        headerShown : false,
-        headerBackTitleVisible : false,
-        headerTitle : ''
-    }
-},
-    
+
+    RateDemoClass: {
+        screen: RateDemoClass,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+
+    DemoClassResults: {
+        screen: DemoClassResults,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+
+    ParentConnect: {
+        screen: ParentConnect,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+
     PaymentFailedScreen: {
         screen: PaymentFailedScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     PaymentSuccessScreen: {
         screen: PaymentSuccessScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    
-   
-   
-   
 
-   
+
+
+
+
+
     MainScreen: {
         screen: MainScreen,
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
 
-   
+
 
     Dashboard: {
         screen: Dashboard,
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -193,57 +205,65 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-
-
-
-
-
-    
-
-
 
     MoreMyAddressScreen: {
         screen: MoreMyAddressScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+    MoreNotificationScreen: {
+        screen: MoreNotificationScreen,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+    MoreHelpScreen: {
+        screen: MoreHelpScreen,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     SubscriptonDetailsScreen: {
         screen: SubscriptonDetailsScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     SubscriptonOrderDetails: {
         screen: SubscriptonOrderDetails,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     SubscriptonMathboxDetails: {
         screen: SubscriptonMathboxDetails,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     MoreMySubscriptions: {
         screen: MoreMySubscriptions,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -251,96 +271,96 @@ const AppStackNavigator = createStackNavigator({
         screen: OverallActivitiesScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     ActivityReportScreen: {
         screen: ActivityReportScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     MoreLiveClassBatchScreens: {
         screen: MoreLiveClassBatchScreens,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     StarBadgeReportScreen: {
         screen: StarBadgeReportScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     MoreEditProfileScreen: {
         screen: MoreEditProfileScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     MoreProfileScreen: {
         screen: MoreProfileScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    RenewSubscription:{
+    RenewSubscription: {
         screen: RenewSubscription,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    ShowSubscriptions:{
+    ShowSubscriptions: {
         screen: ShowSubscriptions,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    ClassDetailsScreen:{
+    ClassDetailsScreen: {
         screen: ClassDetailsScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    ClassListScreen:{
+    ClassListScreen: {
         screen: ClassListScreen,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
-    LiveClassSchedule:{
+    LiveClassSchedule: {
         screen: LiveClassSchedule,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     ChooseLiveBatch: {
         screen: ChooseLiveBatch,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -348,16 +368,16 @@ const AppStackNavigator = createStackNavigator({
         screen: PreferLiveBatchScreen,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     TeacherProfile: {
         screen: TeacherProfile,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -365,25 +385,25 @@ const AppStackNavigator = createStackNavigator({
         screen: AddAddress,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
     ViewCurriculum: {
         screen: ViewCurriculum,
         navigationOptions: {
-            headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     CartListScreen: {
         screen: CartListScreen,
         navigationOptions: {
-            headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -393,24 +413,24 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     DemoDetails: {
         screen: DemoDetails,
         navigationOptions: {
-            headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
     TeacherProfile: {
         screen: TeacherProfile,
         navigationOptions: {
             headerShown: false,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
         }
     },
 
@@ -421,8 +441,8 @@ const AppStackNavigator = createStackNavigator({
         screen: FaqScreen,
         navigationOptions: {
             headerShown: true,
-            headerBackTitleVisible : false,
-            headerTitle : ''
+            headerBackTitleVisible: false,
+            headerTitle: ''
 
         }
     },

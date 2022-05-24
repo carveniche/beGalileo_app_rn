@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator, Modal as EModal, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, FlatList, VirtualizedList, ActivityIndicator, Modal as EModal, Dimensions,BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import CustomGradientButton from '../../components/CustomGradientButton';
+import { CustomBackButton } from "../../components";
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Modal from "react-native-modal";
@@ -28,6 +29,7 @@ class BookDemoScreen extends Component {
 
     constructor(props) {
         super(props);
+      
         this.state = {
             currentDate: new Date(),
             showDatePciker: false,
@@ -51,9 +53,10 @@ class BookDemoScreen extends Component {
 
     }
 
+   
 
     componentDidMount() {
-
+       
         var isFrom = this.props.navigation.getParam('from', "");
         if (isFrom == "addKid") {
 
@@ -141,18 +144,17 @@ class BookDemoScreen extends Component {
             const reScheduleDemo = this.props.navigation.getParam('reScheduleDemo', false);
 
             if (reScheduleDemo) {
-                
+
                 const scheduledTimeParam = this.props.navigation.getParam('scheduledTime', "");
                 const scheduledDateParam = this.props.navigation.getParam('scheduledDate', "");
                 var dateRescheduled = moment(scheduledDateParam).format('YYYY-MM-DD');
-                console.log("Mathch Chec :",this.state.selectedDate);
-                console.log("Mathch Item :",dateRescheduled);
-                if(item.time == scheduledTimeParam.trim() & this.state.selectedDate === dateRescheduled)
-                {
+                console.log("Mathch Chec :", this.state.selectedDate);
+                console.log("Mathch Item :", dateRescheduled);
+                if (item.time == scheduledTimeParam.trim() & this.state.selectedDate === dateRescheduled) {
                     this.onItemTimeSelected(item.slot_id)
-                    console.log("Mathch Found",scheduledTimeParam,item.time);
+                    console.log("Mathch Found", scheduledTimeParam, item.time);
                 }
-                    
+
             }
 
             if (mrngMatchString.includes(item.time)) {
@@ -389,7 +391,11 @@ class BookDemoScreen extends Component {
 
     }
 
+    onPressBack = () => {
+        const { goBack } = this.props.navigation;
 
+        goBack();
+    }
 
 
     render() {
@@ -409,6 +415,10 @@ class BookDemoScreen extends Component {
                         loading &&
                         <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
                     }
+
+                    <View style={{ marginStart: 20 }}>
+                        <CustomBackButton onPress={this.onPressBack} />
+                    </View>
 
 
                     <View style={{ flex: 1 }}>

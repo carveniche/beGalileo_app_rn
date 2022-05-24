@@ -17,60 +17,6 @@ class MoreLiveClassBatchScreens extends Component {
         super(props);
         this.state = {
             liveBatchDatas: [
-                {
-                    name: 'S',
-                    image: IMG_SHAKSHI,
-                    classType: 'Group Class',
-                    grade: 'Grade 1',
-                    batchNo: 3,
-                    timings: [
-                        {
-                            batchDay: "Monday",
-                            batchTime: "4pm"
-                        },
-                        {
-                            batchDay: "Friday",
-                            batchTime: "4pm"
-                        }
-                    ],
-                    changeBatchCount: 0
-                },
-                {
-                    name: 'Sarthak',
-                    image: IMG_SARTHAK,
-                    classType: '1 to 1',
-                    grade: 'Grade 3',
-                    batchNo: 4,
-                    timings: [
-                        {
-                            batchDay: "Tuesday",
-                            batchTime: "4pm"
-                        },
-                        {
-                            batchDay: "Wednesday",
-                            batchTime: "4pm"
-                        }
-                    ],
-                    changeBatchCount: 1
-                },
-                {
-                    name: 'Kiaan',
-                    image: IMG_SHAKSHI,
-                    classType: 'Group Class',
-                    grade: 'Kindergarden',
-                    batchNo: 5,
-                    timings: [
-                        {
-                            batchDay: "Wednesday",
-                            batchTime: "4pm"
-                        },
-                        {
-                            batchDay: "Friday",
-                            batchTime: "5pm"
-                        }
-                    ],
-                    changeBatchCount: 2
-                },
             ]
         };
     }

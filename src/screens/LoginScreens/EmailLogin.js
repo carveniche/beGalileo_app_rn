@@ -1,9 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform, Modal } from "react-native";
 import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { COLOR, CommonStyles } from "../../config/styles";
 import CustomGradientButton from "../../components/CustomGradientButton";
+import { BorderedTextInput, CustomBorderedTextInput } from "../../components";
 import { normalize } from "react-native-elements";
 import { isValidEmail } from "../../components/helpers";
 import { existingUserLogin } from "../../actions/authenticate";
@@ -20,9 +21,10 @@ const EmailLogin = () => {
     const [mPassword, setMpassword] = useState('');
     const [mResetEmail, setResetEmail] = useState('');
     const [resetEmailError, setResetEmailError] = useState(false);
-    const [resetEmailErrorMsg,setResetEmailErrorMsg] = useState('');
+    const [resetEmailErrorMsg, setResetEmailErrorMsg] = useState('');
     const [userPasswordError, setUserPasswordError] = useState(false);
-    
+    const inputEmail = useRef(null);
+    const inputPassword = useRef(null);
     const [forgotPasswordDialog, setForgotPasswordDialog] = useState(false);
     const loginStatus = useSelector((state) => state.authenticate.user_login_status);
     const loginResponse = useSelector((state) => state.authenticate.user_login_response);
@@ -58,6 +60,18 @@ const EmailLogin = () => {
 
     }
 
+    onFocusIn = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+          });
+    }
+
+    onFocusOut = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+          });
+    }
+
 
 
     onForgotPassword = () => {
@@ -68,20 +82,19 @@ const EmailLogin = () => {
         }
         else {
             setResetEmailError(false);
-            let url = BASE_URL + "/app_mathbox/forgot_password?email="+mResetEmail;
+            let url = BASE_URL + "/app_mathbox/forgot_password?email=" + mResetEmail;
             console.log(url);
             client.get(url).then((res) => {
                 console.log("Forgot Password Response", res.data);
                 if (res.data.status) {
                     onResetLinkSuccess(res.data)
                 }
-                else
-                {
+                else {
                     setResetEmailErrorMsg(res.data.message)
                     setResetEmailError(true);
-                   
+
                 }
-                    
+
             }).catch((err) => {
                 setResetEmailErrorMsg(err.message);
                 setResetEmailError(true);
@@ -108,20 +121,25 @@ const EmailLogin = () => {
         <View>
 
 
-            <View style={{  justifyContent: 'center', marginBottom: 2 }}>
+            <View style={{ justifyContent: 'center', marginBottom: 2 }}>
 
                 <View style={{ marginLeft: 20, marginRight: 20, marginTop: 25, marginBottom: 2 }}>
 
                     {userNameError && <Text style={[CommonStyles.text_8_regular, { color: COLOR.RED }]}>Please enter a valid Email</Text>}
                     <TextInput
-                        ref={(input) => { this.Otp_4_TextInput = input; }}
+                        ref={ref => {this.inputEmail = ref;
+                        }}
+                        keyboardType='email-address'
                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                        placeholder="Enter User Email"
-                        style={styles.textInputBordered}
+                        placeholder="Email"
+                        style={[styles.textInputBordered,{  }]}
                         autoCapitalize="none"
                         onChangeText={text => setMuserName(text)}
                         value={mUserName}
+                        onFocus={()=>onFocusIn(this.inputEmail)}
+                        onBlur={()=>onFocusOut(this.inputEmail)}
                         blurOnSubmit={false}
+
 
                     />
                 </View>
@@ -129,14 +147,17 @@ const EmailLogin = () => {
 
                     {userPasswordError && <Text style={[CommonStyles.text_8_regular, { color: COLOR.RED }]}>Please enter a valid Password</Text>}
                     <TextInput
-                        ref={(input) => { this.Otp_4_TextInput = input; }}
+                        ref={ref => {this.inputPassword = ref;
+                        }}
                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                        placeholder="Enter Password"
+                        placeholder="Password"
                         style={styles.textInputBordered}
                         secureTextEntry={true}
                         autoCapitalize="none"
                         onChangeText={value => setMpassword(value)}
                         value={mPassword}
+                        onFocus={()=>onFocusIn(this.inputPassword)}
+                        onBlur={()=>onFocusOut(this.inputPassword)}
                         blurOnSubmit={false}
 
                     />
@@ -215,7 +236,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderRadius: 10,
         borderWidth: 1.5,
-        borderColor: COLOR.BORDER_COLOR_GREEN,
+        borderColor: COLOR.LIGHT_BORDER_COLOR,
         backgroundColor: COLOR.WHITE
     },
     loginButton: {

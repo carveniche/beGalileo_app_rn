@@ -16,7 +16,7 @@ const ComponentSpeedMathListItem = props => {
 
         <View style={{ marginTop: normalize(5) }}>
         
-        <View style={[CommonStyles.shadowContainer_border_20, { flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: COLOR.LIGHT_BLUE, marginTop: normalize(8) }]}>
+        <View style={[CommonStyles.boxShadow, { flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: COLOR.LIGHT_BLUE, marginTop: normalize(8),marginHorizontal : 20,borderRadius : 20 }]}>
             <View style={{ marginTop: normalize(12), marginBottom: normalize(12) }}>
                 <Image style={{ height: normalize(32), width: normalize(32), resizeMode: 'contain', position: 'absolute' }} source={IMG_SHAKSHI} />
                 <Image style={{ height: normalize(32), width: normalize(32), resizeMode: 'contain', marginStart: normalize(20) }} source={IMG_SARTHAK} />

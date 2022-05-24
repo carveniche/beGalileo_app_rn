@@ -29,6 +29,25 @@ export function getDifferenceFromTodayDate(value, time) {
 
 }
 
+export function getDifferenceFromTodayTime(value, time) {
+
+    var eventMoment = moment(value + time, 'YYYY-MM-DDLT');
+
+    var currentMoment = moment();
+
+    const minsLeft = eventMoment.diff(currentMoment, 'minutes');
+   return minsLeft;
+
+
+    //const timeLeft = moment(future.diff(currentDate)).format("HH:mm:ss");
+
+
+}
+
+export function checkIfValueNullOrEmpty(value){
+    return value == "" || value == "NUll" || value == "null" || value =="NULL";
+}
+
 export function getClassesDateFormat(classDate) {
     if (classDate != null || classDate != "")
         return classDate.trim().split(" ");
@@ -107,4 +126,19 @@ export function getValueOfMonth(month) {
     ];
     return monthNames[month];
 }
+
+export function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+  
+  
+
 

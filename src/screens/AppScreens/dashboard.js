@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, ScrollView, Alert,BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR } from '../../config/styles';
@@ -21,7 +21,9 @@ class Dashboard extends Component {
 
     componentDidMount(){
         console.log("Dashboard Page",this.props);
+
     }
+   
 
     render() {
         return (

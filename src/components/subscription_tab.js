@@ -309,7 +309,7 @@ class SubscriptionTabs extends Component {
                     styles.selectedContainerStyle :
                     this.state.subscriptionAddedToCart == groupPrefix + index ? styles.cartAddedContainerStyle :
                         styles.shadowContainerStyle} >
-                    <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(16) }}>
+                    <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(10) }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
@@ -410,17 +410,17 @@ class SubscriptionTabs extends Component {
 
         return this.state.priceDetails.map((item, index) =>
             this.props.recommended != item.duration &&
-            <Pressable onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(20), marginBottom: normalize(20) }}>
+            <Pressable onPress={() => this.onGroupClassSelected(index)} key={index} style={{ marginTop: normalize(10), marginBottom: normalize(10) }}>
                 <View>
                     <View style={this.state.selectedSubscription == groupPrefix + index ?
                         styles.selectedContainerStyle :
                         this.state.subscriptionAddedToCart == groupPrefix + index ? styles.cartAddedContainerStyle :
                             styles.shadowContainerStyle} >
-                        <View style={{ marginStart: normalize(8), marginEnd: normalize(8), marginBottom: normalize(16) }}>
+                        <View style={{ marginStart: normalize(16), marginEnd: normalize(16), marginBottom: normalize(10) }}>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
                                 <View style={{ flexDirection: "row" }}>
                                     <Text style={[CommonStyles.text_18_semi_bold]}>{item.duration} Months</Text>
-                                    {/* <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.display_price}</Text> */}
+                                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }]}>{item.discount} % off</Text>
                                 </View>
                                 {/* <Text>Check Box  : {String(this.state[groupPrefixCheckBox + index])}</Text> */}
                                 <View>
@@ -452,9 +452,9 @@ class SubscriptionTabs extends Component {
 
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: normalize(12) }}>
 
-                                            <View style={{  width: normalize(25) }}>
+                                            <View style={{ width: normalize(25) }}>
                                                 <CheckBox
-                                                    containerStyle={{  margin: 0,padding : 20 }}
+                                                    containerStyle={{ margin: 0, padding: 20 }}
                                                     size={30}
                                                     onPress={() => this.onCheckBoxChecked(index)}
                                                     checked={this.state[groupPrefixCheckBox + index]}
@@ -463,7 +463,7 @@ class SubscriptionTabs extends Component {
 
                                             <View style={{ marginStart: normalize(35) }}>
                                                 <Text style={[CommonStyles.text_12_bold]}>{item.currency} {item.mathbox_price}</Text>
-                                                <Text style={[CommonStyles.text_12_regular, {  }]}>Includes {item.boxes} Math boxes</Text>
+                                                <Text style={[CommonStyles.text_12_regular, {}]}>Includes {item.boxes} Math boxes</Text>
                                             </View>
                                         </View>
                                     </View> :
@@ -472,9 +472,7 @@ class SubscriptionTabs extends Component {
                             }
 
 
-                            <View>
-
-                            </View>
+          
 
                         </View>
 
@@ -546,7 +544,7 @@ class SubscriptionTabs extends Component {
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(16) }}>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={[CommonStyles.text_18_semi_bold]}>{item.months}</Text>
-                                <Text style={[CommonStyles.text_12_bold], { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }}>{item.discount}</Text>
+                                <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_PURPLE, marginStart: normalize(12), alignSelf: 'center' }]}>{item.discount}</Text>
                             </View>
                             <View>
                                 <Text style={[CommonStyles.text_18_semi_bold]}>{item.final_price}</Text>
@@ -672,15 +670,24 @@ const styles = StyleSheet.create({
     shadowContainerStyle: {
         //<--- Style with elevation
 
-        backgroundColor: COLOR.TARIFF_CARD,
+        backgroundColor: COLOR.WHITE,
         borderWidth: 1,
         borderRadius: normalize(24),
         borderColor: COLOR.TEXT_COLOR_HINT,
-        shadowColor: COLOR.SHADOW_COLOR,
-        shadowOffset: { width: 10, height: 10 },
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 2,
+
+        ...Platform.select({
+            ios: {
+                shadowColor: '#0B42AB',
+                shadowOffset: { width: 1, height: 3 },
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+
+            },
+            android: {
+                elevation: 3
+
+            },
+        }),
     },
     selectedContainerStyle: {
         //<--- Style with elevation

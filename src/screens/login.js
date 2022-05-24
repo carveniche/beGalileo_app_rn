@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, Platform, Image,BackHandler,ScrollView } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
 import { TESTING_EMAIL, TESTING_MOBILE_NUMBER, SCREEN_HEIGHT, SCREEN_WIDTH } from "../config/configs";
-import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin,editMobileNumber } from '../actions/authenticate';
+import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin, editMobileNumber } from '../actions/authenticate';
 import PhoneInput from 'react-native-phone-input';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal'
@@ -18,21 +18,25 @@ import * as Constants from '../components/helpers/Constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import axios from 'axios';
 import jwt from "react-native-pure-jwt";
+import { checkIfValueNullOrEmpty } from "../components/helpers";
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { AppleButton, appleAuth } from '@invertase/react-native-apple-authentication';
-import { ScrollView } from "react-native-gesture-handler";
+
 import { Alert } from "react-native";
 import EmailLogin from "./LoginScreens/EmailLogin";
+import { GOOGLE_LOGO } from "../assets/images";
 
 
 
 class Login extends Component {
     constructor() {
+       
         super();
         this.onPressFlag = this.onPressFlag.bind(this);
         this.selectCountry = this.selectCountry.bind(this);
         this.handleSubmitMobileNumber = this.handleSubmitMobileNumber.bind(this);
         this.verifysubmiitedOTP = this.verifysubmiitedOTP.bind(this);
+        this.handleBackButton = this.handleBackButton.bind(this);
         //  this.otpHandler = this.otpHandler.bind(this);
         this.state = {
             cca2: '',
@@ -63,12 +67,13 @@ class Login extends Component {
             parentCurrency: '',
             timeZone: '',
             autoOtpIos: '',
-            loginStatus: false
+            loginStatus: false,
+            borderColor: COLOR.LIGHT_BORDER_COLOR
         };
     }
 
     componentDidMount() {
-       
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         GoogleSignin.configure();
         if (this.phone !== undefined) {
             this.setState({
@@ -76,36 +81,17 @@ class Login extends Component {
             });
         }
 
-        //For Testing
 
-        // this.setState({
-        //     mUserName: 'anns.rahim@carveniche.com',
-        //     mPassword: 'mathbox@123'
-        // })
-
-        // this.setState({
-        //     countryName: Constants.INDIA,
-        //     countryCode: 'IN',
-        //     parentCurrency: Constants.INDIA_CURRENCY,
-        //     stateLoading: false,
-        //     timeZone: 'Asia/Kolkata'
-        // });
-        // this.setState({
-        //     countryName: Constants.DUBAI,
-        //     countryCode: 'UAE',
-        //     parentCurrency: Constants.OTHER_CURRENCY,
-        //     stateLoading: false,
-        //     timeZone: 'Asia/Kolkata'
-        // });
         this.getCountryFromIp();
 
     }
     signIn = async () => {
-     
+
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-           
+            console.log("google user info", userInfo);
+
             this.setState({ userInfo });
             this.onGoogleLoginSuccess(userInfo);
 
@@ -127,7 +113,7 @@ class Login extends Component {
 
     onGoogleLoginSuccess = (userInfo) => {
 
-      
+
         const user = userInfo.user;
         this.setState({
             isGoogleLogin: true,
@@ -137,6 +123,7 @@ class Login extends Component {
             parentLastName: user.familyName
         })
         this.props.storeMobileNumber("", false, user.email, this.state.countryCode, this.state.countryName);
+        //this.props.storeMobileNumber("", false,"vivek@carveniche.com", this.state.countryCode, this.state.countryName);
     }
 
 
@@ -156,11 +143,11 @@ class Login extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-               
+
                 var country = responseJson.country.replace(/^"(.*)"$/, '$1');
                 var countryCode = responseJson.countryCode.replace(/^"(.*)"$/, '$1');
                 var timeZone = responseJson.timezone.replace(/^"(.*)"$/, '$1');
-               
+
                 var currency = '';
 
                 //For Testing
@@ -204,9 +191,9 @@ class Login extends Component {
     otpHandler = (message) => {
         if (message == null)
             return;
-       
+
         const otp = /(\d{4})/g.exec(message)[1];
-        
+
         this.setState({
             otpNumber_1: otp[0],
             otpNumber_2: otp[1],
@@ -219,8 +206,16 @@ class Login extends Component {
     }
 
     componentWillUnmount() {
+
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         if (Platform.OS == 'android')
             RNOtpVerify.removeListener();
+    }
+
+    handleBackButton() {
+        console.log("On back pressed from app");
+        console.log("Route Name ", this.props.navigation.state)
+        return true;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -237,8 +232,7 @@ class Login extends Component {
                     type: "success",
                 });
                 this.onOtpVerificationSuccess()
-                // this.props.storeMobileNumber(this.state.myNumber, true, "", "91", this.state.countryName);
-                //this.props.navigation.navigate('ParentProfile');
+
             }
             else {
                 showMessage({
@@ -252,7 +246,7 @@ class Login extends Component {
 
 
         if (prevProps.user_login_status != this.props.user_login_status) {
-           
+
             if (this.props.user_login_status != undefined && this.props.user_login_status !== null) {
                 if (this.props.user_login_status) {
                     this.existingUserToDashboard(this.props.user_login_response);
@@ -284,24 +278,53 @@ class Login extends Component {
                 storeLocalData(Constants.ParentCountryName, this.state.countryName);
                 storeLocalData(Constants.ParentCurrency, this.state.parentCurrency);
                 storeLocalData(Constants.ParentTimeZone, this.state.timeZone);
-               
+                console.log("Reponse login", response);
+                console.log("Mobile ", checkIfValueNullOrEmpty(response.mobile))
+                console.log("Email ", checkIfValueNullOrEmpty(response.email))
+                if (response.new_user) {
+                    if (!checkIfValueNullOrEmpty(response.mobile) || !checkIfValueNullOrEmpty(response.email) || !checkIfValueNullOrEmpty(response.first_name)) {
+                        console.log("Email or Mobile or First Name is missing")
+                        this.props.navigation.navigate(Constants.ParentProfile, {
+                            parentId: response.user_id,
+                            parentNumber: this.state.myNumber,
+                            parentTimeZone: this.state.timeZone,
+                            parentFirstName: this.state.parentFirstName,
+                            parentLastName: this.state.parentLastName,
+                            parentEmail: response.email
+                        });
+
+                    }
+                    else {
+                        this.props.navigation.navigate(Constants.AddKidDetail, {
+                            fromParent: true,
+                            parentEmail: response.email
+                        });
+                    }
+                }
+                else {
+                    this.existingUserToDashboard(response);
+                }
+
+                return;
+
+
+
                 if (response.new_user) {
 
-                    if(response.email == "" | response.email == "NUll" | response.email == "null" | response.email=="NULL")
-                        {
-                            this.props.navigation.navigate(Constants.ParentProfile, {
-                                parentId:response.user_id,
-                                parentNumber: this.state.myNumber,
-                                parentTimeZone: this.state.timeZone,
-                                parentEmail : response.email
-                            });
-                        }
-                        else{
-                            this.props.navigation.navigate(Constants.AddKidDetail, {
-                                fromParent: true,
-                                parentEmail : response.email
-                            });
-                        }
+                    if (response.email == "" | response.email == "NUll" | response.email == "null" | response.email == "NULL") {
+                        this.props.navigation.navigate(Constants.ParentProfile, {
+                            parentId: response.user_id,
+                            parentNumber: this.state.myNumber,
+                            parentTimeZone: this.state.timeZone,
+                            parentEmail: response.email
+                        });
+                    }
+                    else {
+                        this.props.navigation.navigate(Constants.AddKidDetail, {
+                            fromParent: true,
+                            parentEmail: response.email
+                        });
+                    }
 
                     // this.props.navigation.navigate(Constants.AddKidDetail, {
                     //     fromParent: true,
@@ -316,9 +339,9 @@ class Login extends Component {
                         //     parentTimeZone: this.state.timeZone
                         // });
                         this.props.navigation.navigate(Constants.AddKidDetail, {
-                        fromParent: true,
-                        parentEmail : response.email
-                    });
+                            fromParent: true,
+                            parentEmail: response.email
+                        });
 
                     }
                     else if (this.state.isAppleLogin) {
@@ -330,28 +353,27 @@ class Login extends Component {
                         //     parentTimeZone: this.state.timeZone
                         // });
                         this.props.navigation.navigate(Constants.AddKidDetail, {
-                        fromParent: true,
-                        parentEmail : response.email
-                    });
+                            fromParent: true,
+                            parentEmail: response.email
+                        });
 
                     }
                     else {
-                        if(response.email == "" | response.email == "NUll" | response.email == "null" | response.email=="NULL")
-                        {
+                        if (response.email == "" | response.email == "NUll" | response.email == "null" | response.email == "NULL") {
                             this.props.navigation.navigate(Constants.ParentProfile, {
-                                parentId:response.user_id,
+                                parentId: response.user_id,
                                 parentNumber: this.state.myNumber,
                                 parentTimeZone: this.state.timeZone,
-                                parentEmail : response.email
+                                parentEmail: response.email
                             });
                         }
-                        else{
+                        else {
                             this.props.navigation.navigate(Constants.AddKidDetail, {
                                 fromParent: true,
-                                parentEmail : response.email
+                                parentEmail: response.email
                             });
                         }
-                       
+
                     }
 
 
@@ -360,7 +382,7 @@ class Login extends Component {
                 else {
                     this.existingUserToDashboard(response);
                 }
-         
+
             }
 
         }
@@ -443,7 +465,7 @@ class Login extends Component {
         }
         else {
             var userOTP = otp_value1 + "" + otp_value2 + "" + otp_value3 + "" + otp_value4;
-           
+
             this.props.verifyOTP(userOTP, this.state.myNumber)
         }
 
@@ -475,7 +497,7 @@ class Login extends Component {
             })
         }
         if (isValidCred) {
-            
+
             this.props.existingUserLogin(this.state.mUserName, this.state.mPassword);
         }
 
@@ -486,16 +508,17 @@ class Login extends Component {
 
     handleSubmitMobileNumber() {
 
-     
+
 
         //for Testing
         if (this.state.myNumber == TESTING_MOBILE_NUMBER) {
             this.onOtpVerificationSuccess();
+            return;
         }
 
 
         if (this.state.myNumber !== null && this.state.myNumber.length === 10) {
-            this.sendOtpToUser();
+           // this.sendOtpToUser();
 
             this.setState({
 
@@ -536,9 +559,9 @@ class Login extends Component {
 
 
     focusPrevious(key, index) {
-   
+
         if (key === 'Backspace' && index !== 0) {
-           
+
             if (index == 3)
                 this.Otp_4_TextInput.focus();
             else if (index == 2)
@@ -553,7 +576,7 @@ class Login extends Component {
     onOTPChanged(text, id) {
         let newText = '';
         let numbers = '0123456789';
-       
+
 
 
         for (var i = 0; i < text.length; i++) {
@@ -561,7 +584,7 @@ class Login extends Component {
                 newText = newText + text[i];
             }
         }
-       
+
         if (id == 0) {
             this.setState({ otpNumber_1: newText });
             if (newText != "")
@@ -589,7 +612,7 @@ class Login extends Component {
 
     onAutoOtpTextChange = (text) => {
         const { otpNumber_4, otpNumber_3, otpNumber_2, otpNumber_1 } = this.state;
-     
+
         this.setState({
             autoOtpIos: text
         })
@@ -618,12 +641,12 @@ class Login extends Component {
         if (Platform.OS === 'android') {
             RNOtpVerify.getHash()
                 .then(hashKey => {
-                   
+
                     this.props.sendOTPHashed(this.state.myNumber, hashKey);
                     this.startListeningForOtp();
                 })
                 .catch(err => {
-                 
+
                     this.props.sendOTP(this.state.myNumber);
                 });
         }
@@ -637,7 +660,7 @@ class Login extends Component {
     }
 
     reSendOTP = () => {
-        
+
         this.props.reSendOTP(this.state.myNumber);
 
     }
@@ -667,8 +690,33 @@ class Login extends Component {
     }
 
     editMobileNumber = () => {
-        
-       this.props.editMobileNumber();
+
+        this.props.editMobileNumber();
+    }
+
+    onFocus = () => {
+        this.setState({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+        })
+    }
+
+    onBlur = () => {
+        this.setState({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+        })
+    }
+
+
+    onFocusIn = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_GREEN
+        });
+    }
+
+    onFocusOut = (inputRef) => {
+        inputRef.setNativeProps({
+            borderColor: COLOR.LIGHT_BORDER_COLOR
+        });
     }
 
 
@@ -743,27 +791,13 @@ class Login extends Component {
             console.log(credentialState);
             // use credentialState response to ensure the user is authenticated
             if (credentialState === appleAuth.State.AUTHORIZED) {
-                console.log(appleAuthRequestResponse);
-                console.log(appleAuthRequestResponse.identityToken);
-                //   const jsonRes = jwt.decode(appleAuthRequestResponse.identityToken,"",{
-                //     skipValidation: true
-                //   }).then(res=>{
-                //       console.log(res)
-                //   })
-                //   .error(errr=>{
-                //       console.log(errr)
-                //   });
-                // const jwtDecoded = jwt.decode(appleAuthRequestResponse.identityToken).then(res=>{
-                //     console.log("Decode Completed");
-                //     console.log(res)
-                // }).error(err=>{
-                //     console.log("Error  : "+err)
-                // })
+
                 this.onAppleLoginSuccess(appleAuthRequestResponse);
-                // user is authenticated
+
             }
             else {
-               
+                console.log("Apple sign in failed")
+
                 alert("Login Failed");
 
             }
@@ -782,7 +816,7 @@ class Login extends Component {
                             buttonStyle={AppleButton.Style.BLACK}
                             buttonType={AppleButton.Type.SIGN_IN}
                             style={{
-                                width: 180, // You must specify a width
+                                width: 300, // You must specify a width
                                 height: 50, // You must specify a height
                                 fontSize: 15
 
@@ -792,12 +826,15 @@ class Login extends Component {
                     }
                 </View>
                 <View style={{ marginTop: normalize(15) }}>
-                    <GoogleSigninButton
-                        style={{ width: 180, height: 50, marginStart: 5, fontSize: 5 }}
-                        size={GoogleSigninButton.Size.Standard}
-                        color={GoogleSigninButton.Color.Dark}
-                        onPress={this.signIn}
-                        disabled={false} />
+                    <TouchableOpacity onPress={this.signIn} style={[CommonStyles.shadowContainerWithoutBorderRadius, { height: 50,justifyContent : 'center' }]}>
+                        <View style={{ flexDirection : 'row',justifyContent : 'center' }}>
+                            <Image style={{ height: 35, width: 40, resizeMode: 'contain',alignSelf : 'center' }} source={GOOGLE_LOGO} />
+                            
+                            <Text style={[CommonStyles.text_14_semi_bold,{ alignSelf : 'center',marginStart :2 }]}>Sign in with Google</Text>
+                        </View>
+
+                    </TouchableOpacity>
+
 
                 </View>
 
@@ -811,7 +848,7 @@ class Login extends Component {
         const mobileNumberContent = (
 
             <View>
-                <View style={styles.numberContainer}>
+                <View style={[styles.numberContainer, { borderColor: this.state.borderColor }]}>
                     <TouchableOpacity onPress={this.onPressFlag}>
                         <View style={styles.countryCodeContainer}>
                             <PhoneInput
@@ -860,9 +897,12 @@ class Login extends Component {
 
 
 
-                    <TextInput placeholder="Your Phone Number"
+                    <TextInput
+                        placeholder="Your Phone Number"
                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                         keyboardType='numeric'
+                        onBlur={() => this.onBlur()}
+                        onFocus={() => this.onFocus()}
                         style={styles.mobileNumberInput}
                         onChangeText={(text) => this.onChanged(text)}
                         value={this.state.myNumber}
@@ -911,7 +951,8 @@ class Login extends Component {
                         blurOnSubmit={false}
 
                         keyboardType='numeric'
-
+                        onFocus={() => this.onFocusIn(this.Otp_1_TextInput)}
+                        onBlur={() => this.onFocusOut(this.Otp_1_TextInput)}
                         style={styles.otpNumberInput}
                         onChangeText={(text) => this.onOTPChanged(text, 0)}
                         value={otpNumber_1}
@@ -923,6 +964,8 @@ class Login extends Component {
                         keyboardType='numeric'
                         onKeyPress={e => this.focusPrevious(e.nativeEvent.key, 1)}
                         style={styles.otpNumberInput}
+                        onFocus={() => this.onFocusIn(this.Otp_2_TextInput)}
+                        onBlur={() => this.onFocusOut(this.Otp_2_TextInput)}
                         onChangeText={(text) => this.onOTPChanged(text, 1)}
                         value={otpNumber_2}
                         blurOnSubmit={false}
@@ -933,6 +976,8 @@ class Login extends Component {
                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                         keyboardType='numeric'
                         onKeyPress={e => this.focusPrevious(e.nativeEvent.key, 2)}
+                        onFocus={() => this.onFocusIn(this.Otp_3_TextInput)}
+                        onBlur={() => this.onFocusOut(this.Otp_3_TextInput)}
                         style={styles.otpNumberInput}
                         onChangeText={(text) => this.onOTPChanged(text, 2)}
                         value={otpNumber_3}
@@ -944,6 +989,8 @@ class Login extends Component {
                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                         keyboardType='numeric'
                         onKeyPress={e => this.focusPrevious(e.nativeEvent.key, 3)}
+                        onFocus={() => this.onFocusIn(this.Otp_4_TextInput)}
+                        onBlur={() => this.onFocusOut(this.Otp_4_TextInput)}
                         style={styles.otpNumberInput}
                         onChangeText={(text) => this.onOTPChanged(text, 3)}
                         value={otpNumber_4}
@@ -1011,7 +1058,7 @@ class Login extends Component {
                                     <EmailLogin />
 
                                     <TouchableOpacity onPress={this.switchSignInWithMobile}>
-                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center',  padding: normalize(5) }]}>Sign in with Mobile Number</Text>
+                                        <Text style={[CommonStyles.text_12_Regular, { alignSelf: 'center', padding: normalize(5) }]}>{ countryName == Constants.INDIA ?  "Sign in with Mobile Number" : "Back"}</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -1082,18 +1129,16 @@ const styles = StyleSheet.create({
     },
     bannerContianer: {
         flex: 1,
-        height: (SCREEN_HEIGHT / 2.5),
+        height: (SCREEN_HEIGHT / 2),
         backgroundColor: COLOR.WHITE
     },
     bannerHalfContianer: {
 
-        height : 250,
+        height: 300,
         backgroundColor: COLOR.WHITE
     },
     bottomContianer: {
-        flex: 1,
-        height: SCREEN_HEIGHT / 2,
-        justifyContent: 'center'
+        flex: 1
     },
     countryCodeContainer: {
         padding: 0,
@@ -1116,8 +1161,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 15,
         borderRadius: 10,
-        borderWidth: 2,
-        borderColor: COLOR.BORDER_COLOR_GREEN,
+        borderWidth: 1,
         backgroundColor: COLOR.WHITE
     },
     OtpContainer: {
@@ -1131,7 +1175,7 @@ const styles = StyleSheet.create({
 
     },
     mobileNumberInput: {
-        flex: 4,
+        width: 250,
         paddingStart: 15,
         fontSize: normalize(15),
         fontFamily: 'montserrat',
@@ -1139,13 +1183,15 @@ const styles = StyleSheet.create({
 
     },
     otpNumberInput: {
+        width: 60,
+        height: 60,
         textAlign: 'center',
         padding: 20,
         alignSelf: 'center',
         borderRadius: 10,
         borderWidth: 2,
         color: COLOR.BLACK,
-        borderColor: COLOR.BORDER_COLOR_GREEN,
+        borderColor: COLOR.LIGHT_BORDER_COLOR,
         backgroundColor: COLOR.WHITE
     },
     textInputBordered: {

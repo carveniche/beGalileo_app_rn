@@ -1,21 +1,29 @@
-import React from 'react';
-import { View,Text,StyleSheet,TouchableOpacity } from 'react-native';
-const BorderedTextInput = React.forwardRef((props,ref)=>(
-        <TextInput
-        
-        placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+import { TextInput } from 'react-native';
+import React, { Component } from 'react';
 
-        style={styles.textInputBordered}
-        onChangeText={props.onChangeText}
-        value={props.value}
+class BorderedTextInput extends Component {
 
-    />
-));
-const styles = StyleSheet.create({
-    textInputBordered: {
-        borderRadius: 10,
-        borderWidth: 1.5,
-        backgroundColor: COLOR.WHITE
+
+    onFocusInput = () => {
+        console.log("Props",this.props)
     }
-})
+
+    render() {
+        const { style,props,ref } = this.props;
+        return (
+            <TextInput 
+            {...props}
+            style={style}
+            onFocus={this.onFocusInput}
+            />
+        );
+    }
+}
+
+export default BorderedTextInput;
+
+
+
+
+
 

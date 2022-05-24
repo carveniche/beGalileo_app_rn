@@ -128,7 +128,7 @@ class DemoDetails extends Component {
                 <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
                     <View>
                         <View style={{ marginTop: normalize(20), marginStart: normalize(12) }}>
-                            <Text style={CommonStyles.text_18_bold}>{isDemoConfirmed ? "Your demo is confirmed" : "Demo class booked \nWaiting for confirmation"}</Text>
+                            <Text style={[CommonStyles.text_18_semi_bold,{ color : COLOR.TEXT_TITLE_HEADLINE }]}>{isDemoConfirmed ? "Your demo is confirmed" : "Demo class booked \nWaiting for confirmation"}</Text>
                         </View>
                         <Modal isVisible={isCancelConfirmationDemoVisible}>
                             <View style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(10), borderRadius: normalize(12) }}>
@@ -287,8 +287,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLOR.WHITE,
         justifyContent: 'flex-start',
-        marginStart: 10,
-        marginEnd: 10
+        marginStart: 0,
+        marginEnd: 0
     },
     thingsToNoteText: {
         color: 'rgba(53, 54, 57, 0.7)',

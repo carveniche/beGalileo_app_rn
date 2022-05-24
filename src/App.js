@@ -11,11 +11,24 @@ import ROOT from "./screens/root";
 import * as reducers from './reducers';
 import thunk from "redux-thunk";
 import { BASE_URL } from './config/configs'; 
-
-import {
-  createStackNavigator
-} from "react-navigation-stack";
+import * as Sentry from "@sentry/react-native";
+import SENTRY_BASE_URL from './config/configs';
 import FlashMessage from "react-native-flash-message";
+
+Sentry.init({
+  dsn: SENTRY_BASE_URL,
+  enableOutOfMemoryTracking: false,
+  integrations: [
+    new Sentry.ReactNativeTracing({
+      tracingOrigins: ["localhost", "begalileo.com", /^\//],
+      // ... other options
+    }),
+  ],
+  tracesSampleRate: 1.0,
+});
+
+
+
 
 console.disableYellowBox = true;
 
@@ -47,18 +60,9 @@ const client = axios.create({
   const store = createStore(rootReducer, applyMiddleware(thunk,axiosMiddleware(client)));
 
 
-  export default class App extends Component {
+  class App extends Component {
 
-    componentDidMount(){
-      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
-    componentWillUnmount(){
-      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-    }
-
-    handleBackButton() {
-     // return true;
-    }
+   
 
     render() {
       return (
@@ -79,3 +83,5 @@ const client = axios.create({
       padding : 5
     }
   });
+
+  export default Sentry.wrap(App);

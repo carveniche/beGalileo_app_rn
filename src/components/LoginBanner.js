@@ -1,11 +1,12 @@
 import { StyleSheet, View, Text, Image, Keyboard } from 'react-native';
 import React, { Component } from 'react';
-import ViewPager from '@react-native-community/viewpager';
+
 import Styles, { COLOR, CommonStyles } from '../config/styles';
 import { normalize } from '../components/helpers';
-import { LOGO_BANNER_1, IC_BANNER_1, IC_BANNER_2, IC_BANNER_3 } from '../assets/images';
+import { LOGO_BANNER_1, IC_BANNER_1, IC_BANNER_2, IC_BANNER_3, BANNER_1_1, BANNER_1_2 } from '../assets/images';
 import Dots from 'react-native-dots-pagination';
 import Swiper from 'react-native-swiper'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../config/configs';
 
 const headerText = ["Track your learning and see what’s in store!",
     "All play here - learning just happens!",
@@ -82,7 +83,15 @@ export default class LoginBanner extends React.Component {
                     </View>
                     {this.state.showImage &&
 
-                        <Image style={styles.image} source={IC_BANNER_1} />
+                        <View style={styles.image_container}>
+
+                            <Image style={[styles.bg_image,{ borderBottomLeftRadius : 50,bottom : 20 }]} source={BANNER_1_2} />
+                            <Image style={[styles.bg_image , { bottom : -15,borderBottomLeftRadius : 50,borderBottomRightRadius : 100 }]}  source={BANNER_1_1} />
+                            <Image style={[styles.logo_image]} source={IC_BANNER_1} />
+
+                        </View>
+
+
 
 
                     }
@@ -94,7 +103,7 @@ export default class LoginBanner extends React.Component {
                         <Text style={[CommonStyles.text_14_Regular, styles.subHeaderTextItem]}>{subHeaderText[1]}</Text>
                     </View>
                     {this.state.showImage &&
-                        <Image style={styles.image} source={IC_BANNER_2} />
+                        <Image style={[styles.logo_image]}  source={IC_BANNER_2} />
                     }
                 </View>
                 <View style={[styles.subItemContianer, { backgroundColor: colorBg[2] }]}>
@@ -103,7 +112,7 @@ export default class LoginBanner extends React.Component {
                         <Text style={[CommonStyles.text_14_Regular, styles.subHeaderTextItem]}>{subHeaderText[2]}</Text>
                     </View>
                     {this.state.showImage &&
-                        <Image style={styles.image} source={IC_BANNER_3} />
+                        <Image style={[styles.logo_image]}  source={IC_BANNER_3} />
                     }
                 </View>
             </Swiper>
@@ -131,11 +140,14 @@ const styles = StyleSheet.create({
     headerContianer: {
 
         flexDirection: 'column',
+        marginStart: 10,
+        marginEnd: 10
 
     },
     headerTextItem: {
-        marginTop : 20,
-        marginHorizontal : 10,
+        marginTop: 20,
+        marginStart: 10,
+        marginEnd : 50,
         fontSize: normalize(15),
         fontWeight: 'bold',
         color: COLOR.TEXT_COLOR_BLUE
@@ -144,20 +156,34 @@ const styles = StyleSheet.create({
 
         fontSize: normalize(12),
         marginTop: 10,
-        marginHorizontal : 10,
+        marginStart: 10,
+        marginEnd : 50,
         color: "#353639",
         opacity: 0.7
     },
-    image: {
-        flex : 1,
-        width: 200,
-        height: 80,
-        overflow: 'hidden',
-        marginStart : 10,
-        justifyContent : 'center',
-        alignContent : 'center',
-        alignSelf : 'center',
-        resizeMode : 'contain'
+    logo_image: {
+       
+        position: 'absolute',
+        resizeMode: 'contain',
+        width: SCREEN_WIDTH/2, 
+        height: SCREEN_HEIGHT/5, 
+        bottom : 20,
+        right : 20 
+       
+    },
+    bg_image: {
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT/4,
+        position: 'absolute',
+        resizeMode: 'contain',
+    
+        overflow: "hidden"
+    },
+
+
+    image_container: {
+        flex: 1,
+        overflow : 'hidden'
     },
 
     wrapper: {
