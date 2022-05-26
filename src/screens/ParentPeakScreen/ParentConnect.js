@@ -17,6 +17,7 @@ import { CustomBorderedTextInput, CustomButton } from '../../components';
 import { ScrollView } from 'react-native-gesture-handler';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import axios from 'axios';
+import { IMG_PARENT_PEEK } from '../.././assets/images'
 
 
 
@@ -28,6 +29,7 @@ const ParentConnect = (props) => {
   const [participants, setParticipants] = useState(new Map());
   const [videoTracks, setVideoTracks] = useState(new Map());
   const [studentId, setStudentId] = useState("")
+  const [studentName, setStudentName] = useState("")
   const [liveCLassId, setLiveClassId] = useState("")
   const [parentId, setParentId] = useState("")
   const [participantCount, setParticipantCount] = useState(0);
@@ -93,15 +95,18 @@ const ParentConnect = (props) => {
   const _onEndButtonPress = () => {
     setStatus('disconnected')
     twilioRef.current.disconnect();
+    goToHome()
   };
 
   useEffect(() => {
     let studid = props.navigation.getParam('student_id', null);
     let liveId = props.navigation.getParam('live_class_id', null);
     let parentId = props.navigation.getParam('parent_id', null);
+    let studName = props.navigation.getParam('student_name', null);
     setLiveClassId(liveId)
     setStudentId(studid)
     setParentId(parentId)
+    setStudentName(studName)
 
 
   });
@@ -209,13 +214,28 @@ const ParentConnect = (props) => {
 
   };
 
+  const getNonConnectedParticipant = () => {
+
+   
+
+    let isTutorAvailable = false
+    Array.from(videoTracks, ([trackSid, trackIdentifier, participantIdentity]) => {
+      if (videoTracks.get(trackSid).participantIdentity == "tutor")
+        isTutorAvailable = true;
+    })
+    if (isTutorAvailable)
+      return 'Waiting for ' + studentName + ' to connect'
+    else
+      return 'Waiting for teacher to connect'
+  }
+
 
 
 
 
   return (
 
-    <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: COLOR.BLACK }} >
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
       <View style={styles.container}>
         {
           status !== 'connected' &&
@@ -225,9 +245,13 @@ const ParentConnect = (props) => {
               status == 'connecting' &&
               <ActivityIndicator size="large" color="black" style={CommonStyles.loadingIndicatior} />
             }
+            {/* <View style={{ position :'absolute',bottom : 0,left : 0,right : 0,width : SCREEN_WIDTH }}>
 
-            <Text style={[{ alignSelf: 'center', marginTop: 30 }, CommonStyles.text_14_bold]}>
-              Peak Live Class
+              <Image style={{ resizeMode : 'contain',width: SCREEN_WIDTH, height: SCREEN_WIDTH / 2, alignSelf: 'center' }} source={IMG_PARENT_PEEK} />
+            </View> */}
+
+            <Text style={[CommonStyles.text_14_bold, { alignSelf: 'center', marginTop: 30, color: COLOR.TEXT_COLOR_BLUE }]}>
+              Peek Live Class
             </Text>
             {
               permissionDeniedMsg &&
@@ -249,17 +273,22 @@ const ParentConnect = (props) => {
 
             {
               !permissionDeniedMsg &&
-              <View style={{ flex: 2, justifyContent: 'center', marginHorizontal: 20 }}>
-                <Text style={[{ alignSelf: 'center', marginTop: 30, textAlign: 'center' }, CommonStyles.text_12__semi_bold]}>
-                  You can take peak of the ongoing live class
+              <View style={{ flex: 1, justifyContent: 'center', marginHorizontal: 30 }}>
+
+                <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', marginTop: 30, textAlign: 'center', color: COLOR.TEXT_BODY_COLOR }]}>
+                  Want to take a glance at
                 </Text>
-                <Text style={[{ alignSelf: 'center', marginTop: 30, textAlign: 'center' }, CommonStyles.text_12__semi_bold]}>
-                  Your Video will be hidden to the teacher and student
+                <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', textAlign: 'center', color: COLOR.TEXT_BODY_COLOR }]}>
+                  {studentName}'s class
                 </Text>
-                <Text style={[{ alignSelf: 'center', marginTop: 30, textAlign: 'center' }, CommonStyles.text_12__semi_bold]}>
+                <Text style={[CommonStyles.text_12_bold, { alignSelf: 'center', marginTop: 20, textAlign: 'center', fontStyle: 'italic', fontSize: 15, fontWeight: '700' }]}>
+                  Your Video will not be shown to the teacher and student
+                </Text>
+                <Text style={[{ alignSelf: 'center', marginTop: 2, textAlign: 'center', fontStyle: 'italic', fontSize: 15, fontWeight: '700' }, CommonStyles.text_12_bold]}>
                   Your Microphone will be muted
                 </Text>
                 <View style={{ marginTop: 30 }}>
+                  <Image style={{ resizeMode: 'contain', width: SCREEN_WIDTH, height: SCREEN_WIDTH / 2, alignSelf: 'center' }} source={IMG_PARENT_PEEK} />
 
                   <CustomGradientButton
                     myRef={(input) => { this.btn_connect_now = input; }}
@@ -277,8 +306,8 @@ const ParentConnect = (props) => {
                 style={CommonStyles.green_button_gradient}
                 children="Home"
 
-                containerStyle={{ backgroundColor: COLOR.TEXT_ALPHA_GREY }}
-                textStyle={[CommonStyles.text_14_bold, { color: COLOR.WHITE }]}
+                containerStyle={{ backgroundColor: COLOR.LIGHT_BLUE, marginHorizontal: 30 }}
+                textStyle={[CommonStyles.text_14_bold, { color: COLOR.BLUE_LINk }]}
                 onPress={goToHome}
               />
             </View>
@@ -296,9 +325,13 @@ const ParentConnect = (props) => {
           <View style={styles.callContainer}>
             {
               participantCount < 2 &&
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center',zIndex:10,  elevation: 10 }}>
+              <View style={{ width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT / 2, position: 'absolute', left: 0, right: 0, bottom: 100, justifyContent: 'center', alignItems: 'center', zIndex: 10, elevation: 10 }}>
                 <View style={{ backgroundColor: COLOR.BG_ALPHA_BLACK, width: 300, height: 200, borderRadius: 20, alignContent: 'center', justifyContent: 'center' }}>
-                  <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.WHITE, textAlign: 'center', justifyContent: 'center', alignContent: 'center' }]}>Waiting for all the participant to connect</Text>
+                  {
+                    participantCount == 1 &&
+                    <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.WHITE, textAlign: 'center', justifyContent: 'center', alignContent: 'center', marginHorizontal: 20 }]}>{getNonConnectedParticipant()}</Text>
+                  }
+
 
                 </View>
 
@@ -317,11 +350,14 @@ const ParentConnect = (props) => {
                       <View style={{ flex: 1 }}>
                         {/* <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.BLACK, textAlign: 'center' }]}>{videoTracks.get(trackSid).participantIdentity}</Text> */}
 
-                        <TwilioVideoParticipantView
-                          style={styles.remoteVideo}
-                          key={trackSid}
-                          trackIdentifier={trackIdentifier}
-                        />
+                        <View style={styles.participantVideoContainer}>
+                          <TwilioVideoParticipantView
+                            style={styles.remoteVideo}
+                            key={trackSid}
+                            trackIdentifier={trackIdentifier}
+                          />
+                        </View>
+
 
 
                       </View>
@@ -381,8 +417,7 @@ export default ParentConnect;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR.WHITE,
-    paddingHorizontal: 20
+    backgroundColor: COLOR.WHITE
   },
   callContainer: {
     flex: 1,
@@ -429,15 +464,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
   },
-  remoteVideo: {
-    width: 350,
-    height: 350,
+  participantVideoContainer: {
+    width: SCREEN_WIDTH - 20,
+    height: SCREEN_HEIGHT / 2.5,
     alignSelf: 'center',
-    borderColor: COLOR.ORANGE,
+    borderColor: COLOR.BORDER_COLOR_GREY,
     overflow: 'hidden',
     borderRadius: 20,
     borderWidth: 5,
     marginVertical: 10,
+    zIndex: 1,
+  },
+  remoteVideo: {
+    width: SCREEN_WIDTH - 20,
+    height: SCREEN_HEIGHT / 2.5,
+    overflow: 'hidden',
     zIndex: 1,
   },
   optionsContainer: {

@@ -94,7 +94,7 @@ class HomeScheduleScreen extends Component {
                 flex: 1,
                 backgroundColor: COLOR.BG_FAQ_GRERY
             }}>
-                <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow : 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ flex: 1 }}>
                         <NavigationEvents onDidFocus={() => this.onComponentFocus()} />
 
@@ -107,12 +107,12 @@ class HomeScheduleScreen extends Component {
                                     <TouchableOpacity onPress={this.onTabSelected} style={isLiveTabSelected ? styles.tabItemSelected : styles.tabItem}>
                                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Live Class</Text>
                                     </TouchableOpacity>
-                                     <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isLiveTabSelected ? styles.tabItem : styles.tabItemSelected]}>
+                                    {/* <TouchableOpacity onPress={this.onTabSelected} style={[{ marginStart: normalize(25) }, isLiveTabSelected ? styles.tabItem : styles.tabItemSelected]}>
                                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Curriculam</Text>
-                                </TouchableOpacity>
+                                    </TouchableOpacity> */}
                                 </View>
                             </View>
-                        } 
+                        }
 
                         {
                             loading &&
@@ -120,16 +120,16 @@ class HomeScheduleScreen extends Component {
                         }
                         {
                             student_class_status &&
-                            <View style={{ flex : 1 }}>
+                            <View style={{ flex: 1 }}>
                                 {
-                                    isLiveTabSelected ? 
-                                    <LiveClassSchedule navigation={this.props.navigation} />
-                                    :
-                                    <CurriculamSchedule />
+                                    isLiveTabSelected ?
+                                        <LiveClassSchedule navigation={this.props.navigation} />
+                                        :
+                                        <CurriculamSchedule />
                                 }
-                               
-                                </View>
-                            
+
+                            </View>
+
 
                         }
 

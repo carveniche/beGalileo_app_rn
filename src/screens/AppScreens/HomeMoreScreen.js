@@ -180,13 +180,13 @@ class HomeMoreScreen extends Component {
                                 </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={this.onNoificationClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
+                            {/* <TouchableOpacity onPress={this.onNoificationClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_NOTIFICATIONS} />
                                     <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Notifications</Text>
                                 </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity onPress={this.onMoreHelpScreen} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={ICON_HELP} />

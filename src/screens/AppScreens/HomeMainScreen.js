@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, AsyncStorage, Platform, BackHandler } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator,Platform ,AsyncStorage, BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -15,6 +15,7 @@ import MainUserDashboard from '../dashboard/MainUserDashboard';
 import DashboardHeader from '../../components/DashboardHeader';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { NavigationEvents } from 'react-navigation';
+
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
 
@@ -75,8 +76,8 @@ class HomeMainScreen extends Component {
           Sentry.captureMessage('Hai Capotured message');
 
 
-
-          BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);  
+          if(Platform.OS == 'android')
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);  
 
         if (this.props.state.dashboard_status) {
             this.setState({
@@ -107,15 +108,16 @@ class HomeMainScreen extends Component {
 
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        if(Platform.OS == 'android')
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
+
+  
 
     handleBackButton() {
-        this.props.navigation.goBack(this.props.currentScreen.name);
-       // return true;
+        //ToastAndroid.show('Back button is pressed', ToastAndroid.SHORT);
+        return true;
     }
-
-
 
 
     requestUserPermission = async () => {
@@ -322,7 +324,7 @@ class HomeMainScreen extends Component {
                 <ScrollView showsVerticalScrollIndicator={false} >
                     <View style={{ flex: 1, justifyContent: 'flex-start' }}>
 
-                        <DashboardHeader headerTitle={this.getHeaderTitle()} headerDescription="See your Kids activity" allKidsList={allKidsList} />
+                        <DashboardHeader headerTitle={this.getHeaderTitle()} headerDescription="See your Kids activity..." allKidsList={allKidsList} />
                         {
                             dashboardResponse &&
                             <View>{

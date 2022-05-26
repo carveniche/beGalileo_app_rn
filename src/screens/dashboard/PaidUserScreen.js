@@ -604,6 +604,7 @@ class PaidUserScreen extends Component {
             navigation: this.props.navigation,
             live_class_id: liveId,
             student_id: this.props.currentSelectedKid.student_id,
+            student_name : this.props.currentSelectedKid.first_name,
             parent_id: this.props.dashboardResponse.parent_id
         });
     }

@@ -154,7 +154,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.75</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.78</Text>
             </View>
         )
     }

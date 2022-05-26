@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, ScrollView, Alert, ActivityIndicator, FlatList, YellowBox, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, ScrollView, SafeAreaView, ActivityIndicator, FlatList, YellowBox, TouchableOpacity } from "react-native";
 import { connect } from 'react-redux';
 import { COLOR, CommonStyles, radioButtonTheme } from "../config/styles";
 import { CheckBox } from 'react-native-elements'
