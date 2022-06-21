@@ -46,6 +46,7 @@ import ClassListScreen from '../screens/ScheduleScreens/ClassListScreen';
 import LiveClassSchedule from '../screens/ScheduleScreens/LiveClassSchedule';
 import MoreNotificationScreen from '../screens/MoreScreens/more_notification_screen';
 import ParentConnect from "../screens/ParentPeakScreen/ParentConnect";
+import MidasHomeScreen from "../screens/MidasTest/MidasHomeScreen";
 
 
 
@@ -147,6 +148,15 @@ const AppStackNavigator = createStackNavigator({
 
     ParentConnect: {
         screen: ParentConnect,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
+
+    MidasHomeScreen: {
+        screen: MidasHomeScreen,
         navigationOptions: {
             headerShown: false,
             headerBackTitleVisible: false,

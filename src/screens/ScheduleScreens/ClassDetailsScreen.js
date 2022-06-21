@@ -83,18 +83,21 @@ class ClassDetailsScreen extends Component {
         }
 
         if (prevProps.rescheduleUpcomingStatus != this.props.rescheduleUpcomingStatus) {
-
-            if (this.props.rescheduleUpcomingStatus) {
-                this.closeRescheduleClass()
-                this.onPressBack()
-            }
-            else
+            if(this.props.rescheduleUpcomingStatus != null)
             {
-                showMessage({
-                    message: this.props.rescheduleUpcomingResponse.message,
-                    type: "danger",
-                });
+                if (this.props.rescheduleUpcomingStatus) {
+                    this.closeRescheduleClass()
+                    this.onPressBack()
+                }
+                else
+                {
+                    showMessage({
+                        message: this.props.rescheduleUpcomingResponse.message,
+                        type: "danger",
+                    });
+                }
             }
+           
         }
 
     }

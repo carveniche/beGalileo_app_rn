@@ -5,7 +5,7 @@ export const SCREEN_WIDTH =  Dimensions.get('window').width;
 export const MSG91_AUTH_KEY = "313408AH0lkf4gael5eae578fP1";
 export const MSG91_TEMPLATE_ID = "622ea190518f435a16376a48";
 
-export const TESTING_MOBILE_NUMBER = '8197713454';
+export const TESTING_MOBILE_NUMBER = '99999888888';
 export const TESTING_EMAIL = "test_parent@begalileo.com";
 
 export const RAZOR_PAY_TEST_KEY = "rzp_live_xpLP9XUEmN6kZQ";

@@ -66,3 +66,4 @@ export const IOS ='ios';
 export const COMPLETED_CLASSES = "Completed Classes";
 export const INCOMPLETE_CLASSES = "InComplete Classes";
 export const UPCOMING_CLASSES = "Upcoming Classes";
+export const MIDAS_HOME_SCREEN = "MidasHomeScreen";

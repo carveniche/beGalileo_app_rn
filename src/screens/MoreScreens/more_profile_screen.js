@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -9,11 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from "../../components/CustomGradientButton";
 import { isValidEmail, allowOnlyAlphabets } from "../../components/helpers";
-import { updateParentProfile,getDashboardItems } from "../../actions/dashboard";
+import { updateParentProfile, getDashboardItems } from "../../actions/dashboard";
+import { deleteUserAccount,logOutUser } from "../../actions/authenticate";
 import axios from "axios";
 import { BASE_URL } from "../../config/configs";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import {NavigationActions,StackActions} from 'react-navigation'; 
+import { NavigationActions, StackActions } from 'react-navigation';
+import { getLocalData } from '../../components/helpers/AsyncMethods';
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 
@@ -52,32 +55,31 @@ class MoreProfileScreen extends Component {
 
             }
             else {
-                if(this.props.updateProfileStatus != null)
-                {
+                if (this.props.updateProfileStatus != null) {
                     showMessage({
                         message: this.props.updateProfileResponse.message,
                         type: "danger",
-                    }); 
+                    });
                 }
-               
+
             }
         }
     }
 
     loadDashboardDatas = () => {
         this.setState({
-            isEditScreen : false
+            isEditScreen: false
         })
 
 
-        
-        this.props.getDashboardItems(this.props.dashboardResponse.parent_details[0].id, 
-            this.props.dashboardResponse.parent_details[0].country,
-             this.props.currentSelectedKid.student_id)
 
-      
-       
-      }
+        this.props.getDashboardItems(this.props.dashboardResponse.parent_details[0].id,
+            this.props.dashboardResponse.parent_details[0].country,
+            this.props.currentSelectedKid.student_id)
+
+
+
+    }
 
     onPressBack = () => {
         const { goBack } = this.props.navigation;
@@ -91,6 +93,10 @@ class MoreProfileScreen extends Component {
         })
         //  this.props.navigation.navigate(Constants.MoreEditProfileScreen);
     }
+
+
+    onClickDe
+
     onUpdateProfile = () => {
         let isValidationSuccess = true;
         if (isValidEmail(this.state.mUserEmail)) {
@@ -101,7 +107,7 @@ class MoreProfileScreen extends Component {
         }
 
         else {
-        
+
             this.setState({
                 emailError: true
             })
@@ -109,7 +115,7 @@ class MoreProfileScreen extends Component {
         }
 
         if (this.state.mUserFirstName == "") {
-            
+
             this.setState({
                 firstNameError: true
             })
@@ -127,16 +133,16 @@ class MoreProfileScreen extends Component {
             })
         }
         else {
-            
+
             this.setState({
                 mobileNumberError: true
             })
             isValidationSuccess = false;
         }
-       
+
 
         if (isValidationSuccess) {
-          
+
             this.props.updateParentProfile(this.props.dashboardResponse.parent_details[0].id,
                 this.state.mUserMobileNumber,
                 this.state.mUserEmail,
@@ -175,9 +181,76 @@ class MoreProfileScreen extends Component {
         }
         this.setState({ myNumber: newText });
     }
+
+
+    onClickDeleteAccount = () => {
+
+        Alert.alert(
+            "Deleting the account will remove your account and delete all your datas stored with us. Are you sure want to delete account?",
+            "",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Yes", onPress: () => this.onDeleteConfirmation() }
+            ],
+            { cancelable: false }
+        );
+    }
+
+    onDeleteConfirmation = async () => {
+        console.log("On Click delete")
+        this.props.deleteUserAccount(this.props.dashboardResponse.parent_details[0].id).then((response) => {
+            const dataResponse = response.payload.data
+            if (dataResponse.status) {
+                this.onDeleteAccountSuccess()
+            }
+            else {
+                showMessage({
+                    message: "Unable to delete account please try later",
+                    type: "danger",
+                });
+            }
+
+
+        }).catch((err) => {
+            showMessage({
+                message: "Unable to delete account please try later",
+                type: "danger",
+            });
+        })
+
+
+    }
+
+
+    onDeleteAccountSuccess = () => {
+        console.log("delete account success")
+        const items = [[Constants.IS_LOGGED_IN, JSON.stringify(false)], [Constants.IsParentRegistered, JSON.stringify(false)],[Constants.ParentUserId, JSON.stringify("")]]
+        AsyncStorage.multiSet(items).then(() => {
+           this.props.logOutUser();
+            this.goToLogin();
+        })
+    }
+
+    goToLogin = () => {
+        console.log("Deleting  Account");
+        // this.props.navigation.replace(Constants.Splash);
+        const navigateAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: Constants.Splash })],
+        });
+
+        this.props.navigation.dispatch(navigateAction);
+        // this.props.navigation.replace(Constants.MainScreen);
+    }
+
+
     render() {
         const { isEditScreen } = this.state;
-        const { dashboardResponse,loading } = this.props;
+        const { dashboardResponse, loading } = this.props;
         return (
             <View style={{
                 flex: 1,
@@ -195,127 +268,108 @@ class MoreProfileScreen extends Component {
                         {loading &&
                             <ActivityIndicator size="large" color="black" style={CommonStyles.activityIndicatorStyle} />
                         }
-                        
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(20) }}>
-                            <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>{isEditScreen ? "Edit Profile" : "Profile"}</Text>
-                            {
-                                isEditScreen ?
+                      
+                        {
+                            this.props.dashboardStatus && 
+                            <><View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: normalize(20) }}>
+                                <Text style={[CommonStyles.text_18_bold, { color: COLOR.TEXT_COLOR_BLUE }]}>{isEditScreen ? "Edit Profile" : "Profile"}</Text>
+                                {isEditScreen ?
                                     <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => {
                                         this.setState({
                                             isEditScreen: false
-                                        })
-                                    }}>
+                                        });
+                                    } }>
                                         <Image source={IC_CLOSE_BLUE} style={{ height: 40, width: 40, padding: 20, resizeMode: 'cover' }} />
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity onPress={this.onEditProfileClick} style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_EDIT_PEN} />
                                         <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>Edit Profile</Text>
-                                    </TouchableOpacity>
-
-                            }
+                                    </TouchableOpacity>}
 
 
-                        </View>
-                        <View style={{ marginTop: normalize(10) }}>
-                            <Text style={[CommonStyles.text_11_bold]}>Email Id</Text>
-                            {
-                                isEditScreen && dashboardResponse.parent_details[0].email == "" ?
-                                    <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
+                            </View><View style={{ marginTop: normalize(10) }}>
+                                    <Text style={[CommonStyles.text_11_bold]}>Email Id</Text>
+                                    {isEditScreen && dashboardResponse.parent_details[0].email == "" ?
+                                        <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
 
-                                        {this.state.emailError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
-                                        <TextInput
-                                            ref={(input) => { this.email_id_input = input; }}
-                                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                                            keyboardType='email-address'
-                                            style={styles.textInputBordered}
-                                            autoCapitalize='none'
-                                            onChangeText={(text) => this.setState({ mUserEmail: text })}
-                                            value={this.state.mUserEmail}
-                                            blurOnSubmit={false}
-                                        //setting limit of input
-                                        />
+                                            {this.state.emailError && <Text style={styles.errorMessage}>Please enter a valid Email</Text>}
+                                            <TextInput
+                                                ref={(input) => { this.email_id_input = input; } }
+                                                placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                                keyboardType='email-address'
+                                                style={styles.textInputBordered}
+                                                autoCapitalize='none'
+                                                onChangeText={(text) => this.setState({ mUserEmail: text })}
+                                                value={this.state.mUserEmail}
+                                                blurOnSubmit={false} />
 
 
-                                    </View>
-                                    :
-                                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].email == "" ? "- - - - - - - -  -" : dashboardResponse.parent_details[0].email}</Text>
-                            }
+                                        </View>
+                                        :
+                                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].email == "" ? "- - - - - - - -  -" : dashboardResponse.parent_details[0].email}</Text>}
 
-                        </View>
-                        <View style={{ marginTop: normalize(10) }}>
-                            <Text style={[CommonStyles.text_11_bold]}>First Name</Text>
-                            {
-                                isEditScreen ?
-                                    <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
+                                </View><View style={{ marginTop: normalize(10) }}>
+                                    <Text style={[CommonStyles.text_11_bold]}>First Name</Text>
+                                    {isEditScreen ?
+                                        <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
 
-                                        {this.state.firstNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
-                                        <TextInput
+                                            {this.state.firstNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>}
+                                            <TextInput
 
-                                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                                placeholderTextColor={COLOR.TEXT_COLOR_HINT}
 
-                                            style={styles.textInputBordered}
-                                            onChangeText={this.addUserFirstName.bind(this)}
-                                            value={this.state.mUserFirstName}
-                                            blurOnSubmit={false}
+                                                style={styles.textInputBordered}
+                                                onChangeText={this.addUserFirstName.bind(this)}
+                                                value={this.state.mUserFirstName}
+                                                blurOnSubmit={false} />
+                                        </View>
+                                        :
 
-                                        />
-                                    </View>
-                                    :
+                                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].first_name == "" ? "- - - - - - - - " : dashboardResponse.parent_details[0].first_name}</Text>}
 
-                                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].first_name == "" ? "- - - - - - - - " : dashboardResponse.parent_details[0].first_name}</Text>
-                            }
+                                </View><View style={{ marginTop: normalize(10) }}>
+                                    <Text style={[CommonStyles.text_11_bold]}>Last Name</Text>
+                                    {isEditScreen ?
+                                        <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
 
-                        </View>
-                        <View style={{ marginTop: normalize(10) }}>
-                            <Text style={[CommonStyles.text_11_bold]}>Last Name</Text>
-                            {
-                                isEditScreen ?
-                                    <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
+                                            {/* {this.state.firstNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>} */}
+                                            <TextInput
 
-                                        {/* {this.state.firstNameError && <Text style={styles.errorMessage}>Please enter a valid name</Text>} */}
-                                        <TextInput
+                                                placeholderTextColor={COLOR.TEXT_COLOR_HINT}
 
-                                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                                style={styles.textInputBordered}
+                                                onChangeText={this.addUserLastName.bind(this)}
+                                                value={this.state.mUserLastName}
+                                                blurOnSubmit={false} />
+                                        </View>
+                                        :
+                                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].last_name == "" ? "- - - - - - - - " : dashboardResponse.parent_details[0].last_name}</Text>}
 
-                                            style={styles.textInputBordered}
-                                            onChangeText={this.addUserLastName.bind(this)}
-                                            value={this.state.mUserLastName}
-                                            blurOnSubmit={false}
+                                </View><View style={{ marginTop: normalize(10) }}>
+                                    <Text style={[CommonStyles.text_11_bold]}>Phone Number</Text>
+                                    {isEditScreen && dashboardResponse.parent_details[0].mobile == "" ?
+                                        <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
 
-                                        />
-                                    </View>
-                                    :
-                                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].last_name == "" ? "- - - - - - - - " : dashboardResponse.parent_details[0].last_name}</Text>
-                            }
-
-                        </View>
-                        <View style={{ marginTop: normalize(10) }}>
-                            <Text style={[CommonStyles.text_11_bold]}>Phone Number</Text>
-                            {
-                                isEditScreen && dashboardResponse.parent_details[0].mobile == "" ?
-                                    <View style={{ marginLeft: 5, marginRight: 5, marginTop: 12, marginBottom: 2 }}>
-
-                                        {this.state.mobileNumberError && <Text style={styles.errorMessage}>Please enter a valid mobile number</Text>}
-                                        <TextInput
-                                            ref={(input) => { this.email_id_input = input; }}
-                                            placeholderTextColor={COLOR.TEXT_COLOR_HINT}
-                                            keyboardType='number-pad'
-                                            style={styles.textInputBordered}
-                                            autoCapitalize='none'
-                                            onChangeText={(text) => this.onMobileNumberChanged(text)}
-                                            value={this.state.mUserMobileNumber}
-                                            blurOnSubmit={false}
-                                        //setting limit of input
-                                        />
+                                            {this.state.mobileNumberError && <Text style={styles.errorMessage}>Please enter a valid mobile number</Text>}
+                                            <TextInput
+                                                ref={(input) => { this.email_id_input = input; } }
+                                                placeholderTextColor={COLOR.TEXT_COLOR_HINT}
+                                                keyboardType='number-pad'
+                                                style={styles.textInputBordered}
+                                                autoCapitalize='none'
+                                                onChangeText={(text) => this.onMobileNumberChanged(text)}
+                                                value={this.state.mUserMobileNumber}
+                                                blurOnSubmit={false} />
 
 
-                                    </View>
-                                    :
-                                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].mobile == "" ? "- - - - - - - - -" : dashboardResponse.parent_details[0].mobile}</Text>
-                            }
+                                        </View>
+                                        :
+                                        <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(8) }]}>{dashboardResponse.parent_details[0].mobile == "" ? "- - - - - - - - -" : dashboardResponse.parent_details[0].mobile}</Text>}
 
-                        </View>
+                                </View></>
+                        }
+                        
 
                         {
                             isEditScreen &&
@@ -335,6 +389,12 @@ class MoreProfileScreen extends Component {
 
 
 
+
+
+
+
+
+
                         {/* <View style={{ marginTop: normalize(32) }}>
                             <Text style={[CommonStyles.text_11_bold]}>Pincode</Text>
                             <View style={{ flexDirection: 'row', marginTop: normalize(8) }}>
@@ -348,6 +408,19 @@ class MoreProfileScreen extends Component {
 
                     </View>
                 </ScrollView>
+                <View style={{ position: 'absolute', bottom: 0,start : 0,end : 0,marginBottom : 50 }}>
+                    <TouchableOpacity onPress={this.onClickDeleteAccount}>
+                        <Text style={[CommonStyles.text_14_bold, { color: COLOR.ORANGE,textAlign : 'center' }]}>Delete Account</Text>
+                    </TouchableOpacity>
+                    {/* <CustomGradientButton
+                                myRef={(input) => { this.btn_pay_now = input; }}
+                                style={{ paddingTop: normalize(10), paddingBottom: normalize(10), alignItems: 'center' }}
+                                children={"Delete Account"}
+                                onPress={this.onClickDeleteAccount}
+
+                            /> */}
+
+                </View>
             </View>
         );
     }
@@ -370,7 +443,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     updateParentProfile,
-    getDashboardItems
+    getDashboardItems,
+    deleteUserAccount,
+    logOutUser
 };
 
 const styles = StyleSheet.create({

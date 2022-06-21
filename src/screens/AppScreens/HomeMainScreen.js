@@ -108,6 +108,7 @@ class HomeMainScreen extends Component {
 
 
     componentWillUnmount() {
+        console.log("Inside main screen")
         if(Platform.OS == 'android')
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }

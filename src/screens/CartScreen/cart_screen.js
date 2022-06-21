@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, VirtualizedList, ColorPropType, ActivityIndicator, PanResponder, Modal } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, BackHandler , ActivityIndicator, PanResponder, Modal } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -21,6 +21,7 @@ class CartListScreen extends Component {
     constructor(props) {
         super(props);
         this.updateCartPaymentStatus = this.updateCartPaymentStatus.bind(this);
+        this.handleBackButton = this.handleBackButton.bind(this);
         this.state = {
             cartItems: [
 
@@ -44,6 +45,12 @@ class CartListScreen extends Component {
         }
     }
 
+    componentWillUnmount() {
+        if(Platform.OS == 'android')
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+
     componentDidMount() {
         if (this.props.dashboardStatus) {
             let parentDetail = this.props.dashboardResponse.parent_details[0];
@@ -61,11 +68,18 @@ class CartListScreen extends Component {
             //this.calculatePriceDetails();
             this.getCartListScreen();
         }
+        if(Platform.OS == 'android')
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);  
 
 
 
 
     }
+
+    handleBackButton() {
+       this.onPressBack()
+    }
+
 
 
     getCartListScreen = () => {

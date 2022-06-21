@@ -10,6 +10,7 @@ import {
     REGISTER_PARENT,
     GET_GRADE_DATA,
     REGISTER_STUDENT,
+    DELETE_ACCOUNT,
     LOGOUT_REQUEST, DELETE_STUDENT, EDIT_STUDENT, EXISTING_USER_LOGIN, EDIT_MOBILE_NUMBER
 
 } from '../config/redux-action-types/authenticate';
@@ -265,12 +266,26 @@ export function registerStudent(user_id, first_name, last_name, dob, grade, boar
 
 export function deleteStudent(student_id) {
     return {
-        type: DELETE_STUDENT,
+        type: DELETE_ACCOUNT,
         payload: {
             request: {
                 url: 'app_mathbox/delete_child',
                 params: {
                     student_id
+                }
+            }
+        }
+    }
+}
+
+export function deleteUserAccount(parent_id) {
+    return {
+        type: DELETE_STUDENT,
+        payload: {
+            request: {
+                url: 'app_mathbox/delete_user_account',
+                params: {
+                    parent_id
                 }
             }
         }

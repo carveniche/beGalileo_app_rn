@@ -5,8 +5,6 @@ import { LOGO_BGL_WITH_CAPTION, LOGO_BGL_WITH_CAPTION_2, LOGO_BGL_WITH_CAPTION_3
 import { getLocalData, storeLocalData } from '../components/helpers/AsyncMethods';
 import * as Constants from '../components/helpers/Constants';
 
-
-
 class Splash extends Component {
     constructor() {
         super();
@@ -154,7 +152,7 @@ class Splash extends Component {
                     ]}
                 />
 
-                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.78</Text>
+                <Text style={{ alignItems: 'flex-start', alignSelf: 'flex-start', color: COLOR.BLACK }}>V1.80</Text>
             </View>
         )
     }

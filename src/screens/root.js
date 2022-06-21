@@ -8,17 +8,17 @@ import { SENTRY_BASE_URL } from "../config/configs";
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationV4Instrumentation();
 
-Sentry.init({
-    dsn: SENTRY_BASE_URL,
-    enableOutOfMemoryTracking: false,
-    integrations: [
-      new Sentry.ReactNativeTracing({
-        tracingOrigins: ["localhost", "begalileo.com", /^\//],
-        // ... other options
-      }),
-    ],
-    tracesSampleRate: 1.0,
-  });
+// Sentry.init({
+//     dsn: SENTRY_BASE_URL,
+//     enableOutOfMemoryTracking: false,
+//     integrations: [
+//       new Sentry.ReactNativeTracing({
+//         tracingOrigins: ["localhost", "begalileo.com", /^\//],
+//         // ... other options
+//       }),
+//     ],
+//     tracesSampleRate: 1.0,
+//   });
   
 
 class Root extends Component {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, TouchableWithoutFeedback, Linking } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
-import { COLOR, CommonStyles,cardBoxShadowStyle } from '../../config/styles';
+import { COLOR, CommonStyles, cardBoxShadowStyle } from '../../config/styles';
 import { IC_BOOK_DEMO_BG, LIVE_CLASS_CARD_THUMB, ICON_CLOCK, CARD_BTN_ARROW, IC_PARENT_MOM, IC_PLAY_BLUE, IC_CLOSE_BLUE, IC_STAR_LAYOUT, IC_BANNER_2 } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
@@ -127,9 +127,9 @@ class NewUserScreen extends Component {
         if (currentSessionKid.student_demos != null && currentSessionKid.student_demos[0].status != 'Completed')
             return (
 
-                <View style={{ marginTop : normalize(10) }}>
+                <View style={{ marginTop: normalize(10) }}>
 
-                    <View style={[CommonStyles.boxShadow ,{ backgroundColor : COLOR.WHITE,margin: normalize(10), borderRadius: normalize(24) }]}>
+                    <View style={[CommonStyles.boxShadow, { backgroundColor: COLOR.WHITE, margin: normalize(10), borderRadius: normalize(24) }]}>
 
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ height: normalize(110), marginStart: normalize(5), marginTop: normalize(5) }}>
@@ -159,7 +159,7 @@ class NewUserScreen extends Component {
                                 {
                                     currentSessionKid.student_demos[0].status == 'booked' &&
                                     <View>
-                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginBottom: normalize(2), marginTop: normalize(1),marginEnd : normalize(10) ,alignSelf: 'center' }]}>Waiting for confirmation</Text>
+                                        <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_ORANGE, marginBottom: normalize(2), marginTop: normalize(1), marginEnd: normalize(10), alignSelf: 'center' }]}>Waiting for confirmation</Text>
                                     </View>
                                 }
 
@@ -193,6 +193,10 @@ class NewUserScreen extends Component {
         this.props.navigation.navigate(Constants.CartListScreen);
     }
 
+    goToMidasHome = () => {
+        this.props.navigation.navigate(Constants.MIDAS_HOME_SCREEN)
+    }
+
     render() {
         const B = (props) => <Text style={{ fontWeight: 'bold' }}>{props.children}</Text>
         const { currentSessionKid } = this.state;
@@ -214,6 +218,8 @@ class NewUserScreen extends Component {
                     style={{ backgroundColor: COLOR.WHITE, marginTop: normalize(20), borderRadius: normalize(30) }}
                 >
 
+
+                  
                     <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         {
                             currentSessionKid &&
@@ -226,19 +232,25 @@ class NewUserScreen extends Component {
                             </View>
                         }
 
-
-
-
-
                     </View>
+                    {/* <View style={{ marginVertical : 20,marginHorizontal : 20 }}>
+                        <TouchableOpacity onPress={this.goToMidasHome}>
+                            <View style={[CommonStyles.shadowContainerWithoutBorderRadius,{ borderRadius : 20 }]}>
+                            <Text style={[CommonStyles.text_14_semi_bold,{ textAlign : 'center',marginVertical : 20 }]}>Take Midas Test</Text> 
+                            </View>
+                            
+                        </TouchableOpacity>
+                    </View> */}
+
+
 
                     {
                         this.props.dashboardStatus && this.props.dashboardResponse.students.length > 0 &&
-                        <View style={{ marginStart: 5, marginEnd: 5 ,marginTop : normalize(16) }}>
+                        <View style={{ marginStart: 5, marginEnd: 5, marginTop: normalize(16) }}>
                             {
 
                             }
-                             <Text style={[CommonStyles.text_14_semi_bold,{ alignSelf : 'center',color : COLOR.TEXT_TITLE_HEADLINE }]}>Choose subscription</Text> 
+                            <Text style={[CommonStyles.text_14_semi_bold, { alignSelf: 'center', color: COLOR.TEXT_TITLE_HEADLINE }]}>Choose subscription</Text>
 
                             <SubscriptionTabs goToCartList={this.goToCartList} navigation={this.props.navigation} />
                         </View>

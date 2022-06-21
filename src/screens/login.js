@@ -73,7 +73,11 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        if (Platform.OS == 'android')
+        {
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        }
+        
         GoogleSignin.configure();
         if (this.phone !== undefined) {
             this.setState({
@@ -207,9 +211,13 @@ class Login extends Component {
 
     componentWillUnmount() {
 
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        
         if (Platform.OS == 'android')
+        {
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
             RNOtpVerify.removeListener();
+        }
+           
     }
 
     handleBackButton() {
@@ -508,7 +516,7 @@ class Login extends Component {
 
     handleSubmitMobileNumber() {
 
-
+        console.log("Send mobile number for OTP")
 
         //for Testing
         if (this.state.myNumber == TESTING_MOBILE_NUMBER) {
@@ -518,7 +526,7 @@ class Login extends Component {
 
 
         if (this.state.myNumber !== null && this.state.myNumber.length === 10) {
-           // this.sendOtpToUser();
+            this.sendOtpToUser();
 
             this.setState({
 

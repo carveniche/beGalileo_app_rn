@@ -81,7 +81,7 @@ class MathBoxTabs extends Component {
     render() {
         return (
             <View >
-                <Text style={[CommonStyles.text_12__semi_bold,{ color : COLOR.TEXT_COLOR_BLACK,marginStart : normalize(25),marginTop : normalize(20),borderBottomColor : COLOR.RED,borderBottomWidth : 2 }]}>What will you get</Text>
+                <Text style={[CommonStyles.text_12__semi_bold,{ color : COLOR.TEXT_COLOR_BLACK,marginStart : normalize(25),marginTop : normalize(20) }]}>What will you get</Text>
                 <View style={{ margin: normalize(20), flexDirection: 'row' }}>
 
                     {

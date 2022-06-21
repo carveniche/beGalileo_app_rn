@@ -24,10 +24,11 @@ import {
     REGISTER_STUDENT,REGISTER_STUDENT_FAILED,REGISTER_STUDENT_SUCCESS,
     GET_GRADE_DATA,GET_GRADE_DATA_SUCCESS,GET_GRADE_DATA_FAILED, LOGOUT_REQUEST,
     DELETE_STUDENT,DELETE_STUDENT_SUCCESS,DELETE_STUDENT_FAILED,
-    EDIT_STUDENT,EDIT_STUDENT_SUCCESS,EDIT_STUDENT_FAILED, EXISTING_USER_LOGIN, EXISTING_USER_LOGIN_SUCCESS, EXISTING_USER_LOGIN_FAILED
+    EDIT_STUDENT,EDIT_STUDENT_SUCCESS,EDIT_STUDENT_FAILED, EXISTING_USER_LOGIN, EXISTING_USER_LOGIN_SUCCESS, EXISTING_USER_LOGIN_FAILED, DELETE_ACCOUNT_SUCCESS, DELETE_ACCOUNT_FAILED
 } from '../config/redux-action-types/authenticate'
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { CLASS_CANCEL, CLASS_CANCEL_FAILED, CLASS_CANCEL_SUCCESS } from '../config/redux-action-types/dashboard';
+import { DELETE_ACCOUNT } from '../assets/images';
 
 const initialState = { user: {}, requestRestore: true,showEnterOTP : false }
 
@@ -207,6 +208,27 @@ export default function reducer(state = initialState, action) {
                 ...state,loading : false,
                 user_login_status : false,
                 user_login_response : action.payload.data
+            }
+        }
+        
+
+        case DELETE_ACCOUNT :{
+            return{
+                ...state,loading : true,delete_account_status : null
+            }
+        }
+        case DELETE_ACCOUNT_SUCCESS : {
+            return{
+                ...state,loading : false,
+                delete_account_status : action.payload.data.status,
+                delete_account_response : action.payload.data
+            }
+        }
+        case DELETE_ACCOUNT_FAILED :{
+            return{
+                ...state,loading : false,
+                delete_account_status : false,
+                delete_account_response : action.payload.data
             }
         }
         

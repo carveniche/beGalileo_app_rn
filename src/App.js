@@ -15,17 +15,17 @@ import * as Sentry from "@sentry/react-native";
 import SENTRY_BASE_URL from './config/configs';
 import FlashMessage from "react-native-flash-message";
 
-Sentry.init({
-  dsn: SENTRY_BASE_URL,
-  enableOutOfMemoryTracking: false,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      tracingOrigins: ["localhost", "begalileo.com", /^\//],
-      // ... other options
-    }),
-  ],
-  tracesSampleRate: 1.0,
-});
+// Sentry.init({
+//   dsn: SENTRY_BASE_URL,
+//   enableOutOfMemoryTracking: false,
+//   integrations: [
+//     new Sentry.ReactNativeTracing({
+//       tracingOrigins: ["localhost", "begalileo.com", /^\//],
+//       // ... other options
+//     }),
+//   ],
+//   tracesSampleRate: 1.0,
+// });
 
 
 

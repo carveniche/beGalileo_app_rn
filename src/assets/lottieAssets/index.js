@@ -1,0 +1,1 @@
+export const lottie_puzzle = require('./lottie_puzzle.json');

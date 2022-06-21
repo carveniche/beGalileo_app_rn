@@ -4,9 +4,9 @@ require_relative '../node_modules/react-native-unimodules/cocoapods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 
-target 'ImageNotification' do
-  pod 'Firebase/Messaging', '~> 7.6.0' # eg 6.31.0
-end
+# target 'ImageNotification' do
+#   pod 'Firebase/Messaging', '~> 7.6.0' # eg 6.31.0
+# end
 
 target 'beGalileorndev' do
   rnPrefix = "../node_modules/react-native"

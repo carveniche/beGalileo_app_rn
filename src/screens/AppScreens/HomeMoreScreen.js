@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView,
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import {  IC_PROFILE_PIC, IMG_SHAKSHI, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS,IC_MORE_LOGOUT,ICON_HELP,IC_MORE_NOTIFICATIONS } from "../../assets/images";
+import {  IC_PROFILE_PIC, IMG_SHAKSHI, IMG_SARTHAK, IC_RIGHT_ENTER, IC_MORE_PROFILE, IC_MORE_SUBSCRIPTIONS, IC_MORE_MY_KIDS, IC_MORE_LIVE_CLASS_BATCH, IC_MORE_CARD_DETAILS,IC_MORE_LOGOUT,ICON_HELP,DELETE_ACCOUNT } from "../../assets/images";
 import LinearGradient from 'react-native-linear-gradient';
-import { logOutUser } from "../../actions/authenticate";
+import { logOutUser,deleteUserAccount } from "../../actions/authenticate";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
@@ -13,6 +13,7 @@ import { getLocalData, storeLocalData } from '../../components/helpers/AsyncMeth
 import DashboardHeader from '../../components/DashboardHeader';
 import { NavigationActions, StackActions } from 'react-navigation';
 import AsyncStorage from "@react-native-community/async-storage";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 
 class HomeMoreScreen extends Component {
@@ -86,6 +87,66 @@ class HomeMoreScreen extends Component {
             ],
             { cancelable: false }
         );
+    }
+
+
+    onClickDeleteAccount = () => {
+       
+        Alert.alert(
+            "Deleting the account will remove your account and delete all your datas stored with us. Are you sure want to delete account?",
+            "",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Yes", onPress: () => this.onDeleteConfirmation() }
+            ],
+            { cancelable: false }
+        );
+    }
+
+    onDeleteConfirmation = async () => {
+        console.log("On Click delete")
+        getLocalData(Constants.ParentUserId).then((parentId) => {
+        
+            console.log("Parent ID ",parentId)
+            this.props.deleteUserAccount(parentId).then((response)=>{
+                const dataResponse = response.payload.data
+                if(dataResponse.status)
+                    {
+                       this.onDeleteAccountSuccess()
+                    }
+                else
+                {
+                    showMessage({
+                        message: "Unable to delete account please try later",
+                        type: "danger",
+                    });
+                }
+
+           
+            }).catch((err)=>{
+                showMessage({
+                    message: "Unable to delete account please try later",
+                    type: "danger",
+                });
+            })
+            
+        })
+       
+
+    }
+
+
+    onDeleteAccountSuccess = () => {
+        console.log("delete account success")
+        // const items = [[Constants.IS_LOGGED_IN, JSON.stringify(false)], [Constants.IsParentRegistered, JSON.stringify(false)],[Constants.ParentUserId, JSON.stringify("")]]
+        // AsyncStorage.multiSet(items).then(() => {
+        //     this.props.logOutUser();
+        //     this.goToLogin();
+        // })
     }
 
     onLogOutConfirmation = async () => {
@@ -196,17 +257,16 @@ class HomeMoreScreen extends Component {
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this.onClickLogOut} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    {/* <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_CARD_DETAILS} /> */}
-                                    {/* <Icon
-                                        style={{ marginStart: normalize(8) }}
-                                        size={25}
-                                        name='sign-out'
-                                        color={COLOR.TEXT_COLOR_ORANGE} /> */}
-                                          <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_LOGOUT} />
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_LOGOUT} />
                                     <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Log Out</Text>
                                 </View>
-                                {/* <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} /> */}
                             </TouchableOpacity>
+                            {/* <TouchableOpacity onPress={this.onClickDeleteAccount} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={DELETE_ACCOUNT} />
+                                    <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Delete Account</Text>
+                                </View>
+                            </TouchableOpacity> */}
 
                             {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop : normalize(19),paddingBottom : normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
@@ -246,7 +306,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    logOutUser
+    logOutUser,
+    deleteUserAccount
 };
 
 const styles = StyleSheet.create({
