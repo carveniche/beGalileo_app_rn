@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalSelector from 'react-native-modal-selector'
 import { allowOnlyAlphabets, isValidDate } from '../components/helpers'
 import RadioForm, { RadioButton } from 'react-native-simple-radio-button';
-import { IC_PROFILE_PIC,ADD_ANOTHER_CHILD } from "../assets/images";
+import { IC_PROFILE_PIC, ADD_ANOTHER_CHILD } from "../assets/images";
 import { getLocalData, storeLocalData } from "../components/helpers/AsyncMethods";
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -56,7 +56,7 @@ class AddKidDetail extends Component {
             mChildLastName: "",
             avatarSource: null,
             gradeItemPressed: null,
-            boardItemPressed : null,
+            boardItemPressed: null,
             mBirthDate: null,
             mBirthDay: null,
             mBirthdMonth: null,
@@ -87,7 +87,7 @@ class AddKidDetail extends Component {
         if (prevProps.submitStudentSuccess !== this.props.submitStudentSuccess) {
             if (this.props.submitStudentSuccess) {
                 const student = this.props.studentSubmitResponse;
-                
+
                 storeLocalData(Constants.IS_LOGGED_IN, true);
                 var kidDetail = {
                     userId: student.user_id,
@@ -110,13 +110,13 @@ class AddKidDetail extends Component {
     }
 
     showDatePicker = () => {
-     
-       
+
+
         this.setState({
             mBirthDateDialog: true
         })
 
-        
+
     }
 
     onDOBDatePicked = (date) => {
@@ -151,7 +151,7 @@ class AddKidDetail extends Component {
         })
 
         getLocalData(Constants.ParentUserId).then((parentId) => {
-            console.log("Parent user id "+parentId);
+            console.log("Parent user id " + parentId);
             this.setState({
                 parentUserId: parentId
             })
@@ -171,10 +171,10 @@ class AddKidDetail extends Component {
                 allKidsList: this.props.dashboard_response.students,
                 showAddkidForm: false
             })
-          
+
         }
 
-       
+
     }
 
     onGenderChange = (value) => {
@@ -193,7 +193,7 @@ class AddKidDetail extends Component {
         console.log(item);
         this.props.navigation.navigate(Constants.EditKidDetail, {
             editKidItem: item,
-            totalKids : this.state.allKidsList.length
+            totalKids: this.state.allKidsList.length
         });
     }
 
@@ -213,13 +213,12 @@ class AddKidDetail extends Component {
             })
             isValidationSuccess = false
         }
-        else
-        {
+        else {
             this.setState({
                 mChildNameError: false
-            }) 
+            })
         }
-        
+
         if (this.state.mChildGrade == null) {
             this.setState({
                 mChildGradeError: true
@@ -303,22 +302,22 @@ class AddKidDetail extends Component {
     goToBookDemo = (student) => {
         console.log(student);
         //this.props.updateCurrentKid(student)
-       this.props.navigation.push(Constants.BookDemoScreen,{
-           studentData : student,
-           from : "addKid"
-       });
+        this.props.navigation.push(Constants.BookDemoScreen, {
+            studentData: student,
+            from: "addKid"
+        });
     }
 
     goToHome = () => {
-       // this.props.navigation.push(Constants.BookDemoScreen);
+        // this.props.navigation.push(Constants.BookDemoScreen);
 
         const navigateAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
         });
 
-         this.props.navigation.dispatch(navigateAction);
-          //this.props.navigation.push(Constants.MainScreen);
+        this.props.navigation.dispatch(navigateAction);
+        //this.props.navigation.push(Constants.MainScreen);
     }
 
 
@@ -451,7 +450,7 @@ class AddKidDetail extends Component {
                 numColumns={2}
                 contentContainerStyle={{ flexDirection: 'column' }}
                 // key={'_'+Date.now()}
-               //  keyExtractor={item => "_" + Date.now()}
+                //  keyExtractor={item => "_" + Date.now()}
                 renderItem={({ item: data }) => {
                     return (
                         <TouchableOpacity onPress={() => this.editKidDetail(data)} style={{ flex: 1, margin: 20 }}>
@@ -482,13 +481,13 @@ class AddKidDetail extends Component {
                 horizontal
                 data={this.state.allKidsList}
                 contentContainerStyle={{ flexDirection: 'row' }}
-                key={'#'+Date.now()}
+                key={'#' + Date.now()}
                 renderItem={({ item: data }) => {
                     return (
                         <View style={{ flex: 1, margin: 15 }}>
                             {
                                 data.photo == null ?
-                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode :'contain', alignSelf: 'center' }} source={IC_PROFILE_PIC} />
+                                    <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode: 'contain', alignSelf: 'center' }} source={IC_PROFILE_PIC} />
                                     :
                                     <Image style={{ borderRadius: 100, height: 50, width: 50, resizeMode: 'contain', alignSelf: 'center' }} source={{ uri: data.photo }} />
                             }
@@ -526,10 +525,10 @@ class AddKidDetail extends Component {
     }
 
     onGradeItemSelected(itemId) {
-        console.log(itemId+"-"+this.state.gradeItemPressed);
+        console.log(itemId + "-" + this.state.gradeItemPressed);
         this.setState({
             gradeItemPressed: itemId.key,
-            mChildGrade : itemId.label
+            mChildGrade: itemId.label
         })
     }
 
@@ -537,7 +536,7 @@ class AddKidDetail extends Component {
         console.log(itemId);
         this.setState({
             boardItemPressed: itemId.key,
-            mChildBoard : itemId.label
+            mChildBoard: itemId.label
         })
     }
 
@@ -552,7 +551,7 @@ class AddKidDetail extends Component {
                 }}>
                     <Text
                         style={this.state.gradeItemPressed == item.item.key ? styles.gridTextSelected : styles.gridText}>
-                        {item.item.label} 
+                        {item.item.label}
                     </Text>
                     {
                         item.item.lable ? <Text style={styles.gridLabelContainer}>{item.item.lable}</Text> :
@@ -580,7 +579,7 @@ class AddKidDetail extends Component {
                         style={this.state.boardItemPressed == item.item.key ? styles.gridTextSelected : styles.gridText}>
                         {item.item.label}
                     </Text>
-                    
+
                 </TouchableOpacity>
             }
 
@@ -660,7 +659,7 @@ class AddKidDetail extends Component {
                                 <View style={{ justifyContent: 'center', marginTop: 20 }}>
 
                                     <View style={{ alignSelf: 'center' }}>
-                                        <Image style={{ borderRadius: 100, height: 120, width: 120, resizeMode : 'contain' }} source={this.state.avatarSource == null ? IC_PROFILE_PIC : this.state.avatarSource} />
+                                        <Image style={{ borderRadius: 100, height: 120, width: 120, resizeMode: 'contain' }} source={this.state.avatarSource == null ? IC_PROFILE_PIC : this.state.avatarSource} />
                                         <View style={styles.edit_profile_icon} >
                                             <Icon
                                                 onPress={this.onChooseImageClick}
@@ -770,35 +769,35 @@ class AddKidDetail extends Component {
 
                                 </View> */}
 
-                                <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
-                                <Text style={styles.textSubHeader}>Grade</Text>
-                                {this.state.mChildGradeError && <Text style={styles.errorMessage}>select Grade</Text>}
-                                         <FlatList
+                                <View style={{ marginTop: 5, marginBottom: 5, marginStart: 15, marginEnd: 15 }}>
+                                    <Text style={styles.textSubHeader}>Grade</Text>
+                                    {this.state.mChildGradeError && <Text style={styles.errorMessage}>select Grade</Text>}
+                                    <FlatList
 
-                                                columnWrapperStyle={{ justifyContent: 'flex-start' }}
-                                                data={this.gradeDataList()}
-                                                renderItem={this.gradeRowData}
-                                                horizontal={false}
-                                                keyExtractor={(item, index) => 'grade_' + index}
-                                                
-                                                numColumns={3}
-                                            />
+                                        columnWrapperStyle={{ justifyContent: 'flex-start' }}
+                                        data={this.gradeDataList()}
+                                        renderItem={this.gradeRowData}
+                                        horizontal={false}
+                                        keyExtractor={(item, index) => 'grade_' + index}
+
+                                        numColumns={3}
+                                    />
                                 </View>
 
-                                <View style={{ marginTop : 5,marginBottom : 5,marginStart : 15,marginEnd : 15 }}>
-                                <Text style={styles.textSubHeader}>Curriculum</Text>
-                                {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curriculum</Text>}
-                                
-                                         <FlatList
+                                <View style={{ marginTop: 5, marginBottom: 5, marginStart: 15, marginEnd: 15 }}>
+                                    <Text style={styles.textSubHeader}>Curriculum</Text>
+                                    {this.state.mChildBoardError && <Text style={styles.errorMessage}>select Curriculum</Text>}
 
-                                                columnWrapperStyle={{ justifyContent: 'flex-start' }}
-                                                data={this.boardListData()}
-                                                renderItem={this.boardRowData}
-                                                horizontal={false}
-                                                keyExtractor={(item, index) => 'board_' + index}
-                                         
-                                                numColumns={3}
-                                            />
+                                    <FlatList
+
+                                        columnWrapperStyle={{ justifyContent: 'flex-start' }}
+                                        data={this.boardListData()}
+                                        renderItem={this.boardRowData}
+                                        horizontal={false}
+                                        keyExtractor={(item, index) => 'board_' + index}
+
+                                        numColumns={3}
+                                    />
                                 </View>
 
 
@@ -921,7 +920,7 @@ class AddKidDetail extends Component {
                             flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
                             marginBottom: 20
                         }}>
-                            <Image style={{  height: 16, width: 16, resizeMode: 'contain' }} source={ADD_ANOTHER_CHILD} />
+                            <Image style={{ height: 16, width: 16, resizeMode: 'contain' }} source={ADD_ANOTHER_CHILD} />
                             <Text
                                 onPress={() => this.addKidDetails(false)}
                                 style={{

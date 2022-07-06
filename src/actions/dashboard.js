@@ -7,7 +7,7 @@ DELETE_STUDENT,
 APPLY_COUPON,
 REMOVE_COUPON,
 RESCHEDULE_DEMO,SET_USER_DETAILS,STUDENT_REPORT, DEMO_RESULT,
-PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING, UPDATE_PROFILE, RESCHEDULE_SLOT, RESCHEDULE_UPCOMING
+PARENT_FEEDBACK,PARENT_FEEDBACK_SUCCESS,PARENT_FEEDBACK_FAILED, STUDENT_CATEGORY_CLASSES, WORKBOOK_UPLOAD,CLASS_CANCEL, DEVICE_INFO, STAR_BADGE_REPORT, STUDENT_ACTIVITY, RATING_TAGS, SUBMIT_TEACHER_RATING, TEACHER_RATING, UPDATE_PROFILE, RESCHEDULE_SLOT, RESCHEDULE_UPCOMING, REGISTER_BOOK_DEMO
 } from '../config/redux-action-types/dashboard';
 import FormData from 'form-data';
 
@@ -264,6 +264,27 @@ export function doBookingDemo(student_id,slot_id,day,name,mobile,email){
                     name,
                     mobile,
                     email
+                }
+            }
+        }
+    }
+}
+
+
+export function registerWithBookDemo(parent_id,grade,slot_id,day,student_name,mobile,email){
+    return{
+        type : REGISTER_BOOK_DEMO,
+        payload : {
+            request: {
+                url : 'app_mathbox/register_with_book_demo',
+                params : {
+                    parent_id,
+                    grade,
+                    day,
+                    slot_id,
+                    student_name,
+                    email,
+                    mobile
                 }
             }
         }

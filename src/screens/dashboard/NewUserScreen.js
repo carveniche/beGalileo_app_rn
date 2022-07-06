@@ -14,6 +14,7 @@ import AddCartFloatingButton from '../../components/AddCartFloatingButton';
 import MathBoxTabs from '../dashboard/MathBoxTabs';
 import { WebView } from 'react-native-webview';
 import YouTube from 'react-native-youtube';
+import VideoTestimonials from "../Testimonials/VideoTestimonials";
 //import YoutubePlayer from "react-native-youtube-iframe";
 //import { Rating, AirbnbRating } from 'react-native-ratings';
 
@@ -219,7 +220,7 @@ class NewUserScreen extends Component {
                 >
 
 
-                  
+
                     <View style={{ marginTop: normalize(32), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         {
                             currentSessionKid &&
@@ -276,16 +277,19 @@ class NewUserScreen extends Component {
                     <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 20, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
                         <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
-                            <Text style={CommonStyles.text_18_semi_bold}>
+                            <Text style={CommonStyles.text_14_semi_bold}>
                                 Not sure about beGalileo Online based learning?
                             </Text>
                             <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
-                                some stats may be can come here
+                                beGalileo kid is World’s youngest Tedx Speaker
+                            </Text>
+                            <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
+                                beGalileo kid is IMO Math olympiad International Rank 1
                             </Text>
                             <TouchableOpacity
                                 style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}
                                 onPress={this.goToBookADemo}>
-                                <Text style={[CommonStyles.text_12_bold, {
+                                <Text style={[CommonStyles.text_12__semi_bold, {
                                     paddingTop: normalize(9),
                                     paddingBottom: normalize(9),
                                     paddingStart: normalize(18),
@@ -304,36 +308,10 @@ class NewUserScreen extends Component {
                     <View style={{ backgroundColor: '#EEF8FE', marginTop: normalize(32), borderRadius: normalize(12), marginStart: normalize(10), marginEnd: normalize(10) }}>
                         <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents \nare saying about \nbeGalileo'}</Text>
                         <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'Online learning experience \nwith kids and parents'}</Text>
-                        <Image style={{ height: normalize(200), width: '100%', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} />
-                        <TouchableOpacity style={{ padding: 20 }} onPress={() => {
-                            Linking.openURL('https://www.youtube.com/watch?v=bEJLVQJjeak')
-                            // this.setState({
-                            //     demoVideo: true
-                            // })
-                        }}>
-                            <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 20 }} source={IC_PLAY_BLUE} />
-                        </TouchableOpacity>
+                        {/* <Image style={{ height: normalize(200), width: '100%', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} /> */}
 
-                    </View>
-                </View>
-                {/* <View>
-                        
-                        <View style={{ flex: 1, justifyContent: 'center', backgroundColor: COLOR.TEXT_ALPHA_GREY }} >
-                            <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30 }} onPress={() => {
-                                this.setState({
-                                    demoVideo: false
-                                })
-                            }}>
-                                <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
-                            </TouchableOpacity>
-                             <YoutubePlayer
-                            height={300}
-                            play={true}
-                            videoId={"7BEyc8Z53io"}
-
-                        />  
-
-                            <YouTube
+                        <VideoTestimonials />
+                        {/* <YouTube
                             videoId="bEJLVQJjeak" // The YouTube video ID
                             play={this.state.demoVideo} // control playback of video with true/false
                             inLine // control whether the video should play in fullscreen or inline
@@ -342,13 +320,56 @@ class NewUserScreen extends Component {
                             onChangeState={e => this.setState({ status: e.state })}
                             onChangeQuality={e => this.setState({ quality: e.quality })}
                             onError={e => this.setState({ error: e.error })}
-                            style={{ alignSelf: 'stretch', height: 300 }}
-                            
-                        /> 
-                        </View>
+                            style={{ alignSelf: 'stretch', height: 200, marginTop: 10 }}
 
-           
-                </View> */}
+                        /> */}
+
+
+                        {/* <TouchableOpacity style={{ padding: 20 }} onPress={() => {
+                            //  Linking.openURL('https://www.youtube.com/watch?v=bEJLVQJjeak')
+                            this.setState({
+                                demoVideo: true
+                            })
+                        }}>
+                            <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(12), position: 'absolute', bottom: 0, left: 20 }} source={IC_PLAY_BLUE} />
+                        </TouchableOpacity> */}
+
+                    </View>
+                </View>
+
+                {this.state.demoVideo &&
+                    <View>
+                        <View style={{ height: 400, position: 'absolute', left: 0, right: 0, justifyContent: 'center', backgroundColor: COLOR.RED }} >
+                            <TouchableOpacity style={{ position: 'absolute', bottom: 30, right: 30, backgroundColor: COLOR.RED }} onPress={() => {
+                                this.setState({
+                                    demoVideo: false
+                                })
+                            }}>
+                                <Image style={{ height: normalize(50), width: normalize(50), resizeMode: 'stretch', borderRadius: normalize(50) }} source={IC_CLOSE_BLUE} />
+                            </TouchableOpacity>
+
+
+                            {/* <YouTube
+                                videoId="bEJLVQJjeak" // The YouTube video ID
+                                play={this.state.demoVideo} // control playback of video with true/false
+                                inLine // control whether the video should play in fullscreen or inline
+                                loop // control whether the video should loop when ended
+                                onReady={e => this.setState({ isReady: true })}
+                                onChangeState={e => this.setState({ status: e.state })}
+                                onChangeQuality={e => this.setState({ quality: e.quality })}
+                                onError={e => this.setState({ error: e.error })}
+                                style={{ alignSelf: 'stretch', height: 300 }}
+
+                            /> */}
+                        </View>
+                    </View>
+
+                }
+
+
+
+
+
 
 
             </View>

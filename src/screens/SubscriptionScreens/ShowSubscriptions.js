@@ -10,6 +10,8 @@ import { CustomBackButton } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import SubscriptionTabs from '../../components/subscription_tab';
+//import CustomBackButton from "../../components";
+
 
 
 
@@ -35,6 +37,7 @@ class ShowSubscriptons extends Component {
                     marginStart: 10,
                     marginEnd: 10
                 }}>
+
 
                     <View style={{ marginTop: normalize(10) }}>
                         <CustomBackButton onPress={this.onPressBack} />

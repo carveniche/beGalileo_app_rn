@@ -47,6 +47,8 @@ import LiveClassSchedule from '../screens/ScheduleScreens/LiveClassSchedule';
 import MoreNotificationScreen from '../screens/MoreScreens/more_notification_screen';
 import ParentConnect from "../screens/ParentPeakScreen/ParentConnect";
 import MidasHomeScreen from "../screens/MidasTest/MidasHomeScreen";
+import PostOtpBookDemo from "../screens/PostOtpBookDemo";
+import BookDemoScreenPostOtp from "../screens/BookDemoScreen/book_demo_screen_post_otp";
 
 
 
@@ -128,6 +130,17 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
+    BookDemoScreenPostOtp: {
+        screen: BookDemoScreenPostOtp,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+
+
+        }
+    },
+
     RateDemoClass: {
         screen: RateDemoClass,
         navigationOptions: {
@@ -182,7 +195,14 @@ const AppStackNavigator = createStackNavigator({
     },
 
 
-
+    PostOtpBookDemo: {
+        screen: PostOtpBookDemo,
+        navigationOptions: {
+            headerShown: false,
+            headerBackTitleVisible: false,
+            headerTitle: ''
+        }
+    },
 
 
 

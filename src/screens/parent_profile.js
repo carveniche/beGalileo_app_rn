@@ -53,8 +53,8 @@ class ParentProfile extends Component {
         const propParentTimeZone = this.props.navigation.getParam('parentTimeZone', "");
         parent_id = this.props.navigation.getParam('parentId', 0);
 
-
-
+        console.log("Prop Parent Email",propParentEmail)
+        console.log("Prop Parent Mobile",propParentMobile)
         if(propParentEmail != "" && propParentMobile !== "")
         {
             this.goToAddKids(parent_id)

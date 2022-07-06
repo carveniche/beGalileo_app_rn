@@ -9924,6 +9924,14 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
   "version" "1.2.1"
 
+"react-addons-shallow-compare@15.6.2":
+  "integrity" "sha512-yAV9tOObmKPiohqne1jiMcx6kDjfz7GeL8K9KHgI+HvDsbrRv148uyUzrPc6GwepZnQcJ59Q3lp1ghrkyPwtjg=="
+  "resolved" "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz"
+  "version" "15.6.2"
+  dependencies:
+    "fbjs" "^0.8.4"
+    "object-assign" "^4.1.0"
+
 "react-async-hook@3.6.1":
   "integrity" "sha512-YWBB2feVQF79t5u2raMPHlZ8975Jds+guCvkWVC4kRLDlSCouLsYpQm4DGSqPeHvoHYVVcDfqNayLZAXQmnxnw=="
   "resolved" "https://registry.npmjs.org/react-async-hook/-/react-async-hook-3.6.1.tgz"
@@ -10285,6 +10293,14 @@
   "resolved" "https://registry.npmjs.org/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.4.tgz"
   "version" "2.7.4"
 
+"react-native-snap-carousel@^3.9.1":
+  "integrity" "sha512-xWEGusacIgK1YaDXLi7Gao2+ISLoGPVEBR8fcMf4tOOJQufutlNwkoLu0l6B8Qgsrre0nTxoVZikRgGRDWlLaQ=="
+  "resolved" "https://registry.npmjs.org/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz"
+  "version" "3.9.1"
+  dependencies:
+    "prop-types" "^15.6.1"
+    "react-addons-shallow-compare" "15.6.2"
+
 "react-native-status-bar-height@^2.2.0":
   "integrity" "sha512-z3SGLF0mHT+OlJDq7B7h/jXPjWcdBT3V14Le5L2PjntjjWM3+EJzq2BcXDwV+v67KFNJic5pgA26cCmseYek6w=="
   "resolved" "https://registry.npmjs.org/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz"
@@ -10406,10 +10422,10 @@
     "escape-string-regexp" "2.0.0"
     "invariant" "2.2.4"
 
-"react-native-youtube-iframe@2.0.1":
-  "integrity" "sha512-DPu4nyHhfGs+bylgFRYuRjHlP0mg5Wjlm+KAPRhV68mUMuK1c3v2nXapuoia5GFkmtDwTrrMpIf5iG99QJoILg=="
-  "resolved" "https://registry.npmjs.org/react-native-youtube-iframe/-/react-native-youtube-iframe-2.0.1.tgz"
-  "version" "2.0.1"
+"react-native-youtube-iframe@2.2.2":
+  "integrity" "sha512-og2KW21kCwAHKcnWoyWWBYC6J2Xtqjjwpghhoy9G6zfwZkr8Ej27BbQIAKM/TheJJUZ5/YUrqsgqAdnFYDx5TQ=="
+  "resolved" "https://registry.npmjs.org/react-native-youtube-iframe/-/react-native-youtube-iframe-2.2.2.tgz"
+  "version" "2.2.2"
   dependencies:
     "events" "^3.2.0"
 
@@ -10536,7 +10552,7 @@
   "resolved" "https://registry.npmjs.org/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz"
   "version" "0.13.4"
 
-"react@*", "react@^16.0", "react@^16.0.0", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.3.0", "react@^16.5.0", "react@^16.8", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.3", "react@^17.0.0", "react@> 16.7.0", "react@>=15", "react@>=16.0.0-alpha.12", "react@>=16.3.0", "react@>=16.4.1", "react@>=16.8", "react@>=16.8.3", "react@>=16.8.6", "react@>=17.0.1", "react@~16.9.0", "react@15.x || 16.x || 17.x", "react@16.x.x", "react@17.0.2":
+"react@*", "react@^16.0", "react@^16.0.0", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.3.0", "react@^16.5.0", "react@^16.8", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.3", "react@^17.0.0", "react@> 16.7.0", "react@>=15", "react@>=15.0.0", "react@>=16.0.0-alpha.12", "react@>=16.3.0", "react@>=16.4.1", "react@>=16.8", "react@>=16.8.3", "react@>=16.8.6", "react@>=17.0.1", "react@~16.9.0", "react@15.x || 16.x || 17.x", "react@16.x.x", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"

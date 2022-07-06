@@ -251,7 +251,7 @@ const ParentConnect = (props) => {
             </View> */}
 
             <Text style={[CommonStyles.text_14_bold, { alignSelf: 'center', marginTop: 30, color: COLOR.TEXT_COLOR_BLUE }]}>
-              Peek Live Class
+              Peak Live Class
             </Text>
             {
               permissionDeniedMsg &&

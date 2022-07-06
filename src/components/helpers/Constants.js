@@ -67,3 +67,5 @@ export const COMPLETED_CLASSES = "Completed Classes";
 export const INCOMPLETE_CLASSES = "InComplete Classes";
 export const UPCOMING_CLASSES = "Upcoming Classes";
 export const MIDAS_HOME_SCREEN = "MidasHomeScreen";
+export const POST_OTP_BOOK_DEMO = "PostOtpBookDemo";
+export const BOOK_DEMO_SCREEN_POST_OTP = "BookDemoScreenPostOtp";

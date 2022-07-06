@@ -45,7 +45,8 @@ class HomeMoreScreen extends Component {
     }
 
     onMyAddressClick = () => {
-        this.props.navigation.navigate(Constants.MoreMyAddressScreen);
+    this.props.navigation.navigate(Constants.MoreMyAddressScreen);
+    //this.props.navigation.navigate(Constants.MIDAS_HOME_SCREEN);
     }
 
     onMoreHelpScreen = () => {
@@ -241,6 +242,7 @@ class HomeMoreScreen extends Component {
                                 </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
                             </TouchableOpacity>
+
                             {/* <TouchableOpacity onPress={this.onNoificationClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_NOTIFICATIONS} />

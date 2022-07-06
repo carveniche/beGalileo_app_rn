@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { COLOR, CommonStyles } from "../config/styles";
 import { TESTING_EMAIL, TESTING_MOBILE_NUMBER, SCREEN_HEIGHT, SCREEN_WIDTH } from "../config/configs";
 import { loginUser, sendOTP, reSendOTP, verifyOTP, sendOTPHashed, storeMobileNumber, storeAppleEmail, existingUserLogin, editMobileNumber } from '../actions/authenticate';
+import { updateDeviceInfo } from "../actions/dashboard";
 import PhoneInput from 'react-native-phone-input';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal'
@@ -289,10 +290,11 @@ class Login extends Component {
                 console.log("Reponse login", response);
                 console.log("Mobile ", checkIfValueNullOrEmpty(response.mobile))
                 console.log("Email ", checkIfValueNullOrEmpty(response.email))
+                this.props.updateDeviceInfo(response.user_id, Date.now().toString(), "", Platform.OS);
                 if (response.new_user) {
                     if (!checkIfValueNullOrEmpty(response.mobile) || !checkIfValueNullOrEmpty(response.email) || !checkIfValueNullOrEmpty(response.first_name)) {
                         console.log("Email or Mobile or First Name is missing")
-                        this.props.navigation.navigate(Constants.ParentProfile, {
+                        this.props.navigation.navigate(Constants.POST_OTP_BOOK_DEMO, {
                             parentId: response.user_id,
                             parentNumber: this.state.myNumber,
                             parentTimeZone: this.state.timeZone,
@@ -315,81 +317,6 @@ class Login extends Component {
 
                 return;
 
-
-
-                if (response.new_user) {
-
-                    if (response.email == "" | response.email == "NUll" | response.email == "null" | response.email == "NULL") {
-                        this.props.navigation.navigate(Constants.ParentProfile, {
-                            parentId: response.user_id,
-                            parentNumber: this.state.myNumber,
-                            parentTimeZone: this.state.timeZone,
-                            parentEmail: response.email
-                        });
-                    }
-                    else {
-                        this.props.navigation.navigate(Constants.AddKidDetail, {
-                            fromParent: true,
-                            parentEmail: response.email
-                        });
-                    }
-
-                    // this.props.navigation.navigate(Constants.AddKidDetail, {
-                    //     fromParent: true,
-                    //     parentEmail : response.email
-                    // });
-                    if (this.state.isGoogleLogin) {
-
-                        // this.props.navigation.navigate(Constants.ParentProfile, {
-                        //     parentEmail: this.state.parentEmail,
-                        //     parentFirstName: this.state.userInfo.user.givenName,
-                        //     parentLastName: this.state.userInfo.user.familyName,
-                        //     parentTimeZone: this.state.timeZone
-                        // });
-                        this.props.navigation.navigate(Constants.AddKidDetail, {
-                            fromParent: true,
-                            parentEmail: response.email
-                        });
-
-                    }
-                    else if (this.state.isAppleLogin) {
-
-                        // this.props.navigation.navigate(Constants.ParentProfile, {
-                        //     parentEmail: this.state.parentEmail,
-                        //     parentFirstName: this.state.parentFirstName,
-                        //     parentLastName: this.state.parentLastName,
-                        //     parentTimeZone: this.state.timeZone
-                        // });
-                        this.props.navigation.navigate(Constants.AddKidDetail, {
-                            fromParent: true,
-                            parentEmail: response.email
-                        });
-
-                    }
-                    else {
-                        if (response.email == "" | response.email == "NUll" | response.email == "null" | response.email == "NULL") {
-                            this.props.navigation.navigate(Constants.ParentProfile, {
-                                parentId: response.user_id,
-                                parentNumber: this.state.myNumber,
-                                parentTimeZone: this.state.timeZone,
-                                parentEmail: response.email
-                            });
-                        }
-                        else {
-                            this.props.navigation.navigate(Constants.AddKidDetail, {
-                                fromParent: true,
-                                parentEmail: response.email
-                            });
-                        }
-
-                    }
-
-
-
-                }
-                else {
-                    this.existingUserToDashboard(response);
-                }
 
             }
 
@@ -419,6 +346,7 @@ class Login extends Component {
     }
 
     onOtpVerificationSuccess = () => {
+
         this.props.storeMobileNumber(this.state.myNumber, true, "", this.state.countryCode, this.state.countryName);
     }
 
@@ -1127,7 +1055,8 @@ const mapDispatchToProps = {
     storeMobileNumber,
     storeAppleEmail,
     existingUserLogin,
-    editMobileNumber
+    editMobileNumber,
+    updateDeviceInfo
 };
 
 const styles = StyleSheet.create({
