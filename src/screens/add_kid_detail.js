@@ -148,6 +148,7 @@ class AddKidDetail extends Component {
         const isFromParentState = this.props.navigation.getParam('fromParent', false);
         this.setState({
             isFromParent: isFromParentState
+            
         })
 
         getLocalData(Constants.ParentUserId).then((parentId) => {
@@ -613,8 +614,8 @@ class AddKidDetail extends Component {
                         backgroundColor: COLOR.WHITE
                     }}>
                     {
-                        this.props.dashboard_status &&
-                        <View style={{ margin: 10 }}>
+                        
+                        <View style={{ marginStart: 10 }}>
                             <CustomBackButton onPress={this.onPressBack} />
                         </View>
                     }
@@ -637,7 +638,7 @@ class AddKidDetail extends Component {
                         showAddkidForm ?
                             <View style={{ justifyContent: 'center' }}>
                                 <View style={{ marginTop: 5, marginStart: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={styles.textHeader}>Add a child</Text>
+                                    <Text style={styles.textHeader}>{ this.state.isFromParent ? "Child detail": "Add child"}</Text>
                                     {
                                         allKidsList && allKidsList.length ?
                                             <View style={{ alignSelf: 'center', marginEnd: 20 }}>

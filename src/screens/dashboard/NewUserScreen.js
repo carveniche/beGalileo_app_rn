@@ -277,28 +277,47 @@ class NewUserScreen extends Component {
                     <LinearGradient colors={['#E9F2FF', '#FFE4F6']} style={{ margin: 20, paddingTop: 10, paddingBottom: 10, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
                         <View style={{ flex: 1, marginStart: 20, marginEnd: 10, marginTop: 10, marginBottom: 10, justifyContent: 'space-between' }}>
-                            <Text style={CommonStyles.text_14_semi_bold}>
-                                Not sure about beGalileo Online based learning?
-                            </Text>
-                            <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
-                                beGalileo kid is World’s youngest Tedx Speaker
-                            </Text>
-                            <Text style={[CommonStyles.text_12_Regular, { marginTop: normalize(8) }]}>
-                                beGalileo kid is IMO Math olympiad International Rank 1
-                            </Text>
-                            <TouchableOpacity
-                                style={{ marginTop: normalize(16), borderRadius: 50, backgroundColor: 'white', alignSelf: 'auto' }}
-                                onPress={this.goToBookADemo}>
-                                <Text style={[CommonStyles.text_12__semi_bold, {
-                                    paddingTop: normalize(9),
-                                    paddingBottom: normalize(9),
-                                    paddingStart: normalize(18),
-                                    paddingEnd: normalize(18)
-                                }]}>Book a FREE Demo</Text>
-                            </TouchableOpacity>
+                            <View>
+                                <Text style={CommonStyles.text_14_semi_bold}>
+                                    Not sure about beGalileo Online based learning?
+                                </Text>
+                                <Text style={{ marginTop: normalize(5), fontStyle: 'italic', color: COLOR.BLACK,fontSize : 15  }}>
+                                   * beGalileo kid is World’s youngest Tedx Speaker
+                                </Text>
+                                <Text style={{ marginTop: normalize(5), fontStyle: 'italic', color: COLOR.BLACK,fontSize : 15  }}>
+                                   * beGalileo kid is IMO Math olympiad International Rank 1
+                                </Text>
+                                <Text style={{ marginTop: normalize(5), fontStyle: 'italic', color: COLOR.BLACK,fontSize : 15  }}>
+                               * beGalileo is globally the first to use Microsoft AI in education
+                                </Text>
+                                <Text style={{ marginTop: normalize(5), fontStyle: 'italic', color: COLOR.BLACK,fontSize : 15  }}>
+                                * 93% of our students buy as again, over 97% rate us 5 on likeability
+                                </Text>
+                                <Text style={{ marginTop: normalize(5), fontStyle: 'italic', color: COLOR.BLACK,fontSize : 15  }}>
+                                * We are globally the first program to have coding integrated with math application
+                                </Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ justifyContent : 'center' }}>
+                                    <TouchableOpacity
+                                        style={{ borderRadius: 50, height: 50, backgroundColor: 'white' }}
+                                        onPress={this.goToBookADemo}>
+                                        <Text style={[CommonStyles.text_8_bold, {
+                                            paddingTop: normalize(9),
+                                            paddingBottom: normalize(9),
+                                            paddingStart: normalize(18),
+                                            paddingEnd: normalize(10)
+                                        }]}>Book a FREE Demo</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <Image style={{ height: normalize(75), margin: 10, width: normalize(75), resizeMode: "stretch" }} source={IC_BOOK_DEMO_BG} />
+                            </View>
+
+
                         </View>
 
-                        <Image style={{ height: normalize(100), margin: 10, width: normalize(100), resizeMode: "stretch" }} source={IC_BOOK_DEMO_BG} />
+
 
 
                     </LinearGradient>
@@ -306,7 +325,7 @@ class NewUserScreen extends Component {
                 <View style={{ backgroundColor: COLOR.WHITE, borderTopLeftRadius: normalize(15), borderTopRightRadius: normalize(15) }}>
                     <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.BLACK, alignSelf: 'center', marginTop: normalize(40) }]}>Why beGalileo?</Text>
                     <View style={{ backgroundColor: '#EEF8FE', marginTop: normalize(32), borderRadius: normalize(12), marginStart: normalize(10), marginEnd: normalize(10) }}>
-                        <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents \nare saying about \nbeGalileo'}</Text>
+                        <Text style={[CommonStyles.text_14_semi_bold, { color: COLOR.TEXT_TITLE_HEADLINE, marginTop: normalize(34), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'See what parents and students \nare saying about \nbeGalileo'}</Text>
                         <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY, marginTop: normalize(16), marginStart: normalize(24), lineHeight: normalize(25) }]}>{'Online learning experience \nwith kids and parents'}</Text>
                         {/* <Image style={{ height: normalize(200), width: '100%', resizeMode: 'contain', borderRadius: normalize(12) }} source={IC_PARENT_MOM} /> */}
 

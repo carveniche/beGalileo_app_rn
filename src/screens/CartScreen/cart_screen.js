@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, BackHandler , ActivityIndicator, PanResponder, Modal } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, BackHandler , ActivityIndicator, PanResponder, Modal, KeyboardAvoidingView } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
@@ -456,6 +456,7 @@ class CartListScreen extends Component {
         return (
             <ScrollView
                 showsVerticalScrollIndicator={false}
+                ref='_scrollView'
                 style={{
                     flex: 1,
                     backgroundColor: COLOR.WHITE
@@ -614,7 +615,7 @@ class CartListScreen extends Component {
                     {
                         applyCouponDialog &&
                         <Modal transparent={true}>
-                            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: COLOR.TEXT_ALPHA_GREY }}>
+                            <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: COLOR.TEXT_ALPHA_GREY }}>
                                 <View style={{height : 375 ,backgroundColor: COLOR.WHITE, justifyContent : 'space-evenly',borderTopStartRadius : 24,borderTopEndRadius : 24 }}>
                                     <View style={{ flexDirection: 'row',marginTop : 27,marginStart : 20,justifyContent : 'space-between' }}>
                                         <Text style={[CommonStyles.text_12__semi_bold, { alignSelf: 'center' }]}>Apply coupon</Text>
@@ -667,7 +668,7 @@ class CartListScreen extends Component {
                                         </View>
                                     </View>
                                 </View>
-                            </View>
+                            </KeyboardAvoidingView>
 
 
                         </Modal>

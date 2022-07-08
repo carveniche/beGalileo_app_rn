@@ -5,7 +5,7 @@ export const SCREEN_WIDTH =  Dimensions.get('window').width;
 export const MSG91_AUTH_KEY = "313408AH0lkf4gael5eae578fP1";
 export const MSG91_TEMPLATE_ID = "622ea190518f435a16376a48";
 
-export const TESTING_MOBILE_NUMBER = '8197713454';
+export const TESTING_MOBILE_NUMBER = '9742204562';
 export const TESTING_EMAIL = "test_parent@begalileo.com";
 
 export const RAZOR_PAY_TEST_KEY = "rzp_live_xpLP9XUEmN6kZQ";
@@ -22,6 +22,6 @@ export const SENTRY_BASE_URL = "https://abf78bccb09a4ad9b9f1dd2ca9f4c9ac@o120405
 // export const RAZOR_PAY_TEST_KEY = "rzp_test_WhuCyleI4gXEsb";
 // export const RAZOR_PAY_TEST_SECRET = "DNZpGvPVIqSTqX8E6xE8riHE";
 
-//export const BASE_URL = "https://www.begalileo.com";
-export const BASE_URL = "http://192.168.201.235:3000";
+export const BASE_URL = "https://www.begalileo.com";
+//export const BASE_URL = "http://192.168.201.235:3000";
 //export const BASE_URL = "http://testserver.begalileo.com";

@@ -97,6 +97,7 @@ export const CommonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center'
   },
+  
   text_18_bold: {
     fontFamily: Constants.Montserrat_Bold,
     fontSize: normalize(18),

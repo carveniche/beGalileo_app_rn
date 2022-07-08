@@ -623,9 +623,6 @@ class SubscriptionTabs extends Component {
                         <Text style={[CommonStyles.text_14_semi_bold]}>Other Recommeded Programs</Text>
                     </View>
 
-
-
-
                 }
 
 
@@ -634,7 +631,7 @@ class SubscriptionTabs extends Component {
                         <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Buy now</Text>
                     </TouchableOpacity>
                     {
-                        !(this.props.onlyBuyNow || this.props.isRenew) &&
+                        !(this.props.onlyBuyNow || this.props.isRenew) && this.props.currentSelectedKid && !this.props.currentSelectedKid.demo_booked &&
                         <TouchableOpacity onPress={this.goToBookADemo} style={[{ marginStart: normalize(25) }, isGroupSelected ? styles.tabItem : styles.tabItemSelected]}>
                             <Text style={[CommonStyles.text_12_bold, styles.tabItemText]}>Book a demo</Text>
                         </TouchableOpacity>

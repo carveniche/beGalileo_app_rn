@@ -212,10 +212,15 @@ class DemoConfirmation extends Component {
                                 </View>
                         }
 
-                        <TouchableOpacity onPress={this.rescheduleDemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
+                        {
+                            !isDemoConfirmed && 
+                            <TouchableOpacity onPress={this.rescheduleDemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
                             <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_RESCHEDULE_DEMO} />
                             <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Reschedule Demo</Text>
                         </TouchableOpacity>
+
+                        } 
+                        
                         <TouchableOpacity onPress={this.cancleConfiramtiondemo} style={{ flexDirection: 'row', alignSelf: 'center', marginTop: normalize(20) }}>
                             <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_CANCEL_DEMO} />
                             <Text style={[CommonStyles.text_14_bold, { marginStart: normalize(9), alignSelf: 'center', color: COLOR.TEXT_COLOR_GREEN }]}>Cancel Demo</Text>

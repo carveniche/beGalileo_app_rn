@@ -12,6 +12,8 @@ import * as Constants from '../components/helpers/Constants';
 import { isValidEmail, allowOnlyAlphabets } from '../components/helpers';
 import { useNavigation } from '@react-navigation/native';
 import { storeLocalData } from "../components/helpers/AsyncMethods";
+import { CustomBackButton } from '../components';
+
 let parent_id = 0;
 
 class ParentProfile extends Component {
@@ -340,7 +342,11 @@ class ParentProfile extends Component {
         });
     }
 
-
+    onPressBack = () => {
+        const { goBack } = this.props.navigation;
+    
+        goBack();
+      }
 
     render() {
         const { loading } = this.props;
@@ -348,9 +354,14 @@ class ParentProfile extends Component {
         return (
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} style={{ backgroundColor: COLOR.WHITE }}>
+                <View style={{ margin : 10,padding : 10 }}>
+                <CustomBackButton onPress={this.onPressBack} />
+                </View>
+              
                 <View
                     style={{ backgroundColor: COLOR.WHITE, flex: 1, justifyContent: 'center' }}
                 >
+                     
 
                     <Text style={[CommonStyles.text_16_semi_bold, styles.textHeader]}>Parent Profile</Text>
 

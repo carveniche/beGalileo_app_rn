@@ -5,6 +5,7 @@ import { lottie_laptop_class, lottie_writing } from "../assets/lottieAssets";
 import LottieView from 'lottie-react-native';
 import { SCREEN_WIDTH } from "../config/configs";
 import * as Constants from '../components/helpers/Constants';
+
 let parent_id = 0;
 class PostOtpBookDemo extends Component {
     constructor(props) {

@@ -203,13 +203,14 @@ class HomeMoreScreen extends Component {
                             {kidList}
                         </View> */}
                         <View style={{ marginTop: normalize(32) }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop : normalize(19),paddingBottom : normalize(19) }}>
-                                <TouchableOpacity onPress={this.onProfileClick} style={{ flexDirection: 'row' }}>
-                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_PROFILE} />
+                           
+                            <TouchableOpacity onPress={this.onProfileClick} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_MY_KIDS} />
                                     <Text style={[CommonStyles.text_12__semi_bold, { marginStart: normalize(16) }]}>Profile</Text>
-                                </TouchableOpacity>
+                                </View>
                                 <Image style={{ height: normalize(8), width: normalize(4), marginEnd: normalize(2), resizeMode: "stretch" }} source={IC_RIGHT_ENTER} />
-                            </View>
+                            </TouchableOpacity>
                             <TouchableOpacity onPress={this.onClickMykids} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: normalize(19), paddingBottom: normalize(19) }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ height: normalize(16), width: normalize(16), resizeMode: "stretch" }} source={IC_MORE_MY_KIDS} />

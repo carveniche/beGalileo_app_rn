@@ -431,6 +431,10 @@ class BookDemoScreenPostOtp extends Component {
             this.props.registerWithBookDemo(mUserId, selectedGrade, itemPressed, selectedDate, mChildName, mUserMobileNumber, mUserEmail)
             console.log("All valid")
         }
+        else
+        {
+            this.refs._scrollView.scrollTo(0)
+        }
 
         return;
 
@@ -473,6 +477,9 @@ class BookDemoScreenPostOtp extends Component {
 
     reScheduleDemo = () => {
         const reScheduleDemoParam = this.props.navigation.getParam('reScheduleDemo', false);
+
+        console.log("Reschedule param",reScheduleDemoParam);
+        console.log("Book demo res",this.props.bookDemoResponse)
 
         let demoPreferredSlotId = 0;
         if (reScheduleDemoParam)
@@ -605,6 +612,7 @@ class BookDemoScreenPostOtp extends Component {
         return (
             <View style={styles.mainContainer}>
                 <ScrollView
+                   ref='_scrollView'
                     removeClippedSubviews={false}
                     style={{ flex: 1 }}
                 >

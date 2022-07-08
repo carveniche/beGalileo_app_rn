@@ -352,10 +352,11 @@ class BookDemoScreen extends Component {
                 this.props.dashboardResponse.parent_details[0].email == "" ||
                 this.props.dashboardResponse.parent_details[0].email == null
             ) {
+                this.scheduleDemo("", "", "")
 
-                this.setState({
-                    updateMobileNumberDialog: true
-                })
+                // this.setState({
+                //     updateMobileNumberDialog: true
+                // })
             }
             else {
                 // console.log("QWQWQWQW",this.props.dashboardResponse.parent_details[0]);
@@ -371,10 +372,11 @@ class BookDemoScreen extends Component {
     reScheduleDemo = () => {
         const reScheduleDemoParam = this.props.navigation.getParam('reScheduleDemo', false);
 
+       
         let demoPreferredSlotId = 0;
-        if (reScheduleDemoParam)
-            demoPreferredSlotId = this.props.bookDemoResponse.preferred_slot_id;
-        else
+        // if (reScheduleDemoParam)
+        //     demoPreferredSlotId = this.props.bookDemoResponse.preferred_slot_id;
+        // else
             demoPreferredSlotId = this.props.currentSelectedKid.student_demos[0].preferred_slot_id;
 
         this.props.doReScheduleDemo(this.props.dashboardResponse.parent_id, this.state.currentKid.student_id, demoPreferredSlotId, this.state.itemPressed, this.state.selectedDate);
@@ -408,6 +410,7 @@ class BookDemoScreen extends Component {
         return (
             <View style={styles.mainContainer}>
                 <ScrollView
+                   ref='_scrollView'
                     removeClippedSubviews={false}
                     style={{ flex: 1 }}
                 >
