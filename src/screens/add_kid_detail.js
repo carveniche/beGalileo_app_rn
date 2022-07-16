@@ -24,6 +24,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
 import { CustomBackButton } from '../components';
 import * as Config from '../config/configs';
 import moment from "moment";
+import { BackHandler } from 'react-native';
 YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested', // TODO: Remove when fixed
 ])
@@ -80,6 +81,7 @@ class AddKidDetail extends Component {
         this.onSubmitAndGoHome = this.onSubmitAndGoHome.bind(this)
         this.showKidsList = this.showKidsList.bind(this)
         this.uploadKidDetailToServer = this.uploadKidDetailToServer.bind(this)
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
 
@@ -144,6 +146,7 @@ class AddKidDetail extends Component {
 
     componentDidMount() {
         this.props.getGradeDatas();
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
         const isFromParentState = this.props.navigation.getParam('fromParent', false);
         this.setState({
@@ -176,6 +179,15 @@ class AddKidDetail extends Component {
         }
 
 
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     onGenderChange = (value) => {

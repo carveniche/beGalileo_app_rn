@@ -778,7 +778,7 @@ export function getRatingTags(){
 
 
 
-export function getDemoResults(live_class_id,student_id,parent_id){
+export function getDemoResults(live_class_id,parent_id,student_id){
     return{
         type : DEMO_RESULT,
         payload : {
@@ -786,8 +786,8 @@ export function getDemoResults(live_class_id,student_id,parent_id){
                 url : 'app_mathbox/demo_result',
                 params : {
                     live_class_id,
-                    student_id,
-                    parent_id
+                    parent_id,
+                    student_id
 
                 }
             }

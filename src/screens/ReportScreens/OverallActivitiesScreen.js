@@ -13,6 +13,7 @@ import { normalize, Card } from "react-native-elements";
 import AcitivityReportList from "./AcitivityReportList";
 import ReportFilterBottomDialog from "../../components/ReportFilterBottomDialog";
 import moment from 'moment';
+import { BackHandler } from 'react-native';
 
 class OverallActivitiesScreen extends Component {
     constructor(props) {
@@ -21,10 +22,21 @@ class OverallActivitiesScreen extends Component {
             classType: "",
             showFilter: false,
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.props.getStudentActivity(this.props.dashboardResponse.parent_id, this.props.currentSelectedKid.student_id, 30);
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     onPressBack = () => {

@@ -38,6 +38,12 @@ class PaidUserScreen extends Component {
 
     }
 
+    goToViewCurriculum = () => {
+
+       this.props.navigation.navigate(Constants.ViewCurriculum);
+       //this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+    }
+
 
     checkForNotification() {
         messaging()
@@ -452,9 +458,13 @@ class PaidUserScreen extends Component {
                             </View>
 
                         }
-                        <TouchableOpacity onPress={this.onPressViewAllActivity} style={{ flexDirection: 'row', marginTop: normalize(20), alignSelf: 'center' }}>
+                        <TouchableOpacity onPress={this.onPressViewAllActivity} style={{ flexDirection: 'row', marginTop: normalize(20),marginBottom : normalize(10), alignSelf: 'center' }}>
                             <Image style={{ height: normalize(16), width: normalize(16), alignSelf: 'center', resizeMode: 'contain' }} source={IC_ACTIVITY} />
                             <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View All Activites</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.goToViewCurriculum} style={{ flexDirection: 'row', marginTop: normalize(10),marginBottom : normalize(20), alignSelf: 'center' }}>
+       
+                            <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View full curriculum</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -802,7 +812,7 @@ class PaidUserScreen extends Component {
                         <View style={{ flex: 1, marginTop: normalize(20), marginBottom: normalize(20), marginEnd: normalize(5), marginStart: normalize(10) }}>
                             <Text style={[CommonStyles.text_8_regular, { color: COLOR.TEXT_ALPHA_GREY }]}>Midas</Text>
                             <Text style={[CommonStyles.text_12_bold, { marginTop: normalize(8) }]}>{currentKidDetails.name} needs to give MIDAS test to begin</Text>
-                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, marginTop: normalize(8) }]}>This is a mandatory test</Text>
+                            <Text style={[CommonStyles.text_12_Regular, { color: COLOR.TEXT_COLOR_ORANGE, marginTop: normalize(8) }]}>This is a mandatory test to be taken on the web portal</Text>
                         </View>
                     </View>
                     {/* <View style={{ flexDirection: 'row', marginBottom: normalize(16) }}>

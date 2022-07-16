@@ -10,13 +10,26 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
 import { CustomBackButton } from "../../components";
+import { BackHandler } from 'react-native';
 
 class ViewCurriculam extends Component {
-    state = {
+    constructor(props) {
+        super(props)
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
 
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     componentDidMount() {
         this.getCurriculamDatas(this.props.currentSelectedKid);
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     getCurriculamDatas = (currentKid) => {

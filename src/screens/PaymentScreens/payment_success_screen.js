@@ -30,17 +30,17 @@ class PaymentSuccessScreen extends Component {
 
   goToHome = () => {
 
-    if (this.state.isProfileIncomplete) {
-      this.props.navigation.navigate(Constants.MoreProfileScreen);
-    }
-    else {
+    // if (this.state.isProfileIncomplete) {
+    //   this.props.navigation.navigate(Constants.MoreProfileScreen);
+    // }
+    // else {
       const navigateAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
       });
 
       this.props.navigation.dispatch(navigateAction);
-    }
+   // }
 
 
     // this.props.navigation.replace(Constants.MainScreen);
@@ -106,10 +106,18 @@ class PaymentSuccessScreen extends Component {
             <TouchableOpacity style={{ marginTop: normalize(32) }}>
 
               
-              <CustomGradientButton
+              {/* <CustomGradientButton
                 myRef={(input) => { this.btn_pay_now = input; }}
                 style={styles.btn_proceed_payment}
                 children={isProfileIncomplete ? "Complete Your Profile" : "Start Experiencing Online Learning"}
+                onPress={this.goToHome}
+                textStyling={[CommonStyles.text_12__semi_bold, { color: COLOR.WHITE }]}
+
+              /> */}
+              <CustomGradientButton
+                myRef={(input) => { this.btn_pay_now = input; }}
+                style={styles.btn_proceed_payment}
+                children={"Start Experiencing Online Learning"}
                 onPress={this.goToHome}
                 textStyling={[CommonStyles.text_12__semi_bold, { color: COLOR.WHITE }]}
 

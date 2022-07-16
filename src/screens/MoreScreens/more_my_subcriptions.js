@@ -12,6 +12,7 @@ import { normalize, Card } from "react-native-elements";
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import CustomGradientButton from "../../components/CustomGradientButton";
 import { NavigationActions, StackActions } from 'react-navigation';
+import { BackHandler } from 'react-native';
 
 
 class MoreMySubscriptions extends Component {
@@ -20,6 +21,7 @@ class MoreMySubscriptions extends Component {
         this.state = {
 
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     onPressBack = () => {
         const { goBack } = this.props.navigation;
@@ -35,6 +37,19 @@ class MoreMySubscriptions extends Component {
         getLocalData(Constants.ParentUserId).then((parentId) => {
             this.props.getSubscriptionDetails(parentId);
         })
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     onViewDetailsClick = () => {

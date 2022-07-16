@@ -10,11 +10,14 @@ import { getLocalData } from '../../components/helpers/AsyncMethods';
 import { normalize, Card } from "react-native-elements";
 import { listAddress, removeAddress } from '../../actions/dashboard';
 import NoRecordFoundComponent from '../../components/NoRecordFoundComponent';
+import { BackHandler } from 'react-native';
 
 
 class MoreMyAddressScreen extends Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
     this.state = {
       cart_address: [
 
@@ -30,6 +33,19 @@ class MoreMyAddressScreen extends Component {
       ],
       selectedAddress: 0,
     };
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
   }
 
 
@@ -178,10 +194,10 @@ class MoreMyAddressScreen extends Component {
             }
             <Text style={[CommonStyles.text_18_semi_bold, { color: COLOR.TEXT_COLOR_BLUE, marginTop: normalize(12) }]}>Saved Address</Text>
             {
-                        this.props.list_address_status && this.props.list_address_response.address_details.length > 0 ?
-                            this.renderAddressList() :
-                            <NoRecordFoundComponent title="No address saved" sub_title=""/>
-                    }
+              this.props.list_address_status && this.props.list_address_response.address_details.length > 0 ?
+                this.renderAddressList() :
+                <NoRecordFoundComponent title="No address saved" sub_title="" />
+            }
             <TouchableOpacity onPress={() => {
               this.addAnotherAddress()
             }} style={{ flexDirection: 'row', marginTop: normalize(12) }}>

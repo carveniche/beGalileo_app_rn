@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import { getBatchDetails } from '../../actions/dashboard';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
+import { BackHandler } from 'react-native';
 
 
 class MoreLiveClassBatchScreens extends Component {
@@ -19,6 +20,7 @@ class MoreLiveClassBatchScreens extends Component {
             liveBatchDatas: [
             ]
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     onPressBack = () => {
         const { goBack } = this.props.navigation;
@@ -29,6 +31,19 @@ class MoreLiveClassBatchScreens extends Component {
     componentDidMount() {
         this.getBatchDetails()
     }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+    
     getBatchDetails = () => {
 
         getLocalData(Constants.ParentUserId).then((parentId) => {

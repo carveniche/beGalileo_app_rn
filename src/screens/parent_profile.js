@@ -13,12 +13,14 @@ import { isValidEmail, allowOnlyAlphabets } from '../components/helpers';
 import { useNavigation } from '@react-navigation/native';
 import { storeLocalData } from "../components/helpers/AsyncMethods";
 import { CustomBackButton } from '../components';
+import { BackHandler } from 'react-native';
 
 let parent_id = 0;
 
 class ParentProfile extends Component {
     constructor() {
         super();
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             pinCode: [],
             confirmPinCode: [],
@@ -46,6 +48,19 @@ class ParentProfile extends Component {
 
     pinCodeTextInput = [];
     confirmPinCodeTextInput = [];
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
 
     componentDidMount() {
         const propParentMobile = this.props.navigation.getParam('parentNumber', "");

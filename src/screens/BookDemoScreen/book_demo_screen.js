@@ -50,6 +50,7 @@ class BookDemoScreen extends Component {
             currentKid: null
 
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
     }
 
@@ -103,6 +104,19 @@ class BookDemoScreen extends Component {
 
 
 
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     getTimeSlotsFromDate = () => {
@@ -670,7 +684,7 @@ const styles = StyleSheet.create({
         margin: 5
     },
     gridRowContent: {
-        height: 60,
+        height: 70,
         flex: 0.4,
         justifyContent: 'space-between',
         backgroundColor: COLOR.WHITE,
@@ -680,7 +694,7 @@ const styles = StyleSheet.create({
         margin: 5
     },
     gridRowDisabled: {
-        height: 60,
+        height: 70,
         flex: 0.4,
         justifyContent: 'space-between',
         backgroundColor: COLOR.WHITE,
@@ -691,7 +705,7 @@ const styles = StyleSheet.create({
     },
     gridText: {
         padding: 20,
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: COLOR.BLACK,
         fontFamily: Constants.Montserrat_Regular
@@ -700,22 +714,25 @@ const styles = StyleSheet.create({
         color: COLOR.RED
     },
     gridTextSelected: {
-        padding: 20,
-        fontSize: normalize(14),
+        paddingHorizontal: 10,
+        paddingVertical : 20,
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: COLOR.WHITE,
         fontFamily: Constants.Montserrat_Regular
     },
     gridTextDisabled: {
-        padding: 20,
-        fontSize: normalize(14),
+        paddingHorizontal: 10,
+        paddingVertical : 20,
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: "#AFAFAF",
         fontFamily: Constants.Montserrat_Regular
     },
     gridTextContent: {
-        padding: 10,
-        fontSize: normalize(14),
+        paddingHorizontal: 10,
+        paddingVertical : 20,
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: "#353639",
         fontFamily: Constants.Montserrat_Regular

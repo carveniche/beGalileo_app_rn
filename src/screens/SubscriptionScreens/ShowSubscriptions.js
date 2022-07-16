@@ -10,6 +10,7 @@ import { CustomBackButton } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 import SubscriptionTabs from '../../components/subscription_tab';
+import { BackHandler } from 'react-native';
 //import CustomBackButton from "../../components";
 
 
@@ -18,6 +19,7 @@ import SubscriptionTabs from '../../components/subscription_tab';
 class ShowSubscriptons extends Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             mDuration : null
         };
@@ -25,6 +27,18 @@ class ShowSubscriptons extends Component {
 
     componentDidMount(){
          
+    }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
    

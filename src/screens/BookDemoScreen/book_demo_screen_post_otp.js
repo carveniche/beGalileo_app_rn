@@ -33,7 +33,7 @@ class BookDemoScreenPostOtp extends Component {
 
     constructor(props) {
         super(props);
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             currentDate: new Date(),
             showDatePciker: false,
@@ -68,6 +68,19 @@ class BookDemoScreenPostOtp extends Component {
 
         }
 
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
 
@@ -701,6 +714,7 @@ class BookDemoScreenPostOtp extends Component {
                                     {this.state.childNameError && <Text style={styles.errorMessage}>Enter valid child name</Text>}
                                     <TextInput
                                         ref={(input) => { this.child_name_input = input; }}
+                                        placeholder="Child name"
                                         placeholderTextColor={COLOR.TEXT_COLOR_HINT}
                                         keyboardType='email-address'
                                         style={styles.textInputBordered}
@@ -1035,7 +1049,7 @@ const styles = StyleSheet.create({
     },
     gridText: {
         padding: 20,
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: COLOR.BLACK,
         fontFamily: Constants.Montserrat_Regular
@@ -1045,21 +1059,21 @@ const styles = StyleSheet.create({
     },
     gridTextSelected: {
         padding: 20,
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: COLOR.WHITE,
         fontFamily: Constants.Montserrat_Regular
     },
     gridTextDisabled: {
         padding: 20,
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: "#AFAFAF",
         fontFamily: Constants.Montserrat_Regular
     },
     gridTextContent: {
         padding: 10,
-        fontSize: normalize(14),
+        fontSize: normalize(12),
         alignSelf: 'center',
         color: "#353639",
         fontFamily: Constants.Montserrat_Regular

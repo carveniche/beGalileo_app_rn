@@ -11,15 +11,22 @@ import { normalize, Card } from "react-native-elements";
 import CustomGradientButton from '../../components/CustomGradientButton';
 import Modal from 'react-native-modal';
 import { NavigationActions } from 'react-navigation';
+import { BackHandler } from 'react-native';
 
 class DemoDetails extends Component {
-    state = {
-        isCancelConfirmationDemoVisible: false,
-        isDemoConfirmed: false,
-        demoDetail: null,
-        studentId: 0
 
+    constructor(props) {
+        super(props)
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+        this.state = {
+            isCancelConfirmationDemoVisible: false,
+            isDemoConfirmed: false,
+            demoDetail: null,
+            studentId: 0
+    
+        }
     }
+   
 
     componentDidMount() {
         const { navigation } = this.props;
@@ -35,6 +42,13 @@ class DemoDetails extends Component {
             })
         }
 
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentDidUpdate(prevProps) {
@@ -48,6 +62,11 @@ class DemoDetails extends Component {
             }
         }
 
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     rescheduleDemo = () => {

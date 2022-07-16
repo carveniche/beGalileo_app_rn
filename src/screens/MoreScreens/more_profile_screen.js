@@ -17,6 +17,8 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { NavigationActions, StackActions } from 'react-navigation';
 import { getLocalData } from '../../components/helpers/AsyncMethods';
 import AsyncStorage from "@react-native-community/async-storage";
+import { BackHandler } from 'react-native';
+
 
 
 
@@ -33,6 +35,7 @@ class MoreProfileScreen extends Component {
             mUserLastName: "",
             mUserMobileNumber: ""
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +45,15 @@ class MoreProfileScreen extends Component {
             mUserLastName: this.props.dashboardResponse.parent_details[0].last_name,
             mUserMobileNumber: this.props.dashboardResponse.parent_details[0].mobile,
         })
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     componentDidUpdate(prevProps) {

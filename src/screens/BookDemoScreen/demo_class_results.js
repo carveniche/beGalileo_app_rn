@@ -97,6 +97,11 @@ class DemoClassResults extends Component {
         
     }
 
+    goToViewCurriculum = () => {
+
+        this.props.navigation.navigate(Constants.ViewCurriculum);
+    }
+
     renderResultView = () => {
         const { demo_result_status, demo_result_response } = this.props;
         return (
@@ -174,7 +179,7 @@ class DemoClassResults extends Component {
                     />
                 </View>
 
-                <TouchableOpacity onPress={this.onCLickViewCurriculum}>
+                <TouchableOpacity onPress={this.goToViewCurriculum}>
                     <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN, textAlign: 'center', marginBottom: normalize(40) }]}>View Full Curriculum</Text>
                 </TouchableOpacity>
 

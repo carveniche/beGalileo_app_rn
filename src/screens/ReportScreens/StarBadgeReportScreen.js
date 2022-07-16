@@ -10,9 +10,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { addToCart } from "../../actions/dashboard";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
+import { BackHandler } from 'react-native';
+
 class StarBadgeReportScreen extends Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             isStarSelected: true,
             totalStars: 0,
@@ -60,6 +63,19 @@ class StarBadgeReportScreen extends Component {
             isStarSelected: showStar,
             totalStars: collStars
         })
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     onPressBack = () => {
