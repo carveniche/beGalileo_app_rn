@@ -46,11 +46,11 @@ class MoreEditProfileScreen extends Component {
                 </View>
                 <View style={{ marginTop : normalize(32) }}>
                     <Text style={[CommonStyles.text_11_bold]}>Email Id</Text>
-                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY,marginTop : normalize(8) }]}>sdsdfs@fsfd.cc</Text>
+                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY,marginTop : normalize(8) }]}></Text>
                 </View>
                 <View style={{ marginTop : normalize(40) }}>
                     <Text style={[CommonStyles.text_11_bold]}>Full Name</Text>
-                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY,marginTop : normalize(8) }]}>Pulkeet Shah</Text>
+                    <Text style={[CommonStyles.text_14_Regular, { color: COLOR.TEXT_ALPHA_GREY,marginTop : normalize(8) }]}></Text>
                 </View>
                 <View style={{ marginTop : normalize(32) }}>
                     <Text style={[CommonStyles.text_11_bold]}>Phone Number</Text>

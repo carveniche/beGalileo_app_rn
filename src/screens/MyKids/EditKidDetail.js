@@ -89,9 +89,10 @@ class EditKidDetail extends Component {
     })
     console.log(kidDetail);
 
-  }
+  } 
 
   componentDidUpdate(prevProps) {
+    console.log("Kid details component update",this.props.delete_student_status)
     if (prevProps.edit_student_status != this.props.edit_student_status) {
       if (this.props.edit_student_status) {
         this.goBackToHome();
@@ -99,6 +100,7 @@ class EditKidDetail extends Component {
     }
 
     if (prevProps.delete_student_status != this.props.delete_student_status) {
+      console.log("Props delete students")
       if (this.props.delete_student_status) {
         this.goBackToHome();
       }

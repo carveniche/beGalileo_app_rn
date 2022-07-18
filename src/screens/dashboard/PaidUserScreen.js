@@ -30,9 +30,9 @@ class PaidUserScreen extends Component {
     }
     componentDidMount() {
 
-       
 
-       
+
+
 
         this.renderDashboardData();
 
@@ -40,35 +40,34 @@ class PaidUserScreen extends Component {
 
     goToViewCurriculum = () => {
 
-       this.props.navigation.navigate(Constants.ViewCurriculum);
-       //this.props.navigation.navigate(Constants.PaymentSuccessScreen);
+        this.props.navigation.navigate(Constants.ViewCurriculum);
+        //this.props.navigation.navigate(Constants.PaymentSuccessScreen);
     }
 
 
     checkForNotification() {
         messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-            if (remoteMessage) {
-                console.log(
-                    'Notification caused app to open from quit state:',
-                    remoteMessage.notification
-                );
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification caused app to open from quit state:',
+                        remoteMessage.notification
+                    );
 
-               
-                console.log(
-                    'Notification data :',
-                    remoteMessage.data
-                );
-                if(remoteMessage.data)
-                {
-                    if(remoteMessage.data.type == "join")
-                        this.peakTheLiveClass(remoteMessage.data.live_class_id)
+
+                    console.log(
+                        'Notification data :',
+                        remoteMessage.data
+                    );
+                    if (remoteMessage.data) {
+                        if (remoteMessage.data.type == "join")
+                            this.peakTheLiveClass(remoteMessage.data.live_class_id)
+                    }
+
                 }
 
-            }
-          
-        });
+            });
     }
 
     componentWillUnmount() {
@@ -123,7 +122,7 @@ class PaidUserScreen extends Component {
         if (prevProps.currentSelectedKid != undefined && this.props.dashboardResponse.students != undefined) {
 
             if (this.props.dashboardResponse !== prevProps.dashboardResponse) {
-               this.checkForNotification()
+                this.checkForNotification()
                 this.props.dashboardResponse.students.map((item) => {
 
                     if (item.student_id == this.props.currentSelectedKid.student_id) {
@@ -458,12 +457,15 @@ class PaidUserScreen extends Component {
                             </View>
 
                         }
-                        <TouchableOpacity onPress={this.onPressViewAllActivity} style={{ flexDirection: 'row', marginTop: normalize(20),marginBottom : normalize(10), alignSelf: 'center' }}>
+                        <TouchableOpacity onPress={this.onPressViewAllActivity} style={{ flexDirection: 'row', marginTop: normalize(20), marginBottom: normalize(10), alignSelf: 'center' }}>
                             <Image style={{ height: normalize(16), width: normalize(16), alignSelf: 'center', resizeMode: 'contain' }} source={IC_ACTIVITY} />
                             <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View All Activites</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={this.goToViewCurriculum} style={{ flexDirection: 'row', marginTop: normalize(10),marginBottom : normalize(20), alignSelf: 'center' }}>
-       
+                        <TouchableOpacity onPress={this.goToViewCurriculum} style={{ flexDirection: 'row', marginTop: normalize(10), marginBottom: normalize(20), alignSelf: 'center' }}>
+                            <Icon
+                                size={20}
+                                name='book'
+                                color={COLOR.TEXT_COLOR_GREEN} />
                             <Text style={[CommonStyles.text_12_bold, { color: COLOR.TEXT_COLOR_GREEN, marginStart: normalize(8) }]}>View full curriculum</Text>
                         </TouchableOpacity>
                     </View>
@@ -609,18 +611,18 @@ class PaidUserScreen extends Component {
     }
 
     peakTheLiveClass = (liveId) => {
-        console.log("Live Join Id",liveId)
+        console.log("Live Join Id", liveId)
         this.props.navigation.navigate(Constants.ParentConnect, {
             navigation: this.props.navigation,
             live_class_id: liveId,
             student_id: this.props.currentSelectedKid.student_id,
-            student_name : this.props.currentSelectedKid.first_name,
+            student_name: this.props.currentSelectedKid.first_name,
             parent_id: this.props.dashboardResponse.parent_id
         });
     }
 
 
-   
+
 
 
 
@@ -679,7 +681,7 @@ class PaidUserScreen extends Component {
                     {
 
                         getDifferenceFromTodayTime(liveClassDetails.start_date, liveClassDetails.time) < 0 &&
-                        <TouchableOpacity onPress={()=> this.peakTheLiveClass(liveClassDetails.live_class_id)}>
+                        <TouchableOpacity onPress={() => this.peakTheLiveClass(liveClassDetails.live_class_id)}>
                             <View style={{ flexDirection: 'row', marginBottom: normalize(16), marginTop: normalize(25), marginStart: normalize(16) }}>
                                 <Text style={[CommonStyles.text_12_bold, { flex: 1, color: COLOR.TEXT_COLOR_BLUE, alignSelf: 'center' }]}>Join Class to Peak</Text>
                                 <Image style={{ height: normalize(28), alignSelf: 'center', width: normalize(28), marginEnd: normalize(16), resizeMode: 'contain' }} source={CARD_BTN_ARROW} />
@@ -706,12 +708,12 @@ class PaidUserScreen extends Component {
                 <View style={{ flex: 1, flexDirection: 'row', marginTop: normalize(10), marginBottom: normalize(10), marginEnd: normalize(5), marginStart: normalize(10) }}>
                     <View style={{ flex: 1, marginTop: normalize(10), marginStart: normalize(10) }}>
                         {
-                            totalClass > 1 ? 
-                            <Text style={[CommonStyles.text_12_bold]}>{totalClass} Classes</Text>
-                            :
-                            <Text style={[CommonStyles.text_12_bold]}>{totalClass} Class</Text>
+                            totalClass > 1 ?
+                                <Text style={[CommonStyles.text_12_bold]}>{totalClass} Classes</Text>
+                                :
+                                <Text style={[CommonStyles.text_12_bold]}>{totalClass} Class</Text>
                         }
-                       
+
                         <View style={{ justifyContent: 'center' }}>
                             <Text style={[CommonStyles.text_12__semi_bold]}>Available : </Text>
                             <Text style={[CommonStyles.text_16_bold]}>{availableClass} out of {totalClass}</Text>
@@ -881,7 +883,7 @@ class PaidUserScreen extends Component {
                     this.renewSubscriptionCard(currentKidDetails.expiring_subscription_details)
                 }
 
-               
+
 
                 {
                     currentKidDetails && currentKidDetails.last_class_details != "" &&

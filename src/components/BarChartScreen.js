@@ -68,6 +68,7 @@ class BarChartScreen extends Component {
         const { datas,xAxisData ,colors, colorLines } = this.state;
 
         return datas.map((element, index) => {
+            console.log("Element ",element)
             const Line = ({ line }) => (
                 <Path
                     key={'line '}
@@ -83,7 +84,7 @@ class BarChartScreen extends Component {
                     style={StyleSheet.absoluteFill}
                     data={element}
                     svg={{ fill: BAR_CHART_COLORS[index] }}
-                    contentInset={{ top: 20, bottom: 20 }}
+                    contentInset={{ top: 30, bottom: 0 }}
                     curve={shape.curveNatural}
                 >
                     <Line />

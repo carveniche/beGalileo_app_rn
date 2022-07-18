@@ -86,6 +86,7 @@ class AddKidDetail extends Component {
 
 
     componentDidUpdate(prevProps) {
+     
         if (prevProps.submitStudentSuccess !== this.props.submitStudentSuccess) {
             if (this.props.submitStudentSuccess) {
                 const student = this.props.studentSubmitResponse;
@@ -109,6 +110,7 @@ class AddKidDetail extends Component {
 
             }
         }
+        
     }
 
     showDatePicker = () => {
@@ -151,7 +153,7 @@ class AddKidDetail extends Component {
         const isFromParentState = this.props.navigation.getParam('fromParent', false);
         this.setState({
             isFromParent: isFromParentState
-            
+
         })
 
         getLocalData(Constants.ParentUserId).then((parentId) => {
@@ -626,7 +628,7 @@ class AddKidDetail extends Component {
                         backgroundColor: COLOR.WHITE
                     }}>
                     {
-                        
+
                         <View style={{ marginStart: 10 }}>
                             <CustomBackButton onPress={this.onPressBack} />
                         </View>
@@ -650,7 +652,7 @@ class AddKidDetail extends Component {
                         showAddkidForm ?
                             <View style={{ justifyContent: 'center' }}>
                                 <View style={{ marginTop: 5, marginStart: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={styles.textHeader}>{ this.state.isFromParent ? "Child detail": "Add child"}</Text>
+                                    <Text style={styles.textHeader}>{this.state.isFromParent ? "Child detail" : "Add child"}</Text>
                                     {
                                         allKidsList && allKidsList.length ?
                                             <View style={{ alignSelf: 'center', marginEnd: 20 }}>
@@ -932,7 +934,7 @@ class AddKidDetail extends Component {
                         <View style={{
                             flexDirection: 'row', marginTop: 20, justifyContent: 'center', alignItems: 'center',
                             marginBottom: 20
-                        }}>
+                            }}>
                             <Image style={{ height: 16, width: 16, resizeMode: 'contain' }} source={ADD_ANOTHER_CHILD} />
                             <Text
                                 onPress={() => this.addKidDetails(false)}

@@ -36,7 +36,7 @@ class PaymentSuccessScreen extends Component {
     // else {
       const navigateAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({ routeName: Constants.MainScreen })],
+        actions: [NavigationActions.navigate({ routeName: Constants.Dashboard })],
       });
 
       this.props.navigation.dispatch(navigateAction);

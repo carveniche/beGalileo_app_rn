@@ -41,8 +41,8 @@ class HomeMainScreen extends Component {
         //const currentDSN = Sentry.getCurrentHub().getClient().getOptions().dsn;
 
         console.log("QWQWWW",Sentry.getCurrentHub());
-    
-      
+        console.log(3+4+"7");
+        console.log(3+4+'5');
         
 
         Sentry.setUser({
@@ -108,7 +108,8 @@ class HomeMainScreen extends Component {
 
 
     componentWillUnmount() {
-        console.log("Inside main screen")
+
+    
         if(Platform.OS == 'android')
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }

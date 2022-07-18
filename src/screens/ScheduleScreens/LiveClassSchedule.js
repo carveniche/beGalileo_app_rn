@@ -26,7 +26,7 @@ class LiveClassSchedule extends Component {
         return (
             <View style={{ backgroundColor: COLOR.WHITE,  paddingHorizontal: normalize(10), paddingVertical: normalize(20) }}>
                 <View style={{ flexDirection: 'row', marginBottom: normalize(10), justifyContent: 'space-between' }}>
-                    <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>UpComing Classes</Text>
+                    <Text style={[CommonStyles.text_14_bold, { marginBottom: normalize(10) }]}>Upcoming Classes</Text>
                     <TouchableOpacity onPress={() => this.onPressViewAll(Constants.UPCOMING_CLASSES, upComingClasses)} style={{ paddingStart: normalize(10), paddingEnd: normalize(10) }}>
                         <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_GREEN }]}>View All</Text>
                     </TouchableOpacity>

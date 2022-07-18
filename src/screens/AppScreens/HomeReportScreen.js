@@ -207,7 +207,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showTimeSpentChart } = this.state;
         return (
-            <TouchableOpacity onPress={this.changeTimeSpentChartView} style={[CommonStyles.boxShadow, { backgroundColor : COLOR.WHITE,marginTop: normalize(20), marginHorizontal : 10,borderRadius : 20 }]}>
+            <TouchableOpacity onPress={this.changeTimeSpentChartView} style={[CommonStyles.boxShadow, { backgroundColor: COLOR.WHITE, marginTop: normalize(20), marginHorizontal: 10, borderRadius: 20 }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_TIME_SPENT} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16) }}>
                     <View style={{ flex: 1 }}>
@@ -252,7 +252,24 @@ class HomeReportScreen extends Component {
                     {
                         studentReportStatus && timeInHourFormat(studentReportResponse.total_time_spent) != "0" &&
                         < TouchableOpacity onPress={this.changeTimeSpentChartView} style={{ padding: normalize(20) }}>
-                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                            {
+                                showTimeSpentChart ?
+                                    <View style={{ flex : 1,justifyContent : 'center',alignItems : 'center' }}>
+                                        <Icon
+                                            size={22}
+                                            name='angle-up'
+                                            color={COLOR.TEXT_COLOR_BLUE} />
+                                    </View>
+
+                                    :
+                                    <View style={{ flex : 1,justifyContent : 'center',alignItems : 'center' }}>
+                                        <Icon
+                                            size={22}
+                                            name='angle-down'
+                                            color={COLOR.TEXT_COLOR_BLUE} />
+                                    </View>
+
+                            }
                         </TouchableOpacity>
                     }
 
@@ -266,7 +283,7 @@ class HomeReportScreen extends Component {
         const { currentSelectedKid, studentReportStatus, studentReportResponse } = this.props;
         const { showAccuracyChart } = this.state;
         return (
-            <TouchableOpacity onPress={this.changeAccuracyChartView} style={[CommonStyles.boxShadow, { backgroundColor : COLOR.WHITE,marginHorizontal : 10,borderRadius : 20 }]}>
+            <TouchableOpacity onPress={this.changeAccuracyChartView} style={[CommonStyles.boxShadow, { backgroundColor: COLOR.WHITE, marginHorizontal: 10, borderRadius: 20 }]}>
                 <Image style={{ height: normalize(32), width: normalize(32), marginTop: normalize(16), marginStart: normalize(16), resizeMode: 'contain' }} source={IC_ACCURACY} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-start', marginTop: normalize(8), marginStart: normalize(16), marginBottom: normalize(8) }}>
 
@@ -343,7 +360,25 @@ class HomeReportScreen extends Component {
                     {
                         studentReportStatus && studentReportResponse.total_accuracy > 0 &&
                         <TouchableOpacity onPress={this.changeAccuracyChartView} style={{ padding: normalize(10) }}>
-                            <Image style={{ height: normalize(4), width: normalize(8), resizeMode: 'contain', alignSelf: 'center' }} source={IC_DOWN_ENTER} />
+                            {
+                                showAccuracyChart ?
+                                    <View style={{ flex : 1,justifyContent : 'center',alignItems : 'center' }}>
+                                        <Icon
+                                            size={22}
+                                            name='angle-up'
+                                            color={COLOR.TEXT_COLOR_BLUE} />
+                                    </View>
+
+                                    :
+                                    <View style={{ flex : 1,justifyContent : 'center',alignItems : 'center' }}>
+                                        <Icon
+                                            size={22}
+                                            name='angle-down'
+                                            color={COLOR.TEXT_COLOR_BLUE} />
+                                    </View>
+
+                            }
+
                         </TouchableOpacity>
                     }
 
@@ -618,7 +653,7 @@ class HomeReportScreen extends Component {
                         <View>
 
 
-                            <View style={{  paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
+                            <View style={{ paddingVertical: normalize(10), borderRadius: normalize(20), marginTop: normalize(10) }}>
 
                                 {
                                     this.showAccuracyCard()
@@ -649,7 +684,7 @@ class HomeReportScreen extends Component {
     renderStarAndBadge = () => {
         const { studentReportResponse } = this.props;
         return (
-            <View style={{ height: normalize(48), flexDirection: 'row', marginTop: normalize(20), marginHorizontal : 20 ,justifyContent: 'space-evenly' }}>
+            <View style={{ height: normalize(48), flexDirection: 'row', marginTop: normalize(20), marginHorizontal: 20, justifyContent: 'space-evenly' }}>
                 <TouchableOpacity disabled={false} onPress={() => this.onPressStarEarned(studentReportResponse.stars)} style={{ flex: 1, flexDirection: 'row', backgroundColor: COLOR.BG_YELLOW, borderRadius: normalize(24), justifyContent: 'space-between' }}>
                     <Image style={{ height: normalize(24), width: normalize(24), resizeMode: 'contain', margin: normalize(13) }} source={IC_STARS_EARN} />
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -856,7 +891,7 @@ class HomeReportScreen extends Component {
     }
 
     onBuySubscription = () => {
-       
+
         this.props.navigation.navigate(Constants.ShowSubscriptions);
     }
 
@@ -876,10 +911,10 @@ class HomeReportScreen extends Component {
                         {
                             !loading && studentReportStatus && currentSelectedKid != null && currentSelectedKid.paid_status &&
 
-                            <View style={{ flex : 1 }}>
+                            <View style={{ flex: 1 }}>
                                 {
-                                     this.renderStarAndBadge()
-                                    
+                                    this.renderStarAndBadge()
+
                                 }
                                 {
                                     this.showFilterList()
@@ -887,9 +922,9 @@ class HomeReportScreen extends Component {
                                 {
                                     this.showAllReportDatas()
                                 }
-                                
+
                             </View>
-                           
+
 
                         }
                         {/* {
@@ -905,7 +940,7 @@ class HomeReportScreen extends Component {
                         } */}
                         {
 
-                            !loading && currentSelectedKid !=null && !currentSelectedKid.paid_status &&
+                            !loading && currentSelectedKid != null && !currentSelectedKid.paid_status &&
                             <View style={{ flex: 1 }}>
                                 <NoRecordDemoComponent title="Report unavailble for Demo user" sub_title="Please subscribe for subscription" onBuySubscription={this.onBuySubscription} />
                             </View>

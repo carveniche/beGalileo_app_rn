@@ -28,6 +28,7 @@ class PieChartScreen extends Component {
         var yPercent = 0;
 
         var total = x + y + z;
+        console.log("Time Spent values")
         console.log(x + "-" + y + "-" + z + "-" + total);
         if (x != 0)
             xPercent = (x / total) * 100;

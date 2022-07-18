@@ -266,7 +266,7 @@ export function registerStudent(user_id, first_name, last_name, dob, grade, boar
 
 export function deleteStudent(student_id) {
     return {
-        type: DELETE_ACCOUNT,
+        type: DELETE_STUDENT,
         payload: {
             request: {
                 url: 'app_mathbox/delete_child',

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert,BackHandler } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert, BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import * as Constants from '../../components/helpers/Constants';
 import { COLOR, CommonStyles } from '../../config/styles';
-import {  AVATAR_TEACHER } from "../../assets/images";
-
+import { AVATAR_TEACHER } from "../../assets/images";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { normalize, Card } from "react-native-elements";
 
 import NewUserScreen from './NewUserScreen';
 import PaidUserScreen from './PaidUserScreen';
+import { Pressable } from "react-native";
 
 
 
@@ -26,15 +27,15 @@ class MainUserDashboard extends Component {
 
     componentDidMount() {
 
-      
-       
-     
+
+
+
         this.renderDashboardData();
-       
+
 
     }
 
-   
+
 
 
     getCurrentSelectedKidData = () => {
@@ -103,15 +104,19 @@ class MainUserDashboard extends Component {
     }
 
     onTeacherProfile = (item) => {
-        this.props.navigation.navigate(Constants.TeacherProfile,{ 
-            teacherData : item
+        this.props.navigation.navigate(Constants.TeacherProfile, {
+            teacherData: item
         });
+    }
+
+    onPressCompleteProfile = () => {
+        this.props.navigation.navigate(Constants.MoreProfileScreen)
     }
 
 
     teacherCard = (data) => {
-    
-       return data.map((item) => {
+
+        return data.map((item) => {
             return (
                 <View style={{ marginTop: normalize(10), marginBottom: normalize(10), backgroundColor: COLOR.WHITE, padding: normalize(10), borderRadius: normalize(15) }}>
                     <View style={{ flexDirection: 'row' }}>
@@ -119,7 +124,7 @@ class MainUserDashboard extends Component {
                         <View style={{ marginTop: normalize(8), marginStart: normalize(10), justifyContent: 'center' }}>
                             <Text style={[CommonStyles.text_8_bold, { color: COLOR.TEXT_ALPHA_GREY }]}>Teacher</Text>
                             <Text style={[CommonStyles.text_14_Regular, { color: COLOR.BLACK }]}>{item.name == "" ? "Name not found" : item.name}</Text>
-                            <TouchableOpacity onPress={()=>this.onTeacherProfile(item)}>
+                            <TouchableOpacity onPress={() => this.onTeacherProfile(item)}>
                                 <Text style={[CommonStyles.text_12__semi_bold, { color: COLOR.TEXT_COLOR_BLUE, paddingVertical: normalize(14) }]}>View Tutor's Profile</Text>
                             </TouchableOpacity>
                         </View>
@@ -131,6 +136,22 @@ class MainUserDashboard extends Component {
             )
         })
 
+    }
+
+    checkProfileCompleteness = () => {
+        var profile_not_completed = false;
+        console.log("Profile Completed", this.props.dashboardResponse.parent_details[0])
+        let details = this.props.dashboardResponse.parent_details[0];
+        if (details.first_name == "")
+            profile_not_completed = true;
+        // if (details.last_name == "")
+        //     profile_not_completed = true;
+        if (details.email == "")
+            profile_not_completed = true;
+        if (details.mobile == "")
+            profile_not_completed = true;
+
+        return profile_not_completed;
     }
 
 
@@ -152,6 +173,26 @@ class MainUserDashboard extends Component {
                     currentSelectedKid.paid_status &&
                     <SubscriptionTabs goToCartList={this.goToCartList} />
                 } */}
+
+                {
+                    this.checkProfileCompleteness() &&
+                    <Pressable onPress={this.onPressCompleteProfile} style={{ paddingHorizontal: 40, backgroundColor: COLOR.BG_FAQ_GRERY }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, backgroundColor: COLOR.ORANGE, borderRadius: 20 }}>
+                            <View style={{ justifyContent: 'center' }}>
+                                <Icon
+                                    style={{ marginStart: normalize(8) }}
+                                    size={15}
+                                    name='bell'
+                                    color={COLOR.WHITE} />
+                            </View>
+
+                            <Text style={[CommonStyles.text_11_bold, { marginStart: 10, color: COLOR.WHITE, paddingVertical: 8 }]}>Complete your profile</Text>
+                        </View>
+
+                    </Pressable>
+
+                }
+
 
                 {
 
